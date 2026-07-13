@@ -1,0 +1,3 @@
+{"doc_id":0,"task_name":"gsm8k","output_type":"generate_until","doc":{"answer":"18"},"filtered_resps":["18"],"exact_match":1}
+{"doc_id":1,"task_name":"gsm8k","output_type":"generate_until","doc":{"answer":"10"},"filtered_resps":["9"],"exact_match":0}
+{"doc_id":2,"task_name":"gsm8k","output_type":"generate_until","doc":{"answer":"5"},"filtered_resps":["5"],"exact_match":1}

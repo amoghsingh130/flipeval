@@ -1,0 +1,36 @@
+run_name: kaggle_qwen25_1p5b_public_quantized
+output_dir: /kaggle/working/results
+device_map: auto
+batch_size: 1
+
+baseline:
+  name: fp16
+  model_id: Qwen/Qwen2.5-1.5B-Instruct
+  dtype: float16
+  trust_remote_code: true
+
+methods:
+  - name: gptq_public
+    model_id: Qwen/Qwen2.5-1.5B-Instruct-GPTQ-Int4
+    dtype: float16
+    trust_remote_code: true
+    quantization_backend: gptq_torch
+  - name: awq_public
+    model_id: Qwen/Qwen2.5-1.5B-Instruct-AWQ
+    dtype: float16
+    trust_remote_code: true
+
+tasks:
+  - name: mmlu
+    split: test
+    subjects:
+      - abstract_algebra
+      - college_computer_science
+      - high_school_statistics
+      - machine_learning
+    limit: 100
+  - name: gsm8k
+    split: test
+    limit: 200
+    fewshot: 1
+    max_new_tokens: 256

@@ -1,0 +1,32 @@
+run_name: qwen25_1p5b_bridge_chat
+output_dir: results
+device_map: auto
+batch_size: 1
+
+baseline:
+  name: fp16
+  model_id: Qwen/Qwen2.5-1.5B-Instruct
+  dtype: float16
+  trust_remote_code: true
+
+methods:
+  - {name: gptq_s0, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed0, dtype: float16, seed: 0}
+  - {name: gptq_s1, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed1, dtype: float16, seed: 1}
+  - {name: gptq_s2, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed2, dtype: float16, seed: 2}
+  - {name: awq_s0, model_id: outputs/quantized/qwen25-1p5b-awq4-seed0, dtype: float16, seed: 0}
+  - {name: awq_s1, model_id: outputs/quantized/qwen25-1p5b-awq4-seed1, dtype: float16, seed: 1}
+  - {name: awq_s2, model_id: outputs/quantized/qwen25-1p5b-awq4-seed2, dtype: float16, seed: 2}
+
+tasks:
+  - name: mmlu
+    split: test
+    subjects: [abstract_algebra, college_computer_science, high_school_statistics, machine_learning]
+    limit: 100
+    prompt_style: chat
+  - name: gsm8k
+    split: test
+    limit: 200
+    fewshot: 1
+    fewshot_style: inline
+    max_new_tokens: 256
+    prompt_style: chat
