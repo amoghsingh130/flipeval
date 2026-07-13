@@ -1,32 +1,31 @@
 #!/bin/bash
-# Shared environment for PACE-ICE GPU jobs. Sourced by the sbatch scripts.
-# Edit these once; both build + run jobs use them.
-
+# Shared paths for the pinned Apptainer-based PACE jobs.
 set -euo pipefail
 
-# --- Project location (repo root on ICE) -----------------------------------
-export PROJECT_DIR="${PROJECT_DIR:-$HOME/scratch/Critiquing-Ranking-Quantized-LLMs}"
-
-# --- Caches on scratch (home has a small quota; models are large) ----------
-export SCRATCH_DIR="${SCRATCH_DIR:-$HOME/scratch}"
+export PROJECT_DIR="${PROJECT_DIR:-$HOME/p-<allocation>/flipeval}"
+export SCRATCH_DIR="${SCRATCH_DIR:-$HOME/scratch/flipeval}"
+export IMAGE="${IMAGE:-$SCRATCH_DIR/flipeval.sif}"
 export HF_HOME="${HF_HOME:-$SCRATCH_DIR/hf_cache}"
-export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-$SCRATCH_DIR/hf_cache/datasets}"
-export PIP_CACHE_DIR="${PIP_CACHE_DIR:-$SCRATCH_DIR/pip_cache}"
+export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-$HF_HOME/datasets}"
+export CALIBRATION_DIR="${CALIBRATION_DIR:-$SCRATCH_DIR/calibration}"
 export TOKENIZERS_PARALLELISM=false
-mkdir -p "$HF_HOME" "$HF_DATASETS_CACHE" "$PIP_CACHE_DIR"
+# The host scratch root is mounted at /scratch in every job. APPTAINERENV_*
+# prevents the host's absolute path from leaking into the container namespace.
+export APPTAINERENV_HF_HOME=/scratch/hf_cache
+export APPTAINERENV_HF_DATASETS_CACHE=/scratch/hf_cache/datasets
+export APPTAINERENV_TOKENIZERS_PARALLELISM=false
 
-# --- Modules + conda env ----------------------------------------------------
-# PACE provides anaconda3 as a module. Create the env once (see README), then
-# these lines activate it inside the job.
-module purge
-module load anaconda3
-source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate crql
-
+mkdir -p "$SCRATCH_DIR"/{hf_cache,calibration,work,logs,checkpoints}
 cd "$PROJECT_DIR"
 
 echo "== Job env =="
 echo "host:        $(hostname)"
 echo "project:     $PROJECT_DIR"
+echo "scratch:     $SCRATCH_DIR"
+echo "image:       $IMAGE"
 echo "hf_home:     $HF_HOME"
-python -c "import torch; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'no-gpu')"
+
+if [ ! -f "$IMAGE" ]; then
+  echo "MISSING Apptainer image: $IMAGE" >&2
+  exit 1
+fi

@@ -1,6 +1,7 @@
 import hashlib
 import json
 import math
+import multiprocessing
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -37,6 +38,19 @@ class UniformModel:
 
     def __call__(self, input_ids):
         return SimpleNamespace(logits=torch.zeros((1, input_ids.shape[1], 16)))
+
+
+def _merge_manifest_worker(path, index):
+    merge_manifest(
+        Path(path),
+        {
+            "run_name": "parallel",
+            "started_at": f"t{index}",
+            "config": "/config",
+            "methods": [{"name": f"method-{index}"}],
+            "tasks": [{"name": "mmlu"}],
+        },
+    )
 
 
 def test_chat_multiple_choice_scores_only_continuation_span():
@@ -107,6 +121,26 @@ def test_manifest_merges_separate_invocations(tmp_path):
     assert {method["name"] for method in merged["methods"]} == {"fp16", "awq"}
     assert {task["name"] for task in merged["tasks"]} == {"mmlu", "gsm8k"}
     assert len(merged["runs"]) == 2
+
+
+def test_manifest_merge_is_process_safe(tmp_path):
+    path = tmp_path / "manifest.json"
+    context = multiprocessing.get_context("fork")
+    processes = [
+        context.Process(target=_merge_manifest_worker, args=(path, index))
+        for index in range(8)
+    ]
+    for process in processes:
+        process.start()
+    for process in processes:
+        process.join(timeout=10)
+        assert process.exitcode == 0
+
+    merged = json.loads(path.read_text(encoding="utf-8"))
+    assert {entry["name"] for entry in merged["methods"]} == {
+        f"method-{index}" for index in range(8)
+    }
+    assert len(merged["runs"]) == 8
 
 
 def test_manifest_upgrades_legacy_file(tmp_path):

@@ -1,0 +1,85 @@
+schema_version: 1
+state: frozen-before-main-grid-execution
+frozen_at: '2026-07-13'
+
+models:
+  - tag: qwen25-1p5b
+    model_id: Qwen/Qwen2.5-1.5B-Instruct
+    revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  - tag: qwen25-7b
+    model_id: Qwen/Qwen2.5-7B-Instruct
+    revision: a09a35458c702b33eeacc393d103063234e8bc28
+  - tag: llama32-3b
+    model_id: meta-llama/Llama-3.2-3B-Instruct
+    revision: 0cb88a4f764b7a12671c53f0838cd831a0843b95
+  - tag: llama31-8b
+    model_id: meta-llama/Llama-3.1-8B-Instruct
+    revision: 0e9e39f249a16976918f6564b8830bc894c89659
+
+calibration_datasets:
+  c4:
+    repo_id: allenai/c4
+    config: en
+    split: train
+    revision: 1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+    models: all
+  wikitext2:
+    repo_id: Salesforce/wikitext
+    config: wikitext-2-raw-v1
+    split: train
+    revision: b08601e04326c79dfdd32d625aee71d232d685c3
+    models: [qwen25-1p5b]
+calibration:
+  seeds: [0, 1, 2, 3, 4]
+  sample_count: 128
+  sequence_length: 2048
+  algorithm: numpy-default_rng-shuffle-complete-index-array-v1
+
+methods:
+  fp16: {kind: baseline, seeds: none}
+  rtn: {kind: quantization, bits: [4, 3], seeds: none, calibration_datasets: none}
+  gptq: {kind: quantization, bits: [4, 3], seeds: calibration, calibration_datasets: all}
+  awq: {kind: quantization, bits: [4, 3], seeds: calibration, calibration_datasets: all}
+  wanda: {kind: pruning, sparsity: '2:4', seeds: calibration, calibration_datasets: all}
+
+tasks:
+  - name: mmlu
+    dataset: cais/mmlu
+    revision: c30699e8356da336a370243923dbaf21066bb9fe
+    split: test
+    selection: full
+  - name: arc_challenge
+    dataset: allenai/ai2_arc
+    config: ARC-Challenge
+    revision: 210d026faf9955653af8916fad021475a3f00453
+    split: test
+    selection: full
+  - name: hellaswag
+    dataset: Rowan/hellaswag
+    revision: 218ec52e09a7e7462a5400043bb9a69a41d06b76
+    split: validation
+    selection: indices-0-through-1999
+  - name: gsm8k
+    dataset: openai/gsm8k
+    config: main
+    revision: 740312add88f781978c0658806c59bc2815b9866
+    split: test
+    selection: indices-0-through-999
+
+expected_counts:
+  baseline_checkpoints: 4
+  compressed_checkpoints_c4: 108
+  compressed_checkpoints_wikitext2: 25
+  total_model_variants: 137
+  evaluation_jsonl_files: 548
+
+implementation_status:
+  gptq_builder: implemented-local-tests
+  awq_builder: implemented-local-tests
+  hierarchical_bootstrap: implemented-local-tests
+  rtn_builder: not-implemented
+  wanda_builder: not-implemented
+  arc_challenge_loader: not-implemented
+  hellaswag_loader: not-implemented
+  real_c4_artifact_preflight: requires-pace-storage-and-runtime
+  real_wikitext2_artifact_preflight: blocked-zero-of-36718-rows-reach-2048-qwen-tokens
