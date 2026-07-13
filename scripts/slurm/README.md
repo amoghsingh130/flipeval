@@ -1,80 +1,29 @@
-# Running the pilot on PACE-ICE
+# PACE bridge SLURM helpers
 
-## 0. One-time: get the code + env onto ICE
+These files implement the operational sequence in `docs/PACE_RUNBOOK.md` with the
+pinned Apptainer image. Edit `PROJECT_DIR` in `env.sh` or export it when submitting.
 
-```bash
-ssh <gtusername>@login-ice.pace.gatech.edu
-
-# Put the repo on scratch (home quota is small; models/datasets are large).
-cd ~/scratch
-git clone <your-repo-url> Critiquing-Ranking-Quantized-LLMs   # or rsync it up
-cd Critiquing-Ranking-Quantized-LLMs
-
-module load anaconda3
-conda create -y -n crql python=3.11
-source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate crql
-pip install -r requirements.txt
-pip install auto-gptq autoawq          # the quantization backends
-```
-
-If your repo lives somewhere other than `~/scratch/Critiquing-Ranking-Quantized-LLMs`,
-set `PROJECT_DIR` at the top of `env.sh` (or export it before `sbatch`).
-
-## 1. Build quantized checkpoints (GPU array job)
-
-Builds all 6 checkpoints the pilot config expects (gptq/awq × seed 0,1,2), one GPU each:
+The C4 artifact step is intentionally separate from checkpoint construction. It
+creates one immutable artifact per seed, then GPTQ and AWQ consume the same file.
 
 ```bash
-cd ~/scratch/Critiquing-Ranking-Quantized-LLMs
-sbatch scripts/slurm/build_quantized.sbatch
-squeue --me
+# First verify RAM/cache quota and the C4 sequential-stream plan in the runbook.
+CALIB0=$(sbatch --parsable --array=0 scripts/slurm/prepare_calibration.sbatch)
+CANARY=$(sbatch --parsable --array=0,3 --dependency=afterok:$CALIB0 \
+  scripts/slurm/build_quantized.sbatch)
+
+# Pause and review the seed-0 artifact, GPTQ/AWQ receipts, reloads, and logs.
+CALIB12=$(sbatch --parsable --array=1-2%1 scripts/slurm/prepare_calibration.sbatch)
+BUILD12=$(sbatch --parsable --array=1-2,4-5 --dependency=afterok:$CALIB12 \
+  scripts/slurm/build_quantized.sbatch)
+BRIDGE=$(sbatch --parsable --dependency=afterok:$BUILD12 scripts/slurm/run_bridge.sbatch)
+sbatch --dependency=afterok:$BRIDGE scripts/slurm/verify_bridge.sbatch
 ```
 
-Outputs land in `outputs/quantized/`. Logs in `logs/build_<jobid>_<arrayidx>.{out,err}`.
+The bridge validator requires all fourteen JSONLs, merged manifest coverage,
+chat-prompt metadata, identical item/gold/prompt sets, baseline accuracy inside the
+predeclared ranges, and identical GPTQ/AWQ calibration receipts for seeds 0–2. It
+writes `bridge_validation_summary.json` and exits nonzero on any mismatch.
 
-## 2. Run the pilot + analysis (GPU job)
-
-Blocks until the builds exist (the script checks and exits early if any are missing):
-
-```bash
-sbatch scripts/slurm/run_pilot.sbatch
-```
-
-Or chain it so it starts automatically after the builds finish:
-
-```bash
-BUILD=$(sbatch --parsable scripts/slurm/build_quantized.sbatch)
-sbatch --dependency=afterok:$BUILD scripts/slurm/run_pilot.sbatch
-```
-
-Results: `results/qwen25_1p5b_pilot/*.jsonl`, `pair_summary.csv`, `rank_instability.csv`.
-
-## Before you burn a full GPU allocation
-
-Smoke-test the plumbing on a short interactive session first — cheaper than a bad batch job:
-
-```bash
-salloc --gres=gpu:1 --cpus-per-task=8 --mem=16G --time=00:30:00
-source scripts/slurm/env.sh
-python -m pilot_eval.run --config configs/smoke_tiny.yaml
-python -m pilot_eval.analyze --run-dir results/smoke_tiny --baseline fp16 --bootstrap 100
-```
-
-## Knobs you may need to set
-
-- **Account**: if ICE rejects the job for a missing account, add `#SBATCH -A gts-<PI>-ice`
-  (or your class/PI account) to both sbatch files. Check with `pace-quota` / `sacctmgr`.
-- **GPU type**: default is any available GPU. To pin one, add e.g.
-  `#SBATCH --gres=gpu:V100:1` or a `--constraint=`. `sinfo -o "%N %G"` lists what's free.
-- **Walltime/mem**: 1.5B fits comfortably in 48G RAM + one GPU. Bump `--time` if the
-  GSM8K generation pass (256 new tokens × 200 items × 6 methods) runs long.
-- **HF auth**: Qwen2.5-1.5B is open, so no token needed. If you swap in a gated model,
-  `huggingface-cli login` once (token is cached under `HF_HOME` on scratch).
-
-## Sanity checks
-
-- `env.sh` prints the GPU name and `torch.cuda.is_available()` at the top of every job —
-  confirm it says `True` and names a GPU, not `no-gpu`.
-- Per PILOT.md, freeze prompts/decoding/extraction before the real run, and use the full
-  item counts (MMLU 100/subject, GSM8K 200) so bootstrap rank flips aren't toy-sample noise.
+The three-seed bridge is an operational canary only. It must not be interpreted as
+the registered five-seed H3 analysis.

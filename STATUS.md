@@ -2,6 +2,54 @@
 
 Updated: 2026-07-13
 
+## 2026-07-13 pre-PACE implementation update
+
+The two explicitly registered pre-bridge blockers are implemented locally without
+changing `PREREGISTRATION.md`:
+
+- `scripts/build_quantized.py` now creates or validates one immutable calibration
+  artifact per model/dataset/seed using the complete index-array shuffle, exact
+  128 × 2,048-token selection, short-document skipping, pinned dataset and model
+  revisions, unnormalized source text, exact token IDs, document indices, token
+  hashes, tokenizer fingerprint, and a content checksum. GPTQ and AWQ consume the
+  same artifact and write checkpoint-local pairing receipts.
+- `flipeval.paired_seed_bootstrap` and `flipeval paired-seeds` implement the paired
+  two-level seed-by-item bootstrap. They fail closed on seed or item-set mismatch,
+  independently resample items for repeated seed occurrences, retain paired method
+  indices, and report per-seed intervals, seed SD, item SE, the joint delta interval,
+  rank flips, and exact ties separately.
+- `scripts/verify_bridge.py` turns the bridge criteria into fail-closed checks over
+  all fourteen expected JSONLs, manifest coverage, prompt/gold/item parity, baseline
+  accuracy gates, and GPTQ/AWQ calibration receipts.
+- Parallel evaluator jobs now merge the durable manifest under an advisory file lock
+  and atomic replacement, eliminating the bridge array's read-modify-write race.
+- `configs/main_grid_manifest.yaml` pins model and dataset revisions and expands via
+  `scripts/expected_grid.py` to 137 model variants and 548 expected task JSONLs.
+- The folder is now an isolated Git repository rather than inheriting the unrelated
+  repository at `/Users/amoghsingh`. Baseline commit `a8092df` preserves the 21-test
+  gate-PASS state before these changes.
+
+The registered two blockers are therefore **code-complete under local deterministic
+tests**, but their real backend/C4 preflights remain PACE work. The C4 implementation
+creates the complete shuffled 364,868,892-element index array (about 2.9 GB as
+`int64`) and retrieves the required global rows from the pinned sequential stream.
+This preserves the registered order without materializing the >1 TB decoded Arrow
+dataset, but it will ordinarily scan most of the hundreds-of-GB compressed split and
+therefore still needs a measured PACE runtime/storage preflight.
+
+The WikiText-2 preflight was completed on 2026-07-13 in the pinned Docker runtime
+with the exact Qwen snapshot. It found `0/36,718` train rows containing at least
+2,048 Qwen tokens and failed closed. Thus the row-level reading of the frozen
+WikiText condition is impossible. `docs/WIKITEXT2_PROTOCOL_BLOCKER.md` records the
+evidence and amendment options; `PREREGISTRATION.md` remains unchanged pending a
+human scientific decision made before any main-grid result is inspected.
+
+The broader audit also exposed work that was omitted from the earlier “only two
+blockers” wording: the full registered grid still needs RTN and Wanda checkpoint
+builders and native or rigorously converted ARC-Challenge and HellaSwag execution
+paths. These do **not** block the six-checkpoint GPTQ/AWQ bridge, but they do block
+the 137-variant main grid. They are recorded explicitly in the frozen grid manifest.
+
 ## 2026-07-12 session changes: review completed by execution
 
 The following work was prepared during the 2026-07-12 coding session and was originally flagged for technical review before Kaggle/GPU use:
@@ -29,6 +77,17 @@ On 2026-07-13 the reference-run workflow (harness commands, Kaggle extraction la
 
 ## Verification
 
+- Current pre-PACE local suite (2026-07-13): `36 passed, 1 skipped`; the skip is the
+  integration check that imports AutoAWQ, which is intentionally container-only.
+- Rebuilt `flipeval:prepace` image ID
+  `sha256:ec7120544ff8451739d4763f3c2f9eb42f681b4f3116ae452f6093cbeae6bf65`:
+  `37 passed` in-image, including proof that pinned AutoAWQ preserves the artifact's
+  pre-tokenized calibration IDs. AutoAWQ emits its upstream deprecation warning, so
+  the pinned runtime must remain frozen and the real GPU canary is mandatory.
+- The rebuilt image's CPU smoke completed baseline and placeholder MMLU/GSM8K
+  evaluation and regenerated both analysis summaries.
+- The main-grid expander independently revalidated the frozen count as 137 variants
+  and 548 task JSONLs; Python compilation and `git diff --check` pass.
 - `python3 -m pip install -e .`: passed.
 - Independent `python3 -m pytest -q` rerun on 2026-07-11: 17 passed in 3.06 seconds; after strengthening the golden schema assertion: 17 passed in 2.02 seconds.
 - Independently extracted the pilot archive into a fresh temporary directory and reran `python3 -m pilot_eval.analyze --bootstrap 1000 --seed 0` outside the pytest wrapper.
@@ -60,7 +119,11 @@ The 2026-07-11 update to `PREREGISTRATION.md` resolved the scientific choices be
 8. Support, disconfirmation, and the pre-declared inconclusive region have fixed count thresholds.
 9. Seeds enter a paired two-level seed-by-item bootstrap with variance components reported separately.
 
-Implementation blockers remain before the main grid: `scripts/build_quantized.py` must be brought into exact agreement with the registered calibration builder, and `flipeval` must implement the registered paired two-level bootstrap. Both are queued in `CODING_AGENT_HANDOFF_2026-07-10.md`; neither may be implemented or tuned after inspecting main-grid results.
+The calibration builder and paired two-level bootstrap are now implemented and must
+not be tuned after inspecting bridge or main-grid results. Real C4/WikiText artifact
+preflights, RTN/Wanda construction, and ARC-Challenge/HellaSwag execution remain
+required before the full grid. See `configs/main_grid_manifest.yaml` for the
+machine-readable status and expected matrix.
 
 ## Kaggle Validation Gate: Resolved PASS (2026-07-13)
 
@@ -72,12 +135,20 @@ Decision (full record: `docs/GATE_DECISION_2026-07-13.md`): the pilot implementa
 
 ## Waiting for PACE
 
-The validation gate has passed. Only after the two implementation blockers above are resolved, follow `docs/PACE_RUNBOOK.md` on day one:
+The validation gate has passed. When PACE access is available, follow
+`docs/PACE_RUNBOOK.md` in this order:
 
-1. Build `flipeval.def` and copy its emitted resolved lock into project storage.
-2. Run the CPU smoke on PACE.
-3. Build the six Qwen2.5-1.5B GPTQ/AWQ 4-bit seed-0-to-2 bridge checkpoints.
-4. Run `configs/pace_bridge_chat.yaml` one method per job and confirm merged manifest coverage.
-5. Confirm chat-template absolute accuracy and paired churn signals before starting the preregistered full grid.
+1. Build `flipeval.def`, retain a PACE-specific resolved lock, and run tests plus the
+   CPU smoke.
+2. Preflight the real pinned C4 seed-0 artifact and record peak RAM, bytes cached,
+   stream passes, rows scanned, and wall time;
+   then create bridge artifacts for seeds 0–2.
+3. Build and reload GPTQ seed 0 and AWQ seed 0 as paired GPU-kernel canaries before
+   fanning out the remaining four checkpoints.
+4. Run `configs/pace_bridge_chat.yaml` one method per job, then run the fail-closed
+   bridge validator and write a human decision record.
+5. Implement and freeze the remaining main-grid methods/tasks before submitting the
+   complete expected matrix. Do not interpret partial main-grid accuracy results.
 
-GPU quantization kernels, controlled calibration seeds, the PACE bridge, and the full H1/H2/H3 grid remain intentionally unrun in this pre-access phase.
+GPU quantization kernels, real controlled calibration artifacts, the PACE bridge,
+and the full H1/H2/H3 grid remain intentionally unrun in this pre-access phase.

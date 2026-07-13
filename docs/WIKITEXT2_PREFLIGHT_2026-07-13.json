@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "executed_at": "2026-07-13",
+  "main_grid_results_inspected": false,
+  "docker_image": "flipeval:prepace",
+  "docker_image_id": "sha256:cdbe7cdcf8544683e7b6639f3e059046d5fbf50eb89a234b68f15721e671c948",
+  "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "dataset_id": "Salesforce/wikitext",
+  "dataset_config": "wikitext-2-raw-v1",
+  "dataset_split": "train",
+  "dataset_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+  "seed": 0,
+  "row_count": 36718,
+  "minimum_tokens": 2048,
+  "eligible_row_count": 0,
+  "required_sample_count": 128,
+  "artifact_written": false,
+  "outcome": "blocked",
+  "error": "CalibrationArtifactError: only 0 of 36718 rows contain at least 2048 tokens; the frozen protocol requires 128",
+  "decision_record_written": false,
+  "next_action": "Choose and record a dated preregistration amendment before implementing a WikiText document-unit interpretation."
+}

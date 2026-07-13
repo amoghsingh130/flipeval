@@ -96,7 +96,15 @@ MMLU subject accuracies were abstract algebra `0.33`, college computer science `
 
 ## Work remaining before the main grid
 
-The validation gate is resolved. Independently, `scripts/build_quantized.py` must be updated to match the frozen 128 × 2,048-token calibration protocol, and `flipeval` must implement the registered paired two-level bootstrap before the PACE bridge or main grid. These implementation items are recorded in `CODING_AGENT_HANDOFF_2026-07-10.md` and `STATUS.md`.
+The Kaggle validation gate is resolved and no further Kaggle rerun is required. The
+registered calibration builder and paired two-level bootstrap are now implemented
+under local deterministic tests. Their real C4/WikiText and GPU-backend preflights
+belong on PACE and are described in `docs/PACE_RUNBOOK.md`.
+
+The six-checkpoint GPTQ/AWQ bridge can proceed after those preflights. The broader
+main grid additionally requires RTN/Wanda construction and ARC-Challenge/HellaSwag
+execution paths; these newly explicit implementation states and the 137-variant,
+548-output expected matrix are frozen in `configs/main_grid_manifest.yaml`.
 
 ## Historical Kaggle records
 

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import gc
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -11,39 +13,56 @@ from tqdm import tqdm
 
 
 def merge_manifest(path: Path, new_manifest: dict[str, Any]) -> dict[str, Any]:
-    """Merge a partial invocation into the durable run manifest."""
-    if path.exists():
-        with path.open("r", encoding="utf-8") as f:
-            manifest = json.load(f)
-    else:
-        manifest = {
-            "run_name": new_manifest["run_name"],
-            "created_at": new_manifest["started_at"],
-            "config": new_manifest["config"],
-            "methods": [],
-            "tasks": [],
-            "runs": [],
-        }
+    """Merge a partial invocation into the durable run manifest.
 
-    manifest.setdefault("runs", [])
-    for key in ("methods", "tasks"):
-        existing = manifest.setdefault(key, [])
-        seen = {json.dumps(entry, sort_keys=True) for entry in existing}
-        for entry in new_manifest[key]:
-            encoded = json.dumps(entry, sort_keys=True)
-            if encoded not in seen:
-                existing.append(entry)
-                seen.add(encoded)
-    manifest["runs"].append(
-        {
-            "started_at": new_manifest["started_at"],
-            "methods": [entry["name"] for entry in new_manifest["methods"]],
-            "tasks": [entry["name"] for entry in new_manifest["tasks"]],
-        }
-    )
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(manifest, f, indent=2)
-    return manifest
+    SLURM array members share this file. A sidecar advisory lock covers the whole
+    read-modify-write transaction, and replacement is atomic so readers never see
+    partial JSON.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lock_path = path.with_name(f".{path.name}.lock")
+    with lock_path.open("a", encoding="utf-8") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        if path.exists():
+            with path.open("r", encoding="utf-8") as f:
+                manifest = json.load(f)
+        else:
+            manifest = {
+                "run_name": new_manifest["run_name"],
+                "created_at": new_manifest["started_at"],
+                "config": new_manifest["config"],
+                "methods": [],
+                "tasks": [],
+                "runs": [],
+            }
+
+        manifest.setdefault("runs", [])
+        for key in ("methods", "tasks"):
+            existing = manifest.setdefault(key, [])
+            seen = {json.dumps(entry, sort_keys=True) for entry in existing}
+            for entry in new_manifest[key]:
+                encoded = json.dumps(entry, sort_keys=True)
+                if encoded not in seen:
+                    existing.append(entry)
+                    seen.add(encoded)
+        manifest["runs"].append(
+            {
+                "started_at": new_manifest["started_at"],
+                "methods": [entry["name"] for entry in new_manifest["methods"]],
+                "tasks": [entry["name"] for entry in new_manifest["tasks"]],
+            }
+        )
+        temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+        try:
+            with temporary.open("w", encoding="utf-8") as f:
+                json.dump(manifest, f, indent=2)
+                f.write("\n")
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(temporary, path)
+        finally:
+            temporary.unlink(missing_ok=True)
+        return manifest
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run per-item compressed-LLM pilot evaluation.")

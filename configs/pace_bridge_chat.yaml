@@ -6,6 +6,7 @@ batch_size: 1
 baseline:
   name: fp16
   model_id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
   dtype: float16
   trust_remote_code: true
 
@@ -30,3 +31,18 @@ tasks:
     fewshot_style: inline
     max_new_tokens: 256
     prompt_style: chat
+
+# Operational checks only. These decide whether the bridge plumbing is safe to
+# scale; the three-seed bridge is not an H3 hypothesis test.
+bridge_acceptance:
+  expected_item_counts: {mmlu: 400, gsm8k: 200}
+  baseline_accuracy_ranges:
+    mmlu: [0.365, 0.465]
+    gsm8k: [0.55, 0.65]
+  calibration:
+    dataset: allenai/c4
+    dataset_config: en
+    dataset_revision: 1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+    sample_count: 128
+    sequence_length: 2048
+    paired_seeds: [0, 1, 2]

@@ -8,7 +8,9 @@ From: python:3.11.14-slim-bookworm
 %environment
     export PYTHONDONTWRITEBYTECODE=1
     export PYTHONUNBUFFERED=1
-    export HF_HOME=/scratch/$USER/hf_cache
+    export HF_HOME=/scratch/hf_cache
+    export HF_DATASETS_CACHE=/scratch/hf_cache/datasets
+    export TOKENIZERS_PARALLELISM=false
 
 %files
     . /workspace
