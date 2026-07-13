@@ -1,0 +1,29 @@
+run_name: kaggle_smoke_tiny
+output_dir: /kaggle/working/results
+device_map: auto
+batch_size: 1
+
+baseline:
+  name: fp16
+  model_id: sshleifer/tiny-gpt2
+  dtype: float32
+  trust_remote_code: false
+
+methods:
+  - name: compressed_placeholder
+    model_id: sshleifer/tiny-gpt2
+    dtype: float32
+    seed: 0
+    trust_remote_code: false
+
+tasks:
+  - name: mmlu
+    split: test
+    subjects:
+      - abstract_algebra
+    limit: 2
+  - name: gsm8k
+    split: test
+    limit: 2
+    fewshot: 0
+    max_new_tokens: 32

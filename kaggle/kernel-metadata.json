@@ -1,0 +1,11 @@
+{
+  "id": "amoghsingh130/compressed-llm-pilot",
+  "title": "Compressed LLM Pilot",
+  "code_file": "notebooks/kaggle_pilot.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": []
+}

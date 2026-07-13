@@ -1,0 +1,20 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "jupyter-lab",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "jupyterlab",
+        "--no-browser",
+        "--port",
+        "8888",
+        "--ServerApp.ip=127.0.0.1",
+        "--IdentityProvider.token=",
+        "--ServerApp.password="
+      ],
+      "port": 8888
+    }
+  ]
+}
