@@ -1,0 +1,3959 @@
+{
+  "protocol": "ATLAS_MINING_REGISTRATION_2026-07-15",
+  "enumerated_at": "2026-07-15T23:16:03Z",
+  "search_terms": [
+    "GPTQ",
+    "AWQ",
+    "GGUF",
+    "8bit",
+    "4bit",
+    "bnb"
+  ],
+  "enumeration_method_note": "S1 term matching was performed by pulling the FULL author=open-llm-leaderboard-old dataset listing (7059 datasets, paginated via Link header) and applying a local case-insensitive substring regex, rather than relying on the HF search= query parameter, to avoid missing tokenization-sensitive substring matches (verified necessary: e.g. org name 64bits__LexPodLM-13B only matches because \"64bits\" contains \"4bit\" as a substring -- a false positive the exercise deliberately surfaces and then excludes on inspection of the model card, see notes).",
+  "pair_count": 59,
+  "s1_pair_count": 50,
+  "s2_pair_count": 9,
+  "pairs": [
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__wizard-mega-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_openaccess-ai-collective__wizard-mega-13b",
+      "quantized_model": "TheBloke/wizard-mega-13B-GPTQ",
+      "base_model": "openaccess-ai-collective/wizard-mega-13b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_05T00_29_27.161865",
+          "2023_11_07T07_11_46.594603"
+        ],
+        "base": [
+          "2023_11_05T01_45_36.376645",
+          "2023_11_06T19_41_58.229759"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__orca_mini_v3_7B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_psmathur__orca_mini_v3_7b",
+      "quantized_model": "TheBloke/orca_mini_v3_7B-GPTQ",
+      "base_model": "psmathur/orca_mini_v3_7b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_22T13_46_10.418493",
+          "2023_12_04T11_27_39.056243"
+        ],
+        "base": [
+          "2023_08_16T13_35_32.670682",
+          "2023_10_18T04_27_15.231240"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Llama-2-7B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_meta-llama__Llama-2-7b-hf",
+      "quantized_model": "TheBloke/Llama-2-7B-GPTQ",
+      "base_model": "meta-llama/Llama-2-7b-hf",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_29T12_13_30.420278",
+          "2023_08_30T09_33_50.119005",
+          "2023_10_21T20_13_14.412039"
+        ],
+        "base": [
+          "2023_08_19T16_35_46.942696",
+          "2023_08_21T17_55_50.567332",
+          "2023_08_21T20_09_03.352670",
+          "2023_08_21T20_15_29.093529",
+          "2023_08_21T20_20_08.261679",
+          "2023_08_24T09_19_51.585793",
+          "2023_08_28T19_52_01.926454",
+          "2023_08_29T17_54_59.197645",
+          "2023_09_08T17_00_44.389859",
+          "2023_09_09T12_32_30.613622",
+          "2023_09_14T20_50_38.766533",
+          "2023_09_15T08_35_01.075146",
+          "2023_09_15T09_53_02.418861",
+          "2023_09_20T14_39_46.791628",
+          "2023_12_02T13_00_06.695936",
+          "2023_12_02T13_00_54.924067"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 127,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": "",
+      "contains_disclosed_probe_cell": "arc_challenge (per protocol section 1 probe a; probe results known pre-freeze, excluded from headline aggregates)"
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Llama-2-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_meta-llama__Llama-2-13b-hf",
+      "quantized_model": "TheBloke/Llama-2-13B-GPTQ",
+      "base_model": "meta-llama/Llama-2-13b-hf",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_29T15_04_20.709230",
+          "2023_08_30T10_42_39.395336",
+          "2023_08_31T11_12_42.998068",
+          "2023_10_27T16_26_14.370378"
+        ],
+        "base": [
+          "2023_08_19T22_35_38.117975",
+          "2023_08_23T17_28_00.015478",
+          "2023_08_28T19_56_56.621542",
+          "2023_08_29T22_26_02.660247",
+          "2023_09_08T14_32_14.957248",
+          "2023_09_15T14_07_08.353318",
+          "2023_10_14T23_00_26.644553",
+          "2023_12_02T13_11_49.394544"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 123,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__WizardLM-13B-V1.1-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_WizardLM__WizardLM-13B-V1.1",
+      "quantized_model": "TheBloke/WizardLM-13B-V1.1-GPTQ",
+      "base_model": "WizardLM/WizardLM-13B-V1.1",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_05T12_40_32.771713",
+          "2023_11_07T10_04_12.671111"
+        ],
+        "base": [
+          "2023_07_26T14_16_17.821348",
+          "2023_10_18T15_36_34.719946",
+          "2023_10_28T23_24_10.120000"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Wizard-Vicuna-30B-Uncensored-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_ehartford__Wizard-Vicuna-30B-Uncensored",
+      "quantized_model": "TheBloke/Wizard-Vicuna-30B-Uncensored-GPTQ",
+      "base_model": "ehartford/Wizard-Vicuna-30B-Uncensored",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_07T20_55_33.884727"
+        ],
+        "base": [
+          "2023_07_19T22_31_27.283689",
+          "2023_10_18T12_57_01.368480"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__WizardLM-70B-V1.0-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_WizardLM__WizardLM-70B-V1.0",
+      "quantized_model": "TheBloke/WizardLM-70B-V1.0-GPTQ",
+      "base_model": "WizardLM/WizardLM-70B-V1.0",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_07T19_43_56.739522"
+        ],
+        "base": [
+          "2023_08_17T00_01_57.828467",
+          "2023_10_15T19_05_20.351798"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Airoboros-L2-13B-2.1-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_jondurbin__airoboros-l2-13b-2.1",
+      "quantized_model": "TheBloke/Airoboros-L2-13B-2.1-GPTQ",
+      "base_model": "jondurbin/airoboros-l2-13b-2.1",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_30T18_43_07.011974",
+          "2023_09_22T16_15_21.953879"
+        ],
+        "base": [
+          "2023_08_30T15_34_36.295006",
+          "2023_08_30T18_13_29.562428",
+          "2023_10_22T07_13_42.257437",
+          "2023_10_22T11_50_58.922768"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__OpenOrcaxOpenChat-Preview2-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_Open-Orca__OpenOrcaxOpenChat-Preview2-13B",
+      "quantized_model": "TheBloke/OpenOrcaxOpenChat-Preview2-13B-GPTQ",
+      "base_model": "Open-Orca/OpenOrcaxOpenChat-Preview2-13B",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_30T22_06_48.097340",
+          "2023_10_22T10_53_17.967443"
+        ],
+        "base": [
+          "2023_08_09T10_54_28.159442",
+          "2023_08_09T11_01_47.680717",
+          "2023_08_09T19_53_44.921082",
+          "2023_09_17T22_24_47.406808",
+          "2023_10_13T14_08_03.258972",
+          "2023_10_14T08_18_52.745685",
+          "2023_10_16T12_28_11.016345"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Genz-70b-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_budecosystem__genz-70b",
+      "quantized_model": "TheBloke/Genz-70b-GPTQ",
+      "base_model": "budecosystem/genz-70b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_31T00_30_34.342002"
+        ],
+        "base": [
+          "2023_09_13T09_54_04.852738",
+          "2023_10_23T19_01_32.642131"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0"
+      ],
+      "tasks_quantized_only_count": 61,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 61,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Llama-2-70B-chat-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_meta-llama__Llama-2-70b-chat-hf",
+      "quantized_model": "TheBloke/Llama-2-70B-chat-GPTQ",
+      "base_model": "meta-llama/Llama-2-70b-chat-hf",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_07T22_45_40.943285"
+        ],
+        "base": [
+          "2023_10_17T05_07_42.486452"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Lemur-70B-Chat-v1-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_OpenLemur__lemur-70b-chat-v1",
+      "quantized_model": "TheBloke/Lemur-70B-Chat-v1-GPTQ",
+      "base_model": "OpenLemur/lemur-70b-chat-v1",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_31T06_46_13.725525"
+        ],
+        "base": [
+          "2023_08_24T04_11_57.870589",
+          "2023_09_17T13_31_04.707005"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0"
+      ],
+      "tasks_quantized_only_count": 61,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 61,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__OpenOrca-Platypus2-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_Open-Orca__OpenOrca-Platypus2-13B",
+      "quantized_model": "TheBloke/OpenOrca-Platypus2-13B-GPTQ",
+      "base_model": "Open-Orca/OpenOrca-Platypus2-13B",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_31T16_41_28.579874",
+          "2023_09_16T19_40_18.805309"
+        ],
+        "base": [
+          "2023_08_31T23_53_28.484029",
+          "2023_09_22T19_55_50.660601"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Airoboros-L2-70B-2.1-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_jondurbin__airoboros-l2-70b-2.1",
+      "quantized_model": "TheBloke/Airoboros-L2-70B-2.1-GPTQ",
+      "base_model": "jondurbin/airoboros-l2-70b-2.1",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_08T02_26_46.433766"
+        ],
+        "base": [
+          "2023_08_31T13_20_37.537573",
+          "2023_10_22T02_46_34.884332"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Platypus2-70B-Instruct-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_garage-bAInd__Platypus2-70B-instruct",
+      "quantized_model": "TheBloke/Platypus2-70B-Instruct-GPTQ",
+      "base_model": "garage-bAInd/Platypus2-70B-instruct",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_09_01T08_39_03.285201"
+        ],
+        "base": [
+          "2023_11_09T00_36_31.182871"
+        ]
+      },
+      "tasks": [],
+      "tasks_quantized_only_count": 61,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 0,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__manticore-13b-chat-pyg-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_openaccess-ai-collective__manticore-13b-chat-pyg",
+      "quantized_model": "TheBloke/manticore-13b-chat-pyg-GPTQ",
+      "base_model": "openaccess-ai-collective/manticore-13b-chat-pyg",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_07T17_20_44.747146"
+        ],
+        "base": [
+          "2023_09_23T08_58_22.598379"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Llama-2-7b-Chat-AWQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_meta-llama__Llama-2-7b-chat-hf",
+      "quantized_model": "TheBloke/Llama-2-7b-Chat-AWQ",
+      "base_model": "meta-llama/Llama-2-7b-chat-hf",
+      "method_guess": "AWQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_10_03T10_54_21.847398",
+          "2023_10_24T01_23_20.549960"
+        ],
+        "base": [
+          "2023_10_15T02_34_15.484281"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Guanaco-3B-Uncensored-v2-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_Fredithefish__Guanaco-3B-Uncensored-v2",
+      "quantized_model": "TheBloke/Guanaco-3B-Uncensored-v2-GPTQ",
+      "base_model": "Fredithefish/Guanaco-3B-Uncensored-v2",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_10_03T21_39_11.409465",
+          "2023_10_29T01_04_16.242483"
+        ],
+        "base": [
+          "2023_08_30T20_46_40.695179",
+          "2023_10_14T16_41_50.908036"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__WizardLM-7B-uncensored-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_ehartford__WizardLM-7B-Uncensored",
+      "quantized_model": "TheBloke/WizardLM-7B-uncensored-GPTQ",
+      "base_model": "ehartford/WizardLM-7B-Uncensored",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_10_21T21_04_26.590858",
+          "2023_12_02T12_59_15.195874"
+        ],
+        "base": [
+          "2023_07_19T16_58_31.980929",
+          "2023_10_18T17_40_08.208255"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__WizardLM-33B-V1.0-Uncensored-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_ehartford__WizardLM-33B-V1.0-Uncensored",
+      "quantized_model": "TheBloke/WizardLM-33B-V1.0-Uncensored-GPTQ",
+      "base_model": "ehartford/WizardLM-33b-V1.0-Uncensored",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_10_22T20_59_08.755164"
+        ],
+        "base": [
+          "2023_08_09T10_34_34.277823",
+          "2023_10_12T23_21_17.619828"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": "base repo cardData used lowercase 33b; actual details dataset and base model (now renamed QuixiAI/WizardLM-33B-V1.0-Uncensored) use uppercase 33B"
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__wizard-vicuna-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_junelee__wizard-vicuna-13b",
+      "quantized_model": "TheBloke/wizard-vicuna-13B-GPTQ",
+      "base_model": "junelee/wizard-vicuna-13b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_05T07_12_56.494554",
+          "2023_11_07T21_40_44.837005"
+        ],
+        "base": [
+          "2023_07_18T14_12_52.847326",
+          "2023_10_29T14_38_37.071272"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__EverythingLM-13B-16K-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_totally-not-an-llm__EverythingLM-13b-16k",
+      "quantized_model": "TheBloke/EverythingLM-13B-16K-GPTQ",
+      "base_model": "totally-not-an-llm/EverythingLM-13b-16k",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_05T10_45_48.960213",
+          "2023_11_07T12_26_38.184269"
+        ],
+        "base": [
+          "2023_09_23T17_51_49.550032"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__WizardLM-Uncensored-SuperCOT-StoryTelling-30B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_Monero__WizardLM-Uncensored-SuperCOT-StoryTelling-30b",
+      "quantized_model": "TheBloke/WizardLM-Uncensored-SuperCOT-StoryTelling-30B-GPTQ",
+      "base_model": "Monero/WizardLM-Uncensored-SuperCOT-StoryTelling-30b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_05T11_28_36.402381",
+          "2023_11_08T02_57_56.626250"
+        ],
+        "base": [
+          "2023_07_19T22_17_39.123351",
+          "2023_10_15T18_31_20.676081"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Wizard-Vicuna-13B-Uncensored-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_ehartford__Wizard-Vicuna-13B-Uncensored",
+      "quantized_model": "TheBloke/Wizard-Vicuna-13B-Uncensored-GPTQ",
+      "base_model": "ehartford/Wizard-Vicuna-13B-Uncensored",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_07T13_33_21.987098"
+        ],
+        "base": [
+          "2023_07_19T19_11_03.287932",
+          "2023_10_18T17_43_02.527324"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__WizardLM-30B-Uncensored-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_ehartford__WizardLM-30B-Uncensored",
+      "quantized_model": "TheBloke/WizardLM-30B-Uncensored-GPTQ",
+      "base_model": "ehartford/WizardLM-30B-Uncensored",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_07T17_24_26.800307"
+        ],
+        "base": [
+          "2023_07_19T22_33_53.366908",
+          "2023_10_13T01_45_13.473461"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__guanaco-33B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_timdettmers__guanaco-33b-merged",
+      "quantized_model": "TheBloke/guanaco-33B-GPTQ",
+      "base_model": "timdettmers/guanaco-33b-merged",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_08T02_14_39.195892"
+        ],
+        "base": [
+          "2023_07_20T14_01_44.026263"
+        ]
+      },
+      "tasks": [],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 61,
+      "tasks_common_count": 0,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Orca-2-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_microsoft__Orca-2-13b",
+      "quantized_model": "TheBloke/Orca-2-13B-GPTQ",
+      "base_model": "microsoft/Orca-2-13b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_25T03_42_21.410226"
+        ],
+        "base": [
+          "2023_11_23T09_00_59.774377",
+          "2023_12_30T00_44_18.166149"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__orca_mini_v3_13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_psmathur__orca_mini_v3_13b",
+      "quantized_model": "TheBloke/orca_mini_v3_13B-GPTQ",
+      "base_model": "psmathur/orca_mini_v3_13b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_12_04T12_38_59.699618"
+        ],
+        "base": [
+          "2023_08_09T21_34_12.529590",
+          "2023_10_18T15_47_49.456107"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__neural-chat-7B-v3-2-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_Intel__neural-chat-7b-v3-2",
+      "quantized_model": "TheBloke/neural-chat-7B-v3-2-GPTQ",
+      "base_model": "Intel/neural-chat-7b-v3-2",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_12_11T00_12_21.907526"
+        ],
+        "base": [
+          "2023_12_04T15_53_32.280845"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 63,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Mixtral-8x7B-v0.1-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_mistralai__Mixtral-8x7B-v0.1",
+      "quantized_model": "TheBloke/Mixtral-8x7B-v0.1-GPTQ",
+      "base_model": "mistralai/Mixtral-8x7B-v0.1",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_12_16T08_25_08.853393"
+        ],
+        "base": [
+          "2023_12_11T18_04_02.035270",
+          "2023_12_15T14_35_04.630519",
+          "2024_01_04T16_34_48.985318"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 63,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_alnrg2arg__test3_sft_4bit",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_alnrg2arg__blockchainlabs_7B_merged_test2_4",
+      "quantized_model": "alnrg2arg/test3_sft_4bit",
+      "base_model": "alnrg2arg/blockchainlabs_7B_merged_test2_4",
+      "method_guess": "bnb-4bit(unclear)",
+      "run_timestamps": {
+        "quantized": [
+          "2024_01_27T12_59_01.916844"
+        ],
+        "base": [
+          "2024_01_20T09_52_41.122319"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 63,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_MaziyarPanahi__UNA-34Beagles-32K-bf16-v1-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_one-man-army__UNA-34Beagles-32K-bf16-v1",
+      "quantized_model": "MaziyarPanahi/UNA-34Beagles-32K-bf16-v1-GPTQ",
+      "base_model": "one-man-army/UNA-34Beagles-32K-bf16-v1",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2024_02_19T03_20_06.212464"
+        ],
+        "base": [
+          "2024_01_14T18_01_24.840782"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 63,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__WizardLM-30B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_WizardLM__WizardLM-30B-V1.0",
+      "quantized_model": "TheBloke/WizardLM-30B-GPTQ",
+      "base_model": "WizardLM/WizardLM-30B-V1.0",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_07T18_05_07.591558"
+        ],
+        "base": [
+          "2023_10_21T14_56_55.024771",
+          "2023_10_21T17_46_17.809151",
+          "2023_12_03T04_35_31.048043",
+          "2023_12_03T04_36_04.759843",
+          "2023_12_03T04_42_48.050570",
+          "2023_12_03T04_43_48.387414",
+          "2023_12_03T06_38_27.690404",
+          "2023_12_03T06_39_48.508245"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Project-Baize-v2-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_project-baize__baize-v2-13b",
+      "quantized_model": "TheBloke/Project-Baize-v2-13B-GPTQ",
+      "base_model": "project-baize/baize-v2-13b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_22T13_47_48.408564"
+        ],
+        "base": [
+          "2023_07_18T16_42_29.519016",
+          "2023_10_12T16_13_42.802156"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0"
+      ],
+      "tasks_quantized_only_count": 61,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 61,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__vicuna-13b-v1.3.0-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_lmsys__vicuna-13b-v1.3",
+      "quantized_model": "TheBloke/vicuna-13b-v1.3.0-GPTQ",
+      "base_model": "lmsys/vicuna-13b-v1.3",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_05T09_23_24.198168",
+          "2023_11_07T20_06_54.484278"
+        ],
+        "base": [
+          "2023_10_21T21_13_42.887863"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__Project-Baize-v2-7B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_project-baize__baize-v2-7b",
+      "quantized_model": "TheBloke/Project-Baize-v2-7B-GPTQ",
+      "base_model": "project-baize/baize-v2-7b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_29T19_38_18.380876",
+          "2023_10_22T21_24_57.179060"
+        ],
+        "base": [
+          "2023_07_19T16_24_12.338026",
+          "2023_10_17T20_41_40.256040"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__LongChat-13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_lmsys__longchat-13b-16k",
+      "quantized_model": "TheBloke/LongChat-13B-GPTQ",
+      "base_model": "lmsys/longchat-13b-16k",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_02T21_34_31.634462",
+          "2023_11_04T20_06_00.633401"
+        ],
+        "base": [
+          "2023_10_18T21_36_45.302966"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TheBloke__orca_mini_13B-GPTQ",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_psmathur__orca_mini_13b",
+      "quantized_model": "TheBloke/orca_mini_13B-GPTQ",
+      "base_model": "psmathur/orca_mini_13b",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_11_05T13_43_32.201116",
+          "2023_11_07T10_33_18.298818"
+        ],
+        "base": [
+          "2023_08_09T09_53_33.020588",
+          "2023_10_15T13_38_44.745207"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_malhajar__Platypus2-70B-instruct-4bit-gptq",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_garage-bAInd__Platypus2-70B-instruct",
+      "quantized_model": "malhajar/Platypus2-70B-instruct-4bit-gptq",
+      "base_model": "garage-bAInd/Platypus2-70B-instruct",
+      "method_guess": "GPTQ",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_26T12_30_11.519673"
+        ],
+        "base": [
+          "2023_11_09T00_36_31.182871"
+        ]
+      },
+      "tasks": [],
+      "tasks_quantized_only_count": 61,
+      "tasks_base_only_count": 3,
+      "tasks_common_count": 0,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_LimYeri__CodeMind-Gemma-7B-QLoRA-4bit",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_google__gemma-7b-it",
+      "quantized_model": "LimYeri/CodeMind-Gemma-7B-QLoRA-4bit",
+      "base_model": "google/gemma-7b-it",
+      "method_guess": "QLoRA-4bit",
+      "run_timestamps": {
+        "quantized": [
+          "2024_04_19T00_33_04.996883"
+        ],
+        "base": [
+          "2024_02_22T15_34_10.620055"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 63,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TFLai__llama-13b-4bit-alpaca",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_huggyllama__llama-13b",
+      "quantized_model": "TFLai/llama-13b-4bit-alpaca",
+      "base_model": "huggyllama/llama-13b",
+      "method_guess": "bnb-4bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_08T22_41_19.681002",
+          "2023_10_22T09_29_09.659096"
+        ],
+        "base": [
+          "2023_07_24T15_13_44.970123",
+          "2023_08_19T22_15_08.436043",
+          "2023_08_28T19_54_33.085163",
+          "2023_09_23T10_41_44.150256"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 122,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TFLai__llama-7b-4bit-alpaca",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_huggyllama__llama-7b",
+      "quantized_model": "TFLai/llama-7b-4bit-alpaca",
+      "base_model": "huggyllama/llama-7b",
+      "method_guess": "bnb-4bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_09T19_29_56.361922",
+          "2023_09_17T15_51_21.649052"
+        ],
+        "base": [
+          "2023_08_19T21_59_42.894030",
+          "2023_08_23T16_59_33.663836",
+          "2023_08_28T19_48_59.844014",
+          "2023_12_04T17_40_08.047341"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 121,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TFLai__gpt-neox-20b-4bit-alpaca",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_EleutherAI__gpt-neox-20b",
+      "quantized_model": "TFLai/gpt-neox-20b-4bit-alpaca",
+      "base_model": "EleutherAI/gpt-neox-20b",
+      "method_guess": "bnb-4bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_10T02_03_16.907594",
+          "2023_10_29T00_29_49.222050"
+        ],
+        "base": [
+          "2023_07_20T10_44_54.391639",
+          "2023_08_28T20_20_23.118147",
+          "2023_09_08T18_29_20.429481",
+          "2023_12_03T17_14_42.607420"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 122,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TFLai__llama-2-13b-4bit-alpaca-gpt4",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_meta-llama__Llama-2-13b-hf",
+      "quantized_model": "TFLai/llama-2-13b-4bit-alpaca-gpt4",
+      "base_model": "meta-llama/Llama-2-13b-hf",
+      "method_guess": "bnb-4bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_10T01_35_37.376954",
+          "2023_09_23T12_02_28.224092"
+        ],
+        "base": [
+          "2023_08_19T22_35_38.117975",
+          "2023_08_23T17_28_00.015478",
+          "2023_08_28T19_56_56.621542",
+          "2023_08_29T22_26_02.660247",
+          "2023_09_08T14_32_14.957248",
+          "2023_09_15T14_07_08.353318",
+          "2023_10_14T23_00_26.644553",
+          "2023_12_02T13_11_49.394544"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 123,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TFLai__gpt-neo-1.3B-4bit-alpaca",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_EleutherAI__gpt-neo-1.3B",
+      "quantized_model": "TFLai/gpt-neo-1.3B-4bit-alpaca",
+      "base_model": "EleutherAI/gpt-neo-1.3B",
+      "method_guess": "bnb-4bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_18T13_07_16.687815",
+          "2023_09_23T17_57_15.784929"
+        ],
+        "base": [
+          "2023_07_19T15_04_26.148804",
+          "2023_10_19T06_57_24.325149"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TFLai__bloom-560m-4bit-alpaca",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_bigscience__bloom-560m",
+      "quantized_model": "TFLai/bloom-560m-4bit-alpaca",
+      "base_model": "bigscience/bloom-560m",
+      "method_guess": "bnb-4bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_10_13T02_31_40.775341"
+        ],
+        "base": [
+          "2023_08_09T09_50_46.994927",
+          "2023_10_17T01_44_51.787860",
+          "2023_10_19T07_58_25.532907",
+          "2023_10_19T11_57_26.532188",
+          "2023_10_19T13_58_30.472160",
+          "2023_12_03T15_01_55.935382",
+          "2023_12_03T15_02_09.067243",
+          "2023_12_03T16_04_42.088670",
+          "2023_12_03T16_05_29.861058",
+          "2023_12_04T09_54_26.106896",
+          "2023_12_04T09_54_41.464190",
+          "2023_12_04T13_04_03.136528",
+          "2023_12_04T13_05_03.033636"
+        ]
+      },
+      "tasks": [
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 3,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 3,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_DanielSc4__RedPajama-INCITE-Chat-3B-v1-FT-LoRA-8bit-test1",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_togethercomputer__RedPajama-INCITE-Chat-3B-v1",
+      "quantized_model": "DanielSc4/RedPajama-INCITE-Chat-3B-v1-FT-LoRA-8bit-test1",
+      "base_model": "togethercomputer/RedPajama-INCITE-Chat-3B-v1",
+      "method_guess": "bnb-8bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_17T19_06_24.257655",
+          "2023_09_17T02_48_34.876063"
+        ],
+        "base": [
+          "2023_07_19T15_21_48.380977",
+          "2023_10_17T17_32_08.397205"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_DanielSc4__RedPajama-INCITE-Chat-3B-v1-RL-LoRA-8bit-test1",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_togethercomputer__RedPajama-INCITE-Chat-3B-v1",
+      "quantized_model": "DanielSc4/RedPajama-INCITE-Chat-3B-v1-RL-LoRA-8bit-test1",
+      "base_model": "togethercomputer/RedPajama-INCITE-Chat-3B-v1",
+      "method_guess": "bnb-8bit(LoRA)",
+      "run_timestamps": {
+        "quantized": [
+          "2023_08_29T15_41_04.762236",
+          "2023_10_25T05_14_36.225763"
+        ],
+        "base": [
+          "2023_07_19T15_21_48.380977",
+          "2023_10_17T17_32_08.397205"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_drop_3",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 64,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 64,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_yec019__fbopt-350m-8bit",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_facebook__opt-350m",
+      "quantized_model": "yec019/fbopt-350m-8bit",
+      "base_model": "facebook/opt-350m",
+      "method_guess": "bnb-8bit",
+      "run_timestamps": {
+        "quantized": [
+          "2023_12_02T13_46_11.364082"
+        ],
+        "base": [
+          "2023_07_24T09_55_50.700214",
+          "2023_10_24T09_18_34.693204",
+          "2023_10_29T05_40_05.173534"
+        ]
+      },
+      "tasks": [
+        "harness_gsm8k_5"
+      ],
+      "tasks_quantized_only_count": 1,
+      "tasks_base_only_count": 64,
+      "tasks_common_count": 1,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S1",
+      "quantized_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_cloudyu__4bit_quant_TomGrc_FusionNet_34Bx2_MoE_v0.1_DPO",
+      "base_details_url": "https://huggingface.co/datasets/open-llm-leaderboard-old/details_TomGrc__FusionNet_34Bx2_MoE_v0.1",
+      "quantized_model": "cloudyu/4bit_quant_TomGrc_FusionNet_34Bx2_MoE_v0.1_DPO",
+      "base_model": "TomGrc/FusionNet_34Bx2_MoE_v0.1",
+      "method_guess": "bnb-4bit(DPO-FT)",
+      "run_timestamps": {
+        "quantized": [
+          "2024_02_03T11_35_18.964075"
+        ],
+        "base": [
+          "2024_02_02T06_58_32.819028"
+        ]
+      },
+      "tasks": [
+        "harness_arc_challenge_25",
+        "harness_gsm8k_5",
+        "harness_hellaswag_10",
+        "harness_hendrycksTest_5",
+        "harness_hendrycksTest_abstract_algebra_5",
+        "harness_hendrycksTest_anatomy_5",
+        "harness_hendrycksTest_astronomy_5",
+        "harness_hendrycksTest_business_ethics_5",
+        "harness_hendrycksTest_clinical_knowledge_5",
+        "harness_hendrycksTest_college_biology_5",
+        "harness_hendrycksTest_college_chemistry_5",
+        "harness_hendrycksTest_college_computer_science_5",
+        "harness_hendrycksTest_college_mathematics_5",
+        "harness_hendrycksTest_college_medicine_5",
+        "harness_hendrycksTest_college_physics_5",
+        "harness_hendrycksTest_computer_security_5",
+        "harness_hendrycksTest_conceptual_physics_5",
+        "harness_hendrycksTest_econometrics_5",
+        "harness_hendrycksTest_electrical_engineering_5",
+        "harness_hendrycksTest_elementary_mathematics_5",
+        "harness_hendrycksTest_formal_logic_5",
+        "harness_hendrycksTest_global_facts_5",
+        "harness_hendrycksTest_high_school_biology_5",
+        "harness_hendrycksTest_high_school_chemistry_5",
+        "harness_hendrycksTest_high_school_computer_science_5",
+        "harness_hendrycksTest_high_school_european_history_5",
+        "harness_hendrycksTest_high_school_geography_5",
+        "harness_hendrycksTest_high_school_government_and_politics_5",
+        "harness_hendrycksTest_high_school_macroeconomics_5",
+        "harness_hendrycksTest_high_school_mathematics_5",
+        "harness_hendrycksTest_high_school_microeconomics_5",
+        "harness_hendrycksTest_high_school_physics_5",
+        "harness_hendrycksTest_high_school_psychology_5",
+        "harness_hendrycksTest_high_school_statistics_5",
+        "harness_hendrycksTest_high_school_us_history_5",
+        "harness_hendrycksTest_high_school_world_history_5",
+        "harness_hendrycksTest_human_aging_5",
+        "harness_hendrycksTest_human_sexuality_5",
+        "harness_hendrycksTest_international_law_5",
+        "harness_hendrycksTest_jurisprudence_5",
+        "harness_hendrycksTest_logical_fallacies_5",
+        "harness_hendrycksTest_machine_learning_5",
+        "harness_hendrycksTest_management_5",
+        "harness_hendrycksTest_marketing_5",
+        "harness_hendrycksTest_medical_genetics_5",
+        "harness_hendrycksTest_miscellaneous_5",
+        "harness_hendrycksTest_moral_disputes_5",
+        "harness_hendrycksTest_moral_scenarios_5",
+        "harness_hendrycksTest_nutrition_5",
+        "harness_hendrycksTest_philosophy_5",
+        "harness_hendrycksTest_prehistory_5",
+        "harness_hendrycksTest_professional_accounting_5",
+        "harness_hendrycksTest_professional_law_5",
+        "harness_hendrycksTest_professional_medicine_5",
+        "harness_hendrycksTest_professional_psychology_5",
+        "harness_hendrycksTest_public_relations_5",
+        "harness_hendrycksTest_security_studies_5",
+        "harness_hendrycksTest_sociology_5",
+        "harness_hendrycksTest_us_foreign_policy_5",
+        "harness_hendrycksTest_virology_5",
+        "harness_hendrycksTest_world_religions_5",
+        "harness_truthfulqa_mc_0",
+        "harness_winogrande_5"
+      ],
+      "tasks_quantized_only_count": 63,
+      "tasks_base_only_count": 63,
+      "tasks_common_count": 63,
+      "gated": {
+        "quantized_dataset": false,
+        "base_dataset": false
+      },
+      "license": {
+        "quantized_dataset": null,
+        "base_dataset": null
+      },
+      "notes": ""
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-8B-Instruct-W4A16__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-8B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-8B-Instruct-W4A16",
+      "base_model": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+      "method_guess": "W4A16",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-27T00-03-53.710013"
+        ],
+        "base": [
+          "2024-09-26T08-31-39.355596"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "mmlu_pro",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 39,
+      "tasks_common_count": 39,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded.",
+      "contains_disclosed_probe_cell": "bbh_boolean_expressions (per protocol section 1 probe b; probe results known pre-freeze, excluded from headline aggregates)"
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-8B-Instruct-W8A8-INT8__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-8B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-8B-Instruct-W8A8-INT8",
+      "base_model": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+      "method_guess": "W8A8-INT8",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-26T23-00-47.565545"
+        ],
+        "base": [
+          "2024-09-26T08-31-39.355596"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "mmlu_pro",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 39,
+      "tasks_common_count": 39,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-8B-Instruct-W8A8-FP8__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-8B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-8B-Instruct-W8A8-FP8",
+      "base_model": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+      "method_guess": "W8A8-FP8",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-26T10-05-52.798244"
+        ],
+        "base": [
+          "2024-09-26T08-31-39.355596"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "mmlu_pro",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 39,
+      "tasks_common_count": 39,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-70B-Instruct-W4A16__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-70B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-70B-Instruct-W4A16",
+      "base_model": "meta-llama/Meta-Llama-3.1-70B-Instruct",
+      "method_guess": "W4A16",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-27T13-08-48.312497"
+        ],
+        "base": [
+          "2024-09-27T00-16-45.296088"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "mmlu_pro",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 39,
+      "tasks_common_count": 39,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-70B-Instruct-W8A8-INT8__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-70B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-70B-Instruct-W8A8-INT8",
+      "base_model": "meta-llama/Meta-Llama-3.1-70B-Instruct",
+      "method_guess": "W8A8-INT8",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-27T02-07-59.434935"
+        ],
+        "base": [
+          "2024-09-27T00-16-45.296088"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "mmlu_pro",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 39,
+      "tasks_common_count": 39,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-70B-Instruct-W8A8-FP8__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-70B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-70B-Instruct-W8A8-FP8",
+      "base_model": "meta-llama/Meta-Llama-3.1-70B-Instruct",
+      "method_guess": "W8A8-FP8",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-26T11-11-17.230112"
+        ],
+        "base": [
+          "2024-09-27T00-16-45.296088"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "mmlu_pro",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 39,
+      "tasks_common_count": 39,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-405B-Instruct-W4A16__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-405B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-405B-Instruct-W4A16",
+      "base_model": "meta-llama/Meta-Llama-3.1-405B-Instruct",
+      "method_guess": "W4A16",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-27T20-07-05.024816"
+        ],
+        "base": [
+          "2024-10-01T12-50-43.056045",
+          "2024-10-01T13-51-20.880458",
+          "2024-10-01T14-11-49.756019",
+          "2024-10-01T23-14-30.687440",
+          "2024-10-02T21-45-34.023709"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 38,
+      "tasks_common_count": 38,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-405B-Instruct-W8A8-INT8__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-405B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-405B-Instruct-W8A8-INT8",
+      "base_model": "meta-llama/Meta-Llama-3.1-405B-Instruct",
+      "method_guess": "W8A8-INT8",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-27T13-26-36.493548"
+        ],
+        "base": [
+          "2024-10-01T12-50-43.056045",
+          "2024-10-01T13-51-20.880458",
+          "2024-10-01T14-11-49.756019",
+          "2024-10-01T23-14-30.687440",
+          "2024-10-02T21-45-34.023709"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 38,
+      "tasks_common_count": 38,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    },
+    {
+      "source": "S2",
+      "quantized_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-405B-Instruct-W8A8-FP8__<task>)",
+      "base_details_url": "https://huggingface.co/datasets/neuralmagic/quantized-llama-3.1-leaderboard-v2-evals (config=Meta-Llama-3.1-405B-Instruct__<task>)",
+      "quantized_model": "neuralmagic/Meta-Llama-3.1-405B-Instruct-W8A8-FP8",
+      "base_model": "meta-llama/Meta-Llama-3.1-405B-Instruct",
+      "method_guess": "W8A8-FP8",
+      "run_timestamps": {
+        "quantized": [
+          "2024-09-26T14-45-56.200616"
+        ],
+        "base": [
+          "2024-10-01T12-50-43.056045",
+          "2024-10-01T13-51-20.880458",
+          "2024-10-01T14-11-49.756019",
+          "2024-10-01T23-14-30.687440",
+          "2024-10-02T21-45-34.023709"
+        ]
+      },
+      "tasks": [
+        "bbh_boolean_expressions",
+        "bbh_causal_judgement",
+        "bbh_date_understanding",
+        "bbh_disambiguation_qa",
+        "bbh_formal_fallacies",
+        "bbh_geometric_shapes",
+        "bbh_hyperbaton",
+        "bbh_logical_deduction_five_objects",
+        "bbh_logical_deduction_seven_objects",
+        "bbh_logical_deduction_three_objects",
+        "bbh_movie_recommendation",
+        "bbh_navigate",
+        "bbh_object_counting",
+        "bbh_penguins_in_a_table",
+        "bbh_reasoning_about_colored_objects",
+        "bbh_ruin_names",
+        "bbh_salient_translation_error_detection",
+        "bbh_snarks",
+        "bbh_sports_understanding",
+        "bbh_temporal_sequences",
+        "bbh_tracking_shuffled_objects_five_objects",
+        "bbh_tracking_shuffled_objects_seven_objects",
+        "bbh_tracking_shuffled_objects_three_objects",
+        "bbh_web_of_lies",
+        "gpqa_diamond",
+        "gpqa_extended",
+        "gpqa_main",
+        "ifeval",
+        "math_algebra_hard",
+        "math_counting_and_prob_hard",
+        "math_geometry_hard",
+        "math_intermediate_algebra_hard",
+        "math_num_theory_hard",
+        "math_prealgebra_hard",
+        "math_precalculus_hard",
+        "musr_murder_mysteries",
+        "musr_object_placements",
+        "musr_team_allocation"
+      ],
+      "tasks_quantized_only_count": 39,
+      "tasks_base_only_count": 38,
+      "tasks_common_count": 38,
+      "gated": {
+        "dataset": false
+      },
+      "license": {
+        "dataset": "apache-2.0"
+      },
+      "notes": "neuralmagic/quantized-llama-3.1-leaderboard-v2-evals; companion neuralmagic/quantized-llama-3.1-arena-hard-evals also covers this exact baseline+quant variant pair (question_id join key, no baseline-side gap). companion neuralmagic/quantized-llama-3.1-humaneval-evals has task_id join key but NO baseline (unquantized) rows at all -- cannot support this pair, excluded."
+    }
+  ]
+}
