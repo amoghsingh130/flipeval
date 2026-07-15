@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -17,11 +18,21 @@ def _write_fixture(tmp_path: Path):
             checkpoint = project / "outputs" / name
             checkpoint.mkdir(parents=True)
             receipt = {
-                "artifact_sha256": f"artifact-{seed}",
+                "artifact_sha256": hashlib.sha256(f"artifact-{seed}".encode()).hexdigest(),
+                "model_id": "fixture/model",
+                "model_revision": "model123",
+                "method": family,
+                "bits": 4,
                 "seed": seed,
                 "sample_count": 2,
                 "sequence_length": 4,
                 "dataset": {"repo_id": "fixture/c4", "config": "en", "revision": "data123"},
+                "tokenizer": {
+                    "model_id": "fixture/model",
+                    "model_revision": "model123",
+                    "class": "FixtureTokenizer",
+                    "vocab_sha256": hashlib.sha256(b"fixture-vocab").hexdigest(),
+                },
                 "selected_document_indices": [seed * 2, seed * 2 + 1],
                 "selected_token_hashes": [f"{seed}-a", f"{seed}-b"],
             }
@@ -30,7 +41,7 @@ def _write_fixture(tmp_path: Path):
     config = {
         "run_name": "bridge",
         "output_dir": str(project / "results"),
-        "baseline": {"name": "fp16", "model_id": "fixture/model"},
+        "baseline": {"name": "fp16", "model_id": "fixture/model", "revision": "model123"},
         "methods": methods,
         "tasks": [{"name": "mmlu"}, {"name": "gsm8k"}],
         "bridge_acceptance": {
@@ -42,6 +53,7 @@ def _write_fixture(tmp_path: Path):
                 "dataset_revision": "data123",
                 "sample_count": 2,
                 "sequence_length": 4,
+                "bits": 4,
                 "paired_seeds": [0, 1, 2],
             },
         },
@@ -89,11 +101,59 @@ def test_bridge_validator_rejects_unpaired_calibration_receipt(tmp_path):
     project, config, run_dir = _write_fixture(tmp_path)
     path = project / "outputs" / "awq_s1" / "calibration_manifest.json"
     receipt = json.loads(path.read_text())
-    receipt["artifact_sha256"] = "different"
+    receipt["artifact_sha256"] = hashlib.sha256(b"different").hexdigest()
     path.write_text(json.dumps(receipt), encoding="utf-8")
     summary = verify_bridge(config, run_dir, project)
     assert not summary["passed"]
     assert "seed 1 GPTQ/AWQ calibration artifacts are identical" in summary["errors"]
+
+
+def test_bridge_validator_rejects_checkpoint_from_wrong_model_revision(tmp_path):
+    project, config, run_dir = _write_fixture(tmp_path)
+    for name in ("gptq_s0", "awq_s0"):
+        path = project / "outputs" / name / "calibration_manifest.json"
+        receipt = json.loads(path.read_text())
+        receipt["model_revision"] = "other456"
+        path.write_text(json.dumps(receipt), encoding="utf-8")
+    summary = verify_bridge(config, run_dir, project)
+    assert not summary["passed"]
+    assert "gptq_s0 calibration receipt provenance matches bridge config" in summary["errors"]
+    assert "awq_s0 calibration receipt provenance matches bridge config" in summary["errors"]
+
+
+def test_bridge_validator_rejects_wrong_bit_width(tmp_path):
+    project, config, run_dir = _write_fixture(tmp_path)
+    for name in ("gptq_s2", "awq_s2"):
+        path = project / "outputs" / name / "calibration_manifest.json"
+        receipt = json.loads(path.read_text())
+        receipt["bits"] = 3
+        path.write_text(json.dumps(receipt), encoding="utf-8")
+    summary = verify_bridge(config, run_dir, project)
+    assert not summary["passed"]
+    assert "gptq_s2 calibration receipt provenance matches bridge config" in summary["errors"]
+
+
+def test_bridge_validator_rejects_malformed_artifact_hash(tmp_path):
+    project, config, run_dir = _write_fixture(tmp_path)
+    for name in ("gptq_s1", "awq_s1"):
+        path = project / "outputs" / name / "calibration_manifest.json"
+        receipt = json.loads(path.read_text())
+        receipt["artifact_sha256"] = "not-a-real-hash"
+        path.write_text(json.dumps(receipt), encoding="utf-8")
+    summary = verify_bridge(config, run_dir, project)
+    assert not summary["passed"]
+    assert "gptq_s1 calibration receipt provenance matches bridge config" in summary["errors"]
+
+
+def test_bridge_validator_rejects_tokenizer_drift_across_pair(tmp_path):
+    project, config, run_dir = _write_fixture(tmp_path)
+    path = project / "outputs" / "awq_s0" / "calibration_manifest.json"
+    receipt = json.loads(path.read_text())
+    receipt["tokenizer"]["vocab_sha256"] = hashlib.sha256(b"other-vocab").hexdigest()
+    path.write_text(json.dumps(receipt), encoding="utf-8")
+    summary = verify_bridge(config, run_dir, project)
+    assert not summary["passed"]
+    assert "seed 0 GPTQ/AWQ calibration artifacts are identical" in summary["errors"]
 
 
 def test_bridge_validator_rejects_prompt_or_gold_drift(tmp_path):

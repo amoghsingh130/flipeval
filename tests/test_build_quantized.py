@@ -15,6 +15,7 @@ from scripts.build_quantized import (
     create_calibration_artifact_from_stream,
     token_ids_sha256,
     validate_calibration_artifact,
+    verify_stream_row_count,
     write_calibration_receipt,
 )
 
@@ -237,6 +238,23 @@ def test_checkpoint_receipts_prove_pairing(tmp_path):
     assert gptq["artifact_sha256"] == awq["artifact_sha256"]
     assert gptq["selected_document_indices"] == awq["selected_document_indices"]
     assert gptq["selected_token_hashes"] == awq["selected_token_hashes"]
+
+
+def test_verify_stream_row_count_accepts_exact_registered_count():
+    rows = [{"text": str(index)} for index in range(SPEC.row_count)]
+    assert verify_stream_row_count(lambda: iter(rows), SPEC) == SPEC.row_count
+
+
+def test_verify_stream_row_count_fails_closed_on_understated_universe():
+    rows = [{"text": str(index)} for index in range(SPEC.row_count - 1)]
+    with pytest.raises(CalibrationArtifactError, match="registered row_count"):
+        verify_stream_row_count(lambda: iter(rows), SPEC)
+
+
+def test_verify_stream_row_count_fails_closed_on_overstated_universe():
+    rows = [{"text": str(index)} for index in range(SPEC.row_count + 2)]
+    with pytest.raises(CalibrationArtifactError, match="registered row_count"):
+        verify_stream_row_count(lambda: iter(rows), SPEC)
 
 
 def test_pinned_autoawq_preserves_pre_tokenized_calibration_ids():

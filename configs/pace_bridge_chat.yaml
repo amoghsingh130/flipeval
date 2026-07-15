@@ -45,4 +45,5 @@ bridge_acceptance:
     dataset_revision: 1588ec454efa1a09f29cd18ddd04fe05fc8653a2
     sample_count: 128
     sequence_length: 2048
+    bits: 4
     paired_seeds: [0, 1, 2]

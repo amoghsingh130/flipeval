@@ -80,6 +80,12 @@ def main() -> None:
         action="store_true",
         help="Create/validate the shared artifact without loading a quantization backend.",
     )
+    parser.add_argument(
+        "--verify-stream-row-count",
+        action="store_true",
+        help="Preflight-only: exhaust the pinned stream and fail closed unless it "
+        "yields exactly the registered row_count before any artifact is created.",
+    )
     parser.add_argument("--trust-remote-code", action="store_true")
     args = parser.parse_args()
 
@@ -106,6 +112,16 @@ def main() -> None:
             args.dataset_revision,
             spec.row_count,
         )
+
+    if args.verify_stream_row_count:
+        try:
+            from datasets import load_dataset
+        except ImportError as exc:
+            raise SystemExit("Missing datasets. Install the pinned container runtime.") from exc
+        counted = verify_stream_row_count(
+            make_stream_factory(load_dataset, spec, args.dataset_cache_dir), spec
+        )
+        print(f"Stream row count verified: {counted} rows match the registered row_count", flush=True)
 
     artifact_path = Path(args.calibration_artifact)
     artifact = load_or_create_calibration_artifact(
@@ -158,18 +174,8 @@ def load_or_create_calibration_artifact(
         raise SystemExit("Missing datasets. Install the pinned container runtime.") from exc
 
     if dataset_spec.name == "c4":
-        def stream_factory():
-            return load_dataset(
-                dataset_spec.repo_id,
-                dataset_spec.config,
-                split=dataset_spec.split,
-                revision=dataset_spec.revision,
-                streaming=True,
-                cache_dir=dataset_cache_dir,
-            )
-
         artifact = create_calibration_artifact_from_stream(
-            stream_factory,
+            make_stream_factory(load_dataset, dataset_spec, dataset_cache_dir),
             tokenizer,
             model_id=model_id,
             model_revision=model_revision,
@@ -246,6 +252,48 @@ def create_calibration_artifact(
     )
 
 
+def make_stream_factory(
+    load_dataset: Callable[..., Iterable[Mapping[str, Any]]],
+    dataset_spec: DatasetSpec,
+    dataset_cache_dir: str | None,
+) -> Callable[[], Iterable[Mapping[str, Any]]]:
+    def stream_factory() -> Iterable[Mapping[str, Any]]:
+        return load_dataset(
+            dataset_spec.repo_id,
+            dataset_spec.config,
+            split=dataset_spec.split,
+            revision=dataset_spec.revision,
+            streaming=True,
+            cache_dir=dataset_cache_dir,
+        )
+
+    return stream_factory
+
+
+def verify_stream_row_count(
+    stream_factory: Callable[[], Iterable[Mapping[str, Any]]],
+    dataset_spec: DatasetSpec,
+) -> int:
+    """Exhaust the stream and fail closed unless it yields exactly row_count rows.
+
+    The registered permutation is built over DatasetSpec.row_count. An overstated
+    count already fails closed in retrieve_stream_rows, but an understated count
+    would silently shrink the sampling universe, so the preflight must run this
+    check once per pinned dataset revision before any artifact is created.
+    """
+    expected = int(dataset_spec.row_count)
+    actual = 0
+    for actual, _ in enumerate(stream_factory(), start=1):
+        pass
+    if actual != expected:
+        raise CalibrationArtifactError(
+            f"{dataset_spec.repo_id} ({dataset_spec.config}/{dataset_spec.split}) stream "
+            f"yielded {actual} rows but the registered row_count is {expected}; the frozen "
+            "permutation would cover the wrong sampling universe"
+        )
+    return actual
+
+
 def create_calibration_artifact_from_stream(
     stream_factory: Callable[[], Iterable[Mapping[str, Any]]],
     tokenizer: Any,
@@ -264,6 +312,10 @@ def create_calibration_artifact_from_stream(
     indices is fetched in one sequential pass, then restored to permutation order
     before eligibility checks. If the prefix has too few eligible rows, a larger
     disjoint prefix is fetched in another deterministic pass.
+
+    Assumes the sequential streaming order of the pinned dataset revision equals
+    indexed row order, and that DatasetSpec.row_count is exact; both are verified
+    once per revision by the preflight's verify_stream_row_count pass.
     """
     _validate_requested_shape(size, sequence_length)
     if retrieval_window < size:
