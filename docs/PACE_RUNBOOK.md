@@ -7,8 +7,9 @@ Do not run GPU jobs until all of the following are true:
 1. The project-local Git repository is on the intended frozen commit.
 2. `python -m pytest -q` passes in the image.
 3. `docs/PREPACE_FREEZE.json` matches the checked-out files.
-4. The real C4 calibration-artifact preflight passes, and the WikiText-2 protocol
-   blocker described below has a dated human-approved resolution.
+4. The real C4 calibration-artifact preflight passes. The WikiText-2 protocol
+   blocker described below requires a dated human-approved resolution before
+   WikiText-dependent main-grid work, but does not block this C4-only bridge.
 5. The bridge is treated only as an operational canary, not an H3 analysis.
 
 ## Storage layout
@@ -87,8 +88,10 @@ The WikiText-2 preflight was executed locally on 2026-07-13 inside the pinned Do
 runtime with the exact Qwen revision. It found **0 of 36,718 train rows** at least
 2,048 tokens and stopped as designed. The row-level interpretation of the registered
 condition is therefore impossible. Resolve `docs/WIKITEXT2_PROTOCOL_BLOCKER.md` with
-a dated amendment before main-grid execution. Do not concatenate rows, reconstruct
-articles, change datasets, or relax the length rule without recording that choice.
+a dated amendment before WikiText-dependent main-grid execution. This does not
+authorize changing or delaying the separately registered C4-only bridge. Do not
+concatenate rows, reconstruct articles, change datasets, or relax the length rule
+without recording that choice.
 
 ## Staged bridge canary
 
