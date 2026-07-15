@@ -11,6 +11,7 @@ import yaml
 
 
 PAIR_NAME = re.compile(r"^(gptq|awq)_s(\d+)$")
+SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
 
 
 def main() -> None:
@@ -40,6 +41,8 @@ def verify_bridge(config_path: Path, run_dir: Path, project_root: Path) -> dict[
         raise ValueError("bridge config must declare bridge_acceptance before execution")
 
     baseline = str(config["baseline"]["name"])
+    baseline_model_id = str(config["baseline"]["model_id"])
+    baseline_revision = config["baseline"].get("revision")
     methods = [baseline] + [str(method["name"]) for method in config.get("methods", [])]
     tasks = [str(task["name"]) for task in config.get("tasks", [])]
     expected_counts = {str(key): int(value) for key, value in acceptance["expected_item_counts"].items()}
@@ -117,6 +120,8 @@ def verify_bridge(config_path: Path, run_dir: Path, project_root: Path) -> dict[
                 _check(fields_match, f"{method}/{task} golds and prompts match baseline", errors, checks)
 
     calibration = acceptance["calibration"]
+    expected_bits = int(calibration["bits"])
+    _check(bool(baseline_revision), "baseline declares a pinned model revision", errors, checks)
     receipts: dict[tuple[str, int], dict[str, Any]] = {}
     method_configs = {str(method["name"]): method for method in config.get("methods", [])}
     for name, method in method_configs.items():
@@ -143,9 +148,20 @@ def verify_bridge(config_path: Path, run_dir: Path, project_root: Path) -> dict[
             and receipt.get("dataset", {}).get("revision") == calibration["dataset_revision"]
             and len(receipt.get("selected_document_indices", [])) == int(calibration["sample_count"])
             and len(receipt.get("selected_token_hashes", [])) == int(calibration["sample_count"])
-            and bool(receipt.get("artifact_sha256"))
         )
         _check(valid, f"{name} calibration receipt matches frozen protocol", errors, checks)
+        tokenizer_receipt = receipt.get("tokenizer") or {}
+        provenance = (
+            receipt.get("model_id") == baseline_model_id
+            and receipt.get("model_revision") == baseline_revision
+            and receipt.get("method") == family
+            and receipt.get("bits") == expected_bits
+            and tokenizer_receipt.get("model_id") == baseline_model_id
+            and tokenizer_receipt.get("model_revision") == baseline_revision
+            and bool(tokenizer_receipt.get("vocab_sha256"))
+            and SHA256_HEX.fullmatch(str(receipt.get("artifact_sha256") or "")) is not None
+        )
+        _check(provenance, f"{name} calibration receipt provenance matches bridge config", errors, checks)
 
     for raw_seed in calibration["paired_seeds"]:
         seed = int(raw_seed)
@@ -155,7 +171,7 @@ def verify_bridge(config_path: Path, run_dir: Path, project_root: Path) -> dict[
         if gptq is not None and awq is not None:
             paired = all(
                 gptq.get(key) == awq.get(key)
-                for key in ("artifact_sha256", "selected_document_indices", "selected_token_hashes")
+                for key in ("artifact_sha256", "selected_document_indices", "selected_token_hashes", "tokenizer")
             )
             _check(paired, f"seed {seed} GPTQ/AWQ calibration artifacts are identical", errors, checks)
 

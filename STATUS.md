@@ -1,6 +1,28 @@
 # Pre-PACE Implementation Status
 
-Updated: 2026-07-13
+Updated: 2026-07-15
+
+## 2026-07-15 validator and preflight hardening
+
+An adversarial verification pass found two reproducibility gaps; both are now
+closed as operational hardening with no change to `PREREGISTRATION.md`:
+
+- `scripts/verify_bridge.py` now checks every checkpoint receipt's `model_id`,
+  `model_revision`, `method`, `bits`, and tokenizer identity against the bridge
+  config, requires `artifact_sha256` to be well-formed SHA-256 hex, and includes
+  the tokenizer identity in the GPTQ/AWQ pair-equality check. Previously a pair
+  of checkpoints built from the wrong source model or bit width could PASS.
+  `configs/pace_bridge_chat.yaml` gains the matching `calibration.bits: 4`
+  expectation.
+- `scripts/build_quantized.py` gains `--verify-stream-row-count`, a preflight-only
+  mode that exhausts the pinned stream and fails closed unless it yields exactly
+  the registered `row_count` (an understated count would silently shrink the
+  sampling universe; an overstated one already failed closed). The stream path's
+  ordering assumption is now documented at the function. The PACE C4 seed-0
+  preflight must run this mode once per pinned revision.
+
+Local suite after hardening: `43 passed, 1 skipped` (seven new regression tests;
+the skip remains the container-only AutoAWQ import test).
 
 ## 2026-07-13 pre-PACE implementation update
 
