@@ -2,7 +2,7 @@
 # Shared paths for the pinned Apptainer-based PACE jobs.
 set -euo pipefail
 
-export PROJECT_DIR="${PROJECT_DIR:-$HOME/p-<allocation>/flipeval}"
+export PROJECT_DIR="${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}"
 export SCRATCH_DIR="${SCRATCH_DIR:-$HOME/scratch/flipeval}"
 export IMAGE="${IMAGE:-$SCRATCH_DIR/flipeval.sif}"
 export HF_HOME="${HF_HOME:-$SCRATCH_DIR/hf_cache}"

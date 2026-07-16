@@ -4,8 +4,17 @@ Created 2026-07-15. Operational document, not protocol; update freely as facts l
 Companion to `docs/PACE_RUNBOOK.md` (technical stages) and
 `docs/PACE_EXECUTION_PLAN_2026-07-15.md` (schedule, budgets, go/no-go rules).
 
-Status of the account: PACESHIP application accepted; independence confirmed to
-Jeff Valdez 2026-07-15; account setup in progress under short name `compressedlm`.
+Status of the account: **ACTIVE as of 2026-07-16** (welcome email received);
+$1,000 awarded to the charge account. Confirmed facts from the welcome email:
+login `ssh asingh3206@login-phoenix.pace.gatech.edu` (GT VPN required even on
+campus); data-transfer login node `login-phoenix-rh9.pace.gatech.edu`; Open
+OnDemand at `ondemand-phoenix.pace.gatech.edu`; home
+`/storage/home/hcoda1/0/asingh3206` (10 GB, 100k files); project
+`~/ps-compressedlm-0` (1 TB shared); scratch `~/scratch` (15 TB, files older
+than 60 days purged, never backed up — the C4 mirror and HF cache live here
+and must expect re-staging on long gaps); charge account name via
+`pace-quota`; no computation on head nodes — use `salloc`/`sbatch`.
+PACE acknowledgment text for the paper is in the welcome email.
 
 ## Now, before the account exists
 

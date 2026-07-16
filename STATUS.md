@@ -1,6 +1,27 @@
 # Pre-PACE Implementation Status
 
-Updated: 2026-07-15
+Updated: 2026-07-16
+
+## 2026-07-16 PACE account active; zero-GPU workstreams complete
+
+- PACE Phoenix account is live (welcome email 2026-07-16): login
+  `login-phoenix.pace.gatech.edu` (VPN required), home 10 GB, project
+  `~/ps-compressedlm-0` 1 TB shared, scratch `~/scratch` 15 TB with 60-day
+  purge. $1,000 awarded to the charge account (name via `pace-quota`).
+  `scripts/slurm/env.sh` now defaults to the real project path; GPU jobs pin
+  `--gres=gpu:A100:1`; the calibration job accepts `VERIFY_ROW_COUNT=1` to run
+  the registered stream row-count preflight. Onboarding:
+  `docs/PACE_ONBOARDING_CHECKLIST.md`; staged plan:
+  `docs/PACE_EXECUTION_PLAN_2026-07-15.md`.
+- New-component registrations frozen 2026-07-15 (commit b74fd58): mini-grid
+  scope/escalation, atlas mining, audit; audit §3.3 amended to blind
+  fresh-session independence (d6e02dd).
+- Atlas flip analysis complete over the frozen 59-pair manifest: 1,254
+  analyzed cells (906 S1 + 348 S2). Audit dual extraction complete and the
+  claim table frozen at 17 claims. Results, caveats, and provenance:
+  `docs/RESULTS_2026-07-15_ATLAS_AUDIT.md`. Verdict math and headline
+  aggregates remain unrun.
+- Local suite: `53 passed, 1 skipped` (atlas pipeline added 10 tests).
 
 ## 2026-07-15 validator and preflight hardening
 
