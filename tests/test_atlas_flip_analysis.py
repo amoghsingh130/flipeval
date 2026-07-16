@@ -116,13 +116,14 @@ def test_analyze_cell_fails_closed_on_non_binary_correctness():
 
 
 def test_find_s1_task_file_picks_latest_run_and_exact_task():
+    # Directory names use the -/: timestamp form; manifest cardData uses underscores.
     files = [
-        "2023_11_05T00_29_27.161865/details_harness|gsm8k|5_2023-11-05T00-29-27.161865.parquet",
-        "2023_11_07T07_11_46.594603/details_harness|gsm8k|5_2023-11-07T07-11-46.594603.parquet",
-        "2023_11_07T07_11_46.594603/details_harness|drop|3_2023-11-07T07-11-46.594603.parquet",
+        "2023-11-05T00:29:27.161865/details_harness|gsm8k|5_2023-11-05T00-29-27.161865.parquet",
+        "2023-11-07T07:11:46.594603/details_harness|gsm8k|5_2023-11-07T07-11-46.594603.parquet",
+        "2023-11-07T07:11:46.594603/details_harness|drop|3_2023-11-07T07-11-46.594603.parquet",
     ]
     stamps = ["2023_11_05T00_29_27.161865", "2023_11_07T07_11_46.594603"]
-    assert find_s1_task_file(files, "harness_gsm8k_5", stamps).startswith("2023_11_07")
+    assert find_s1_task_file(files, "harness_gsm8k_5", stamps).startswith("2023-11-07")
     assert "drop" in find_s1_task_file(files, "harness_drop_3", stamps)
     with pytest.raises(CellSkip):
         find_s1_task_file(files, "harness_arc_challenge_25", stamps)
