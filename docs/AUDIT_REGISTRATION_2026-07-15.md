@@ -88,4 +88,17 @@ count of margin-sensitive verdicts accompanies the headline number.
 
 ## Dated Amendments
 
-None.
+**2026-07-15 — Amendment 1 (§3.3 independence mechanism).** The requirement
+that the two extractions occur "on different days" is replaced by an
+extractor-independence requirement: the second extraction is performed in a
+fresh agent session with **no access to pass-1 outputs** — the extractor is
+withheld `docs/audit_claim_table_pass1.csv`, instructed not to read it or
+retrieve it from git history, and receives only the frozen protocol and the
+source frames. Rationale: temporal separation was a proxy for extractor
+independence calibrated to human memory; a fresh agent session carries no
+memory of pass 1, so blind same-day extraction provides at least the intended
+independence; the source-stability benefit of a second-day fetch is instead
+obtained by recording source content hashes in both passes where feasible.
+Decision context: made after pass-1 extraction results were known, but before
+any verdict, power, MDD, or required-n computation was run; the §4 verdict
+rules and the §3.1–3.2 inclusion/extraction rules are unchanged.
