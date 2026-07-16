@@ -237,12 +237,19 @@ def normalize_token(text: str) -> str:
     return re.sub(r"[^0-9a-zA-Z]+", "_", text).strip("_").lower()
 
 
+def timestamp_key(timestamp: str) -> str:
+    """Canonical digits-only form; cardData uses underscores where dirs use -/:."""
+    return re.sub(r"[^0-9]", "", timestamp)
+
+
 def find_s1_task_file(files: Sequence[str], task_config: str, run_timestamps: Sequence[str]) -> str:
     """Latest run's parquet for a task config like 'harness_gsm8k_5' (section 3.2)."""
     want = normalize_token(task_config)
-    for timestamp in sorted(run_timestamps, reverse=True):
+    for timestamp in sorted(run_timestamps, key=timestamp_key, reverse=True):
         for path in files:
-            if not path.endswith(".parquet") or not path.startswith(timestamp):
+            if not path.endswith(".parquet") or "/" not in path:
+                continue
+            if timestamp_key(path.split("/")[0]) != timestamp_key(timestamp):
                 continue
             stem = Path(path).name
             if f"_{want}_" in f"_{normalize_token(stem)}_":
