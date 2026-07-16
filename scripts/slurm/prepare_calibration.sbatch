@@ -23,4 +23,5 @@ srun apptainer exec --pwd /workspace \
   --dataset-cache-dir /scratch/hf_cache/datasets \
   --calibration-artifact "/scratch/calibration/qwen25-1p5b-c4-s${SEED}.json" \
   --prepare-calibration-only \
-  --trust-remote-code
+  --trust-remote-code \
+  ${VERIFY_ROW_COUNT:+--verify-stream-row-count}
