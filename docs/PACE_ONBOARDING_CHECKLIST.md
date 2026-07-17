@@ -52,8 +52,11 @@ PACE acknowledgment text for the paper is in the welcome email.
 
 ## Week 1 (maps to plan Stages 1–2)
 
-- [ ] Build `flipeval.sif` on a compute node per the runbook; require 37 passed
-      in-image; archive `environment.lock.pace.txt` and the image sha256.
+- [ ] Build `flipeval.sif` on a compute node per the runbook; require **54 passed,
+      0 skipped, 0 failed** in-image (corrected from the stale 37 — see the
+      2026-07-16 erratum in `docs/PACE_EXECUTION_PLAN_2026-07-15.md`; any in-image
+      skip is a gate failure); archive `environment.lock.pace.txt` and the image
+      sha256.
 - [ ] If mirroring C4: start the ~305 GB download to `$SCRATCH/flipeval/hf_cache`
       on the appropriate node class and verify the pinned revision resolves
       locally with `HF_HUB_OFFLINE=1`.
