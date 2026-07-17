@@ -8,7 +8,8 @@
 #SBATCH --mem=16G
 #SBATCH --time=01:00:00
 
-source "$(dirname "$0")/env.sh"
+# shellcheck source=scripts/slurm/env.sh
+source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 apptainer exec --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python /workspace/scripts/verify_bridge.py \

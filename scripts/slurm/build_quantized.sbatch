@@ -10,7 +10,8 @@
 #SBATCH --time=06:00:00
 #SBATCH --array=0-5
 
-source "$(dirname "$0")/env.sh"
+# shellcheck source=scripts/slurm/env.sh
+source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs outputs/quantized
 
 MODEL_ID="Qwen/Qwen2.5-1.5B-Instruct"

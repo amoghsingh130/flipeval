@@ -9,7 +9,8 @@
 #SBATCH --time=48:00:00
 #SBATCH --array=0-2%1
 
-source "$(dirname "$0")/env.sh"
+# shellcheck source=scripts/slurm/env.sh
+source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs
 
 SEED=$SLURM_ARRAY_TASK_ID
