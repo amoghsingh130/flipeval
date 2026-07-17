@@ -32,6 +32,11 @@ PROJECT_DIR="${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}"
 SCRATCH_DIR="${SCRATCH_DIR:-$HOME/scratch/flipeval}"
 IMAGE="${IMAGE:-$SCRATCH_DIR/flipeval.sif}"
 PROBE_ONLY="${PROBE_ONLY:-0}"
+# REQUIRE_OFFLINE=1 (default): a failed offline-resolution probe stops the job
+# before the large download. Set 0 to mirror anyway -- correct once the probe
+# outcome is already known and the mirror is wanted for the shard-reading
+# fallback verification path rather than for streaming.
+REQUIRE_OFFLINE="${REQUIRE_OFFLINE:-1}"
 
 # Pinned C4 revision. Authoritative source: scripts/build_quantized.py
 # DATASET_SPECS["c4"] and configs/main_grid_manifest.yaml. Never abbreviate.
@@ -121,7 +126,7 @@ PY
 B_RC=$?
 echo "phase B: rc=$B_RC"
 
-if [ "$B_RC" -ne 0 ]; then
+if [ "$B_RC" -ne 0 ] && [ "$REQUIRE_OFFLINE" = "1" ]; then
   echo
   echo "=== STAGE 1.5 RESULT: offline streaming does NOT resolve from the mirror ===" >&2
   echo "The mirror is inert for build_quantized.py's streaming code path." >&2
@@ -131,7 +136,19 @@ if [ "$B_RC" -ne 0 ]; then
   echo "Not downloading ~305GB. Stopping for human review." >&2
   exit 3
 fi
-echo "Phase B PASS: the mirror serves the streaming path offline."
+
+if [ "$B_RC" -ne 0 ]; then
+  # Measured 2026-07-16 (job 11223841): load_dataset must reach the Hub to
+  # RESOLVE allenai/c4 before streaming opens a byte, and HF_HUB_OFFLINE=1
+  # makes that resolution raise rather than fall back to the cached snapshot.
+  # Ruled 2026-07-17: mirror anyway. It is ~31min at the measured link rate and
+  # it enables the fallback parallel line-count verification path, which reads
+  # the shards directly and needs no Hub resolution.
+  echo "Phase B FAILED but REQUIRE_OFFLINE=0 -- continuing to mirror as ruled."
+  echo "The mirror serves the shard-reading fallback path, not the streaming path."
+else
+  echo "Phase B PASS: the mirror serves the streaming path offline."
+fi
 
 if [ "$PROBE_ONLY" = "1" ]; then
   echo "PROBE_ONLY=1 -- stopping before the full mirror as requested."
@@ -190,6 +207,17 @@ echo "train shards present: $SHARDS (expect 1024)"
 # ---------------------------------------------------------------------------
 echo
 echo "=== Phase D: offline streaming proof against the complete mirror ==="
+if [ "$B_RC" -ne 0 ]; then
+  echo "SKIP: Phase B already established that offline resolution fails."
+  echo "A complete mirror does not change that -- the failure is in Hub"
+  echo "resolution, not in file availability. Stage 2 transport stays networked."
+  echo
+  echo "=== STAGE 1.5 COMPLETE (mirror only; offline streaming unavailable) ==="
+  echo "mirror:  $SCRATCH_DIR/hf_cache ($((AFTER_KB / 1024 / 1024))GB, $SHARDS train shards)"
+  echo "use:     shard-reading fallback verification path; NOT the streaming path."
+  date -Is
+  exit 0
+fi
 APPTAINERENV_HF_HUB_OFFLINE=1 apptainer exec --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
 import sys, time, traceback
 from datasets import load_dataset
