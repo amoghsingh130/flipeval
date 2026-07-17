@@ -28,12 +28,44 @@ require editing frozen content, stop and surface it instead.
 
 ## Verification gates
 
-- `python3 -m pytest -q` must pass before and after changes
-  (baseline: 53 passed, 1 skipped locally; 54 in-container).
-- Source-state fingerprint: `python3 scripts/freeze_prepace.py --verify
-  docs/PREPACE_FREEZE.json`. After committing source changes, refresh with
-  `python3 scripts/freeze_prepace.py` and commit the updated freeze file
-  (the tool refuses dirty worktrees — commit first, freeze second).
+Which gate applies depends on where you are and what you touched.
+
+**Laptop-side (the original convention).** `python3 -m pytest -q` must pass
+before and after changes: baseline **53 passed, 1 skipped**. The one skip is the
+container-only AutoAWQ import test.
+
+**Phoenix-side (authoritative for any cluster-side source change, from
+2026-07-16).** The laptop host gate is *unrunnable* on the Phoenix login node —
+it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
+targets 3.11. The equivalent gate is the in-image suite:
+
+```bash
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 54 passed, 0 skipped
+```
+
+Run it **before** the commit that triggers a freeze refresh, and cite the
+`IN_IMAGE_PYTEST_SUMMARY:` line and its log path from
+`scripts/slurm/build_image.sbatch` as the evidence. **Any in-image skip is a
+gate failure** — a skip means a pinned dependency silently failed to import
+rather than being absent by design. Never pip-install a host environment on the
+cluster to recreate the laptop gate: that is a second, unregistered environment
+whose versions will not match the pinned image.
+
+**By change type.** Shell-only changes require `bash -n` plus `shellcheck`
+(available at `/usr/bin/shellcheck`); doc-only changes require no test gate.
+Both still follow commit → freeze → commit **if they land in a fingerprinted
+tree** (`configs`, `flipeval`, `pilot_eval`, `scripts`, `tests`, plus the
+`INCLUDED_PATHS` list in `scripts/freeze_prepace.py`). `AGENTS.md` and most of
+`docs/` are outside the fingerprint and need no freeze refresh.
+
+**Source-state fingerprint.** `python3 scripts/freeze_prepace.py --verify
+docs/PREPACE_FREEZE.json`. After committing source changes, refresh with
+`python3 scripts/freeze_prepace.py` and commit the updated freeze file (the tool
+refuses dirty worktrees — commit first, freeze second).
+
+*One-time bootstrap, not precedent:* `scripts/slurm/build_image.sbatch` was
+committed under a waiver on 2026-07-16, because the image it builds is itself
+the prerequisite for the gate. Recorded in `docs/PACE_ENVIRONMENT_NOTE.md`.
 
 ## PACE (Phoenix) execution facts
 

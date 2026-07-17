@@ -180,6 +180,40 @@ Recorded so the operational history stays honest:
    real finding was the 403, not the 404. Always take the revision from
    `configs/main_grid_manifest.yaml`, never from an abbreviation.
 
+## Verification gates on Phoenix — the host gate is unrunnable here (2026-07-16)
+
+**Measured:** the Phoenix login node has `python3` **3.9.21** at `/usr/bin/python3`
+and **no pytest, torch, pandas, or scipy**; no project venv exists; and no
+`python`/`anaconda3` module supplies them (they resolve to the same 3.9.21 with
+numpy 1.23.5 and yaml 5.4.1 only). The project targets Python 3.11. AGENTS.md's
+`53 passed, 1 skipped` baseline was established in the laptop dev environment,
+which has never existed on this cluster.
+
+Recreating it here was considered and **rejected**: `tests/test_pilot_eval.py`
+imports torch, so a host environment means multi-GB wheels at *unpinned*
+versions (`requirements.txt` says `torch>=2.3`; the image pins 2.13.0). That is
+a second, unregistered environment whose results would not match the image's —
+the opposite of what the gate is for.
+
+**Ruled 2026-07-16:**
+
+1. **This change waived.** `scripts/slurm/build_image.sbatch` is shell-only, a
+   new file, imported by nothing. Required checks for changes touching no Python
+   are `bash -n` **plus `shellcheck`** (present at `/usr/bin/shellcheck`,
+   v0.10.0). Both were run and are clean.
+2. **Standing rule from Stage 1 onward.** For any cluster-side source change the
+   authoritative gate is the in-image suite —
+   `apptainer exec $IMAGE python -m pytest -q`, expecting **54 passed,
+   0 skipped** — run *before* the commit that triggers a freeze refresh.
+   `scripts/slurm/build_image.sbatch` emits an `IN_IMAGE_PYTEST_SUMMARY:` line
+   carrying counts, exit code, job ID, and log path, so freeze-refresh commits
+   can cite grep-able evidence. AGENTS.md's Verification gates section is
+   updated to match: the 53+1 host gate stays as the laptop-side convention, the
+   in-image gate is its Phoenix-side equivalent.
+3. **Circularity, acknowledged for the record.** Stage 1's own sbatch is
+   necessarily committed under the waiver, because the image it builds is the
+   gate's prerequisite. **A one-time bootstrap, not precedent.**
+
 ## Ruled decisions carried into execution (2026-07-16)
 
 - Stage 1 gate: 54 passed, 0 skipped, 0 failed in-image; any skip fails the gate.
