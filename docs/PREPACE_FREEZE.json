@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-17T04:12:04.210058+00:00",
-  "source_commit": "f6d5ea44fe4bd107da6ec6144713462faac8f595",
-  "source_tree": "43f93d29c6a395c01d9dc4fbdf613b572ca706c9",
+  "created_at": "2026-07-17T04:17:08.956353+00:00",
+  "source_commit": "05d9c160b067033c75aa7bf38cc20286bc306712",
+  "source_tree": "353f0b4ef28d8f181c2293e26d39c884b2447c14",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -50,6 +50,7 @@
     "scripts/slurm/prepare_calibration.sbatch": "954fd22d892713e60f7f82864a5e13a9e55dca83a10a9301e38b8f4c4c7813a8",
     "scripts/slurm/run_bridge.sbatch": "505d443142faae712b17f59807d2bf28a53dc5ed94881ade878b35e73549a469",
     "scripts/slurm/verify_bridge.sbatch": "92711b76b2cb6fdb6201a7659470dde19ae4deac44e8ad77cbd13aaa5bcee21b",
+    "scripts/slurm/verify_row_count.sbatch": "6761b18b237269382de3e6a386254af9198adcf130308f0d399c5a029b88e031",
     "scripts/verify_bridge.py": "f581f3f419011704943b8ef975898a7c188c25766d4b7ef871261c1d2768e5b2",
     "tests/fixtures/lm_eval_gsm8k.jsonl": "09ee35979b5ebce5b7964771791fc9d1f489102b9a0779493b2c3a45f4cfdf9e",
     "tests/fixtures/lm_eval_mmlu_baseline.json": "5bead2f7b68fcd2fee34afae9b004c165b534c971e734c7fb39482f01659b5f5",
@@ -69,5 +70,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "61a3e9ffcd25ed07b6141f028e525b63a25098e902c8a1fe3e24938af5af75e1"
+  "manifest_payload_sha256": "76372416362800f2d57276a2bee8be76c28ffd006bc5d17bab99070b08d5157f"
 }
