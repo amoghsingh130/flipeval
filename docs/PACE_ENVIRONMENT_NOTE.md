@@ -238,6 +238,81 @@ runs the first quantization job, or deferred until after the mini-grid
 completes. `container/environment.lock.pace.txt` records the exact resolve and
 is retained separately from the Docker-mirror lock per the runbook.
 
+## Stage 1.5 — C4 transport measured; the mirror is a diagnostic asset (2026-07-17)
+
+### Offline streaming does not resolve from the mirror (job 11223841)
+
+`snapshot_download` cached two probe shards in 29 s, then:
+
+```
+OFFLINE_STREAM_FAIL ConnectionError Couldn't reach 'allenai/c4' on the Hub (OfflineModeIsEnabled)
+```
+
+**Mechanism.** Three caches, none connected: `snapshot_download` fills the *hub*
+cache; `load_dataset(..., streaming=True)` resolves through the Hub API and then
+reads via `HfFileSystem` over HTTP; `build_quantized.py` passes `cache_dir=` for
+the *datasets* cache. The failure is in **resolution**, not file availability —
+`load_dataset` must reach the Hub before streaming opens a byte, so a complete
+mirror cannot fix it. The download layer is fine.
+
+The probe was deliberately ordered to test the mechanism on two shards *before*
+the ~305 GB download: cost of the negative answer was **644 MB and 36 s**.
+
+### Rates (job 11225540) — decode-bound, not network-bound
+
+| Path | Rows/s | Projected full pass |
+|---|---|---|
+| Network streaming (registered) | **14,021** | **7.23 h** |
+| Local raw `zcat \| wc -l` (gunzip ceiling) | 48,862 | 2.07 h |
+| Local JSON builder (mirrored shard) | 17,673 | 5.73 h |
+
+Bytes/row: **2,155** text (uncompressed), **896.1** compressed. Shard 0 is
+305 MB compressed (319,308,785 bytes).
+
+Local beats network by only **1.26×**; both are far below the gunzip ceiling.
+**JSON decode on one core is the constraint; the 161.8 MB/s link never was.**
+See the 2026-07-17 erratum in `docs/PACE_EXECUTION_PLAN_2026-07-15.md`.
+
+### Struck permanently: the local-files loader rewrite
+
+Rewriting `make_stream_factory` to read mirrored shards
+(`load_dataset("json", data_files=[...])`) is **struck and no longer tracked**,
+by ruling 2026-07-17. Ceiling 1.26× (7.2 h → 5.7 h) against editing fingerprinted
+Python on the registered selection path plus a transport-equivalence argument.
+Its precondition — network-bound *and* passes > ~30 h — is false on both
+clauses. The measurement is the record; do not revisit without new measurements
+that overturn it.
+
+### Mirror status: retain until Stage 2 completes, then let it purge
+
+Demoted to diagnostic asset. Its one remaining use: if the verify pass returns
+anything other than 364,868,892, per-shard line counts over the mirror localize
+the discrepancy (which shards, how many rows) cheaply on embers — impossible
+without it. After the artifact passes validate, the 60-day purge may take it.
+
+### Shard-0 observation
+
+Shard 0 holds exactly **356,317 rows**; ×1024 = **364,868,608**, i.e. **284
+short** of the registered 364,868,892. Equal shard sizes were never an
+assumption anyone made, so this is expected variance rather than a defect. The
+verify pass settles `row_count` definitively.
+
+### Pre-committed response to a verification mismatch (ruled 2026-07-17, before the job returned)
+
+Recorded **before** the verify job returned, so the response cannot be shaped by
+its result:
+
+- **Exit 5 (count ≠ registered `row_count`) is a HARD STOP and a human
+  decision.** The registered permutation universe is built on that constant. No
+  constant edits, no "off by 284 is close enough," no resubmission. Bring Amogh:
+  the verified count, per-shard line counts from the mirror, and which shards
+  deviate from 356,317. The likely resolution is a dated correction recording
+  the true count *before any artifact exists* — but that call is made with
+  numbers in hand.
+- **Exit 4 (a pre-committed abort criterion tripped) stops for reassessment**
+  with measurements. Its truncated count is an artifact of the abort and is not
+  evidence about `row_count`.
+
 ## Verification gates on Phoenix — the host gate is unrunnable here (2026-07-16)
 
 **Measured:** the Phoenix login node has `python3` **3.9.21** at `/usr/bin/python3`
