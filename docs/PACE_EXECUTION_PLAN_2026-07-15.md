@@ -24,8 +24,8 @@
 - **Inputs.** `flipeval.def`, `container/requirements.lock`.
 - **SLURM request.** 1 CPU node job (or interactive): 8 CPUs, 32 GB, 4 h, no GPU, QOS embers. Build on a compute node, not login.
 - **Artifacts.** `$SCRATCH/flipeval/flipeval.sif`; `container/flipeval.sif.sha256`; `container/environment.lock.pace.txt` kept **separate** from the Docker-mirror lock (runbook requirement); pytest and `cpu_smoke.sh` logs archived to `$PROJECT/flipeval/results/pace_gate/`.
-- **Fail-closed validation.** In-image `python -m pytest -q` must report **37 passed** (matching the Docker-mirror image, including the AutoAWQ calibration-ID preservation test); `container/cpu_smoke.sh` completes and regenerates both analysis summaries; diff `environment.lock.pace.txt` vs `environment.lock.resolved.txt` and record every divergence.
-- **Go/no-go.** GO iff 37/37 pass and CPU smoke exits 0. If the PACE lock diverges from the pinned versions of torch 2.13.0 / transformers 5.13.0 / GPTQModel 7.1.0 / AutoAWQ 0.2.9 / lm-eval 0.4.12 / datasets 5.0.0: NO-GO — a divergent resolve is a new environment cell under the preregistration's backend rule; rebuild with hard pins rather than proceed.
+- **Fail-closed validation.** In-image `python -m pytest -q` must report **54 passed, 0 skipped, 0 failed** (see Erratum 2026-07-16; the count below was corrected from the stale 37), including the AutoAWQ calibration-ID preservation test; any in-image skip is a gate failure; `container/cpu_smoke.sh` completes and regenerates both analysis summaries; diff `environment.lock.pace.txt` vs `environment.lock.resolved.txt` and record every divergence.
+- **Go/no-go.** GO iff 54/54 pass with zero skips and CPU smoke exits 0. If the PACE lock diverges from the pinned versions of torch 2.13.0 / transformers 5.13.0 / GPTQModel 7.1.0 / AutoAWQ 0.2.9 / lm-eval 0.4.12 / datasets 5.0.0: NO-GO — a divergent resolve is a new environment cell under the preregistration's backend rule; rebuild with hard pins rather than proceed.
 
 ## Stage 2 — C4 seed-0 artifact preflight (Qwen2.5-1.5B), the measured one
 
@@ -146,3 +146,31 @@ CPU-hours (calibration): dominated by C4 scans — with a local mirror, ~10 × (
 5. Contingent: any pinned-package or GPU-type change after Stage 3 — recorded as a new environment cell per the frozen backend rule, never a silent replacement.
 
 Key file references: `STATUS.md`, `PREREGISTRATION.md`, `docs/PACE_RUNBOOK.md`, `docs/WIKITEXT2_PROTOCOL_BLOCKER.md`, `configs/pace_bridge_chat.yaml`, `configs/main_grid_manifest.yaml`, `scripts/build_quantized.py` (window logic lines 249–330), `scripts/slurm/*.sbatch`, `scripts/verify_bridge.py`. The hard-coded Qwen model in `prepare_calibration.sbatch`/`build_quantized.sbatch` and the absence of a mini-grid config/validator are the only new code artifacts this plan requires; both are gated behind Stage 5's freeze-and-test step.
+
+---
+
+## Dated Errata
+
+This is an operational planning document, not a frozen protocol. Errata correct
+facts that were stale or wrong when written; they never relax a registered rule.
+
+### Erratum 2026-07-16 — Stage 1 in-image test count: 37 → 54
+
+Stage 1 originally required **37 passed** in-image. That number was correct only
+for the 2026-07-13 Docker-mirror image, when the host suite stood at 36 passed +
+1 skipped. The atlas pipeline has since added 10 tests, taking the host suite to
+**53 passed, 1 skipped**; the single host skip is the container-only AutoAWQ
+import test, which *executes* inside the image. The in-image expectation is
+therefore **54 passed, 0 skipped, 0 failed**.
+
+Ruled by Amogh on 2026-07-16: the Stage 1 gate is 54 passed / 0 skipped /
+0 failed, and **any in-image skip is a gate failure** (a skip means a pinned
+dependency silently failed to import rather than being absent by design).
+Stage 1's fail-closed validation and go/no-go bullets above are corrected in
+place. `docs/PACE_ONBOARDING_CHECKLIST.md` carried the same stale 37 and is
+corrected to match. `AGENTS.md` already recorded 54 in-container and needed no
+change. No registered protocol is affected; the host-side gate (53 passed,
+1 skipped) is unchanged.
+
+Decided before any Stage 1 job was submitted and before any quantized accuracy
+result existed.
