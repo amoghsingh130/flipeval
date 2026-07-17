@@ -11,6 +11,7 @@ results/*
 !results/pilot_outputs_20260711T000427Z.tar.gz
 outputs/
 dist/
+logs/
 !results/atlas_run_20260715.tar.gz
 !results/atlas_run_20260715.tar.gz.sha256
 !results/atlas_cells_summary.csv
