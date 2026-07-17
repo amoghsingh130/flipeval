@@ -10,7 +10,8 @@
 #SBATCH --time=08:00:00
 #SBATCH --array=0-6
 
-source "$(dirname "$0")/env.sh"
+# shellcheck source=scripts/slurm/env.sh
+source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs results/qwen25_1p5b_bridge_chat
 
 METHODS=(fp16 gptq_s0 gptq_s1 gptq_s2 awq_s0 awq_s1 awq_s2)
