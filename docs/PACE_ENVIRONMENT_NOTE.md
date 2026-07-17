@@ -180,6 +180,64 @@ Recorded so the operational history stays honest:
    real finding was the 403, not the 404. Always take the revision from
    `configs/main_grid_manifest.yaml`, never from an abbreviation.
 
+## Stage 1 container gate — PASS 2026-07-16 (job 11223607)
+
+Built on compute node `atl1-1-02-006-21-2` under `embers`/`cpu-small` in
+**12 min 23 s**, peak RSS 22.7 GB, from a clean tree at commit `29d1fd6`.
+
+| Item | Result |
+|---|---|
+| Image | `~/scratch/flipeval/flipeval.sif`, 5.8 GB |
+| Image SHA-256 | `09ed767f29e1c0ebb97451b070bc91759301a2d9b63c706511f8b1dcd013418d` |
+| Build mode | unprivileged (no `--fakeroot` needed) |
+| In-image tests | **54 passed, 0 skipped, 0 failed** (16.72 s) |
+| CPU smoke | exit 0; both analysis summaries regenerated |
+| Six gated pins | all match the Docker-mirror lock |
+
+The 54-passed result confirms the erratum: the stale 37 would have failed the
+gate. Two warnings are expected and benign — AutoAWQ's upstream deprecation
+notice (the reason the runtime stays frozen and the GPU canary is mandatory) and
+a `torch.jit.script` deprecation.
+
+**Build mechanics that worked.** No `/etc/subuid` mapping exists for this user,
+but apptainer 1.4.4 handled it automatically: `User not listed in /etc/subuid,
+trying root-mapped namespace` → `%post` ran under fakeroot. Unprivileged builds
+work; `--fakeroot` was never needed. Lustre emits benign
+`ignoring ENOTSUP on setxattr` warnings throughout. `APPTAINER_CACHEDIR`/
+`APPTAINER_TMPDIR` on scratch were necessary and sufficient.
+
+### Lock divergence from the Docker mirror — recorded, not a gate failure
+
+The plan requires recording **every** divergence. The six gated packages match;
+five transitive dependencies resolved newer on PACE (`pip` picked up releases
+published since the 2026-07-10 mirror build, because `container/requirements.lock`
+pins direct dependencies only):
+
+| Package | Docker mirror | PACE |
+|---|---|---|
+| anyio | 4.14.1 | 4.14.2 |
+| filelock | 3.29.7 | 3.30.2 |
+| hf-xet | 1.5.1 | 1.5.2 |
+| narwhals | 2.23.0 | 2.24.0 |
+| typer | 0.26.8 | 0.27.0 |
+
+**Not a NO-GO under the ruled criterion**, which names torch / transformers /
+GPTQModel / AutoAWQ / lm-eval / datasets — all six match. None of the five
+plausibly touches quantization kernels or numerics: async I/O, file locking, the
+Xet download backend, a dataframe-compat shim, and a CLI framework. (`hf-xet` is
+the backend serving `cas-bridge.xethub.hf.co`, so it is on the C4 mirror byte
+path but not on any numerical path.)
+
+**Open question for Amogh, not blocking Stages 1.5–3:** these five are unpinned
+and will drift again on any future rebuild, so an image rebuilt after a scratch
+purge would not be byte-identical to the one the canaries ran on. If that
+matters for the paper's reproducibility claim, hard-pin them in
+`container/requirements.lock` — but note that rebuilding the image is itself a
+new environment cell, so the pinning decision should be made *before* Stage 3
+runs the first quantization job, or deferred until after the mini-grid
+completes. `container/environment.lock.pace.txt` records the exact resolve and
+is retained separately from the Docker-mirror lock per the runbook.
+
 ## Verification gates on Phoenix — the host gate is unrunnable here (2026-07-16)
 
 **Measured:** the Phoenix login node has `python3` **3.9.21** at `/usr/bin/python3`
