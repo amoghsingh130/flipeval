@@ -364,3 +364,48 @@ the opposite of what the gate is for.
 - GPU-type pin stays A100. It remains changeable **only until the first
   quantization job runs, never after**. If `--test-only` shows H100 starting
   materially sooner, the comparison is reported before anything is submitted.
+
+## Stage 2 first attempt — latent env.sh sourcing bug, caught by the fail-closed check (2026-07-17)
+
+**Finding.** `prepare_calibration.sbatch`, `build_quantized.sbatch`,
+`run_bridge.sbatch`, and `verify_bridge.sbatch` all sourced their environment
+with `source "$(dirname "$0")/env.sh"`. Under standard `sbatch`, the batch
+script is spooled to a job-specific path on the compute node
+(`/var/lib/slurm/slurmd/job<id>/slurm_script`) before it runs, so `$0` never
+points back to `scripts/slurm/` — `dirname "$0"` is worthless inside a
+`#SBATCH` script. This is a general SLURM property, not a Phoenix-specific
+quirk.
+
+**Why the two working Stage 1/1.5 scripts dodged it.** `mirror_c4.sbatch` and
+`verify_row_count.sbatch` never source `env.sh` at all — both hardcode
+absolute paths directly. Only the untested Stage 2/3/4 scripts used the
+dirname trick, and Stage 2 (job `11233525`) was its first real invocation.
+
+**Cost of the failure: 1 second, zero data.** `env.sh` never ran, so
+`PROJECT_DIR`/`IMAGE` were unset, apptainer had nothing to bind at
+`/workspace`, and the job died with `FATAL: container creation failed: mount
+source /workspace doesn't exist`, exit 255, before touching the network or the
+mirror. The image-existence fail-closed check in `env.sh` did exactly its job
+— no partial artifact, no corrupted calibration state, nothing to clean up.
+
+**Fix (commits `a5dabd1`, `d0ffaa8`, `91f3b13`).** Replaced the sourcing line
+in all four scripts with
+`source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"`,
+matching `env.sh`'s own default and keeping `env.sh` as the single environment
+contract (no duplication). Repo-wide grep confirmed these were the only four
+instances of the pattern. Added a `# shellcheck source=` directive per file so
+`shellcheck -x` follows and checks `env.sh` itself rather than emitting
+SC1091; all four now pass `bash -n` and `shellcheck -x` clean (rc=0), matching
+the three untouched sbatch scripts. `logs/` (relative `--output=logs/...`
+SBATCH paths land job logs in the project tree) was added to `.gitignore` —
+untracked logs were blocking the freeze tool's dirty-worktree check.
+
+**Fix proven before resubmitting the real job.** A throwaway `embers` probe
+(outside `scripts/`, not committed) sourced `env.sh` the new way and printed
+`PROJECT_DIR`, `IMAGE`, and the image-existence check: all green
+(`IMAGE_EXISTS_CHECK=PASS`), 1 s walltime.
+
+**Resubmitted 2026-07-17.** Seed-0 calibration job `11233678` (`--array=0`,
+inferno) running; Stage 3 canary pair `11233679` (`--array=0,3`, inferno)
+queued `afterok:11233678_*`, per the standing pre-authorization in
+`docs/PACE_RUNBOOK.md:113-114`.
