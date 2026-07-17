@@ -174,3 +174,51 @@ change. No registered protocol is affected; the host-side gate (53 passed,
 
 Decided before any Stage 1 job was submitted and before any quantized accuracy
 result existed.
+
+### Erratum 2026-07-17 — the C4 cost premise is falsified: decode-bound, not network-bound
+
+This plan is built around a cost claim stated in its opening ("A key cost fact
+the plan is built around"), in Stage 2's recommended pre-step, in the CPU-hours
+total, and in Risk 1: that each C4 pass scans ~305 GB over the network, that
+this dominates the campaign, and that a local shard mirror is "the single
+biggest operational lever" and "the difference between a tractable and an
+intractable Stage 5."
+
+**Measured 2026-07-16/17 on Phoenix compute nodes, the premise does not hold.**
+
+| Measurement | Result | Job |
+|---|---|---|
+| Compute-node link, LFS byte range | 161.8 MB/s (HTTP 206, `cas-bridge.xethub.hf.co`) | 11222157 |
+| Network streaming, registered path | **14,021 rows/s → 7.23 h/pass** | 11225540 |
+| Local raw `zcat \| wc -l` (gunzip ceiling) | 48,862 rows/s → 2.07 h/pass | 11225540 |
+| Local JSON builder on a mirrored shard | 17,673 rows/s → 5.73 h/pass | 11225540 |
+
+A local read beats the network by only **1.26×**, and both sit far below the
+raw gunzip ceiling. **The bottleneck is JSON decode on one core, not
+transport.** A full pass is ~7.2 h, not the multi-day scan the plan feared, so
+10 artifacts at ~7–15 h each is trivially tractable and the C4 cost is not the
+campaign's dominant risk.
+
+Consequences, ruled 2026-07-17:
+
+1. **The mirror is demoted** from operational lever to *diagnostic asset*. It
+   cannot serve the registered streaming path at all: `load_dataset` must reach
+   the Hub to *resolve* the dataset before streaming opens a byte, and
+   `HF_HUB_OFFLINE=1` makes that resolution raise rather than fall back to the
+   cached snapshot (job 11223841, `OfflineModeIsEnabled`). Retained until Stage 2
+   fully completes, because per-shard line counts over the mirror are the only
+   cheap tool that could localize a `row_count` discrepancy; afterwards the
+   60-day purge may take it. Do not build plans around it.
+2. **The local-files loader rewrite is struck permanently.** Its ceiling is
+   1.26× (7.2 h → 5.7 h) in exchange for editing fingerprinted Python on the
+   registered selection path plus a transport-equivalence argument. The
+   condition it was contingent on (network-bound *and* passes > ~30 h) is false
+   on both clauses.
+3. **Stage 2's CPU-hours estimate is superseded.** "~100–250 CPU-node-hours with
+   a mirror, 2–4× that without, plus 0.3–1.2 TB of network transfer per
+   artifact" reflected the falsified premise. The real figure is ~7–15 h per
+   artifact over the network, ~1 CPU core bound on decode.
+
+Nothing registered changes: artifact creation keeps the pinned
+`load_dataset(..., streaming=True)` transport and the registered selection rule.
+Decided before any calibration artifact existed and before any accuracy result.
