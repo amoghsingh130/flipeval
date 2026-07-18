@@ -673,5 +673,32 @@ recovers a clean `Qwen2ForCausalLM` construction — closing the gap the canary
 exposed (the import test passed while construction failed). In-image gate count
 rises **55 → 58**.
 
-*(Gate result and cell-3 fingerprints are recorded in the subsection below once
-the rebuild completes.)*
+### Gate result — PASS (embers job 11259853, 2026-07-18, 10 min 19 s, exit 0:0)
+
+| Item | Result |
+|---|---|
+| Gate 1 in-image pytest | **58 passed, 0 skipped, 0 failed** (`rc=0`) |
+| Evidence line | `IN_IMAGE_PYTEST_SUMMARY: passed=58 skipped=0 failed=0 errors=0 rc=0 job=11259853 log=…/results/pace_gate/in_image_pytest.log` |
+| Gate 2 CPU smoke | exit 0; both analysis summaries regenerated |
+| Six gated pins | all match the Docker-mirror lock |
+| Build mode | unprivileged |
+
+The revision shim is bind-mounted source (`scripts/build_quantized.py`), so it is
+not baked into the pinned pip environment — the **PACE lock is byte-identical to
+cell 2** (same `requirements.lock`, same `flipeval.def`; the build rewrote
+`container/environment.lock.pace.txt` with no diff). The image sha differs only
+because the source tree baked by `%files` changed (the shim + tests).
+
+### Three cells — cell 2 superseded, cell 3 live and frozen
+
+| Cell | Image sha256 | PACE lock | Status |
+|---|---|---|---|
+| Cell 1 (2026-07-16) | `09ed767f…013418d` | `environment.lock.pace.superseded-2026-07-16.txt` | Built, no artifact, superseded |
+| Cell 2 (2026-07-18) | `9d2bb608…7ca9550e` | `environment.lock.pace.txt` (identical to cell 3) | **Superseded** — produced only the quarantined split-canary AWQ artifact, which does not freeze the cell |
+| Cell 3 (2026-07-18) | `8260d04cf1f76cb5961b6538dbeb9178006b29c5d8c93d2c639976bcd1db2007` | `environment.lock.pace.txt` | **Live** — the revision-shim cell the paired canary reruns on |
+
+Cell 2's PACE resolve equals cell 3's (no dependency change), so no separate
+superseded lock file is needed — the retained `environment.lock.pace.txt` is the
+resolve for both. The tracked image checksum `container/flipeval.sif.sha256` now
+records the cell-3 sha. **Cell 3 is the genuinely last rebuild: it freezes at the
+first PASSED canary pair (per the clarification above).**
