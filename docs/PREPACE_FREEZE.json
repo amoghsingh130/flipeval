@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-18T07:14:29.472216+00:00",
-  "source_commit": "175e8e43c306bf36ddd029e843db63d9fef222ee",
-  "source_tree": "789c1ad796ea045ac60507c5aaebd780300a267a",
+  "created_at": "2026-07-18T16:27:25.839978+00:00",
+  "source_commit": "a967cc992ae2a16b0ebbfe9ed56e4bbfbf63edb3",
+  "source_tree": "55201ab989173b36e672e67498a8e38638327f3b",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -16,7 +16,7 @@
     "configs/pace_bridge_chat.yaml": "145ab209f2bbb79a64cefc997cbf9fa2966ad357fd9133311b50ac9fad596424",
     "configs/pilot_qwen_1p5b.yaml": "1819c3a1c813ab12f70a430ed347ed1c0d45a762455c1c458d1aa1b1f7bf6022",
     "configs/smoke_tiny.yaml": "6d711ac1cd4715d0176c7a109875941297928269990fdafe849a2906a9b47003",
-    "container/requirements.lock": "db5488ab112ceb7d31d9aa0b5a66269904872c577dc02264ef06edf7636002ae",
+    "container/requirements.lock": "527848eebd6c10dc758200b7fb7cb5fe2fcd2a36a54ab36fcff6469478af60ec",
     "docs/EXPECTED_MAIN_GRID.json": "f9c2bb6f570f1f162e3ab7fda25b25951f180f5f7b42a137bc97b76835895fe3",
     "docs/PACE_RUNBOOK.md": "531d9a4db68da5e6acc2932d0960b6c5ac5dbcb73de359c978e5727430fa1f7f",
     "docs/WIKITEXT2_PREFLIGHT_2026-07-13.json": "8b4c107a590df148398685fc36414fa3b1dfc9edefbbbc2b9357de82ffb7dbf8",
@@ -26,7 +26,7 @@
     "flipeval/cli.py": "2683c8ed4461194a55b6071b0a12776ffb98d7a4353e4da0d306a5d2edc080de",
     "flipeval/core.py": "ed7029c571af187806ecf9da862adff9cd15a8e7562bb9d825739ba4a2420912",
     "flipeval/io.py": "24aff11b38eb58c65d04270dd30fc984a70e1215720d1e67e255aa1f5552dbb5",
-    "flipeval.def": "5999fc2931ae2b83cce549b68f5c991c65f6822f7267fcca65586aa40288fd3d",
+    "flipeval.def": "f73c5d75acb02ce5cf037780e7ee293368121af7469f220bea83984edd20664b",
     "pilot_eval/__init__.py": "111c1a594791d85f9da5c37f12434c7a16518c8b333ffe893bf19eebdae90a07",
     "pilot_eval/analyze.py": "4493a50463653ce52a8d46c0941c127a4f401bb18eadd1a2d9a612643d6f67cb",
     "pilot_eval/config.py": "d01145de2609751dab010b885404d97c11d0cfc8d7114bd8fe0cee62b923838d",
@@ -43,7 +43,7 @@
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
-    "scripts/slurm/build_image.sbatch": "10843362593acec661fb25c3eadec0dd6eca47fbea89a6644748a2f6c4cdb402",
+    "scripts/slurm/build_image.sbatch": "ca65259484df2dc2e054b86b02f449f41dcc716960c11e42f11e31c150ca7350",
     "scripts/slurm/build_quantized.sbatch": "a91fab20572d1036a90a36370cbad403a5d8f0ca49ce5808870cd79d55f1e6de",
     "scripts/slurm/env.sh": "3e267b55cbeb50c85f7c36640bc1396453609bd9c86472728b4fe229accbc86f",
     "scripts/slurm/mirror_c4.sbatch": "ced7de1d241f9fd3e9a05e6a20028cf49bc7eb47410ce75a1fd77215c4f9dc17",
@@ -70,5 +70,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "babbefee36ff98ec5c55ed2cd5c12c126dc4aece382ba2497c74bc7f6f340f96"
+  "manifest_payload_sha256": "d3287ee5a1a752f23ac620b4af6cf2f5f2cf763e7806eb8d117f8104316c4eb2"
 }
