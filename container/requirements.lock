@@ -1,6 +1,11 @@
 # Direct reproducibility pins. The image also writes the complete transitive
 # `pip freeze` to /opt/flipeval/environment.lock.txt.
 torch==2.13.0
+# gptqmodel eagerly imports every model definition (incl. multimodal) at import
+# time, so torchvision is a hard runtime dep even for text-only quantization.
+# Pinned to the release whose metadata declares `torch==2.13.0` (torchvision's
+# own Requires-Dist), i.e. the exact official pairing; not a floating resolve.
+torchvision==0.28.0
 transformers==5.13.0
 gptqmodel==7.1.0
 autoawq==0.2.9

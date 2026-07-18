@@ -22,6 +22,14 @@ From: python:3.11.14-slim-bookworm
     cd /workspace
     python -m pip install --upgrade pip setuptools wheel
     python -m pip install -r container/requirements.lock
+    # Fail the build (do not drift) if pulling torchvision==0.28.0 moved torch
+    # even a patch version off its pin. torchvision's metadata declares
+    # torch==2.13.0, so a mismatch here means the resolve did something unexpected.
+    # Compare the base release only: torch.__version__ carries the CUDA
+    # local-version tag (e.g. '2.13.0+cu130') that the pinned wheel has always
+    # had, and PEP 440 `torch==2.13.0` intentionally matches it -- that tag is
+    # not a version move, so the guard is on the base '2.13.0'.
+    python -c "import torch; base = torch.__version__.split('+')[0]; assert base == '2.13.0', 'torch drifted to ' + torch.__version__"
     python -m pip install --no-deps .
     python -m pytest -q
     mkdir -p /opt/flipeval /kaggle/working/results
@@ -33,4 +41,14 @@ From: python:3.11.14-slim-bookworm
 
 %test
     cd /workspace
+    # gptqmodel imports tokenicer, which creates HF_HOME at import time. The
+    # %environment HF_HOME (=/scratch/hf_cache) is correct at runtime, where the
+    # job binds /scratch and sets HF_HOME via APPTAINERENV_HF_HOME -- but during
+    # `apptainer build` the %test phase has no /scratch bind and a read-only
+    # root, so that import-time mkdir fails. Redirect the cache to a writable
+    # build-local path for the self-test only. This cannot affect runtime, which
+    # overrides HF_HOME through APPTAINERENV_*. (The authoritative gate is
+    # build_image.sbatch's Gate 1, which runs pytest with /scratch bound.)
+    export HF_HOME=/tmp/flipeval_buildtest_hf
+    export HF_DATASETS_CACHE=/tmp/flipeval_buildtest_hf/datasets
     python -m pytest -q
