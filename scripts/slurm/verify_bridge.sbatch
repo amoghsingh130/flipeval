@@ -10,7 +10,7 @@
 
 # shellcheck source=scripts/slurm/env.sh
 source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
-apptainer exec --pwd /workspace \
+apptainer exec --cleanenv --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python /workspace/scripts/verify_bridge.py \
   --config /workspace/configs/pace_bridge_chat.yaml \

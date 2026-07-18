@@ -69,7 +69,7 @@ df -h "$SCRATCH_DIR" | tail -1
 echo
 echo "=== Phase A: partial mirror (2 train shards + metadata) ==="
 A_START=$(date +%s)
-apptainer exec --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
+apptainer exec --cleanenv --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
 import sys
 from huggingface_hub import snapshot_download
 try:
@@ -102,7 +102,7 @@ echo "phase A: rc=$A_RC elapsed=$((A_END - A_START))s"
 # ---------------------------------------------------------------------------
 echo
 echo "=== Phase B: HF_HUB_OFFLINE=1 streaming resolution probe ==="
-APPTAINERENV_HF_HUB_OFFLINE=1 apptainer exec --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
+APPTAINERENV_HF_HUB_OFFLINE=1 apptainer exec --cleanenv --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
 import os, sys, traceback
 print("HF_HUB_OFFLINE =", os.environ.get("HF_HUB_OFFLINE"))
 from datasets import load_dataset
@@ -163,7 +163,7 @@ echo
 echo "=== Phase C: full mirror of the pinned C4 en split ==="
 BEFORE_KB=$(du -sk "$SCRATCH_DIR/hf_cache" 2>/dev/null | cut -f1)
 C_START=$(date +%s)
-apptainer exec --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
+apptainer exec --cleanenv --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
 import sys
 from huggingface_hub import snapshot_download
 try:
@@ -218,7 +218,7 @@ if [ "$B_RC" -ne 0 ]; then
   date -Is
   exit 0
 fi
-APPTAINERENV_HF_HUB_OFFLINE=1 apptainer exec --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
+APPTAINERENV_HF_HUB_OFFLINE=1 apptainer exec --cleanenv --bind "$SCRATCH_DIR:/scratch" "$IMAGE" python - <<PY
 import sys, time, traceback
 from datasets import load_dataset
 try:

@@ -14,7 +14,7 @@ source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs
 
 SEED=$SLURM_ARRAY_TASK_ID
-srun apptainer exec --pwd /workspace \
+srun apptainer exec --cleanenv --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python /workspace/scripts/build_quantized.py \
   --model-id Qwen/Qwen2.5-1.5B-Instruct \

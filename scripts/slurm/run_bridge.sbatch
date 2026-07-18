@@ -16,7 +16,7 @@ mkdir -p logs results/qwen25_1p5b_bridge_chat
 
 METHODS=(fp16 gptq_s0 gptq_s1 gptq_s2 awq_s0 awq_s1 awq_s2)
 METHOD=${METHODS[$SLURM_ARRAY_TASK_ID]}
-srun apptainer exec --nv --pwd /workspace \
+srun apptainer exec --cleanenv --nv --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python -m pilot_eval.run \
   --config /workspace/configs/pace_bridge_chat.yaml \

@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import traceback
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
@@ -577,6 +578,7 @@ def build_gptq(args: Any, tokenizer: Any, artifact: Mapping[str, Any]) -> None:
     try:
         from gptqmodel import GPTQConfig, GPTQModel
     except ImportError as exc:
+        traceback.print_exception(exc)
         raise SystemExit("GPTQ quantization requires the pinned gptqmodel runtime.") from exc
 
     quantize_config = GPTQConfig(bits=args.bits, group_size=128, desc_act=False)
@@ -599,6 +601,7 @@ def build_awq(args: Any, tokenizer: Any, artifact: Mapping[str, Any]) -> None:
     try:
         from awq import AutoAWQForCausalLM
     except ImportError as exc:
+        traceback.print_exception(exc)
         raise SystemExit("AWQ quantization requires the pinned autoawq runtime.") from exc
 
     model = AutoAWQForCausalLM.from_pretrained(

@@ -28,7 +28,7 @@ if [ ! -f "$CALIBRATION_DIR/qwen25-1p5b-c4-s${SEED}.json" ]; then
   exit 1
 fi
 
-srun apptainer exec --nv --pwd /workspace \
+srun apptainer exec --cleanenv --nv --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python /workspace/scripts/build_quantized.py \
   --model-id "$MODEL_ID" \
