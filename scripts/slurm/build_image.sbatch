@@ -106,9 +106,12 @@ echo "image in place: $IMAGE ($(du -h "$IMAGE" | cut -f1), build mode: $BUILD_MO
 # Ruled 2026-07-16: 54 passed, 0 skipped, 0 failed. Any skip fails the gate --
 # a skip means a pinned dependency silently failed to import rather than being
 # absent by design. (The stale 37 is corrected in the plan's dated erratum.)
+# Raised to 55 on 2026-07-18: the torchvision==0.28.0 rebuild makes
+# test_pinned_gptqmodel_exposes_expected_api import gptqmodel for real instead
+# of skipping, so it now runs and passes.
 # ---------------------------------------------------------------------------
 echo
-echo "=== Gate 1: in-image pytest (expect 54 passed, 0 skipped, 0 failed) ==="
+echo "=== Gate 1: in-image pytest (expect 55 passed, 0 skipped, 0 failed) ==="
 apptainer exec --cleanenv --bind "$SCRATCH_DIR:/scratch" "$IMAGE" \
   python -m pytest -q 2>&1 | tee "$PYTEST_LOG"
 PYTEST_RC=${PIPESTATUS[0]}
@@ -126,7 +129,7 @@ echo "parsed: passed=$PASSED skipped=$SKIPPED failed=$FAILED errors=$ERRORS"
 
 GATE_FAIL=0
 [ "$PYTEST_RC" -ne 0 ] && { echo "GATE FAIL: pytest exit $PYTEST_RC" >&2; GATE_FAIL=1; }
-[ "$PASSED" != "54" ]  && { echo "GATE FAIL: expected 54 passed, got $PASSED" >&2; GATE_FAIL=1; }
+[ "$PASSED" != "55" ]  && { echo "GATE FAIL: expected 55 passed, got $PASSED" >&2; GATE_FAIL=1; }
 [ "$SKIPPED" != "0" ]  && { echo "GATE FAIL: expected 0 skipped, got $SKIPPED (a skip = a pinned dep failed to import)" >&2; GATE_FAIL=1; }
 [ "$FAILED" != "0" ]   && { echo "GATE FAIL: $FAILED failed" >&2; GATE_FAIL=1; }
 [ "$ERRORS" != "0" ]   && { echo "GATE FAIL: $ERRORS errors" >&2; GATE_FAIL=1; }
@@ -140,7 +143,7 @@ if [ "$GATE_FAIL" -ne 0 ]; then
   echo "STOPPING: in-image test gate failed. Not running the smoke; not exporting the lock." >&2
   exit 1
 fi
-echo "Gate 1 PASS: 54 passed, 0 skipped, 0 failed"
+echo "Gate 1 PASS: 55 passed, 0 skipped, 0 failed"
 
 # ---------------------------------------------------------------------------
 # Gate 2: CPU smoke. Bound to scratch for /kaggle/working (image is read-only)
@@ -219,7 +222,7 @@ echo "=== STAGE 1 GATE PASS ==="
 echo "image:      $IMAGE"
 echo "build mode: $BUILD_MODE"
 echo "sha256:     $(cut -d' ' -f1 < "$PROJECT_DIR/container/flipeval.sif.sha256")"
-echo "tests:      54 passed, 0 skipped, 0 failed"
+echo "tests:      55 passed, 0 skipped, 0 failed"
 echo "smoke:      exit 0, both analysis summaries regenerated"
 echo "smoke out:  $KAGGLE_BIND/results"
 echo "pins:       all six match the Docker-mirror lock"
