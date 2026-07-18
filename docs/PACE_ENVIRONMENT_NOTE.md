@@ -702,3 +702,18 @@ superseded lock file is needed — the retained `environment.lock.pace.txt` is t
 resolve for both. The tracked image checksum `container/flipeval.sif.sha256` now
 records the cell-3 sha. **Cell 3 is the genuinely last rebuild: it freezes at the
 first PASSED canary pair (per the clarification above).**
+
+### ENVIRONMENT-CELL FREEZE — cell 3 is the campaign environment (2026-07-18)
+
+The paired canary `11260334 --array=0,3` **PASSED both tasks** on cell 3
+(GPTQ seed0 exit 0:0 in 4:29; AWQ seed0 exit 0:0 in 7:05), and all three Stage 3
+checks passed (both checkpoints reload with 0 NaN/Inf; receipts byte-identical
+across methods; AWQ log clean). Per the freeze-point rule, **that first PASSED
+canary pair freezes the environment.**
+
+> **Cell 3 (image sha256 `8260d04cf1f76cb5961b6538dbeb9178006b29c5d8c93d2c639976bcd1db2007`,
+> `container/environment.lock.pace.txt`) is the FlipEval campaign environment,
+> frozen HARD as of 2026-07-18.** No further environment-cell rebuilds for the
+> campaign — any dependency, def, or pinned-runtime change from here is a new,
+> un-superseded cell and requires an explicit ruling. Seeds 1–2, the bridge, and
+> the main/mini grids all run on this exact image sha.
