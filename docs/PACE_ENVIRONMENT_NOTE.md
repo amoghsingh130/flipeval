@@ -495,3 +495,95 @@ before any seed-1/2 or bridge compute was spent on a broken runtime. That
 division of labor (fast mocked unit tests for logic, an expensive real-run
 canary for runtime truth) is by design, not an accident to fix, and is worth
 a sentence in the paper's ops appendix.
+
+## Environment-cell rebuild — torchvision==0.28.0 added to close the GPTQ gap (2026-07-18)
+
+The GPTQ canary gap (missing `torchvision`, above) needed an image rebuild.
+Approved as a single environment-cell change because **zero quantized artifacts
+exist yet** — the same reasoning the plan uses for the compiler branch. This is
+the **last free rebuild**: the pin freezes permanently once the canary produces
+its first GPU output.
+
+### Pre-check before touching the def (embers job 11258458, --cleanenv, current image)
+
+Two questions settled before editing, so the rebuild would be one cell, not two:
+
+1. **Compiler already in-image.** Under `--cleanenv`, `/usr/bin/gcc` and
+   `/usr/bin/cc` are both `gcc (Debian) 12.2.0` (`step0_rc=0`). `build-essential`
+   was always in the def; the AWQ Triton JIT path compiles with the in-image
+   compiler now that the leaked host `CC` is gone. **No toolchain addition
+   needed — the rebuild is torchvision-only.**
+2. **torchvision pairing is exact and does not move torch.** A constrained
+   dry-run resolve (`pip install --dry-run --report torchvision torch==2.13.0`)
+   reports `Would install torchvision-0.28.0` with `requires_dist: torch (==2.13.0)`
+   and torch "already satisfied" at 2.13.0 — i.e. torchvision's own metadata
+   pins torch exactly, and pulling it drifts torch by **zero** patch versions.
+   Installed from plain PyPI, the same index/method as torch. Pinned in
+   `container/requirements.lock` as a hard `==`, never a floating resolve.
+
+### Two build failures, both fail-closed with zero collateral, before the pass
+
+The pinned image is unforgiving by design, and it caught two mistakes on the way:
+
+- **Job 11258508 — `%post` torch-pin assertion (my bug, not a drift).** The
+  assertion compared `torch.__version__ == '2.13.0'`, but the runtime string is
+  `2.13.0+cu130` (the CUDA-13 local-version tag the pinned wheel has always
+  carried; `pip freeze` normalizes it away in the lock, so the lock reads
+  `torch==2.13.0`). PEP 440 `torch==2.13.0` matches `2.13.0+cu130`, so torch
+  never moved. Fixed to guard the **base** release
+  (`torch.__version__.split('+')[0] == '2.13.0'`), which is the correct reading
+  of "moved even a patch version."
+- **Job 11258600 — `%test` pytest (a latent collision torchvision exposed).**
+  `import gptqmodel` → `tokenicer` → `_configure_hf_cache()` does
+  `HF_HOME.mkdir(parents=True)` **at import time**. The `%environment`
+  `HF_HOME=/scratch/hf_cache` is correct at runtime (jobs bind `/scratch` and set
+  it via `APPTAINERENV_HF_HOME`), but during `apptainer build` the `%test` phase
+  has no `/scratch` bind and a read-only root → `OSError [Errno 30] Read-only
+  file system: '/scratch'`. This was latent while `torchvision` was absent:
+  `import gptqmodel` failed early with `ModuleNotFoundError`, so
+  `pytest.importorskip` **skipped** the test before `tokenicer` was ever reached.
+  Fixed by redirecting `HF_HOME`/`HF_DATASETS_CACHE` to a writable build-local
+  `/tmp` path **in the `%test` block only** — runtime is untouched (it overrides
+  `HF_HOME` through `APPTAINERENV_*`), and Gate 1 remains the authoritative run
+  because it execs pytest with `/scratch` bound. The `%post` pytest already
+  passed with gptqmodel importing for real (it uses a writable default cache),
+  so the 55-pass was demonstrated before Gate 1 even ran.
+
+Both fixes are runtime-neutral and were folded into the single environment-cell
+commit `ffc366c`. The failed-build job logs (`image_11258508.out`,
+`image_11258600.out`) permanently record the iteration.
+
+### Gate result — PASS (embers job 11258719, 2026-07-18, 9 min 25 s, exit 0:0)
+
+| Item | Result |
+|---|---|
+| Gate 1 in-image pytest | **55 passed, 0 skipped, 0 failed** (`rc=0`) |
+| Evidence line | `IN_IMAGE_PYTEST_SUMMARY: passed=55 skipped=0 failed=0 errors=0 rc=0 job=11258719 log=…/results/pace_gate/in_image_pytest.log` |
+| Gate 2 CPU smoke | exit 0; both analysis summaries regenerated |
+| Six gated pins | all match the Docker-mirror lock |
+| Build mode | unprivileged |
+
+`AGENTS.md`/`CLAUDE.md` in-image gate and `scripts/slurm/build_image.sbatch`
+Gate 1 are updated 54 → **55** to match: `test_pinned_gptqmodel_exposes_expected_api`
+now imports gptqmodel for real instead of skipping.
+
+### Both fingerprints — old cell superseded, new cell live
+
+| Cell | Image sha256 | PACE lock | Status |
+|---|---|---|---|
+| Old (built 2026-07-16) | `09ed767f29e1c0ebb97451b070bc91759301a2d9b63c706511f8b1dcd013418d` | `container/environment.lock.pace.superseded-2026-07-16.txt` | **Built, never produced a quantized artifact, superseded** |
+| New (built 2026-07-18) | `9d2bb608c7b54bf71a5d688723d06c38bf36b8849758fcb9e95c1fda7ca9550e` | `container/environment.lock.pace.txt` | **Live** — the pin the canary runs on |
+
+Both lock files are retained in the tree. New-cell resolve diverges from the
+old-cell resolve on exactly three lines: `+torchvision==0.28.0` (intended),
+`filelock 3.30.2 → 3.31.0`, and `huggingface_hub 1.23.0 → 1.24.0`. The two
+transitive drifts are the same unpinned-dependency behavior recorded in the
+Stage 1 "Lock divergence" section (requirements.lock pins direct deps only);
+neither touches quantization kernels or numerics (a file lock and the HF hub
+client), and **all six gated pins match** — not a NO-GO under the ruled
+criterion.
+
+**Rationale for the record.** This environment-cell change is clean because no
+quantized artifact exists yet; the pin freezes permanently at the first
+successful GPU output. This is the last free rebuild — any dependency change
+after the canary emits its first checkpoint is a new, un-superseded cell.
