@@ -12,6 +12,9 @@ results/*
 outputs/
 dist/
 logs/
+
+# Sibling research project checked out alongside flipeval; not part of this repo.
+Cont-Labelerr-auditing/
 !results/atlas_run_20260715.tar.gz
 !results/atlas_run_20260715.tar.gz.sha256
 !results/atlas_cells_summary.csv
