@@ -1,13 +1,14 @@
 import json
 import sys
 from copy import deepcopy
-from types import SimpleNamespace
+from types import ModuleType, SimpleNamespace
 
 import pytest
 
 from scripts.build_quantized import (
     CalibrationArtifactError,
     DatasetSpec,
+    _strip_revision_from_shell_model,
     artifact_sha256,
     build_awq,
     build_gptq,
@@ -191,7 +192,15 @@ def test_gptq_and_awq_builders_consume_the_same_artifact(monkeypatch, tmp_path):
         def save_quantized(self, path):
             calls["awq_save"] = path
 
+    # build_gptq imports gptqmodel.utils.hf to install the revision shim; provide
+    # a fake submodule so the from-import resolves against the mocked package.
+    fake_hf = ModuleType("gptqmodel.utils.hf")
+    fake_hf.build_shell_model = lambda loader, config, trust_remote_code=True, **kw: None
+    fake_utils = ModuleType("gptqmodel.utils")
+    fake_utils.hf = fake_hf
     monkeypatch.setitem(sys.modules, "gptqmodel", SimpleNamespace(GPTQConfig=Config, GPTQModel=GPTQModel))
+    monkeypatch.setitem(sys.modules, "gptqmodel.utils", fake_utils)
+    monkeypatch.setitem(sys.modules, "gptqmodel.utils.hf", fake_hf)
     monkeypatch.setitem(sys.modules, "awq", SimpleNamespace(AutoAWQForCausalLM=AWQModel))
     common = {
         "bits": 4,
@@ -220,6 +229,52 @@ def test_gptq_and_awq_builders_consume_the_same_artifact(monkeypatch, tmp_path):
         "fixture/model",
         {"revision": "model123", "trust_remote_code": True},
     )
+
+
+def test_revision_shim_strips_only_revision_from_shell_model():
+    received = {}
+
+    def spy(loader, config, trust_remote_code=True, **kwargs):
+        received["loader"] = loader
+        received["config"] = config
+        received["trust_remote_code"] = trust_remote_code
+        received["kwargs"] = kwargs
+        return "SHELL_MODEL"
+
+    wrapped = _strip_revision_from_shell_model(spy)
+    out = wrapped(
+        "LOADER",
+        "CONFIG",
+        trust_remote_code=False,
+        revision="pinnedrev",
+        device_map=None,
+        _fast_init=True,
+        extra="untouched",
+    )
+
+    # Return value flows through, revision is dropped, every other kwarg and the
+    # positional/keyword forwarding is byte-for-byte unchanged.
+    assert out == "SHELL_MODEL"
+    assert received["loader"] == "LOADER"
+    assert received["config"] == "CONFIG"
+    assert received["trust_remote_code"] is False
+    assert received["kwargs"] == {"device_map": None, "_fast_init": True, "extra": "untouched"}
+    assert "revision" not in received["kwargs"]
+    assert wrapped._flipeval_strips_revision is True
+
+
+def test_revision_shim_is_a_noop_when_revision_absent():
+    received = {}
+
+    def spy(loader, config, trust_remote_code=True, **kwargs):
+        received["kwargs"] = kwargs
+        return "SHELL_MODEL"
+
+    wrapped = _strip_revision_from_shell_model(spy)
+    out = wrapped("LOADER", "CONFIG", device_map=None, _fast_init=False)
+
+    assert out == "SHELL_MODEL"
+    assert received["kwargs"] == {"device_map": None, "_fast_init": False}
 
 
 def test_checkpoint_receipts_prove_pairing(tmp_path):
@@ -272,3 +327,36 @@ def test_pinned_gptqmodel_exposes_expected_api():
 
     assert GPTQConfig is not None
     assert GPTQModel is not None
+
+
+def test_pinned_gptqmodel_builds_qwen2_shell_model_under_pinned_transformers():
+    # Closes the gap the cell-2 canary exposed: importing gptqmodel succeeds,
+    # but constructing the shell model through gptqmodel's own path leaks
+    # `revision` into transformers>=5 from_config and dies. This is a real
+    # CPU-side construction (weights stay on 'meta'; no GPU, no network).
+    pytest.importorskip("gptqmodel")
+    pytest.importorskip("transformers")
+    from gptqmodel.utils.hf import build_shell_model
+    from transformers import AutoModelForCausalLM, Qwen2Config
+
+    config = Qwen2Config(
+        vocab_size=256,
+        hidden_size=64,
+        intermediate_size=128,
+        num_hidden_layers=2,
+        num_attention_heads=4,
+        num_key_value_heads=2,
+        max_position_embeddings=128,
+    )
+    # build_shell_model unconditionally deletes device_map/_fast_init, so both
+    # must be present; revision is the leaking hub-only kwarg.
+    kwargs = dict(revision="pinnedrev", device_map=None, _fast_init=False)
+
+    # The raw path still fails in exactly this shape under the pinned runtime.
+    with pytest.raises(TypeError, match="revision"):
+        build_shell_model(AutoModelForCausalLM, config=config, trust_remote_code=False, **dict(kwargs))
+
+    # The shim recovers a clean construction on the same path.
+    shimmed = _strip_revision_from_shell_model(build_shell_model)
+    model = shimmed(AutoModelForCausalLM, config=config, trust_remote_code=False, **dict(kwargs))
+    assert model.__class__.__name__ == "Qwen2ForCausalLM"

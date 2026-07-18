@@ -587,3 +587,91 @@ criterion.
 quantized artifact exists yet; the pin freezes permanently at the first
 successful GPU output. This is the last free rebuild — any dependency change
 after the canary emits its first checkpoint is a new, un-superseded cell.
+
+> **Freeze-point clarification (ruled by Amogh, 2026-07-18).** The clause above
+> — "the pin freezes at the first successful GPU output" — is **superseded**.
+> The environment pin freezes at the **first PASSED canary pair**, not at the
+> first artifact on disk. A single artifact from a split canary (one method
+> succeeds, the other fails) does *not* freeze the cell, because paired-receipt
+> verification never ran and the two methods did not come from one proven
+> environment. See the cell-3 section below.
+
+## Environment-cell rebuild — gptqmodel/Transformers 5.x `revision=` fix, cell 3 (2026-07-18)
+
+**Why a third cell.** The cell-2 canary pair (`11258797`) split: AWQ seed0
+COMPLETED and wrote a 1.1 G artifact, but GPTQ seed0 FAILED at model load with
+`TypeError: Qwen2ForCausalLM.__init__() got an unexpected keyword argument
+'revision'` (`gptqmodel/utils/hf.py build_shell_model` →
+`transformers .../auto_factory.from_config`). The torchvision rebuild (cell 2)
+fixed the earlier import gap, letting GPTQ get far enough to hit this next wall:
+gptqmodel 7.1.0 forwards `revision=` into `from_config`, which Transformers
+5.13.0 rejects.
+
+**Governance applied (per the freeze-point clarification above).** A split
+canary does not freeze the cell. The cell-2 AWQ artifact is therefore
+**quarantined, not kept**:
+`outputs/quantized/qwen25-1p5b-awq4-seed0` →
+`qwen25-1p5b-awq4-seed0.cell2-superseded`, never to be read by anything
+downstream. Both canaries rerun under the fixed cell 3 so both receipts come
+from one environment. **Cell 3 is the genuinely last rebuild: after a passed
+canary pair the environment is frozen for the campaign, hard.**
+
+### Diagnosis — no released gptqmodel fixes it (all CPU-side, no GPU)
+
+The failing call path (`build_shell_model` → `AutoModelForCausalLM.from_config`)
+is CPU-reachable, so the whole diagnosis ran on `embers` CPU with no GPU queue.
+
+- **Root cause.** gptqmodel 7.1.0's `utils/hf.py:build_shell_model` forwards its
+  model-init kwargs straight into `AutoModelForCausalLM.from_config`. It strips
+  `device_map`/`_fast_init` at that seam but **not** `revision`. Under
+  transformers 5.x, `from_config` passes unknown kwargs into the concrete model
+  `__init__`, and `Qwen2ForCausalLM.__init__` rejects `revision`. Older
+  transformers tolerated the stray kwarg; 5.13.0 does not.
+- **`revision` is inert at that seam.** In `loader.py:from_pretrained`, the
+  pinned revision is consumed by `get_model_local_path` (weight/config fetch)
+  **before** `build_shell_model` is called; by the time the shell model is
+  built, weights are already local and `revision` only governs hub fetches, not
+  architecture (which comes from the config object). Stripping `revision` only
+  at the `from_config` boundary therefore cannot change which revision is
+  fetched.
+- **No release fixes it.** The only gptqmodel release after 7.1.0 is **7.2.0**
+  (verified against the GitHub tags API — there is no 7.1.1). Its
+  `gptqmodel/utils/hf.py` is **byte-identical** to 7.1.0's `build_shell_model`,
+  so 7.2.0 does not fix the bug. And the 7.1.0→7.2.0 delta (12 commits) is
+  dominated by new model-architecture definitions and touches the
+  quantization/model-construction surface (`models/auto.py`, `models/base.py`,
+  `models/loader.py`, `models/writer.py`, `utils/structure.py`,
+  `looper/stage_layer.py`) — **not** compat-only. Under the decision rule, a
+  version bump is off the table on both counts (doesn't fix it; not
+  compat-only).
+- **Reproduced + confirmed on the pinned image** (embers CPU job `11259695`,
+  cell-2 image): raw path raises
+  `TypeError: Qwen2ForCausalLM.__init__() got an unexpected keyword argument
+  'revision'`; the from_config-boundary shim (pop `revision`) constructs the
+  Qwen2 shell model cleanly (`PROBE_SHIM: SUCCESS type= Qwen2ForCausalLM`).
+
+### Chosen fix — a narrow, from_config-boundary compat shim in our code
+
+Per the decision rule's second branch (only path that fixes it involves
+un-pinnable upstream change), the fix lives in **our** code, not the runtime:
+`scripts/build_quantized.py:_strip_revision_from_shell_model` wraps
+`gptqmodel.utils.hf.build_shell_model` to drop **only** `revision` before
+delegating (it extends gptqmodel's own existing `device_map`/`_fast_init` strip
+by exactly one key). `build_gptq` installs it — idempotently — right before
+`GPTQModel.load`; because `loader.from_pretrained` imports `build_shell_model`
+from the module at call time, patching the module attribute takes effect. The
+`GPTQModel.load(..., revision=...)` call is unchanged, so the pinned revision is
+still used for the weight fetch.
+
+**This is a pinned-runtime workaround, not an upstream fix.** It is documented
+here and guarded by three tests (`tests/test_build_quantized.py`): two
+regression tests proving the shim strips only `revision` and is a no-op
+otherwise (run everywhere), and a real CPU-side construction gate
+(`test_pinned_gptqmodel_builds_qwen2_shell_model_under_pinned_transformers`)
+that asserts the raw path still raises in exactly this shape and the shim
+recovers a clean `Qwen2ForCausalLM` construction — closing the gap the canary
+exposed (the import test passed while construction failed). In-image gate count
+rises **55 → 58**.
+
+*(Gate result and cell-3 fingerprints are recorded in the subsection below once
+the rebuild completes.)*

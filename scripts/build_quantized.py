@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import json
 import os
@@ -574,12 +575,49 @@ def validate_calibration_artifact(
         raise CalibrationArtifactError("calibration artifact checksum is invalid")
 
 
+def _strip_revision_from_shell_model(build_shell_model: Callable) -> Callable:
+    """Wrap ``gptqmodel.utils.hf.build_shell_model`` so ``revision`` never reaches
+    transformers' ``from_config``.
+
+    Pinned-runtime workaround (gptqmodel 7.1.0 + transformers 5.13.0). When
+    gptqmodel builds the meta-device shell model it forwards its model-init
+    kwargs straight into ``AutoModelForCausalLM.from_config``; under
+    transformers>=5, ``from_config`` passes unknown kwargs into the concrete
+    model ``__init__``, which rejects hub-only kwargs like ``revision``
+    (``TypeError: Qwen2ForCausalLM.__init__() got an unexpected keyword argument
+    'revision'``). The pinned-revision weights are already resolved upstream
+    (``loader.get_model_local_path``) before this seam, so ``revision`` is inert
+    here — it governs hub fetches, not architecture, which comes from the config
+    object. ``build_shell_model`` already strips ``device_map``/``_fast_init`` at
+    this same boundary; this extends that set by exactly one key and changes
+    nothing else. No released gptqmodel fixes this (7.2.0's ``utils/hf.py`` is
+    byte-identical to 7.1.0's and carries algorithm-relevant deltas), so a
+    version bump is not an option under the pinned image.
+    """
+
+    @functools.wraps(build_shell_model)
+    def wrapper(loader, config, trust_remote_code=True, **model_init_kwargs):
+        model_init_kwargs.pop("revision", None)
+        return build_shell_model(
+            loader, config, trust_remote_code=trust_remote_code, **model_init_kwargs
+        )
+
+    wrapper._flipeval_strips_revision = True  # idempotency guard
+    return wrapper
+
+
 def build_gptq(args: Any, tokenizer: Any, artifact: Mapping[str, Any]) -> None:
     try:
         from gptqmodel import GPTQConfig, GPTQModel
+        from gptqmodel.utils import hf as gptq_hf
     except ImportError as exc:
         traceback.print_exception(exc)
         raise SystemExit("GPTQ quantization requires the pinned gptqmodel runtime.") from exc
+
+    # loader.from_pretrained imports build_shell_model from this module at call
+    # time, so patching the module attribute before GPTQModel.load takes effect.
+    if not getattr(gptq_hf.build_shell_model, "_flipeval_strips_revision", False):
+        gptq_hf.build_shell_model = _strip_revision_from_shell_model(gptq_hf.build_shell_model)
 
     quantize_config = GPTQConfig(bits=args.bits, group_size=128, desc_act=False)
     examples = [
