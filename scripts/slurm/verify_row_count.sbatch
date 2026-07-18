@@ -48,7 +48,7 @@ if [ ! -f "$IMAGE" ]; then
   exit 1
 fi
 
-srun apptainer exec --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" "$IMAGE" \
+srun apptainer exec --cleanenv --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" "$IMAGE" \
   python - <<'PY'
 import resource
 import sys

@@ -264,3 +264,11 @@ def test_pinned_autoawq_preserves_pre_tokenized_calibration_ids():
     token_ids = [[1, 2, 3, 4], [5, 6, 7, 8]]
     blocks = get_calib_dataset(data=token_ids, n_samples=2, max_seq_len=4)
     assert [block.tolist()[0] for block in blocks] == token_ids
+
+
+def test_pinned_gptqmodel_exposes_expected_api():
+    pytest.importorskip("gptqmodel")
+    from gptqmodel import GPTQConfig, GPTQModel
+
+    assert GPTQConfig is not None
+    assert GPTQModel is not None

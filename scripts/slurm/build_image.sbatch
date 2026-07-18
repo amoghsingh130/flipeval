@@ -109,7 +109,7 @@ echo "image in place: $IMAGE ($(du -h "$IMAGE" | cut -f1), build mode: $BUILD_MO
 # ---------------------------------------------------------------------------
 echo
 echo "=== Gate 1: in-image pytest (expect 54 passed, 0 skipped, 0 failed) ==="
-apptainer exec --bind "$SCRATCH_DIR:/scratch" "$IMAGE" \
+apptainer exec --cleanenv --bind "$SCRATCH_DIR:/scratch" "$IMAGE" \
   python -m pytest -q 2>&1 | tee "$PYTEST_LOG"
 PYTEST_RC=${PIPESTATUS[0]}
 
@@ -148,7 +148,7 @@ echo "Gate 1 PASS: 54 passed, 0 skipped, 0 failed"
 # ---------------------------------------------------------------------------
 echo
 echo "=== Gate 2: CPU smoke (outputs -> $KAGGLE_BIND/results) ==="
-apptainer exec \
+apptainer exec --cleanenv \
   --bind "$KAGGLE_BIND:/kaggle/working" \
   --bind "$SCRATCH_DIR:/scratch" \
   "$IMAGE" sh /workspace/container/cpu_smoke.sh 2>&1 | tee "$SMOKE_LOG"
@@ -175,7 +175,7 @@ echo "Gate 2 PASS: CPU smoke exit 0, both analysis summaries regenerated"
 # ---------------------------------------------------------------------------
 echo
 echo "=== Export PACE lock and image checksum ==="
-apptainer exec "$IMAGE" cat /opt/flipeval/environment.lock.txt \
+apptainer exec --cleanenv "$IMAGE" cat /opt/flipeval/environment.lock.txt \
   > "$PROJECT_DIR/container/environment.lock.pace.txt" || exit 1
 sha256sum "$IMAGE" > "$PROJECT_DIR/container/flipeval.sif.sha256" || exit 1
 echo "wrote container/environment.lock.pace.txt ($(wc -l < "$PROJECT_DIR/container/environment.lock.pace.txt") packages)"

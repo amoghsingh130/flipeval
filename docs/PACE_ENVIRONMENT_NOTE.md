@@ -409,3 +409,89 @@ untracked logs were blocking the freeze tool's dirty-worktree check.
 inferno) running; Stage 3 canary pair `11233679` (`--array=0,3`, inferno)
 queued `afterok:11233678_*`, per the standing pre-authorization in
 `docs/PACE_RUNBOOK.md:113-114`.
+
+## Stage 3 canary pair — two real runtime failures, caught on schedule (2026-07-18)
+
+**Calibration completed clean.** Job `11233678` finished after 15:43:38 wall
+time (`retrieval.passes=2`, `retrieval.stream_rows_scanned=729,664,541` = two
+full 364,868,892-row sequential C4 scans; the frozen protocol's window=4096
+vs. target=128 margin usually needs one pass but did not this time), peak RSS
+7,236,216K, 128 samples, artifact `qwen25-1p5b-c4-s0.json`
+(`sha256:f0a1ed0a...c38af49`), exit 0:0.
+
+**Canary pair `11233679` failed both array tasks in ~30s each**, before
+touching the GPU workload. This is exactly what the canary pause point is
+for. Diagnosed CPU-side only (no GPU queue needed) via a short `embers` probe
+job, per the standing rule against interpreting anything from the failure
+beyond job health:
+
+- **GPTQ (array task 0):** `gptqmodel`'s real import chain
+  (`gptqmodel.models.auto` → `definitions.afmoe` → `definitions.internvl_chat`
+  → `import torchvision`) fails with `ModuleNotFoundError: No module named
+  'torchvision'`. The package eagerly imports every model definition
+  including multimodal ones at `import gptqmodel` time, even though this
+  project only quantizes a plain text model. `--nv` was already present on
+  the sbatch invocation, ruling that hypothesis out immediately. This is a
+  missing pinned dependency, not an env-leak or GPU-context issue.
+- **AWQ (array task 3):** imports fine, but `model.quantize()`'s Triton JIT
+  kernel compile shells out to `gcc` and fails with `FileNotFoundError` on
+  `/usr/local/pace-apps/spack/.../gcc-12.3.0-.../bin/gcc` — a host
+  spack-managed path that doesn't exist inside the container. Confirmed via
+  an `env`-diff probe: without `--cleanenv`, `CC`, `CXX`, and `MODULEPATH`
+  leak from the submitting shell straight into the container (`apptainer
+  exec` has no `--cleanenv` in any `scripts/slurm/*.sbatch` invocation before
+  this fix). The image's own compiler (`gcc 12.2.0` at `/usr/bin/gcc`) is
+  fine and never gets used because the leaked `CC` shadows it. Confirmed
+  `--cleanenv` still lets `APPTAINERENV_HF_HOME` /
+  `APPTAINERENV_HF_DATASETS_CACHE` / `APPTAINERENV_TOKENIZERS_PARALLELISM`
+  through — the sanctioned channel is unaffected.
+
+**Fix applied (shell-only, `bash -n` + `shellcheck -x` clean on all seven
+touched `.sbatch` files):** added `--cleanenv` to all 12 `apptainer exec`
+invocations across `scripts/slurm/`, relying on `APPTAINERENV_*` for
+everything the container legitimately needs. This resolves AWQ. It does not
+resolve GPTQ — that needs `torchvision` added to the pinned image, which is
+an environment-cell change requiring an image rebuild, and is being held for
+an explicit decision rather than auto-applied (the same reasoning the plan
+already uses for the compiler-missing branch: legal now because no quantized
+artifact exists yet, but a rebuild the human signs off on, not one an agent
+triggers on its own).
+
+**Hardening landed in the same commit:**
+1. `build_gptq`/`build_awq` in `scripts/build_quantized.py` now print the
+   full chained `ImportError` traceback (`traceback.print_exception(exc)`)
+   before raising the `SystemExit` fail-closed message, so the next real
+   failure isn't masked the way this one initially was (the bare
+   `SystemExit` swallowed the traceback; the real cause only surfaced by
+   bypassing the wrapper in a diagnostic probe).
+2. Added `test_pinned_gptqmodel_exposes_expected_api` to
+   `tests/test_build_quantized.py`, mirroring the existing
+   `test_pinned_autoawq_preserves_pre_tokenized_calibration_ids` pattern
+   (`pytest.importorskip("gptqmodel")`, then a real import asserting
+   `GPTQConfig`/`GPTQModel` exist) — so the in-image gate stops certifying a
+   `sys.modules` monkeypatched fake as proof the runtime works.
+
+**Gate consequence, current transitional state.** Because `gptqmodel` is
+genuinely broken in the pinned image right now, the new test *skips*
+(doesn't fail) under `pytest.importorskip`. Measured in-image result today:
+**54 passed, 1 skipped, 0 failed** (bind-mounted live source tree, matching
+how every production job actually runs pytest against the pinned
+runtime) — not the `54 passed, 0 skipped` baseline in `AGENTS.md`. That
+document intentionally is **not** updated to a final number yet: the skip
+correctly documents the real, open GPTQ gap rather than masking it, and the
+target (`55 passed, 0 skipped`, or similar) only gets recorded once
+`torchvision` lands in a rebuilt image. Anyone re-running
+`build_image.sbatch`'s Gate 1 against the current source tree without first
+fixing `torchvision` will now correctly hard-fail on the skip — that's
+intended, not a regression.
+
+**The lesson.** The unit-test gate (mocked `sys.modules["gptqmodel"]`) only
+ever proved the surrounding selection/quantization logic was wired up
+correctly against a *fake* module — it could not and did not prove the real
+runtime imports on GPU hardware. Only the canary — a real GPU job running
+the real pinned dependency — could prove that, and it did exactly what it
+was registered to do: fail fast (~30s, zero GPU-hours burned on either task)
+before any seed-1/2 or bridge compute was spent on a broken runtime. That
+division of labor (fast mocked unit tests for logic, an expensive real-run
+canary for runtime truth) is by design, not an accident to fix, and is worth
+a sentence in the paper's ops appendix.
