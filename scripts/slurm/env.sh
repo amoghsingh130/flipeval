@@ -14,6 +14,15 @@ export TOKENIZERS_PARALLELISM=false
 export APPTAINERENV_HF_HOME=/scratch/hf_cache
 export APPTAINERENV_HF_DATASETS_CACHE=/scratch/hf_cache/datasets
 export APPTAINERENV_TOKENIZERS_PARALLELISM=false
+# HF Hub download/metadata read timeouts (huggingface_hub 1.24.0 defaults: 10s
+# each) raised to 60s so intermittent Hub 503s / slow shard reads while streaming
+# C4 on compute nodes do not trip 'read operation timed out'. Only these two
+# timeouts are env-settable in the pinned stack; the datasets 5.0.0 streaming
+# retry counts (20x outer, with 503-specific and rate-limit backoff) are
+# hardcoded and already generous, so no code change is made. --cleanenv strips
+# bare host vars, so these must use the APPTAINERENV_ prefix to reach the image.
+export APPTAINERENV_HF_HUB_DOWNLOAD_TIMEOUT=60
+export APPTAINERENV_HF_HUB_ETAG_TIMEOUT=60
 
 mkdir -p "$SCRATCH_DIR"/{hf_cache,calibration,work,logs,checkpoints}
 cd "$PROJECT_DIR"
