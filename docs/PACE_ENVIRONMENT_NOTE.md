@@ -867,3 +867,48 @@ of gap the bridge failure exposed (Stage 3 never ran a checkpoint through
 must be exercised end to end on 2 items through the real loader, scorer, and
 manifest writer before it is trusted at scale** — a green unit suite is not
 evidence that a path runs.
+
+## OPEN MINI-GRID PLANNING ITEM — TorchLinear throughput vs the 12h Qwen walls
+
+**Raised 2026-07-19 (Amogh), from the 2-item smoke `11285552`. To be decided in
+the mini-grid submission review, BEFORE any mini-grid run — not now, and not
+after results exist.**
+
+Measured per-item cost on the cell-3 A100, chat prompt style:
+
+| kernel | MMLU (scoring) | GSM8K (generation) |
+|---|---|---|
+| GPTQ `TorchLinear` | ~2.86 s/item | ~4.58 s/item |
+| AWQ `WQLinear_GEMM` | ~0.42 s/item | ~5.22 s/item |
+
+`TorchLinear` is ~7x slower than AWQ's GEMM on the scoring path. At bridge scale
+(400 MMLU items) that is ~19 min and irrelevant. **At mini-grid scale it is not.**
+The mini-grid runs full MMLU — **14,042 items** — so at ~2.9 s/item a single GPTQ
+variant needs **~11 hours for MMLU alone, against the planned 12-hour Qwen walls,
+before GSM8K is added at all.** This does not "come back at main-grid volume": it
+binds at the very next campaign stage.
+
+Two routes, both legal, one must be chosen in the submission review:
+
+1. **Promote the TRITON fallback.** `TritonV2Linear` is the same native-loader
+   family (`GPTQModel.load`, no dependency change, freeze untouched) and passed
+   the same probe forward pass. The kernel is a *recorded nuisance variable*, so
+   switching is legal — but under the standing discipline it **must be decided
+   before mini-grid results exist**, and it needs a short **parity check against
+   `TorchLinear`** first (same items, same seed, compare per-item scores) since no
+   such comparison has ever been run. TRITON's per-item cost is also unmeasured;
+   the probe only proved it loads and runs.
+2. **Per-task job splitting plus longer walls.** Split MMLU and GSM8K into
+   separate array tasks and raise the wall. No kernel change, so no parity
+   question at all — the nuisance variable stays exactly as recorded for the
+   bridge. Costs scheduling complexity and more queue exposure.
+
+Route 2 is the conservative default because it changes nothing numerical. Route 1
+is cheaper in wall time but spends a parity check and a nuisance-variable change.
+**Do not defer this to the point where mini-grid results are visible** — that
+would convert a free methodological choice into a results-contingent one.
+
+Note the smoke's projections are *conservative*: item 1 of 2 carries
+`TorchLinear` compile warmup, so steady-state is likely below 2.86 s/item. That
+cuts in the safe direction and does not dissolve the problem — 14,042 items has
+no margin to give back.
