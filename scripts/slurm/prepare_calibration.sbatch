@@ -14,15 +14,29 @@ source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs
 
 SEED=$SLURM_ARRAY_TASK_ID
+
+# Model/artifact identity is parameterized so one script serves every
+# calibration cell. The defaults reproduce the registered Qwen2.5-1.5B
+# invocation byte-for-byte, so existing runbook commands are unchanged; other
+# models are selected by exporting these at submit time, e.g.
+#   sbatch --array=0-4 --export=ALL,CALIB_MODEL_ID=meta-llama/Llama-3.2-3B-Instruct,...
+# Values must match the pinned tag in configs/main_grid_manifest.yaml.
+CALIB_MODEL_ID="${CALIB_MODEL_ID:-Qwen/Qwen2.5-1.5B-Instruct}"
+CALIB_MODEL_REVISION="${CALIB_MODEL_REVISION:-989aa7980e4cf806f80c7fef2b1adb7bc71aa306}"
+CALIB_ARTIFACT_PREFIX="${CALIB_ARTIFACT_PREFIX:-qwen25-1p5b-c4-s}"
+
+echo "calib model:  $CALIB_MODEL_ID @ $CALIB_MODEL_REVISION"
+echo "calib artifact: /scratch/calibration/${CALIB_ARTIFACT_PREFIX}${SEED}.json"
+
 srun apptainer exec --cleanenv --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python /workspace/scripts/build_quantized.py \
-  --model-id Qwen/Qwen2.5-1.5B-Instruct \
-  --model-revision 989aa7980e4cf806f80c7fef2b1adb7bc71aa306 \
+  --model-id "$CALIB_MODEL_ID" \
+  --model-revision "$CALIB_MODEL_REVISION" \
   --seed "$SEED" \
   --dataset c4 \
   --dataset-cache-dir /scratch/hf_cache/datasets \
-  --calibration-artifact "/scratch/calibration/qwen25-1p5b-c4-s${SEED}.json" \
+  --calibration-artifact "/scratch/calibration/${CALIB_ARTIFACT_PREFIX}${SEED}.json" \
   --prepare-calibration-only \
   --trust-remote-code \
   ${VERIFY_ROW_COUNT:+--verify-stream-row-count}
