@@ -99,7 +99,9 @@ def main() -> None:
 
     for method in selected_methods:
         print(f"Loading {method.name}: {method.model_id}", flush=True)
-        model, tokenizer = load_model_and_tokenizer(method, run)
+        model, tokenizer, load_info = load_model_and_tokenizer(method, run)
+        print(f"  backend={load_info['quantization_backend']} kernel={load_info['kernel']}", flush=True)
+        merge_manifest(run_dir / "manifest.json", {"loaded": {method.name: load_info}})
         for task in selected_tasks:
             items = load_task(task.name, task.split, task.limit, task.subjects, task.fewshot)
             out_path = run_dir / f"{method.name}.{task.name}.jsonl"
@@ -118,6 +120,7 @@ def main() -> None:
                             "method": method.name,
                             "model_id": method.model_id,
                             "seed": method.seed,
+                            "kernel": load_info["kernel"],
                         }
                     )
                     f.write(json.dumps(record, ensure_ascii=True) + "\n")

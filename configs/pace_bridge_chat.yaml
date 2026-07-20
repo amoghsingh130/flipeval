@@ -11,12 +11,12 @@ baseline:
   trust_remote_code: true
 
 methods:
-  - {name: gptq_s0, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed0, dtype: float16, seed: 0}
-  - {name: gptq_s1, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed1, dtype: float16, seed: 1}
-  - {name: gptq_s2, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed2, dtype: float16, seed: 2}
-  - {name: awq_s0, model_id: outputs/quantized/qwen25-1p5b-awq4-seed0, dtype: float16, seed: 0}
-  - {name: awq_s1, model_id: outputs/quantized/qwen25-1p5b-awq4-seed1, dtype: float16, seed: 1}
-  - {name: awq_s2, model_id: outputs/quantized/qwen25-1p5b-awq4-seed2, dtype: float16, seed: 2}
+  - {name: gptq_s0, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed0, dtype: float16, seed: 0, quantization_backend: gptqmodel_torch}
+  - {name: gptq_s1, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed1, dtype: float16, seed: 1, quantization_backend: gptqmodel_torch}
+  - {name: gptq_s2, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed2, dtype: float16, seed: 2, quantization_backend: gptqmodel_torch}
+  - {name: awq_s0, model_id: outputs/quantized/qwen25-1p5b-awq4-seed0, dtype: float16, seed: 0, quantization_backend: awq_gemm}
+  - {name: awq_s1, model_id: outputs/quantized/qwen25-1p5b-awq4-seed1, dtype: float16, seed: 1, quantization_backend: awq_gemm}
+  - {name: awq_s2, model_id: outputs/quantized/qwen25-1p5b-awq4-seed2, dtype: float16, seed: 2, quantization_backend: awq_gemm}
 
 tasks:
   - name: mmlu

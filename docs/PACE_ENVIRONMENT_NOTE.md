@@ -766,3 +766,77 @@ nuisance variable recorded in every run manifest, so the boring precedented choi
 beats the faster one. **TRITON (`TritonV2Linear`) is the documented fallback**,
 used only if the 2-item eval smoke projects `TorchLinear` past a workable bridge
 wall time even with `-t` raised.
+
+## Quantized eval entry points — explicit kernel selection, cell 3 (2026-07-19)
+
+Backend probe **`11285139`** (A100 80GB, cell-3 image `8260d04c`, subprocess-isolated,
+full tracebacks) swept every in-image load path for the seed-0 checkpoints and ran
+a tiny forward pass on each:
+
+| path | verdict | kernel | detail |
+|---|---|---|---|
+| `awq/AutoAWQForCausalLM.from_quantized` | **PASS** | `WQLinear_GEMM` | `logits=(1, 5, 151936)` |
+| `awq/transformers.from_pretrained` (default) | FAIL | `AwqMarlinLinear` | `ModuleNotFoundError: Marlin torch.ops kernels are not properly installed` |
+| `gptq/GPTQModel.load(TORCH)` | **PASS** | `TorchLinear` | `logits=(1, 5, 151936)` |
+| `gptq/GPTQModel.load(TRITON)` | **PASS** | `TritonV2Linear` | `logits=(1, 5, 151936)` |
+| `gptq/transformers.GPTQConfig(backend=gptq_torch)` | FAIL | — | `ImportError: Loading a GPTQ quantized model requires optimum` |
+
+Both methods therefore have a working entry point **inside the frozen cell 3**, with
+no dependency change and no threat to the freeze.
+
+### Systemic lesson: auto-selected prebuilt kernels are the hazard class
+
+Both `transformers` routes died where the **framework auto-selected a prebuilt
+kernel**, not in our code. GPTQ needs `optimum`, which the cell does not have. AWQ
+is worse-disguised: `quantizer_awq.py:86` hands post-init to *gptqmodel's* Marlin
+path (`hf_gptqmodel_post_init` → `marlin_awq.py:192`), and the log shows
+`AwqMarlinLinear` already selected before the failure. That is the same
+prebuilt-extension family as the `EXLLAMA_V2` SIGILL recorded above.
+
+> **Campaign principle: select the kernel explicitly, everywhere.** Any path that
+> lets a framework choose a kernel for us is a latent failure — either a missing
+> dependency, or a binary compiled for an instruction set this hardware lacks. The
+> failure mode is a hard crash at load, or worse, a silent kernel substitution that
+> changes the recorded nuisance variable without changing the config.
+
+### Entry points now in use, and their honest provenance
+
+`pilot_eval/modeling.py` routes quantized checkpoints through the native library of
+each method with an explicit backend, selected by `quantization_backend` in the run
+config:
+
+- `gptqmodel_torch` → `GPTQModel.load(..., backend=BACKEND.TORCH)`, kernel `TorchLinear`
+- `awq_gemm` → `AutoAWQForCausalLM.from_quantized(...)`, kernel `WQLinear_GEMM`
+
+Names describe what actually executes. The retired value `gptq_torch` **fails loudly
+with a pointer to `gptqmodel_torch`, and is never silently remapped** — a manifest
+that names a route which did not run is worse than a crash. Kernel identity is read
+from the loaded model by `isinstance` against each library's own base class, not by
+substring-matching class names: the first probe's name sniffer returned `?` for
+`TorchLinear`, and `?` in a registered manifest field is a silent data defect. The
+probe fails closed if no quantized linear is found.
+
+**Provenance — stated plainly, not inherited.** The Kaggle-validated entry point was
+`transformers` + `optimum`, and it is **unavailable in cell 3**. The entry point we
+now use is *different code*. What carries over from the pilot is the **kernel**: the
+pilot ran GPTQModel `TorchLinear` per its run records, and `gptqmodel_torch` runs
+that same kernel — which is why TORCH was ruled over the faster TRITON. So:
+
+> The `gptqmodel_torch` / `awq_gemm` entry points are **not** covered by the Kaggle
+> validation. Their validation evidence is (1) the cell-3 backend probe forward
+> passes above, (2) the 2-item eval smoke through the real loader and scorer, and
+> (3) the bridge validator's parity and baseline-gate checks. The "Kaggle-validated"
+> label must not be attached to them.
+
+TRITON (`TritonV2Linear`) remains the documented fallback, used only if the smoke
+projects `TorchLinear` past a workable bridge wall time even with `-t` raised.
+
+### Gate
+
+In-image suite **58 → 66 passed, 0 skipped** (pregate job `11285202`, log
+`~/scratch/flipeval/logs/pregate_11285202.out`; live tree bound over `/workspace`
+against the cell-3 image). Recorded in `AGENTS.md`, `CLAUDE.md`, and
+`scripts/slurm/build_image.sbatch`. The first attempt (`11285195`) failed
+`1 failed, 65 passed` and caught a real ordering defect: backend validation ran
+*after* the tokenizer load, so an unroutable backend was only rejected once a fetch
+had already been attempted. Validation now happens first.

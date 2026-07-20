@@ -7,6 +7,42 @@ from typing import Any
 import yaml
 
 
+# Quantized load routes, each named for the loader and kernel that actually run.
+# The value is what the run manifest records, so it must never be an alias for
+# something else. See docs/PACE_ENVIRONMENT_NOTE.md, cell-3 backend probe.
+QUANTIZATION_BACKENDS = ("gptqmodel_torch", "awq_gemm")
+
+# Values that were valid before the cell-3 probe. These fail loudly and are
+# never remapped: silently rewriting a backend would let a manifest claim a
+# route that did not run, which is worse than a crash.
+RETIRED_QUANTIZATION_BACKENDS = {
+    "gptq_torch": (
+        "quantization_backend 'gptq_torch' loaded via transformers.GPTQConfig, "
+        "which cannot work in the cell-3 image: transformers raises "
+        "'Loading a GPTQ quantized model requires optimum' and optimum is not in "
+        "the frozen environment (backend probe 11285139, 2026-07-19). "
+        "Use 'gptqmodel_torch', which loads via GPTQModel.load(BACKEND.TORCH) and "
+        "runs the same TorchLinear kernel. This is deliberately NOT remapped for "
+        "you: the recorded backend must name the route that actually executed."
+    ),
+}
+
+
+def validate_quantization_backend(value: Any) -> str | None:
+    """Return a known backend name, or raise with a pointer to the replacement."""
+    if value is None:
+        return None
+    name = str(value)
+    if name in RETIRED_QUANTIZATION_BACKENDS:
+        raise ValueError(RETIRED_QUANTIZATION_BACKENDS[name])
+    if name not in QUANTIZATION_BACKENDS:
+        raise ValueError(
+            f"unknown quantization backend: {name!r} "
+            f"(known: {', '.join(QUANTIZATION_BACKENDS)})"
+        )
+    return name
+
+
 @dataclass(frozen=True)
 class MethodConfig:
     name: str
@@ -49,7 +85,7 @@ def _method(raw: dict[str, Any]) -> MethodConfig:
         seed=raw.get("seed"),
         revision=raw.get("revision"),
         trust_remote_code=bool(raw.get("trust_remote_code", True)),
-        quantization_backend=raw.get("quantization_backend"),
+        quantization_backend=validate_quantization_backend(raw.get("quantization_backend")),
     )
 
 

@@ -6,13 +6,30 @@ from typing import Any
 
 import torch
 
-from .config import MethodConfig, RunConfig
+from .config import MethodConfig, RunConfig, validate_quantization_backend
 from .tasks import EvalItem, extract_gsm8k_answer
 
 
 def load_model_and_tokenizer(method: MethodConfig, run: RunConfig):
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-    torch_dtype = _dtype(method.dtype)
+    """Load a method's model and tokenizer.
+
+    Returns ``(model, tokenizer, load_info)``. ``load_info`` carries the runtime
+    facts the manifest must record -- the load route and the quantized-linear
+    kernel that it actually selected. Kernel identity is a registered nuisance
+    variable, so it is read from the loaded model rather than assumed.
+
+    Quantized checkpoints are loaded through their native library with an
+    explicit kernel choice. The transformers/HfQuantizer entry point is not used
+    for them: in the cell-3 image it lets the framework auto-select a prebuilt
+    kernel, which fails for both methods (GPTQ needs the absent `optimum`; AWQ
+    routes into `AwqMarlinLinear` with no Marlin runtime). See
+    docs/PACE_ENVIRONMENT_NOTE.md.
+    """
+    # Validate before touching the network or disk: an unroutable backend should
+    # fail in milliseconds, not after a tokenizer or checkpoint fetch.
+    backend = validate_quantization_backend(method.quantization_backend)
+
+    from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(
         method.model_id,
         revision=method.revision,
@@ -22,24 +39,91 @@ def load_model_and_tokenizer(method: MethodConfig, run: RunConfig):
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    model_kwargs: dict[str, Any] = {}
-    if method.quantization_backend == "gptq_torch":
-        from transformers import GPTQConfig
+    if backend == "gptqmodel_torch":
+        model = _load_gptqmodel_torch(method, run)
+    elif backend == "awq_gemm":
+        model = _load_awq_gemm(method, run)
+    else:
+        model = _load_unquantized(method, run)
 
-        model_kwargs["quantization_config"] = GPTQConfig(bits=4, backend="gptq_torch")
-    elif method.quantization_backend is not None:
-        raise ValueError(f"unknown quantization backend: {method.quantization_backend}")
+    model.eval()
+    load_info = {
+        "quantization_backend": backend,
+        "kernel": _kernel_id(model, backend),
+    }
+    return model, tokenizer, load_info
 
-    model = AutoModelForCausalLM.from_pretrained(
+
+def _load_unquantized(method: MethodConfig, run: RunConfig):
+    from transformers import AutoModelForCausalLM
+
+    return AutoModelForCausalLM.from_pretrained(
         method.model_id,
         revision=method.revision,
         trust_remote_code=method.trust_remote_code,
-        torch_dtype=torch_dtype,
+        torch_dtype=_dtype(method.dtype),
         device_map=run.device_map,
-        **model_kwargs,
     )
-    model.eval()
-    return model, tokenizer
+
+
+def _load_gptqmodel_torch(method: MethodConfig, run: RunConfig):
+    """GPTQ via GPTQModel.load with the TORCH backend (kernel: TorchLinear)."""
+    from gptqmodel import BACKEND, GPTQModel
+
+    loaded = GPTQModel.load(
+        method.model_id,
+        backend=BACKEND.TORCH,
+        device=_resolve_device(run.device_map),
+    )
+    return getattr(loaded, "model", loaded)
+
+
+def _load_awq_gemm(method: MethodConfig, run: RunConfig):
+    """AWQ via AutoAWQ's native loader (kernel: WQLinear_GEMM)."""
+    from awq import AutoAWQForCausalLM
+
+    loaded = AutoAWQForCausalLM.from_quantized(
+        method.model_id,
+        fuse_layers=False,
+        trust_remote_code=method.trust_remote_code,
+        safetensors=True,
+    )
+    return getattr(loaded, "model", loaded)
+
+
+def _kernel_id(model, backend: str | None) -> str:
+    """Read the quantized-linear kernel class from the loaded model.
+
+    Deliberately an isinstance check against each loader library's own base
+    class rather than a substring match on class names: the kernel id goes into
+    every run manifest as a registered nuisance variable, and a name-sniffing
+    detector returns '?' for kernels like ``TorchLinear`` whose names contain
+    none of the expected substrings. Fails closed -- an unidentifiable kernel is
+    an unrecordable run, not a warning.
+    """
+    if backend is None:
+        return "none"
+    if backend == "gptqmodel_torch":
+        from gptqmodel.nn_modules.qlinear import BaseQuantLinear as base
+    elif backend == "awq_gemm":
+        from awq.modules.linear.gemm import WQLinear_GEMM as base
+    else:
+        raise ValueError(f"no kernel probe for backend: {backend}")
+
+    for _, module in model.named_modules():
+        if isinstance(module, base):
+            return type(module).__name__
+    raise RuntimeError(
+        f"backend {backend!r} loaded but no quantized linear layer was found; "
+        "the kernel id is a registered manifest field and cannot be left unknown"
+    )
+
+
+def _resolve_device(device_map: str) -> str:
+    """GPTQModel.load takes a device, not a transformers device_map."""
+    if device_map in {"auto", "cuda"}:
+        return "cuda" if torch.cuda.is_available() else "cpu"
+    return device_map
 
 
 def evaluate_item(
