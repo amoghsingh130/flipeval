@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-20T18:47:41.849009+00:00",
-  "source_commit": "c3ffb632b23714216077fc77d69c57dd496483b4",
-  "source_tree": "b41715c5223fb8e47ae331783b2cdd56ee94db12",
+  "created_at": "2026-07-20T19:09:22.278449+00:00",
+  "source_commit": "047e9b1c631a8342b1832c3be86f8afc1d54c2e0",
+  "source_tree": "82b9109185931d9b69cddd6fad084af270d6312a",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
-    "PREREGISTRATION.md": "ee91b91930e134286dc2a6f63c655d0f74db6d688e605d8c732d4272c0c9f73f",
+    "PREREGISTRATION.md": "9d7b1a5a691d1b703f7588910a327e748d060c6238c672cc5e2e9702cf8d5115",
     "README.md": "b5db281f86956c9a33b462adc1876ecf9341d48788780baf0f692f7f56658865",
     "STATUS.md": "198b9702f42541e1d0b0d42911077ee34f5456daa56fcfac0b54087e7160e812",
     "configs/kaggle_qwen_1p5b.yaml": "9b012e690b86747393ceb0c17ef91ef33803e69c447812543a763af9e40e4659",
@@ -20,7 +20,7 @@
     "docs/EXPECTED_MAIN_GRID.json": "f9c2bb6f570f1f162e3ab7fda25b25951f180f5f7b42a137bc97b76835895fe3",
     "docs/PACE_RUNBOOK.md": "531d9a4db68da5e6acc2932d0960b6c5ac5dbcb73de359c978e5727430fa1f7f",
     "docs/WIKITEXT2_PREFLIGHT_2026-07-13.json": "8b4c107a590df148398685fc36414fa3b1dfc9edefbbbc2b9357de82ffb7dbf8",
-    "docs/WIKITEXT2_PROTOCOL_BLOCKER.md": "2c906638a6848b80214ccf5ced3ce18eadb723930be22418166003b0501882d3",
+    "docs/WIKITEXT2_PROTOCOL_BLOCKER.md": "80665ee1311eefa90b7bdca673e381beba26b777d78f985178cdf3d69f1f9f3e",
     "flipeval/__init__.py": "7ff709482707d2ce81ab9ee58d7f7e1db8c0c719f8ad4f6d3b9965300319217f",
     "flipeval/__main__.py": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
     "flipeval/cli.py": "2683c8ed4461194a55b6071b0a12776ffb98d7a4353e4da0d306a5d2edc080de",
@@ -55,6 +55,7 @@
     "scripts/slurm/verify_bridge.sbatch": "cc8d8204c6bb3ce3c984768b5b5c3283b99f4d06fbbeb7232c3e9824f14c2f57",
     "scripts/slurm/verify_row_count.sbatch": "75ae8091fa3cc425788827ee96ecb1ef342062efc83488a63b8a3b009d0787e8",
     "scripts/verify_bridge.py": "f581f3f419011704943b8ef975898a7c188c25766d4b7ef871261c1d2768e5b2",
+    "scripts/wikitext2_article_probe.py": "17a917b80aaa246388015915af71acd8aa239f65a9c00452d9634626648528e0",
     "tests/fixtures/lm_eval_gsm8k.jsonl": "09ee35979b5ebce5b7964771791fc9d1f489102b9a0779493b2c3a45f4cfdf9e",
     "tests/fixtures/lm_eval_mmlu_baseline.json": "5bead2f7b68fcd2fee34afae9b004c165b534c971e734c7fb39482f01659b5f5",
     "tests/fixtures/lm_eval_mmlu_method.json": "b1c3cb7bf96f86481d6af612bce68662a51d3d9aa0f415766020116b28b8b9dc",
@@ -74,5 +75,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "bff5b47dcd3ab1240a3d30ea6e90f14bc75561ccb0b5a4c4e3a9f5a2e6ae858f"
+  "manifest_payload_sha256": "be255c9ab35519974a703659fbae755ff99c6fe77efc926d5c488dfa9715746d"
 }
