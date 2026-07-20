@@ -5,16 +5,17 @@ Computed 2026-07-20 per `docs/AUDIT_REGISTRATION_2026-07-15.md` §4–5, after t
 
 ## Headline
 
-> **5 of 17 audited "near-lossless" compression claims are underpowered for their
-> own assertion, and a further 4 are indeterminate because the source does not
-> report enough to check.** 3 of the 13 determinate claims are margin-sensitive.
-> **0 of 17 release the per-item outputs a third party would need to run the
-> paired test themselves.**
+> **K = 4 of the 12 determinate "near-lossless" compression claims are
+> underpowered for their own assertion, and J = 5 of the 17 audited claims are
+> indeterminate from insufficient or incompatible reporting.** 1 of the 12
+> determinate claims is margin-sensitive. **0 of 17 release the per-item outputs
+> a third party would need to run the paired test themselves.**
 
-Secondary reading (all claims judged at the registered 2 pp margin rather than
-their own): **1 of 17 underpowered**. The two readings differ by a factor of five
-and the reason is interpretive, not statistical — see §"Interpretive choices" #1.
-Both are in the CSV (`verdict`, `verdict_at_registered_2pp`).
+Secondary reading (all claims judged against the uniform registered 2 pp
+yardstick rather than their own margin): **1 of 12 underpowered**. The two
+readings differ by a factor of four and the reason is interpretive, not
+statistical — see §"Interpretive choices" #1. Both are in the CSV (`verdict`,
+`verdict_at_registered_2pp`).
 
 No claim is described as false. The audited property is the **evidential
 sufficiency of the reported evaluation**, not the truth of the underlying
@@ -68,7 +69,6 @@ Underpowered at the applicable margin — the claim's own stated margin:
 
 | claim | source | stated margin | reported n | required n | shortfall |
 |---|---|---|---|---|---|
-| **R04** | AWQ | 0.30 pp | 1,319 | 50,519 | **38.3×** |
 | **R17** | Red Hat Llama-3-8B W8A16 | 0.15 pp | 28,659 | 369,856 | **12.9×** |
 | **R07** | SparseGPT | 0.23 pp | 12,410 | 131,482 | **10.6×** |
 | **R06** | Wanda | 0.30 pp | 18,904 | 77,282 | 4.1× |
@@ -79,18 +79,26 @@ resolution is than the difference it pronounces negligible:
 
 | claim | MDD (paired) | claimed margin | ratio | ratio (indep. binomial) |
 |---|---|---|---|---|
-| R04 | 2.09 pp | 0.30 pp | **6.97×** | 12.57× |
 | R17 | 0.61 pp | 0.15 pp | **4.05×** | 7.25× |
 | R07 | 0.84 pp | 0.23 pp | **3.67×** | 7.07× |
-| R14 | 2.27 pp | 0.70 pp | 3.25× | — (no baseline) |
 | R06 | 0.68 pp | 0.30 pp | 2.28× | 4.52× |
+| R15 | 0.32 pp | 0.20 pp | 1.60× | 4.20× |
+| _(R04)_ | _2.09 pp_ | _0.30 pp_ | _6.97×_ | _12.57×_ |
+| _(R14)_ | _2.27 pp_ | _0.70 pp_ | _3.25×_ | _— (no baseline)_ |
+
+R04 and R14 are italicised because they are **indeterminate**: their numbers are
+computable and are retained in the CSV for transparency, but they carry no
+verdict and are excluded from K. See §"Indeterminate" below.
 
 The independent-binomial column is uniformly *worse* — roughly 2× the ratio.
 Pairing is the generous assumption; these claims are underpowered even so.
 
-**Margin-sensitive (3 of 13):** R01, R04, R14. Each flips between underpowered
-and adequately powered across the 1 pp → 3 pp sweep, so their verdicts are an
-artefact of margin choice rather than a robust finding, and are reported as such.
+**Margin-sensitive (1 of 12 determinate):** R01. It flips between underpowered
+and adequately powered across the 1 pp → 3 pp sweep, so its verdict is an
+artefact of margin choice rather than a robust finding, and is reported as such.
+Margin sensitivity qualifies a headline verdict, so it is counted over the claims
+that have one; R04 and R14 also flip across the sweep and keep the
+`margin_sensitive` column in the CSV, but neither carries a verdict to qualify.
 
 **V3 — reproducibility: 0 yes / 3 partial / 14 no.** The three "partial" cases
 (R08, R15, R16, all Red Hat cards) release per-item outputs for Arena-Hard,
@@ -100,7 +108,11 @@ paired comparison it asserts. This is arguably the most actionable finding here:
 underpowering is fixable by evaluating more items, but irreproducibility means
 nobody outside can check the claim at any n.
 
-## Indeterminate — insufficient reporting (4)
+## Indeterminate — insufficient or incompatible reporting (J = 5)
+
+Two kinds, distinguished by the CSV column `indeterminate_kind`.
+
+**Insufficient reporting (4)** — a registered input is genuinely absent:
 
 | claim | source | missing input |
 |---|---|---|
@@ -109,9 +121,25 @@ nobody outside can check the claim at any n.
 | R13 | vLLM FP8 docs | n = 250 stated, but **no on-page baseline run at all** |
 | R14 | vLLM FP8 KV-cache blog | n imputable, margin stated (0.7 pp), but no baseline — Figure 8 only |
 
-R13 and R14 retain a computable V2 (the paired sd depends on discordance, not on
-baseline accuracy), reported in the CSV as supplementary but excluded from the
-headline K. Both are underpowered at 2 pp on that supplementary basis.
+**Metric-incompatible (1)** — the source reports enough, but about a quantity the
+registered model cannot score:
+
+| claim | source | incompatibility |
+|---|---|---|
+| R04 | AWQ | the qualifying quote asserts negligible loss on **COCO CIDEr**, a generation metric with no per-item correct/incorrect state; V1/V2 are flip-model quantities and do not apply to it |
+
+Every indeterminate claim keeps whatever components remain computable, listed in
+the CSV column `determinate_components` and reported as supplementary
+transparency only — never verdict-bearing:
+
+- **R13** — V2 (the paired sd depends on discordance, not baseline accuracy).
+- **R14** — V1 (paired) and V2. Both are underpowered at 2 pp on that basis.
+- **R04** — V1 and V2, computed on GSM8K, the source's own *accuracy* benchmark
+  (−0.30 pp, n = 1,319). On that substituted basis it would be underpowered by
+  38.3×. That computation is retained in full so a reader can see exactly what
+  was set aside and why, but it is not the audited assertion: GSM8K is a
+  different benchmark from the one the qualifying sentence is about, and the
+  source used non-trigger language for it. See §"Interpretive choices" #3.
 
 **This category is a finding, not a gap in the analysis.** Two of the four are
 among the most-cited results in the field, and their headline equivalence
@@ -122,45 +150,65 @@ exists to address.
 ## Interpretive choices
 
 Registered rules that were ambiguous enough to require a decision. Each is
-recorded in code and reversible by re-running with the alternative.
+recorded in code and reversible by re-running with the alternative. All seven
+were ruled on by Amogh on 2026-07-20; #1 and #3 are recorded below as ruled.
 
-1. **"Applicable margin" (§4 V2) — the choice that moves the headline.** §4 names
-   the 2 pp registered margin first and adds "(and at the claim's own margin when
-   it states one)", then labels the verdict *underpowered for its own assertion*
-   "at the applicable margin". Read as *own margin where stated, 2 pp as
-   fallback*, **K = 5**. Read as *2 pp always*, **K = 1**. I took the first: the
-   label says "its own assertion", and judging a claim that asserts 0.15 pp
-   parity against a 2 pp yardstick tests something the source never claimed. Both
-   are computed and reported; if Amogh reads §4 the other way, the CSV column
-   `verdict_at_registered_2pp` is the headline without recomputation.
-2. **Claimed margin = the largest |delta| the source asserts is negligible.**
-   Most claims cover several benchmarks with different deltas. Using the largest
-   is the reading most favourable to the source. Using the delta matched to the
-   n actually used would be harsher — for R01 (n is PIQA's 1,838, largest delta
-   is ARC-Easy's) it would raise the MDD/margin ratio about 34×.
-3. **R04 (AWQ) is scored on GSM8K, not on its own quoted benchmark.** The primary
-   quote's benchmark is COCO **CIDEr**, a generation-quality metric with no
-   per-item correct/incorrect state, so the registered accuracy-flip model
-   cannot apply to it. Verdict computed on the source's own accuracy benchmark
-   (GSM8K, −0.30 pp). R04 is the largest shortfall in the table, so this choice
-   carries weight; scoring it as indeterminate instead would give K = 4, J = 5.
-4. **Claim-level, not claim×benchmark.** §4 says "for each claim × benchmark",
+1. **"Applicable margin" (§4 V2) — the choice that moves the headline.
+   RATIFIED as the primary verdict basis.** §4 names the 2 pp registered margin
+   first and adds "(and at the claim's own margin when it states one)", then
+   labels the verdict *underpowered for its own assertion* "at the applicable
+   margin". Read as *own margin where stated, 2 pp as fallback*, **K = 4**. Read
+   as *2 pp always*, **K = 1**. The first governs: the frozen label is
+   "underpowered for its **own** assertion", and judging a 0.15 pp parity claim
+   against a 2 pp yardstick audits a claim nobody made. The 2 pp reading is kept
+   and reported as the uniform-yardstick secondary (CSV column
+   `verdict_at_registered_2pp`).
+
+   *Methods-narrative note.* The first pass of this analysis returned K = 1 by
+   applying 2 pp uniformly; re-reading the frozen §4 label produced K = 5 (K = 4
+   after choice #3). The correction ran against the direction the analyst's first
+   instinct had gone, which is the evidence that the rule text governed the
+   analysis rather than the desired result. Worth carrying into the paper's
+   methods section.
+2. **Claimed margin = the largest |delta| the source asserts is negligible.
+   RATIFIED.** Most claims cover several benchmarks with different deltas. Using
+   the largest is the reading most favourable to the source. Using the delta
+   matched to the n actually used would be harsher — for R01 (n is PIQA's 1,838,
+   largest delta is ARC-Easy's) it would raise the MDD/margin ratio about 34×.
+   An audit that resolves every ambiguity in the source's favour and still finds
+   shortfalls is the armoured version of the finding.
+3. **R04 (AWQ) is indeterminate, not scored on GSM8K. OVERRULED** — the first
+   pass scored it on GSM8K and reported it as the largest shortfall in the table
+   (38.3×). The qualifying quote asserts negligible loss on COCO **CIDEr**, a
+   generation metric with no per-item correct/incorrect state; V1/V2 are
+   flip-model quantities and genuinely do not apply to that assertion. Computing
+   the TOST requirement on GSM8K audits a sentence the source wrote about a
+   different benchmark in different, non-trigger language — and it was
+   simultaneously the largest number in the table and the most attackable row.
+   An audit paper's currency is unimpeachability; it is not spent on its own
+   biggest number. R04 moves to indeterminate (`metric-incompatible`), taking the
+   headline from K = 5, J = 4 to **K = 4, J = 5**. The GSM8K computation stays in
+   the CSV as a transparency column with a note.
+4. **Claim-level, not claim×benchmark. RATIFIED.** §4 says "for each claim × benchmark",
    but the frozen table stores one pooled n per claim. Operating at the frozen
    table's granularity avoids inventing per-benchmark rows the freeze does not
    contain. Multi-task claims use the pooled n across their enumerated splits,
    with every summed task listed in the `n_basis` column.
-5. **TOST sample size uses one-sided z₁₋α.** `flipeval.required_n_for_effect`
-   uses two-sided z₁₋α/₂ — correct for *detection*, but TOST is two one-sided
-   tests at α each. Reusing it unchanged would have inflated every required n by
-   ~27 % under the name "TOST". The formula is implemented locally, documented,
-   and cross-checked against flipeval on the shared quantities.
-6. **"The two probe-tagged cells" means two probe _pairs_, 99 cells.**
+5. **TOST sample size uses one-sided z₁₋α. RATIFIED, with special approval as
+   the correct TOST construction.** `flipeval.required_n_for_effect` uses
+   two-sided z₁₋α/₂ — correct for *detection*, but TOST is two one-sided tests at
+   α each. Reusing it unchanged would have inflated every required n by ~27 %
+   under the name "TOST" — a real methodological error wearing a plausible name.
+   The formula is implemented locally, documented, and cross-checked against
+   flipeval on the shared quantities.
+6. **"The two probe-tagged cells" means two probe _pairs_, 99 cells. RATIFIED.**
    `contains_disclosed_probe_cell` is true for 99 rows spanning pair_index 2 and
    50. All 99 are excluded.
-7. **Degenerate-row handling is per-input, not blanket.** R13/R14 keep the
-   verdicts their available inputs support rather than being discarded whole;
-   only genuinely absent inputs produce "indeterminate". Nothing is imputed
-   beyond §3.2's own rule.
+7. **Degenerate-row handling is per-input, not blanket. RATIFIED.** R04/R13/R14
+   keep the components their available inputs support rather than being discarded
+   whole; only genuinely absent inputs (or, for R04, an incompatible metric)
+   produce "indeterminate", and the surviving components are reported as
+   supplementary. Nothing is imputed beyond §3.2's own rule.
 
 ## Provenance
 
@@ -171,5 +219,8 @@ recorded in code and reversible by re-running with the alternative.
 | atlas | `results/atlas_cells_summary.csv`, sha256 `98201adef9939c00bef7d89b515cbadf907315eb8a052c7f00437b8910a4712d` |
 | analysable cells | 1,155 (1,254 non-excluded − 99 probe) |
 | image | cell 3, sha256 `8260d04cf1f76cb5961b6538dbeb9178006b29c5d8c93d2c639976bcd1db2007` |
-| compute | embers CPU job `11287114`, in-image; α = 0.05, power = 0.80 |
-| gate | 109 passed, 0 skipped |
+| compute | embers CPU job `11287114`, in-image; α = 0.05, power = 0.80 (first pass, pre-rulings) |
+| gate run after the 2026-07-20 rulings | embers CPU job `11296950`, in-image — established the 111-passed gate under the writable-`/scratch` bind |
+| headline-emitting recompute | embers CPU job `11297536`, in-image — the run whose `AUDIT_HEADLINE` line matches the committed `results/audit_verdicts.csv` (K = 4 of 12, J = 5) |
+| gate | 111 passed, 0 skipped (109 baseline + 2 tests added for ruling #3) |
+| gate caveat | run as `apptainer exec -B <scratch>/fake_scratch:/scratch "$IMAGE" python -m pytest -q`; without the bind, 2 GPTQModel tests fail at import on nodes whose `/scratch` is root-owned (`tokenicer` mkdirs the image-pinned `HF_HOME=/scratch/hf_cache`). Environmental, not a code failure; unrelated to this analysis |
