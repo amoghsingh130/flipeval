@@ -1,6 +1,11 @@
 # WikiText-2 calibration protocol blocker
 
-Status: **human protocol decision required before main-grid execution**  
+Status: **RESOLVED 2026-07-20 — Option A chosen.** Amogh Singh selected Option A
+(deterministic article reconstruction), results-blind, recorded as the dated
+amendment of 2026-07-20 in `PREREGISTRATION.md` § Dated Amendments. Decision
+Point A is closed. The builder remains fail-closed on WikiText-2 until the
+amended rule is implemented and passes the full gate; implementation is
+deferred and does not gate mini-grid work.  
 Detected: 2026-07-13  
 Main-grid results inspected: **no**
 

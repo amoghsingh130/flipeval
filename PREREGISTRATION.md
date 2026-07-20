@@ -94,4 +94,77 @@ An item is excluded only for a benchmark loader/scorer failure that affects all 
 
 ## Dated Amendments
 
-None.
+### 2026-07-20 — WikiText-2 document definition (Decision Point A)
+
+**Decision owner:** Amogh Singh, alone.
+
+**Results inspected before this decision:** No main-grid or mini-grid accuracy
+result has been inspected, and none exists. The only evidence seen is
+calibration-eligibility data, recorded below.
+
+The 2026-07-13 calibration preflight failure recorded in
+`docs/WIKITEXT2_PROTOCOL_BLOCKER.md`: on `Salesforce/wikitext`,
+`wikitext-2-raw-v1`, train split, dataset revision
+`b08601e04326c79dfdd32d625aee71d232d685c3`, tokenized with
+`Qwen/Qwen2.5-1.5B-Instruct` revision
+`989aa7980e4cf806f80c7fef2b1adb7bc71aa306` under the pinned runtime
+(torch 2.13.0, transformers 5.13.0, datasets 5.0.0), seed 0, no added special
+tokens: **0 of 36,718 rows contain at least 2,048 tokens**, against a
+registered requirement of 128. No calibration artifact or checkpoint was
+produced. This is a property of the corpus layout, not of the seed — WikiText-2
+raw distributes each article across many short rows — so no reseeding can make
+the registered row-level reading executable.
+
+The 2026-07-20 eligibility probe, run **before** this decision was taken, on the
+same pinned dataset revision, tokenizer revision, and runtime, applying the
+reconstruction rule below verbatim (SLURM job `11303825`, embers CPU, in-image;
+algorithm `wikitext2-level1-heading-articles-v1`): **629 articles reconstructed
+from 36,718 rows, of which 425 contain at least 2,048 tokens** against the
+registered requirement of 128 — verdict SUFFICIENT, a 3.3× pool. Token-length
+distribution across the 629 reconstructed articles: min 10, p25 1,703, median
+2,857, p75 5,320, p90 8,577, max 21,295, mean 4,002.0; 2,517,232 tokens total.
+Eligibility is a property of the articles and not of the seed, so this single
+count satisfies all five registered seeds. The probe script is persisted at
+`scripts/wikitext2_article_probe.py` and is the **reference implementation** of
+the reconstruction rule: the builder's reconstruction must match its
+`reconstruct_articles` and `is_level1_heading` functions verbatim.
+
+**Rationale:** The preregistration requires the WikiText-2 condition to sample
+128 *documents* of 2,048 tokens. It did not operationalize "document" for a
+corpus whose Hugging Face rows are line fragments rather than documents. This
+amendment supplies that definition. It changes no other registered parameter.
+
+**Amended rule.** For the Qwen2.5-1.5B-Instruct WikiText-2 calibration
+condition, a *document* is one article, reconstructed deterministically from the
+raw corpus as follows:
+
+1. Read the train split in source row order at the pinned dataset revision.
+2. An article begins at each row that is a level-1 heading — a row whose text,
+   after stripping surrounding whitespace, matches a single `=`-delimited title
+   (`= Title =`) and not a deeper heading (`= = Subtitle = =` or lower). All
+   rows up to but excluding the next level-1 heading belong to that article.
+   Rows preceding the first level-1 heading form no article and are discarded.
+3. An article's text is its member rows concatenated in source order, joined
+   exactly as stored, with no normalization beyond that already present in the
+   raw corpus.
+4. The reconstruction algorithm is versioned and persisted with the artifact,
+   together with the ordered article index array and a hash of each
+   reconstructed article, so the reconstruction is independently checkable.
+
+The registered sampling rule then applies unchanged to that article array: for
+seed `s`, shuffle the complete reconstructed-article index array using
+`numpy.random.default_rng(s).shuffle`; visit articles in that order; tokenize
+each without adding special tokens; skip articles shorter than 2,048 tokens;
+retain the first 2,048 tokens from each eligible article until 128 samples are
+collected. Persist the selected article indices and token hashes. GPTQ seed `s`
+and AWQ seed `s` receive the identical ordered calibration samples, as for C4.
+
+Seeds `{0,1,2,3,4}`, sample count 128, token length 2,048, the eligibility
+threshold, method pairing, and index retention are **unchanged** from the
+frozen protocol.
+
+**Fail-closed condition.** The builder continues to fail closed on the WikiText-2
+condition until this rule is implemented and tested. If the reconstruction
+yields fewer than 128 eligible articles for any seed, the builder must raise
+rather than relax any registered parameter, and the shortfall returns here as a
+new dated amendment.
