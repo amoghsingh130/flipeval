@@ -52,17 +52,43 @@ def merge_manifest(path: Path, new_manifest: dict[str, Any]) -> dict[str, Any]:
                 "tasks": [entry["name"] for entry in new_manifest["tasks"]],
             }
         )
-        temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
-        try:
-            with temporary.open("w", encoding="utf-8") as f:
-                json.dump(manifest, f, indent=2)
-                f.write("\n")
-                f.flush()
-                os.fsync(f.fileno())
-            os.replace(temporary, path)
-        finally:
-            temporary.unlink(missing_ok=True)
+        _atomic_write(path, manifest)
         return manifest
+
+
+def record_load_info(path: Path, method_name: str, load_info: dict[str, Any]) -> dict[str, Any]:
+    """Record how a method's model was actually loaded, under `loaded`.
+
+    Separate from merge_manifest: that function merges a whole invocation and
+    appends a `runs` entry, so calling it per method would both fail on the
+    missing invocation keys and invent a spurious run per model load. This
+    updates one key under the same advisory lock and atomic replace.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lock_path = path.with_name(f".{path.name}.lock")
+    with lock_path.open("a", encoding="utf-8") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        manifest: dict[str, Any] = {}
+        if path.exists():
+            with path.open("r", encoding="utf-8") as f:
+                manifest = json.load(f)
+        manifest.setdefault("loaded", {})[method_name] = load_info
+        _atomic_write(path, manifest)
+        return manifest
+
+
+def _atomic_write(path: Path, payload: dict[str, Any]) -> None:
+    """Replace `path` atomically so readers never observe partial JSON."""
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    try:
+        with temporary.open("w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2)
+            f.write("\n")
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run per-item compressed-LLM pilot evaluation.")
@@ -101,7 +127,7 @@ def main() -> None:
         print(f"Loading {method.name}: {method.model_id}", flush=True)
         model, tokenizer, load_info = load_model_and_tokenizer(method, run)
         print(f"  backend={load_info['quantization_backend']} kernel={load_info['kernel']}", flush=True)
-        merge_manifest(run_dir / "manifest.json", {"loaded": {method.name: load_info}})
+        record_load_info(run_dir / "manifest.json", method.name, load_info)
         for task in selected_tasks:
             items = load_task(task.name, task.split, task.limit, task.subjects, task.fewshot)
             out_path = run_dir / f"{method.name}.{task.name}.jsonl"

@@ -326,3 +326,28 @@ def test_bridge_config_names_an_explicit_backend_for_every_quantized_method():
         ["gptqmodel_torch"] * 3 + ["awq_gemm"] * 3
     )
     assert all(m.quantization_backend in QUANTIZATION_BACKENDS for m in run.methods)
+
+
+def test_record_load_info_does_not_invent_a_run_entry(tmp_path):
+    """Load info must not go through merge_manifest.
+
+    merge_manifest merges a whole invocation and appends to `runs`; calling it
+    per model load raised KeyError('methods') and would have added a spurious run
+    per method. Caught by the 2-item smoke (job 11285321), not by the suite.
+    """
+    from pilot_eval.run import record_load_info
+
+    path = tmp_path / "manifest.json"
+    merge_manifest(path, {
+        "run_name": "r", "started_at": "t", "config": "/c",
+        "methods": [{"name": "gptq_s0"}], "tasks": [{"name": "mmlu"}],
+    })
+
+    record_load_info(path, "gptq_s0", {"quantization_backend": "gptqmodel_torch", "kernel": "TorchLinear"})
+    record_load_info(path, "awq_s0", {"quantization_backend": "awq_gemm", "kernel": "WQLinear_GEMM"})
+
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    assert len(manifest["runs"]) == 1
+    assert manifest["loaded"]["gptq_s0"]["kernel"] == "TorchLinear"
+    assert manifest["loaded"]["awq_s0"]["kernel"] == "WQLinear_GEMM"
+    assert manifest["methods"] == [{"name": "gptq_s0"}]

@@ -840,3 +840,30 @@ against the cell-3 image). Recorded in `AGENTS.md`, `CLAUDE.md`, and
 `1 failed, 65 passed` and caught a real ordering defect: backend validation ran
 *after* the tokenizer load, so an unroutable backend was only rejected once a fetch
 had already been attempted. Validation now happens first.
+
+### The 2-item smoke earned its place immediately (2026-07-19)
+
+First smoke attempt, job **`11285321`**, FAILED exit 1:0 in 23s — in *our* new
+code, not the environment. The GPTQ route worked exactly as designed
+(`backend=gptqmodel_torch kernel=TorchLinear` printed, `Kernel: loaded ->
+[TorchLinear]`), and the run then died in the manifest write:
+
+```
+File "/workspace/pilot_eval/run.py", line 104, in main
+  merge_manifest(run_dir / "manifest.json", {"loaded": {method.name: load_info}})
+KeyError: 'methods'
+```
+
+`merge_manifest` merges a *whole invocation* and appends a `runs` entry; calling
+it once per model load both raised on the missing invocation keys and would have
+invented a spurious run per method. Fixed with a dedicated `record_load_info`
+that updates one key under the same advisory lock and atomic replace, plus a
+regression test — gate **66 → 67**.
+
+Worth stating plainly: the unit suite passed at 66 with this defect present,
+because no test exercised the load path's manifest write. That is the same class
+of gap the bridge failure exposed (Stage 3 never ran a checkpoint through
+`modeling.py`). **Standing addition to the canary checklist: every new run path
+must be exercised end to end on 2 items through the real loader, scorer, and
+manifest writer before it is trusted at scale** — a green unit suite is not
+evidence that a path runs.
