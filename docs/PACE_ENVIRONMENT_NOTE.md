@@ -717,3 +717,52 @@ canary pair freezes the environment.**
 > campaign — any dependency, def, or pinned-runtime change from here is a new,
 > un-superseded cell and requires an explicit ruling. Seeds 1–2, the bridge, and
 > the main/mini grids all run on this exact image sha.
+
+## Cell-3 fact — `EXLLAMA_V2` GPTQ kernel is disqualified on this hardware (2026-07-19)
+
+Recorded from the first backend probe, job **`11285100`** (A100 80GB PCIe,
+`atl1-1-01-006-3-0`, gpu-a100/inferno, cell-3 image `8260d04c`). The probe swept
+in-image quantized load paths for the seed-0 GPTQ and AWQ checkpoints, running a
+tiny forward pass on each.
+
+**`GPTQModel.load(backend=EXLLAMA_V2)` kills the process with SIGILL**
+(`srun: error: atl1-1-01-006-3-0: task 0: Illegal instruction (core dumped)`;
+job `FAILED 132:0`, step `CANCELLED 0:4`, 50s wall). The crash lands during model
+load, after the `Estimated Quantization BPW` line and before any kernel selection
+is reported. Almost certainly an instruction-set mismatch in the prebuilt exllama
+extension shipped in the pinned wheel — i.e. it was compiled for a baseline this
+node does not implement.
+
+**Disposition: permanently off the candidate list. Not diagnosed further, by
+ruling.** Two other GPTQ kernels load and run correctly in cell 3, so exllama
+buys nothing and diagnosing a prebuilt-extension ISA mismatch is unbudgeted work.
+`MARLIN` is dropped alongside it for the same reason (untested here, same
+prebuilt-kernel risk class, zero upside).
+
+This is a **hardware/runtime property of cell 3, not a defect in the image or the
+checkpoints** — no dependency change is implied and the cell-3 freeze is
+untouched. Nothing in the registered pipeline ever selected exllama: the failing
+bridge path used the `transformers` HfQuantizer default, and the chosen path is
+now an explicit backend selection.
+
+Two process facts worth carrying forward:
+
+- **A SIGILL cannot be caught by `try/except`.** The run-1 probe reported each
+  path from inside an exception handler, so the exllama crash took down the whole
+  harness and left the AWQ paths — the actual open question — untested. Any future
+  sweep over candidate kernels must isolate each attempt in its own subprocess so
+  a fatal signal costs one row, not the run.
+- **Do not truncate probe tracebacks.** Run 1 clipped them to 300 chars, which
+  left the `transformers`/`GPTQConfig(backend=gptq_torch)` failure unexplained
+  (cut off inside `auto_factory.py`) and forced a rerun to learn the reason.
+
+Both are fixed in the run-2 probe (`~/scratch/flipeval/work/backend_probe2.py`,
+job `11285139`). Probes live in scratch and are throwaway — not fingerprinted,
+not part of the registered pipeline.
+
+**Kernel choice pre-ruled (2026-07-19, Amogh):** GPTQ evaluation uses **TORCH
+(`TorchLinear`)** — the pilot-validated precedent; kernel identity is a registered
+nuisance variable recorded in every run manifest, so the boring precedented choice
+beats the faster one. **TRITON (`TritonV2Linear`) is the documented fallback**,
+used only if the 2-item eval smoke projects `TorchLinear` past a workable bridge
+wall time even with `-t` raised.
