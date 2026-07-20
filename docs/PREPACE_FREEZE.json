@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-19T16:22:47.462529+00:00",
-  "source_commit": "d809480586c6262e6f79681c6ae439477c034103",
-  "source_tree": "4ed53b676c732bd6002a51507b970c21e1585d26",
+  "created_at": "2026-07-20T02:51:08.648863+00:00",
+  "source_commit": "f70de5976d78d17ff68f02a8a34171801fa0459c",
+  "source_tree": "ece6d5335cd249939f1d3c354928691c079fabe3",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -13,7 +13,7 @@
     "configs/kaggle_qwen_public_quantized.yaml": "73c53f17c018d9fa278c467f4dc4803fd4585aaf58f8d4765bedaf9bfe07383d",
     "configs/kaggle_smoke_tiny.yaml": "a6465f20cc76798b84c595da6e5ef9e5a57558d8e713ce4f7eecdf249edba5dc",
     "configs/main_grid_manifest.yaml": "fca4979e47a2edf09f59c8317a99c783dd535b8d246e4afa79eb6b4ea830e6a6",
-    "configs/pace_bridge_chat.yaml": "145ab209f2bbb79a64cefc997cbf9fa2966ad357fd9133311b50ac9fad596424",
+    "configs/pace_bridge_chat.yaml": "5b93f4ac85ad4a9da77cb479e17d49626017a7a4c97f503d4d69041647b9f9b7",
     "configs/pilot_qwen_1p5b.yaml": "1819c3a1c813ab12f70a430ed347ed1c0d45a762455c1c458d1aa1b1f7bf6022",
     "configs/smoke_tiny.yaml": "6d711ac1cd4715d0176c7a109875941297928269990fdafe849a2906a9b47003",
     "container/requirements.lock": "527848eebd6c10dc758200b7fb7cb5fe2fcd2a36a54ab36fcff6469478af60ec",
@@ -29,9 +29,9 @@
     "flipeval.def": "f73c5d75acb02ce5cf037780e7ee293368121af7469f220bea83984edd20664b",
     "pilot_eval/__init__.py": "111c1a594791d85f9da5c37f12434c7a16518c8b333ffe893bf19eebdae90a07",
     "pilot_eval/analyze.py": "4493a50463653ce52a8d46c0941c127a4f401bb18eadd1a2d9a612643d6f67cb",
-    "pilot_eval/config.py": "d01145de2609751dab010b885404d97c11d0cfc8d7114bd8fe0cee62b923838d",
-    "pilot_eval/modeling.py": "9f9e61cc6e368db47ca78264f5935d52dc99cb7477342bf40aa7a5efca442972",
-    "pilot_eval/run.py": "59e003170241cc9c6a4ba791bc6e8974dbe28521bd173e8bb7c7d44e34374e14",
+    "pilot_eval/config.py": "fd0915a4d0a223aa7f6ac67559ff8a8899c84081a7c8dfb6edbfc7bae9dcc359",
+    "pilot_eval/modeling.py": "3633e2df2dc0cf615d07091248c4207dbf89b458c3811803be2d5496c34d329e",
+    "pilot_eval/run.py": "ff8ee8503af8834bfd288f847b45a45922a33d3adf263900e2867f290f3b0d25",
     "pilot_eval/tasks.py": "4ba447cabf7d5216c361659cf10c8c745347545efb5c97c13443dc3f2fd7f3a5",
     "pyproject.toml": "cd3349eca8a076b1aabfb7dac258e1de78094a1356913b99d1f29c6450ac37c3",
     "scripts/atlas_flip_analysis.py": "8fd0ef204fcc74ee28e09f45f40d1787ba1621d2aebb4c43aa905f350e5817cc",
@@ -43,7 +43,7 @@
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
-    "scripts/slurm/build_image.sbatch": "2aed54332c1a6e9d6deaaebc7f7e7ed6b83b3e0336d75dc4571b085bfd04e518",
+    "scripts/slurm/build_image.sbatch": "e5883b3811033f0dc01b94b31e37405ecfbdb47ca3b0b9bf25e833e32638a3b6",
     "scripts/slurm/build_quantized.sbatch": "a91fab20572d1036a90a36370cbad403a5d8f0ca49ce5808870cd79d55f1e6de",
     "scripts/slurm/env.sh": "9d3ac9d040e9e0e43c500b9180edbf1549475992bffd97a9f342d2ed1bafb33e",
     "scripts/slurm/mirror_c4.sbatch": "ced7de1d241f9fd3e9a05e6a20028cf49bc7eb47410ce75a1fd77215c4f9dc17",
@@ -64,11 +64,11 @@
     "tests/test_expected_grid.py": "4239d32d9d4b667a6d6680fd22be857d24023fe79054a9f42a68a55cdaea4ccc",
     "tests/test_golden.py": "0a386ff15be16876bbb9f6f9e929639714c0ec853ed3760ea0bdbf57d2d50ea7",
     "tests/test_io_cli.py": "ca0036acee6889321342bb870975090827bfe503171b8536f4f71a17ff730f81",
-    "tests/test_pilot_eval.py": "e8fbfd59e58d2d4b68d4cfd5ac32b004bc31d833192fa3f237bd4b5240c8c55b",
+    "tests/test_pilot_eval.py": "6a28af63619c683a90182e32967467b4290d5968ab67325c2bdd5a985794929f",
     "tests/test_verify_bridge.py": "6025c09d4bfeb8014c00163c1f229bd90c0a4c85eb1b0bd1b600786a41e458b8"
   },
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "f97d02f65ff01c6002a0227a239ccc7e87419bb42c672e59861719b8c0c85a93"
+  "manifest_payload_sha256": "197bce37849c5a3e450caa51192c47cbd71837270957788ea5903a6438168450"
 }
