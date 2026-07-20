@@ -64,9 +64,16 @@ class ClaimProfile:
     baseline_accuracy: float | None
     claimed_margin_pp: float | None
     margin_basis: str
-    indeterminate: bool = False          # a registered input genuinely absent
+    indeterminate: bool = False          # a registered input absent, or the metric incompatible
     indeterminate_reason: str = ""
+    # Why the claim is indeterminate, as it appears in the verdict string. Two
+    # kinds: the source reports too little ("insufficient reporting"), or it
+    # reports enough but about a metric the registered flip model cannot score
+    # ("metric-incompatible").
+    indeterminate_kind: str = "insufficient reporting"
     notes: str = ""
+    # Registered components that remain computable for an indeterminate claim.
+    # Reported in the CSV as supplementary transparency, never verdict-bearing.
     determinate_components: tuple = field(default=())
 
 
@@ -96,9 +103,17 @@ CLAIM_PROFILES = [
                  "GSM8K standard test size; the frozen row's own n (COCO 5000) belongs to a CIDEr claim",
                  0.1387, 0.30,
                  "GSM8K -0.30pp, the accuracy benchmark the source reports",
-                 notes="INTERPRETIVE: the primary quote's benchmark is COCO CIDEr, a generation "
-                       "metric, so the registered accuracy-flip model cannot apply to it. Verdict "
-                       "computed on the source's own accuracy benchmark (GSM8K) instead."),
+                 indeterminate=True,
+                 indeterminate_reason="qualifying quote asserts negligible loss on COCO CIDEr, a "
+                                      "generation metric with no per-item correct/incorrect state; "
+                                      "V1/V2 are flip-model quantities that do not apply to it",
+                 indeterminate_kind="metric-incompatible",
+                 determinate_components=("V1_paired", "V1_independent", "V2"),
+                 notes="The GSM8K columns are computable and retained for transparency, but GSM8K "
+                       "is a different benchmark from the one the qualifying sentence is about, and "
+                       "the source used non-trigger language for it. Scoring the CIDEr assertion "
+                       "via GSM8K would audit a sentence the source did not write, so R04 is "
+                       "indeterminate and its GSM8K numbers are supplementary only."),
     ClaimProfile("R05", "squeezellm", 4, "mmlu", 14042,
                  "frozen row states 'imputed (MMLU test set, standard n=14042)'",
                  0.391, 3.1,
@@ -214,7 +229,9 @@ def compute_rows(claim_table: Path, atlas: Path) -> list[dict]:
             "discordance_match_tier": match.tier,
             "discordance_n_cells": match.n_cells,
             "indeterminate": profile.indeterminate,
+            "indeterminate_kind": profile.indeterminate_kind if profile.indeterminate else "",
             "indeterminate_reason": profile.indeterminate_reason,
+            "determinate_components": " ".join(profile.determinate_components),
             "v3_per_item_outputs": per_item_outputs_verdict(source_row["per_item_outputs_released"]),
             "notes": profile.notes,
         }
@@ -294,14 +311,14 @@ def compute_rows(claim_table: Path, atlas: Path) -> list[dict]:
 
         # Headline verdict, at the applicable margin.
         if profile.indeterminate:
-            row["verdict"] = "indeterminate - insufficient reporting"
+            row["verdict"] = f"indeterminate - {profile.indeterminate_kind}"
         elif row["v2_underpowered_applicable"]:
             row["verdict"] = "underpowered for its own assertion"
         else:
             row["verdict"] = "adequately powered at its applicable margin"
         # Secondary reading: everything judged at the registered 2pp margin.
         if profile.indeterminate:
-            row["verdict_at_registered_2pp"] = "indeterminate - insufficient reporting"
+            row["verdict_at_registered_2pp"] = f"indeterminate - {profile.indeterminate_kind}"
         elif row[f"v2_underpowered_paired_{REGISTERED_MARGIN_PP:g}pp"]:
             row["verdict_at_registered_2pp"] = "underpowered for its own assertion"
         else:
@@ -330,16 +347,23 @@ def main() -> None:
     determinate = [r for r in rows if not r["indeterminate"]]
     underpowered = [r for r in determinate if r["verdict"] == "underpowered for its own assertion"]
     indeterminate = [r for r in rows if r["indeterminate"]]
-    sensitive = [r for r in rows if r["margin_sensitive"] is True]
+    # Margin sensitivity qualifies a verdict, so it is reported over the claims
+    # that HAVE a headline verdict. Indeterminate rows keep the column (their
+    # supplementary V2 can still flip across the sweep) but are not counted here.
+    sensitive = [r for r in determinate if r["margin_sensitive"] is True]
 
     print(f"AUDIT_INPUT_SHA256 claim_table={sha256_of(claim_table)}")
     print(f"AUDIT_INPUT_SHA256 atlas={sha256_of(atlas)}")
     print(f"AUDIT_ALPHA={ALPHA} POWER={POWER} registered_margin_pp={REGISTERED_MARGIN_PP}")
     at_2pp = [r for r in determinate if r["verdict_at_registered_2pp"] == "underpowered for its own assertion"]
-    print(f"AUDIT_HEADLINE {len(underpowered)} of {len(rows)} claims underpowered for their own "
-          f"assertion (+ {len(indeterminate)} indeterminate from insufficient reporting)")
-    print(f"AUDIT_HEADLINE_AT_REGISTERED_2PP {len(at_2pp)} of {len(rows)} underpowered "
-          f"(+ {len(indeterminate)} indeterminate) -- secondary reading, all claims judged at 2pp")
+    insufficient = [r for r in indeterminate if r["indeterminate_kind"] == "insufficient reporting"]
+    incompatible = [r for r in indeterminate if r["indeterminate_kind"] == "metric-incompatible"]
+    print(f"AUDIT_HEADLINE K={len(underpowered)} of {len(determinate)} determinate claims "
+          f"underpowered for their own assertion; J={len(indeterminate)} indeterminate from "
+          f"insufficient or incompatible reporting ({len(insufficient)} insufficient, "
+          f"{len(incompatible)} metric-incompatible); {len(rows)} claims audited")
+    print(f"AUDIT_HEADLINE_AT_REGISTERED_2PP {len(at_2pp)} of {len(determinate)} determinate "
+          f"underpowered (+ {len(indeterminate)} indeterminate) -- secondary reading, uniform 2pp yardstick")
     print(f"AUDIT_MARGIN_SENSITIVE {len(sensitive)} of {len(determinate)} determinate claims")
     print(f"AUDIT_V3_REPRODUCIBLE "
           f"{sum(1 for r in rows if r['v3_per_item_outputs'] == 'yes')} yes / "

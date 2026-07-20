@@ -220,9 +220,39 @@ def test_claim_profiles_cover_the_frozen_table_exactly():
     assert len(CLAIM_PROFILES) == 17
 
 
-def test_indeterminate_set_is_exactly_the_four_flagged_rows():
-    """R02/R11 (chart-image only) and R13/R14 (no on-page baseline)."""
-    assert {p.claim_id for p in CLAIM_PROFILES if p.indeterminate} == {"R02", "R11", "R13", "R14"}
+def test_indeterminate_set_is_exactly_the_five_flagged_rows():
+    """R02/R11 (chart-image only), R13/R14 (no on-page baseline), R04 (metric-incompatible)."""
+    assert {p.claim_id for p in CLAIM_PROFILES if p.indeterminate} == {
+        "R02", "R04", "R11", "R13", "R14"}
+
+
+def test_r04_is_indeterminate_for_metric_incompatibility_not_missing_inputs():
+    """R04's qualifying quote is about COCO CIDEr, which has no per-item correct/incorrect
+    state, so the flip-model V1/V2 cannot score it. Its GSM8K numbers stay computable and
+    are emitted for transparency, but they must not carry the verdict."""
+    from scripts.audit_verdicts import compute_rows
+
+    profile = next(p for p in CLAIM_PROFILES if p.claim_id == "R04")
+    assert profile.indeterminate_kind == "metric-incompatible"
+    assert profile.n and profile.baseline_accuracy is not None and profile.claimed_margin_pp
+
+    rows = {r["claim_id"]: r for r in compute_rows(
+        Path("docs/audit_claim_table.csv"), Path("results/atlas_cells_summary.csv"))}
+    assert rows["R04"]["verdict"] == "indeterminate - metric-incompatible"
+    assert rows["R04"]["v1_mdd_pp_paired"], "GSM8K transparency columns must survive"
+    assert rows["R04"]["determinate_components"] == "V1_paired V1_independent V2"
+
+
+def test_headline_counts_are_four_underpowered_of_twelve_determinate():
+    """K = 4 of 12 determinate, J = 5 indeterminate (ruling of 2026-07-20)."""
+    from scripts.audit_verdicts import compute_rows
+
+    rows = compute_rows(Path("docs/audit_claim_table.csv"),
+                        Path("results/atlas_cells_summary.csv"))
+    determinate = [r for r in rows if not r["indeterminate"]]
+    assert len(determinate) == 12
+    assert len(rows) - len(determinate) == 5
+    assert sum(r["verdict"] == "underpowered for its own assertion" for r in determinate) == 4
 
 
 def test_every_determinate_profile_has_the_inputs_its_verdict_needs():
