@@ -23,6 +23,18 @@ export APPTAINERENV_TOKENIZERS_PARALLELISM=false
 # bare host vars, so these must use the APPTAINERENV_ prefix to reach the image.
 export APPTAINERENV_HF_HUB_DOWNLOAD_TIMEOUT=60
 export APPTAINERENV_HF_HUB_ETAG_TIMEOUT=60
+# Gated repos (meta-llama/*) need an auth token inside the container. --cleanenv
+# strips host vars and ~/.cache/huggingface is not among the binds, so the token
+# is read from the host and forwarded explicitly. Conditional: jobs on ungated
+# repos are unaffected if no token file exists. The token is never written to
+# the repo or echoed -- only its presence is reported.
+HF_TOKEN_FILE="${HF_TOKEN_PATH:-$HOME/.cache/huggingface/token}"
+HF_TOKEN_STATUS=absent
+if [ -r "$HF_TOKEN_FILE" ]; then
+  APPTAINERENV_HF_TOKEN="$(tr -d '[:space:]' < "$HF_TOKEN_FILE")"
+  export APPTAINERENV_HF_TOKEN
+  HF_TOKEN_STATUS=present
+fi
 
 mkdir -p "$SCRATCH_DIR"/{hf_cache,calibration,work,logs,checkpoints}
 cd "$PROJECT_DIR"
@@ -33,6 +45,7 @@ echo "project:     $PROJECT_DIR"
 echo "scratch:     $SCRATCH_DIR"
 echo "image:       $IMAGE"
 echo "hf_home:     $HF_HOME"
+echo "hf_token:    ${HF_TOKEN_STATUS}"
 
 if [ ! -f "$IMAGE" ]; then
   echo "MISSING Apptainer image: $IMAGE" >&2
