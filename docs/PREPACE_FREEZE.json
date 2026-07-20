@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-20T18:28:23.133095+00:00",
-  "source_commit": "232bf3557b17d12cabe5addf156737285f37c280",
-  "source_tree": "5958dc14560226fa15569b36b2246324e8951ba4",
+  "created_at": "2026-07-20T18:47:41.849009+00:00",
+  "source_commit": "c3ffb632b23714216077fc77d69c57dd496483b4",
+  "source_tree": "b41715c5223fb8e47ae331783b2cdd56ee94db12",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -48,9 +48,9 @@
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
     "scripts/slurm/build_image.sbatch": "b18bc90dcda25281c111ed1e264240cfa80bbeebbcce4f5202fba3deb1c54511",
     "scripts/slurm/build_quantized.sbatch": "a91fab20572d1036a90a36370cbad403a5d8f0ca49ce5808870cd79d55f1e6de",
-    "scripts/slurm/env.sh": "9d3ac9d040e9e0e43c500b9180edbf1549475992bffd97a9f342d2ed1bafb33e",
+    "scripts/slurm/env.sh": "8a677e794534055aece7f5294da43db66c79b240b2866b54c73327dcc934181f",
     "scripts/slurm/mirror_c4.sbatch": "ced7de1d241f9fd3e9a05e6a20028cf49bc7eb47410ce75a1fd77215c4f9dc17",
-    "scripts/slurm/prepare_calibration.sbatch": "48635c646b7096eadf1775b58bd5a2af7e5c3169f5e225b9ab663c6ae7c01b35",
+    "scripts/slurm/prepare_calibration.sbatch": "1ed38168233a8e06228ba11ea129929e37be86c326936112e20267e3594410dd",
     "scripts/slurm/run_bridge.sbatch": "4e52f6b275e87d24500dbe663026dd429123fa324ad201f04064b0e343ac135b",
     "scripts/slurm/verify_bridge.sbatch": "cc8d8204c6bb3ce3c984768b5b5c3283b99f4d06fbbeb7232c3e9824f14c2f57",
     "scripts/slurm/verify_row_count.sbatch": "75ae8091fa3cc425788827ee96ecb1ef342062efc83488a63b8a3b009d0787e8",
@@ -74,5 +74,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "eb5d03cb80e888ff3d016dde9ed9af7d9a3a10fbb9ff73b51dde0636579314cd"
+  "manifest_payload_sha256": "bff5b47dcd3ab1240a3d30ea6e90f14bc75561ccb0b5a4c4e3a9f5a2e6ae858f"
 }
