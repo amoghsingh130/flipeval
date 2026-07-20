@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-20T02:58:09.531241+00:00",
-  "source_commit": "98b013e3a63551d6aec876f0827f0dce70f49ead",
-  "source_tree": "7afd6fb28f3a3c7eca4534a8e8485f1f3aaa249c",
+  "created_at": "2026-07-20T04:29:43.965846+00:00",
+  "source_commit": "30c074f61744cbbf08ca7c0bf71db15aae7a4622",
+  "source_tree": "1e2b39a6563d21053cb2091a8221bf3a60ab260c",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -35,7 +35,10 @@
     "pilot_eval/tasks.py": "4ba447cabf7d5216c361659cf10c8c745347545efb5c97c13443dc3f2fd7f3a5",
     "pyproject.toml": "cd3349eca8a076b1aabfb7dac258e1de78094a1356913b99d1f29c6450ac37c3",
     "scripts/atlas_flip_analysis.py": "8fd0ef204fcc74ee28e09f45f40d1787ba1621d2aebb4c43aa905f350e5817cc",
+    "scripts/audit_stats.py": "ba1ca41dc02cbcf76189a41e1277b54d67459dda71ef77e483c4267d6fb57571",
+    "scripts/audit_verdicts.py": "e07fcee50f4184a91a7da7b8c06b5bf292bc88ed880d6b3c8ea619d33afcf656",
     "scripts/build_quantized.py": "73fce25b619799a713e0c0090221c8c110b933028694270772ad73b040852c80",
+    "scripts/certification_tables.py": "60512e7bc615fb6edba44350fcce249f6780e9de12f40f2fe76de23c0d580164",
     "scripts/compare_mmlu_reference.py": "2e47f1e89bf77e0f6edaee87c685f399e77fbb2f39e2b816327c5f438f275c88",
     "scripts/expected_grid.py": "d56cab5397c8928d22d716655fc1398ed69b7ee7942720f72e3f557fc0f8b4fe",
     "scripts/freeze_prepace.py": "71d08634bcf92b29f82d29e391f913477bdfd3871bc760d4f25824d15dbc4b1b",
@@ -43,7 +46,7 @@
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
-    "scripts/slurm/build_image.sbatch": "a7cac61a2276b7aaac66d72d778f02d4c7bd62e2a132e312f54f634f90b45123",
+    "scripts/slurm/build_image.sbatch": "b18bc90dcda25281c111ed1e264240cfa80bbeebbcce4f5202fba3deb1c54511",
     "scripts/slurm/build_quantized.sbatch": "a91fab20572d1036a90a36370cbad403a5d8f0ca49ce5808870cd79d55f1e6de",
     "scripts/slurm/env.sh": "9d3ac9d040e9e0e43c500b9180edbf1549475992bffd97a9f342d2ed1bafb33e",
     "scripts/slurm/mirror_c4.sbatch": "ced7de1d241f9fd3e9a05e6a20028cf49bc7eb47410ce75a1fd77215c4f9dc17",
@@ -58,6 +61,7 @@
     "tests/fixtures/pilot/pair_summary.csv": "c4a98d9b2c3f618d77a0c2702417fa576375d9c73c26704eb45e038f0979ef3f",
     "tests/fixtures/pilot/rank_instability.csv": "5ba85412c95eba0c86f39603f6063c5161a8a5931aa2f9bf96f5b31136156ea4",
     "tests/test_atlas_flip_analysis.py": "852d8f25460a5ebc6e03006cdcbf8e4357c6a4ede9727dac97b63b0b737fc853",
+    "tests/test_audit_stats.py": "aabf4578fee94810eeb4790d75a6fa5e93c23f64e61ce12767cb6fdbc75e08ea",
     "tests/test_build_quantized.py": "50b5857a99502b30087007bc15b30825f21bc13497a1f502efe0af98129e43d9",
     "tests/test_compare_mmlu_reference.py": "887b9539311e16bed12c9886da6a3e5675bb4a03a21a28b3f2b5e2ad7de7271a",
     "tests/test_core.py": "3a7bbabf822bc89c08db5b4d49e4c5d9c2347e24105a0d796c671847d9d6e6b5",
@@ -70,5 +74,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "65bc51ad74f2ecf664a50451db7bef64ec3fd39a815f2a841c1fdb55c3469b0c"
+  "manifest_payload_sha256": "0a4bc6732db1238d980cef4e38841e67822c8643e2ba12f2f51e976af00b65cb"
 }
