@@ -86,13 +86,31 @@ So the bridge validation was sound and is unaffected by this gap: it never
 depended on the missing receipts, and the criterion it did enforce is the one
 that matters for pairing correctness.
 
-**Those checkpoint manifests no longer exist.** `~/scratch/flipeval/checkpoints/`
-is empty — the bridge checkpoints were cleaned up after
-`results/bridge_run_20260720.tar.gz` was archived. The manifests were present
-when `verify_bridge.py` passed on 2026-07-20; they are not present now. Anyone
-re-running `verify_bridge.py` today against a bare scratch tree will fail on
-missing receipts, and that failure would be an artifact of cleanup rather than a
-regression. Recorded so it is not misdiagnosed.
+**The live checkpoint copies are gone, but the manifests themselves survive in
+the archive.** `~/scratch/flipeval/checkpoints/` is empty — the bridge
+checkpoints were scratch-transient by design and were cleaned up after
+`results/bridge_run_20260720.tar.gz` was archived.
+
+**Copies are preserved in the committed bridge tarball**, at:
+
+```
+results/bridge_run_20260720.tar.gz
+  └─ bridge_bundle_20260720/calibration_receipts/
+       qwen25-1p5b-{gptq4,awq4}-seed{0,1,2}.calibration_manifest.json   (6 files)
+```
+
+Six manifests, matching the bridge's three paired seeds × two methods. So the
+provenance `verify_bridge.py` checked is durably retained, alongside the signed
+`docs/BRIDGE_DECISION_RECORD_2026-07-20.md` and the archived run artifacts.
+Nothing is lost.
+
+Anyone re-running `verify_bridge.py` today against a bare scratch tree will
+still fail on missing receipts, because the validator resolves them from live
+checkpoint directories rather than from the archive. **That failure is an
+artifact of cleanup, not a regression**, and the manifests can be restored from
+the tarball above. Rebuilt checkpoints regenerate their own manifests at build
+time, so the condition also clears itself on any re-run. Recorded so it is not
+rediscovered later as a scare.
 
 ## 5. Scope
 
