@@ -18,6 +18,8 @@ from scripts.atlas_flip_analysis import (
     s1_key,
     s1_prompt,
     s1_run_combinations,
+    RETRYABLE_STATUS,
+    _retry_delay,
 )
 
 
@@ -250,3 +252,21 @@ def test_parse_next_link_reads_rfc5988_next_target():
     assert parse_next_link('<https://x>; rel="prev"') is None
     assert parse_next_link(None) is None
     assert parse_next_link("") is None
+
+
+def test_retry_delay_honours_retry_after_header():
+    import urllib.error
+    exc = urllib.error.HTTPError("u", 429, "Too Many Requests",
+                                 {"Retry-After": "7"}, None)
+    assert _retry_delay(exc, 0) == 7.0
+
+
+def test_retry_delay_falls_back_to_bounded_exponential_backoff():
+    delay = _retry_delay(RuntimeError("boom"), 3)
+    assert 8.0 <= delay <= 10.0          # 2**3 plus <=25% jitter
+    assert _retry_delay(RuntimeError("boom"), 20) <= 150.0   # bounded
+
+
+def test_rate_limit_status_is_retryable_but_not_found_is_not():
+    assert 429 in RETRYABLE_STATUS and 503 in RETRYABLE_STATUS
+    assert 404 not in RETRYABLE_STATUS and 401 not in RETRYABLE_STATUS

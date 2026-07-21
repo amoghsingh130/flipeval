@@ -14,8 +14,11 @@ import argparse
 import csv
 import dataclasses
 import json
+import os
+import random
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -255,17 +258,64 @@ def analyze_cell(
 # Fetch layer (stdlib HTTPS; no new dependencies)
 # ---------------------------------------------------------------------------
 
-def _http_get_with_headers(url: str, retries: int = 3) -> tuple[bytes, Mapping[str, str]]:
+HTTP_RETRIES = 8
+MIN_REQUEST_INTERVAL = 0.12  # seconds between Hub requests (politeness throttle)
+RETRYABLE_STATUS = frozenset({408, 425, 429, 500, 502, 503, 504})
+_LAST_REQUEST_AT = [0.0]
+
+
+def _throttle() -> None:
+    """Keep a floor on the interval between Hub requests.
+
+    The F1 fallback issues several downloads per cell where rev-1 issued one,
+    which multiplied the request rate enough to trip the Hub's 429 limiter on
+    the first rev-2 attempt (job 11339935, failed at pair 18).
+    """
+    elapsed = time.monotonic() - _LAST_REQUEST_AT[0]
+    if elapsed < MIN_REQUEST_INTERVAL:
+        time.sleep(MIN_REQUEST_INTERVAL - elapsed)
+    _LAST_REQUEST_AT[0] = time.monotonic()
+
+
+def _retry_delay(exc: Exception, attempt: int) -> float:
+    """Exponential backoff with jitter, honouring Retry-After when present."""
+    if isinstance(exc, urllib.error.HTTPError):
+        retry_after = exc.headers.get("Retry-After") if exc.headers else None
+        if retry_after:
+            try:
+                return min(120.0, float(retry_after))
+            except ValueError:
+                pass
+    return min(120.0, (2.0 ** attempt)) * (1.0 + random.random() * 0.25)
+
+
+def _http_get_with_headers(url: str, retries: int = HTTP_RETRIES) -> tuple[bytes, Mapping[str, str]]:
+    """Fetch with backoff. Retries rate-limit and transient server errors only.
+
+    An authenticated request gets a substantially higher Hub rate limit, so the
+    token env.sh already forwards for gated repos is used here when present. It
+    is never logged.
+    """
+    headers = {"User-Agent": "flipeval-atlas/0.1"}
+    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     last: Exception | None = None
     for attempt in range(retries):
         try:
-            request = urllib.request.Request(url, headers={"User-Agent": "flipeval-atlas/0.1"})
+            _throttle()
+            request = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(request, timeout=120) as response:
                 return response.read(), dict(response.headers)
-        except Exception as exc:  # noqa: BLE001 - retried, then re-raised
+        except urllib.error.HTTPError as exc:
             last = exc
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"failed to fetch {url}: {last}")
+            if exc.code not in RETRYABLE_STATUS:
+                raise RuntimeError(f"failed to fetch {url}: {exc}") from exc
+            time.sleep(_retry_delay(exc, attempt))
+        except Exception as exc:  # noqa: BLE001 - transient transport; retried
+            last = exc
+            time.sleep(_retry_delay(exc, attempt))
+    raise RuntimeError(f"failed to fetch {url} after {retries} attempts: {last}")
 
 
 def _http_get(url: str, retries: int = 3) -> bytes:
