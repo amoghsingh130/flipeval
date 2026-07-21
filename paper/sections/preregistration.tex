@@ -264,3 +264,61 @@ registered rule}---never supported or disconfirmed on four cells---and no
 reduced-cell variant of the rule is constructed after results are seen.
 Section~\ref{sec:minigrid} reports accordingly.
 \minigridTODO{escalation-rule outcome and the dated escalation decision record}
+
+\subsection{The spot-check found a selection bias in our own pipeline}
+\label{sec:prereg-spotcheck}
+% SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md; the spot-check report of
+% 2026-07-21 (10 cells, 262/262 fields); ruling R7.
+
+The protocol required an independent spot-check of the atlas pipeline before any
+atlas number could be quoted externally. We report what it found, because the
+finding is the paper's thesis applied to the paper.
+
+The check re-downloaded the raw per-item files for ten cells, stratified across
+both sources and across zero-delta, high-churn, McNemar-significant and excluded
+strata, and recomputed the joins, pairing gates, flip counts, churn, net deltas
+and exact McNemar $p$ values from a \emph{fresh reimplementation of the
+registered definitions}---deliberately not a rerun of our own pipeline, since
+rerunning the same code confirms determinism rather than correctness. All
+262 compared fields reconciled exactly, including dyadic $p$ values reproduced
+without \texttt{scipy}, and no upstream data drift was detected.
+
+The arithmetic was right. The \emph{population} was not. Two defects surfaced.
+First, our implementation omitted a clause of our own registration: when the
+prompt-hash gate fails, the protocol requires trying earlier run combinations in
+reverse-chronological order, and the code simply took the newest run and gave
+up. Eleven pairs contributed zero cells as a result. Crucially, the loss was
+\textbf{not random}: it removed exactly those pairs whose quantized side had
+been re-evaluated later, a property correlated with a model being popular enough
+to re-run. Second, a newer details schema nested its metrics one level deeper
+than our parser looked, so 583 cells were recorded as having no binary
+correctness metric when in fact they had one, and a sentence in our own results
+note attributed that gap to the upstream leaderboard's reporting standards. We
+retracted the sentence.
+
+We draw three points from this, and none of them is that we were unlucky.
+
+\textbf{An aggregate can be exactly right and still be built on the wrong
+population.} Every cell we checked was computed correctly. Had we validated by
+recomputing our own numbers---the natural, and useless, form of self-check---we
+would have confirmed all of them and shipped the selection bias intact. What
+caught it was reconstructing the measurement from the protocol text rather than
+from the code.
+
+\textbf{Preregistration did the work it is supposed to do.} The registration
+text was frozen before any statistic existed, and it fully determined the
+direction of the repair: we did not choose a rule that flattered a result, we
+executed a rule that was already binding and had been under-implemented. That
+is why the fix is a correction rather than a post-hoc adjustment, and it is why
+we can say so without asking to be trusted. The correction was nevertheless made
+\emph{after} results had been inspected, and we disclose that plainly rather
+than presenting the repair as a pre-specified step.
+
+\textbf{Both revisions are public.} We publish rev-1 and rev-2 and report the
+delta between them, rather than replacing the record with its corrected version.
+A field in which near-lossless claims cannot be rechecked because per-item
+outputs are never released---the finding of Section~\ref{sec:audit}---is a field
+whose corrections are invisible. Ours is not, and the difference is the point of
+the artifact rather than an apology for it.
+\revtwoTODO{final rev-1 vs rev-2 delta: cells recovered, cells added, and the
+resulting movement (if any) in the headline descriptives, $K$ and $J$}
