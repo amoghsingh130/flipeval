@@ -122,6 +122,26 @@ The exemplar-placement defect is separate and is not cured by any metric choice.
 **Held for Amogh. No GSM8K gate is committed, and `configs/pace_minigrid_h3.yaml`
 therefore still fails the validator closed on missing ranges.**
 
+> **RESOLVED BY RULING (Amogh, 2026-07-21).** The hold above is discharged. The
+> metric choice is ruled: **`exact_match,flexible-extract`**, on the
+> pre-existing-extractor ground — `pilot_eval.tasks.extract_gsm8k_answer` has
+> always read the `####` marker with a last-number fallback, which is the
+> convention `flexible-extract` implements, so a `strict-match` reference would
+> gate the pipeline against a stricter rule than the pipeline has ever applied.
+> The ruling requires the disclosure that both metric values were observed
+> before the choice was made; that disclosure is present and is retained
+> verbatim in the paragraph above and in Amendment 1.
+>
+> Recorded in **`fe69ab4`** ("Amend the FP16 gate rule: name the GSM8K metric,
+> correct exemplar placement"), with the `--fewshot_as_multiturn false`
+> requirement following in **`2541984`**. Both the metric name and the
+> disclosure sentence were verified present in that amendment text on
+> 2026-07-21 before this note was written.
+>
+> **This item is off the blocked list.** What remains is execution, not a
+> decision: the replacement reference array `11342098` must complete, and all
+> four ranges are then derived and committed together.
+
 ## 5. What is committed
 
 Nothing yet. A half-filled gate block is the dangerous middle state that
