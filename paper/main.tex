@@ -26,6 +26,16 @@
 % paper must be wrapped in \minigridTODO until all registered cells exist.
 \newcommand{\minigridTODO}[1]{\textcolor{red}{[TODO-pending-minigrid: #1]}}
 \newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
+% Every figure whose value depends on the atlas cell population is superseded
+% pending atlas rev-2 (ruling R5/R7, 2026-07-21). The rev-1 per-cell arithmetic
+% is independently confirmed (10 cells, 262/262 fields); what moves is the
+% denominator. See docs/ATLAS_REV2_CORRECTION_2026-07-21.md.
+\newcommand{\revtwoTODO}[1]{\textcolor{red}{[TODO-pending-rev2: #1]}}
+\newcommand{\revtwoBanner}[1]{%
+  \begin{quote}\small\textcolor{red}{\textbf{TODO-pending-rev2.}
+  Every figure in this section that depends on the atlas cell population is
+  superseded pending rev-2: #1 The rev-1 per-cell arithmetic is independently
+  confirmed; the denominator is what changes.}\end{quote}}
 
 \title{Certifying Compressed Language Models:\\ An Audit and a Statistical Toolkit}
 \author{Amogh Singh\\ Georgia Institute of Technology}
