@@ -158,3 +158,57 @@ amendment to `docs/MINIGRID_REGISTRATION_2026-07-15.md` written by Amogh. If the
 amendment resolves the shot count differently, the GSM8K half of this derivation
 must be rerun at the ruled count **before** any mini-grid GSM8K result exists;
 the MMLU half is unaffected.
+
+---
+
+## Dated Amendments
+
+### Amendment 1 (2026-07-21) — GSM8K metric named, exemplar placement corrected
+
+**Written after the first GSM8K reference attempt was inspected, and before any
+replacement run was submitted.** The results seen were FP16 baselines from an
+independent harness, not mini-grid results; no mini-grid job exists. Ruled by
+Amogh 2026-07-21 on the evidence in
+`docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md` § 4.
+
+Two defects in the GSM8K half of array `11338637`, both absent from the MMLU
+half, which stands unchanged:
+
+**(a) Exemplar placement.** § 2 asserted that omitting `--fewshot_as_multiturn`
+yields exemplars inline in the user message. That is **wrong** for lm-eval
+0.4.12, which logs `Using default fewshot_as_multiturn=True` and auto-enables
+the behaviour whenever a chat template is applied; its own help reads
+"Auto-enabled with `--apply_chat_template`. Use 'false' to disable." The first
+run therefore placed each exemplar in its own user/assistant turn pair, while
+`PREREGISTRATION.md` (line 43) and `pilot_eval` place all three inline in a
+single user message.
+
+**Corrected requirement:** the GSM8K reference passes
+`--fewshot_as_multiturn false` explicitly. Rendered prompts must be confirmed
+inline before the run is used for any derivation.
+
+**(b) GSM8K metric.** § 2 fixed the task, shot count and item range but never
+named which of the harness's two GSM8K metrics to read, leaving the choice to
+the derivation script, which took `strict-match`.
+
+**Corrected requirement: the GSM8K metric is `exact_match,flexible-extract`.**
+
+The ground is a property of the two implementations, fixed long before any of
+this: `pilot_eval.tasks.extract_gsm8k_answer` reads the `####` marker **and
+falls back to the last number in the response**. `flexible-extract` is the
+harness filter implementing that same convention; `strict-match` requires the
+bare regex `#### (-?[0-9.,]+)` and is a stricter rule than the pipeline being
+gated has ever applied. A reference metric stricter than the implementation it
+gates measures format compliance rather than the quantity of interest.
+
+**Stated plainly rather than glossed:** this choice was made *after* observing
+that `strict-match` produced a Qwen gate of [0.175, 0.289] — one the known-good
+bridge implementation (0.615 on 200 items) would fail badly — and it is also the
+choice that raises the Qwen figure from 0.232 to 0.566. The justification above
+does not depend on which number is larger, but the ordering is recorded here so
+a reader can weigh it. The § 3 arithmetic is **not** touched, no tolerance is
+widened, and the MMLU gates derived under the original text are unaffected.
+
+Any GSM8K figure produced under `strict-match` or under multiturn placement is
+void for gate-derivation purposes and is retained only as the diagnostic record
+in `docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md`.
