@@ -83,4 +83,19 @@ confirmatory cells. Therefore:
 
 ## Dated Amendments
 
-None.
+### Amendment 2 (2026-07-21, Amogh Singh): GSM8K few-shot binding
+
+§2 states GSM8K uses "1 few-shot example, inline in the user message — matching
+the validated bridge configuration." These two clauses conflict: the validated
+bridge configuration (`configs/pace_bridge_chat.yaml`, `fewshot: 1`) is
+implemented in `pilot_eval/tasks.py` as a boolean switch that emits the fixed
+3-example `GSM8K_FEWSHOT` block, so the bridge canary that passed was validated
+with 3 inline examples. The operative binding for the mini-grid is the validated
+bridge configuration: 3 inline few-shot examples, byte-identical prompt path to
+the bridge. The literal count "1" in §2 was a drafting error. The config key
+`fewshot` retains its existing boolean semantics (truthy ⇒ the fixed 3-example
+block; the integer is not a count).
+
+Results-blind status: no mini-grid accuracy results exist or have been inspected
+as of this amendment; the bridge canary results that were inspected are
+operational validation runs outside the mini-grid's confirmatory set.
