@@ -1,0 +1,81 @@
+% Abstract. Three bracketed H3 variants; select exactly one once all eight
+% registered confirmatory cells exist. Until then the paper ships variant (C).
+% The mini-grid executes 4 of 8 cells (docs/MINIGRID_REGISTRATION_2026-07-15.md
+% §1) and the frozen decision rule applies only over all eight (§4), so variant
+% (C) is the only one currently selectable.
+
+\begin{abstract}
+Compressed language models are routinely released with a claim of
+\emph{near-lossless} quality, supported by a difference of a fraction of a point
+in aggregate benchmark accuracy. We ask whether the evaluations offered for
+those claims could have detected the equivalence they assert, and we find that
+at their own reported sample sizes many could not.
+% SOURCE (next sentence, all figures): docs/AUDIT_VERDICTS_2026-07-20.md
+% §Headline; results/audit_verdicts.csv columns verdict / v3_per_item_outputs.
+In a preregistered audit of 17 equivalence claims drawn from method papers,
+official quantized model cards, and inference-stack vendor documentation,
+\textbf{4 of the 12 claims whose reporting permits a verdict are underpowered
+for their own assertion}---the smallest difference their evaluation could have
+resolved is larger than the difference they pronounce negligible, by factors of
+$2.0\times$ to $12.9\times$. A further \textbf{5 of the 17} cannot be evaluated
+at all because the numbers underlying the claim are reported only as chart
+images, without a baseline, or for a metric that has no per-item correct/incorrect
+state. And \textbf{none of the 17 sources releases the per-item outputs} a third
+party would need to run the paired comparison itself. No audited claim is
+asserted to be false; the audited property is the evidential sufficiency of the
+reported evaluation, not the truth of the underlying equivalence.
+
+We then supply the missing apparatus. Equivalence is a certification problem,
+not a detection problem: we implement two one-sided tests at a declared margin,
+and we compute \emph{certification tables} that state how many items an
+evaluation needs to certify a compressed model within $\pm m$ points of its
+baseline. The counts are derived from the per-item disagreement rates actually
+observed under compression rather than from independent-binomial variance, which
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column"
+reduces the required sample size by $1.7\times$ (GSM8K) to $14.7\times$ (MuSR),
+and by $4.4\times$ pooled over 1{,}155 evaluation cells. The requirement is
+driven by answer churn rather than task difficulty: MMLU needs about 2{,}123
+items at a 2\,pp margin while the harder GPQA needs 749.
+
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
+% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
+Those rates come from an atlas of the public record of compression evaluation:
+1{,}155 paired model-by-task cells mined from public per-item evaluation dumps,
+spanning 3B to 405B parameters. Across the atlas, per-item churn runs roughly
+five to six times the net accuracy delta, and 113 cells (9.8\%) post an
+\emph{exactly identical} accuracy to their baseline while still disagreeing with
+it on individual items---at a median of 6.2\% of items among those cells.
+
+% ---------------------------------------------------------------------------
+% H3 VARIANT (A) -- SUPPORTED. Selectable only if all 8 registered confirmatory
+% cells exist and the frozen support rule of PREREGISTRATION.md fires.
+% Finally, a preregistered controlled experiment pairs GPTQ and AWQ on
+% byte-identical calibration samples across five calibration seeds. Under the
+% frozen eight-cell decision rule, H3 is supported: the calibration seed alone
+% reorders the two methods in TODO of eight confirmatory cells, so a
+% single-calibration comparison of compression methods is not reproducible.
+%
+% H3 VARIANT (B) -- DISCONFIRMED. Selectable only if all 8 cells exist and the
+% frozen disconfirmation rule fires.
+% Finally, a preregistered controlled experiment pairs GPTQ and AWQ on
+% byte-identical calibration samples across five calibration seeds. Under the
+% frozen eight-cell decision rule, H3 is disconfirmed: seed-induced dispersion
+% is small relative to the method gap in TODO of eight confirmatory cells, so
+% method rankings in this regime are seed-stable and the evaluation-size
+% problem, not the calibration seed, is the binding threat to reproducibility.
+%
+% H3 VARIANT (C) -- UNDECIDED UNDER THE REGISTERED RULE. Current selection.
+% ---------------------------------------------------------------------------
+Finally, a preregistered controlled experiment pairs GPTQ and AWQ on
+byte-identical calibration samples across five calibration seeds, to ask whether
+the calibration seed alone can reorder two compression methods. The registered
+decision rule is defined over eight model-by-benchmark cells; the executed
+mini-grid covers four of them, so we report those four descriptively and record
+the hypothesis as \textbf{undecided under the registered rule}, without
+constructing a reduced-cell variant after seeing results.
+\minigridTODO{four-cell descriptive summary; escalation-rule outcome}
+
+All protocols were registered and frozen before the corresponding analyses ran,
+the analyst decisions that moved the headline are documented with the direction
+they moved it, and every number above is recomputable from released artifacts.
+\end{abstract}

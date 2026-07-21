@@ -1,0 +1,112 @@
+% =====================================================================
+% Section: Controlled seed-paired experiment (H3) -- SKELETON.
+%
+% HARD RULE FOR THIS FILE: no sentence in it may state an H3 outcome.
+% The mini-grid executes 4 of the 8 registered confirmatory cells
+% (docs/MINIGRID_REGISTRATION_2026-07-15.md §1). The frozen
+% Supported/Disconfirmed/Inconclusive rule of PREREGISTRATION.md is defined over
+% all EIGHT cells and applies only when all eight exist (MINIGRID §4). Therefore
+% the four completed cells are reported DESCRIPTIVELY and H3 is reported as
+% UNDECIDED under the registered rule. No reduced-cell variant of the rule may
+% be constructed after results are seen.
+%
+% Every quantity below is a \minigridTODO slot. Do not fill any of them from
+% partial results; the project's inspection discipline forbids interpreting
+% partial grid output at all.
+% =====================================================================
+
+\section{Does the calibration seed reorder compression methods?}
+\label{sec:minigrid}
+
+\subsection{Design}
+
+% SOURCE: PREREGISTRATION.md §"Experimental Grid" and §"H3 Decision Rule";
+% docs/MINIGRID_REGISTRATION_2026-07-15.md §§1-2.
+The registered confirmatory design compares 4-bit GPTQ against 4-bit AWQ at
+five calibration seeds $\{0,1,2,3,4\}$ over eight model-by-benchmark cells:
+$\{$Qwen2.5-1.5B-Instruct, Qwen2.5-7B-Instruct, Llama-3.2-3B-Instruct,
+Llama-3.1-8B-Instruct$\}\times\{$MMLU, GSM8K$\}$, with MMLU as the registered
+likelihood-based benchmark and GSM8K as the registered generative one.
+
+The pairing is the design's load-bearing element. For seed $s$, the calibration
+set is 128 samples of exactly 2{,}048 tokens drawn from C4 by a fixed,
+seed-determined procedure (shuffle the full train-split document index array with
+\texttt{numpy.random.default\_rng(s)}, visit documents in that order, skip
+documents shorter than 2{,}048 tokens, retain the first 2{,}048 tokens of each
+eligible document until 128 are collected), and \textbf{GPTQ seed $s$ and AWQ
+seed $s$ receive the identical ordered calibration samples}. A ranking
+difference at seed $s$ is therefore attributable to method-by-calibration
+interaction rather than to the two methods having seen different data. Selected
+document indices and token hashes are persisted. The chat template is on for
+every method including the FP16 baselines; GSM8K uses one inline few-shot
+example and test indices 0--999; MMLU uses the full test split.
+
+\subsection{Registered quantities}
+
+% SOURCE: PREREGISTRATION.md §"H3 Decision Rule" and §"Hierarchical aggregation
+% across calibration seeds".
+Per cell, with $d_s = \mathrm{acc}_{\mathrm{GPTQ},s} - \mathrm{acc}_{\mathrm{AWQ},s}$:
+a \emph{winner flip} occurs when two registered seeds give $d_s$ and $d_t$ of
+opposite sign with both nonzero (exact ties are counted as neither flip nor
+non-flip, and reported separately, so a tie can neither create nor erase a flip);
+$\mathrm{gap} = |\mathrm{mean}_s(\mathrm{acc}_{\mathrm{GPTQ},s}) -
+\mathrm{mean}_s(\mathrm{acc}_{\mathrm{AWQ},s})|$;
+$\mathrm{range}_m = \max_s(\mathrm{acc}_{m,s}) - \min_s(\mathrm{acc}_{m,s})$;
+and the range/gap criterion holds when
+$\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}}) \geq
+\mathrm{gap}$. Seed-level SD and item-level SE are reported as separate variance
+components rather than collapsed, and the H3-relevant rank-instability estimate
+comes from the two-level paired bootstrap that resamples seed labels and, within
+each selected seed, items---with GPTQ and AWQ retaining the same sampled seed
+labels and item indices.
+
+\subsection{Scope of what was executed, and the reporting consequence}
+\label{sec:minigrid:scope}
+
+% SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 3, 4.
+The executed mini-grid covers \textbf{4 of the 8} registered confirmatory cells,
+$\{$Qwen2.5-1.5B-Instruct, Llama-3.2-3B-Instruct$\}\times\{$MMLU, GSM8K$\}$. The
+7B/8B cells are deferred behind a mechanical, pre-committed escalation rule:
+escalate iff winner flips occur in at least 1 of the 4 cells, or the range/gap
+criterion holds in at least 2 of the 4. No other result---3-bit, other
+benchmarks, or any atlas finding---can substitute to trigger escalation.
+
+Because the frozen Supported/Disconfirmed/Inconclusive rule is defined over all
+eight cells, and because the mini-grid registration fixed the consequence in
+advance, this paper reports the four completed cells \textbf{descriptively}, and
+reports \textbf{H3 as undecided under the registered rule}. It is not reported as
+supported and not reported as disconfirmed, and no reduced-cell variant of the
+rule is constructed after seeing results.
+
+\subsection{Results}
+
+\minigridTODO{per-cell table: cell, seeds, $\mathrm{acc}_{\mathrm{GPTQ},s}$,
+$\mathrm{acc}_{\mathrm{AWQ},s}$, $d_s$, winner-flip count, ties,
+$\mathrm{gap}$, $\mathrm{range}_{\mathrm{GPTQ}}$,
+$\mathrm{range}_{\mathrm{AWQ}}$, range/gap criterion}
+
+\minigridTODO{variance components per cell: seed-level SD versus item-level SE}
+
+\minigridTODO{two-level paired-bootstrap rank-flip rate per cell, with tie
+replicates reported separately under the registered denominator convention}
+
+\minigridTODO{escalation-rule application and the dated escalation decision
+record; whether the 7B/8B cells were built}
+
+\minigridTODO{flip statistics for the same cells---net delta, harmful and
+beneficial flip rates, accuracy-state churn, total answer churn---so the
+controlled cells can be read against the atlas of \S\ref{sec:atlas}}
+
+\subsection{Deferred registered analyses}
+
+% SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §4.3; PREREGISTRATION.md
+% §"Experimental Grid" and the 2026-07-20 Decision Point A amendment.
+The registered secondary analyses remain deferred with the rest of the main
+grid: the 3-bit dose-response check, ARC-Challenge, HellaSwag, and the
+WikiText-2 calibration-distribution contrast on Qwen2.5-1.5B-Instruct. The
+last of these is governed by a dated amendment that defines a WikiText-2
+``document'' as a reconstructed article, after a preflight found that
+0 of 36{,}718 raw rows reach the registered 2{,}048-token length while 425 of
+629 reconstructed articles do; the amendment records that no accuracy result had
+been inspected when it was taken. None of these analyses can substitute for a
+confirmatory cell.

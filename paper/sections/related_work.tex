@@ -1,0 +1,77 @@
+% =====================================================================
+% Section: Related work and positioning -- SKELETON.
+% Rule for this section: cite honestly and preemptively. Every prior claim we
+% do NOT own is attributed in the same paragraph where our version appears.
+% Bibliography keys are placeholders; docs/related_work_checklist.md tracks the
+% sweep that must be completed (search dates, databases, screened counts).
+% =====================================================================
+
+\section{Related work and positioning}
+\label{sec:related}
+
+\subsection{Per-item behaviour under compression}
+
+\citet{dutta2024flips} show that compressed models can match baseline aggregate
+accuracy while flipping many individual answers, and propose flips and KL
+divergence as complementary metrics. \textbf{The flips metric is theirs, and we
+do not claim it.} What we add is (i) the same decomposition measured across the
+public record at scale rather than in a controlled study
+(\S\ref{sec:atlas}), (ii) the use of the observed flip-rate distribution as the
+\emph{variance model} for equivalence certification
+(\S\ref{sec:certification}), and (iii) the audit that follows from it
+(\S\ref{sec:audit}).
+\TODO{complete the forward/backward citation sweep per
+docs/related\_work\_checklist.md and add any 2025--2026 work on prediction
+instability, behavioural consistency, or rank robustness}
+
+\subsection{Calibration sensitivity in post-training quantization}
+
+\citet{williamsaletras2024} establish that the calibration \emph{data} affects
+quantized model quality. \textbf{Calibration-data effects are theirs.} Our
+registered question is orthogonal and finer-grained: holding the calibration
+corpus fixed, does the calibration \emph{sample seed} change the \emph{ranking}
+of two methods? The design pairs GPTQ seed $s$ and AWQ seed $s$ on byte-identical
+calibration samples, so a seed-level ranking difference is attributable to
+method-by-calibration interaction rather than to the two methods seeing different
+data (\S\ref{sec:minigrid}).
+\TODO{position against any work with controlled calibration seeds; the sweep has
+not yet found one}
+
+\subsection{Statistics for language-model evaluation}
+
+The closest tool is \citet{llmaccuracystats2026}, which brings one-sided McNemar
+\emph{detection} to LLM accuracy comparisons. We agree with its diagnosis and
+differ in the question asked. Detection asks whether there is evidence of a
+difference; a non-significant result is not equivalence, and at the sample sizes
+in \S\ref{sec:audit} it is frequently just an absence of resolution. Our deltas
+are: (i) TOST certification at a \emph{declared} margin;
+(ii) required-$n$ certification tables computed from empirical churn rather than
+from independent-binomial variance, with the $1.7$--$14.7\times$ correction that
+implies; (iii) anytime-valid sequential certification via confidence sequences,
+so a practitioner can stop evaluating as soon as the model is certified
+(\S\ref{sec:sequential}); and (iv) the audit of published claims, which is the
+empirical case that the distinction matters in practice.
+\TODO{verify arXiv 2602.10144 metadata against the primary source before
+submission; do not cite from memory}
+
+\subsection{Reporting-standards audits}
+
+The constructive-audit genre is well established: \citet{dodge2019showyourwork}
+on reporting the compute and search behind reported numbers, and
+\citet{marie2021mtaudit} on the statistical practice of machine-translation
+evaluation. We follow both in framing and in tone: the finding is about what the
+field reports, not about whether individual authors are right, and the paper's
+deliverable is a standard plus the tooling to meet it.
+
+\subsection{Compression methods audited}
+
+\TODO{one paragraph situating the audited methods---GPTQ \citep{gptq2022},
+AWQ \citep{awq2023}, SmoothQuant \citep{smoothquant2022},
+LLM.int8() \citep{llmint82022}, SqueezeLLM \citep{squeezellm2023},
+Wanda \citep{wanda2023}, SparseGPT \citep{sparsegpt2023},
+SpinQuant \citep{spinquant2024}, QuIP\# \citep{quipsharp2024}---and noting the
+honest non-claimers (QuIP\#, SpinQuant, the Qwen quantized model cards, and the
+llama.cpp documentation), which are cited as positive examples of restraint in
+equivalence language.}
+% SOURCE for the honest-non-claimer list:
+% docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §2, "Honest non-claimers" bullet.

@@ -1,0 +1,40 @@
+% =====================================================================
+% Section: Conclusion -- SKELETON. The proposed reporting standard is the part
+% a reader should be able to copy into a model card, so keep it short, concrete,
+% and free of hedging.
+% =====================================================================
+
+\section{Conclusion: a reporting standard for compression claims}
+\label{sec:conclusion}
+
+The claim ``near-lossless'' is cheap to write and expensive to support. This
+paper measured the gap---\textbf{4 of 12 determinate claims underpowered for
+their own assertion, 5 of 17 unevaluable from what is reported, 0 of 17
+reproducible from released artifacts}---and supplied the apparatus that closes
+it: equivalence certification at a declared margin, sample-size tables computed
+from observed churn rather than assumed variance, and sequential certification
+that stops as soon as the evidence arrives.
+
+We propose five lines that a model card or method paper can adopt directly.
+
+\begin{enumerate}
+  \item \textbf{Declare a margin.} ``Equivalent'' without $\pm m$ is not a
+  testable statement. State the margin before evaluating.
+  \item \textbf{Run the paired test.} Report TOST at your margin, not just a
+  non-significant difference test. Failing to detect a difference is not
+  equivalence.
+  \item \textbf{Report churn next to net delta.} They are different quantities;
+  in the public record churn runs five to six times the net delta, and roughly
+  one evaluation cell in ten posts an identical score while still disagreeing on
+  items.
+  \item \textbf{Cite the sample size you met.} Table~\ref{tab:certification}
+  gives the count your benchmark family requires at your margin; say which
+  column you are in and what you actually ran.
+  \item \textbf{Release per-item outputs.} A few megabytes converts an assertion
+  into something a third party can check. No source we audited did this for the
+  tasks its own claim covers.
+\end{enumerate}
+
+\TODO{closing paragraph on the H3 experiment's contribution to the standard,
+written only after all registered cells exist; it must not state an H3 outcome
+until then}

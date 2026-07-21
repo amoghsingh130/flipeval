@@ -1,0 +1,78 @@
+% =====================================================================
+% Section: Introduction -- SKELETON with drafted opening.
+% Numbers here must mirror sections/audit.tex, certification.tex, atlas.tex
+% exactly; if one changes, change both. SOURCE comments repeated for safety.
+% =====================================================================
+
+\section{Introduction}
+\label{sec:intro}
+
+A compressed language model is usually released with a sentence of the form
+``negligible degradation'' or ``$99.x\%$ recovery'', supported by a difference of
+a fraction of a point in aggregate accuracy on a fixed benchmark. That sentence
+is an equivalence claim. Equivalence claims have a statistical form---a declared
+margin, a test, and a sample size sufficient to reject the composite null that
+the difference exceeds the margin---and the sentence almost never has it.
+
+This paper does two things. It measures how large the gap is, in a preregistered
+audit of the claims themselves; and it supplies the apparatus that closes it.
+
+\paragraph{The audit.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts.csv.
+Of 17 equivalence claims enumerated from method papers, official quantized model
+cards, and inference-stack vendor documentation, 5 cannot be evaluated at all
+from what they report, and \textbf{4 of the remaining 12 are underpowered for
+their own assertion}: the smallest difference their evaluation could resolve
+exceeds the difference they pronounce negligible, by $2.0\times$ to
+$12.9\times$. \textbf{None of the 17 releases the per-item outputs} that a third
+party would need to run the paired comparison the claim asserts. No claim is
+described as false; the audited property is the evidential sufficiency of the
+reported evaluation. \TODO{one-sentence example of a claim + its shortfall,
+chosen for legibility, once the section is final}
+
+\paragraph{The fix.}
+Equivalence is a certification problem. We compute certification tables---how
+many items an evaluation needs in order to certify a compressed model within
+$\pm m$ points of its baseline---from the per-item disagreement rates actually
+observed under compression rather than from independent-binomial variance.
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column".
+The correction is large: $1.7\times$ to $14.7\times$ fewer items by family,
+$4.4\times$ pooled. And the requirement is set by churn rather than difficulty,
+which defeats the natural intuition: MMLU needs about 2{,}123 items at 2\,pp
+where the harder GPQA needs 749.
+
+\paragraph{The evidence.}
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
+% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
+Both rest on an atlas of 1{,}155 paired model-by-task cells mined from public
+per-item evaluation dumps spanning 3B to 405B parameters, in which churn runs
+five to six times the net delta, and 113 cells (9.8\%) post an exactly identical
+accuracy to their baseline while still disagreeing with it on individual items,
+at a median of 6.2\% of items. A preregistered controlled experiment then asks
+whether the calibration \emph{seed} alone can reorder two compression methods.
+\minigridTODO{one-sentence status; H3 is undecided under the registered rule
+until all eight registered cells exist}
+
+\paragraph{What is new, and what is not.}
+Per-item flips as a diagnostic for compressed models are due to
+\citet{dutta2024flips}, and calibration-\emph{data} effects on quantization
+quality are due to \citet{williamsaletras2024}; we claim neither. Our
+contributions are (i) the preregistered audit and its verdict artifact,
+(ii) empirical certification tables and the paired-design correction they
+quantify, (iii) anytime-valid sequential certification, which lets an evaluation
+stop as soon as the model is certified, (iv) the atlas of the public record, and
+(v) the seed-level pairing design and its ranking-instability analysis. Relative
+to the closest existing tool \citep{llmaccuracystats2026}, which performs
+one-sided McNemar \emph{detection}, our delta is the shift from detection to
+certification: a declared margin, TOST, required-$n$ tables, and sequential
+stopping.
+
+\paragraph{Preregistration.}
+All protocols were frozen before the analyses they govern
+(\S\ref{sec:prereg}), deviations are dated amendments rather than edits, and
+the analyst decisions that moved the headline are reported together with the
+direction they moved it---including the two corrections that removed the
+paper's largest numbers.
+
+\TODO{contributions bullet list, paper-map paragraph, and artifact URLs/DOI
+once minted}

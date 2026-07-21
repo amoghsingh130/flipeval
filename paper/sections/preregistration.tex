@@ -1,0 +1,266 @@
+% =====================================================================
+% Section: Preregistration, freezes, and analyst degrees of freedom
+% -- COMPLETE DRAFT
+%
+% PRIMARY SOURCES:
+%   PREREGISTRATION.md                        (frozen 2026-07-11)
+%   docs/AUDIT_REGISTRATION_2026-07-15.md     (frozen; Amendment 1 appended)
+%   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md (frozen)
+%   docs/MINIGRID_REGISTRATION_2026-07-15.md  (frozen)
+%   docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices", §Provenance
+%   docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3 (freeze commits)
+%   docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Why this note exists"
+%
+% DISCLOSURE BOUNDARY -- ENFORCE ON EVERY EDIT.
+% The retired "6.3% flips at identical score" anecdote (bnb-4bit same-repo
+% rerun) may appear in THIS SECTION ONLY, labelled as (i) pre-registration data
+% contact and (ii) outside the frozen 59-pair manifest. It must appear nowhere
+% else in the paper and nowhere at all in the blog post. It is a motivating
+% anecdote inside the honest-disclosure narrative, never an atlas statistic.
+% =====================================================================
+
+\section{Preregistration, freezes, and analyst degrees of freedom}
+\label{sec:prereg}
+
+An audit paper is only as good as its own protocol discipline. This section
+documents that discipline, including the places where it cost us the result we
+would have preferred. Readers who want results first may skip to
+\S\ref{sec:audit} and return.
+
+\subsection{What was frozen, and when}
+\label{sec:prereg:timeline}
+
+% SOURCE: PREREGISTRATION.md header lines 3-7;
+% docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3 (commits b74fd58, d6e02dd, f06348f,
+% 715a7ce); docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table sha256).
+\begin{table}[t]
+\centering
+\small
+\caption{Freeze timeline. Each artifact was committed before the analysis it
+governs could be run, and each frozen file carries a \emph{Dated Amendments}
+section: deviations are appended, never edited in, and each records whether
+results had been inspected before the decision.}
+\label{tab:freeze-timeline}
+\begin{tabular}{llll}
+\toprule
+Date & Artifact & Commit & What it fixed in advance \\
+\midrule
+2026-07-11 & \texttt{PREREGISTRATION.md} & --- & Grid, metrics, TOST margin (2\,pp), H3 decision rule \\
+2026-07-15 & Three registrations & \texttt{b74fd58} & Audit, atlas-mining, and mini-grid protocols \\
+2026-07-15 & Audit Amendment 1 & \texttt{d6e02dd} & Blind-extraction independence mechanism \\
+2026-07-15 & Pair manifest & \texttt{f06348f} & The 59 atlas pairs, before any flip statistic \\
+2026-07-15 & Claim table & \texttt{715a7ce} & The 17 audited claims, before any verdict \\
+2026-07-20 & WikiText-2 amendment & --- & ``Document'' definition, Decision Point A \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The frozen claim table's content hash is recorded with the verdicts
+(sha256 \texttt{842b9756...5af7b15}), as is the atlas summary's
+(\texttt{98201ade...10a4712d}) and the container image's, so that a reader can
+confirm the inputs to any reported number were the frozen ones. Analyses ran
+inside a pinned Apptainer image; the test suite state at each analysis run is
+recorded in the corresponding results document.
+
+Three properties of this arrangement do work in the paper.
+\emph{First}, the mechanical parts of the audit---inclusion trigger vocabulary,
+extraction fields, verdict formulas, robustness sweep---were fixed before any
+claim's power was computed, so the audit cannot have selected its claims or its
+statistics to produce a headline.
+\emph{Second}, the atlas pair list was frozen before any flip statistic, so the
+atlas cannot have selected pairs to produce churn.
+\emph{Third}, the H3 decision rule was fixed, in algebra, before the first
+compressed checkpoint existed, and the paper reports whatever that rule returns.
+
+\subsection{Disclosed pre-registration data contact}
+\label{sec:prereg:contact}
+
+Preregistration is a claim about ordering, so the places where our order was
+imperfect are disclosed by the registrations themselves rather than discovered
+by a reader.
+
+% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §1.
+\textbf{Audit.} Five candidate claims were collected with exact quotes on
+2026-07-15 during a feasibility sweep, before the registration was written
+(GPTQ, LLM.int8(), and SmoothQuant abstracts; the Red~Hat AI W4A16 Llama-3.1-8B
+model card; Meta's quantized-Llama blog). No power computation had been run on
+any of them. They enter the pool through the same §3 criteria as
+later-collected claims, and they are not treated as a separate stratum, because
+the contact was with the \emph{quotes}, not with any verdict quantity.
+
+% SOURCE: docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §1; the 99 probe cells
+% are excluded per §6 and per docs/AUDIT_VERDICTS_2026-07-20.md ruling #6.
+\textbf{Atlas.} Two feasibility probes were run on 2026-07-15 before the
+registration was drafted, and their results were known: TheBloke/Llama-2-7B-GPTQ
+against meta-llama/Llama-2-7b-hf on ARC-Challenge (74 flips of 1{,}170, net
+$-1.03$\,pp), and a Neural~Magic Llama-3.1-8B baseline against its W4A16
+quantization on \texttt{bbh\_boolean\_expressions} (17 flips of 250, net
+$+1.2$\,pp). Those pairs are flagged in the atlas and excluded from every
+headline aggregate; the exclusion covers all 99 cells belonging to the two probe
+\emph{pairs}, not merely the two probe tasks (\S\ref{sec:prereg:choices},
+interpretive choice~6).
+
+% SOURCE: docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Why this note exists".
+% DISCLOSURE BOUNDARY: this paragraph is the ONLY place the 6.3% anecdote may
+% appear in any FlipEval public-facing text. Never in the blog, never in the
+% abstract, never in §\ref{sec:atlas}.
+\textbf{A retired anecdote.} The project's original motivating observation was a
+feasibility rerun of a bnb-4bit checkpoint against its own repository's
+full-precision weights, in which roughly 6.3\% of items flipped correctness while
+the aggregate score was unchanged. That observation is what made the project
+seem worth doing, and it is reported here for that reason. It is
+\textbf{retired from every quantitative use}, on two independent grounds: it is
+pre-registration data contact, and it lies outside the frozen 59-pair manifest,
+since same-repository multi-precision runs are an amendment candidate that was
+never acted upon. The registered replacement is the identical-score statistic of
+\S\ref{sec:atlas:identical}, computed on the frozen atlas population: 113 of
+1{,}155 cells (9.78\%) at a median churn of 6.22\%. Where an anecdote and a
+registered statistic point the same way, the paper cites the statistic.
+
+\subsection{The interpretive choices that moved the headline}
+\label{sec:prereg:choices}
+
+Frozen protocols do not eliminate analyst judgement; they make it visible and
+datable. Seven passages of the audit registration were ambiguous enough to
+require a ruling before verdicts could be computed. All seven were ruled on
+2026-07-20, each is implemented in code, and each is reversible by re-running
+with the alternative. Four matter for how the results should be read.
+
+\paragraph{Choice 1: which margin is ``the applicable margin''---and the
+$K = 1 \to 5 \to 4$ correction.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1,
+% including the "Methods-narrative note" paragraph; K values cross-checked
+% against results/audit_verdicts.csv columns verdict and
+% verdict_at_registered_2pp.
+The frozen §4 names the 2\,pp registered margin first, adds ``(and at the
+claim's own margin when it states one)'', and then labels the verdict
+``underpowered for its own assertion'' \emph{at the applicable margin}. Two
+readings survive that text. Judged against a uniform 2\,pp yardstick,
+$K = 1$ of 12. Judged against each claim's own stated margin, with 2\,pp as the
+fallback for claims that state none, $K = 5$---and $K = 4$ after choice~3 below.
+
+The order in which those numbers arrived is the point, so we report it exactly.
+\textbf{The first pass of this analysis returned $K = 1$}, by applying the 2\,pp
+margin uniformly. Re-reading the frozen label---``underpowered for its
+\emph{own} assertion''---produced \textbf{$K = 5$}: a source that asserts parity
+within 0.15\,pp has made a 0.15\,pp claim, and judging it against a 2\,pp
+yardstick audits a claim nobody made. Ruling on choice~3 then moved one claim
+out of the determinate set, yielding the reported \textbf{$K = 4$}.
+
+We draw a specific methodological conclusion from this sequence, and it is not
+that the frozen text was perfect. It is that the correction ran \emph{against}
+the direction the analyst's first instinct had gone. The first pass had already
+produced a defensible, publishable, conservative number; the frozen text
+required a larger one, and the frozen text governed. That is the evidence
+available, from inside a solo-authored project, that the rule text drove the
+analysis rather than the desired result. Had the correction run the other
+way---first pass large, frozen text small---the same discipline would have
+required reporting the small number, and this paragraph would say so. Both
+readings are reported in the paper (\S\ref{sec:audit:results}) and shipped in
+the released CSV, so a reader who prefers the uniform yardstick can have it.
+
+\paragraph{Choice 2: what counts as the claim's own margin.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #2;
+% results/audit_verdicts.csv columns claimed_margin_pp, margin_basis, and the
+% R01 note in column `notes`.
+Most claims cover several benchmarks with different deltas. We define the
+claimed margin as \textbf{the largest $|\Delta|$ the source asserts is
+negligible}. This is the reading most favourable to the source: it grants the
+claim the widest margin its own sentence can bear, and therefore the smallest
+required sample size. The harsher alternative---matching the delta to the
+benchmark whose $n$ was actually used---would, for R01 alone (whose $n$ is
+PIQA's 1{,}838 while its largest delta is ARC-Easy's), raise the MDD-to-margin
+ratio by roughly $34\times$. We did not take it.
+
+The principle generalises to the whole audit. Every ambiguity was resolved in
+the source's favour: pairing rather than independent binomial variance for the
+variance model (the paired assumption is the generous one, and
+Table~\ref{tab:audit-mdd} shows the independent bound is uniformly worse); the
+largest asserted delta as the margin; a claim's own margin rather than a uniform
+one; and imputation by \emph{median} discordance from the most specific matching
+atlas tier rather than by any upper quantile. \textbf{An audit that resolves
+every ambiguity in the audited source's favour and still finds shortfalls of
+$2$--$13\times$ is the armoured version of the finding.}
+
+\paragraph{Choice 3: R04 is indeterminate rather than scored on a substituted
+benchmark.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and the
+% R04 bullet in §Indeterminate; results/audit_verdicts.csv row R04.
+Discussed in full at \S\ref{sec:audit:r04}. It is recorded here as a ruling
+because it is the second correction that cost the paper a number: it removed
+what the first pass had reported as the audit's largest shortfall ($38.3\times$)
+and moved the headline from $K = 5, J = 4$ to $K = 4, J = 5$. The GSM8K
+computation is retained in the released CSV as a labelled transparency column so
+that the set-aside quantity is inspectable rather than deleted.
+
+\paragraph{Choice 5: TOST uses the one-sided $z$.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #5;
+% docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
+The project's own helper, \texttt{flipeval.required\_n\_for\_effect}, uses the
+two-sided $z_{1-\alpha/2}$. That is correct for \emph{detection} and wrong for
+TOST, which rejects two one-sided nulls at level $\alpha$ each. Reusing the
+helper unchanged would have inflated every required $n$ in this paper by about
+27\%---in the conservative direction, under the name ``TOST'', and with no
+symptom visible in any output. It would have made every audit shortfall and
+every certification count larger than the correct value. The TOST formula is
+therefore implemented locally with the one-sided $z_{1-\alpha} = 1.6449$,
+documented, and cross-checked against the project implementation on the
+quantities the two share; the paired standard deviation is pinned against
+\texttt{flipeval.core.minimum\_detectable\_difference} on synthetic delta vectors
+in the test suite, so the audit cannot silently fork from the tested library.
+
+\paragraph{The remaining three rulings, in brief.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #4, #6, #7.
+Choice~4: verdicts are computed at claim level rather than
+claim\,$\times$\,benchmark, because the frozen table stores one pooled $n$ per
+claim and operating at a finer granularity would mean inventing rows the freeze
+does not contain; every summed task is listed in the released
+\texttt{n\_basis} column. Choice~6: ``the two probe-tagged cells'' is read as
+two probe \emph{pairs}, comprising 99 cells, all excluded. Choice~7: degenerate
+rows are handled per input rather than discarded whole, so an indeterminate
+claim keeps the components its available inputs support, reported as
+supplementary and never verdict-bearing.
+
+\subsection{Result-inspection discipline}
+\label{sec:prereg:discipline}
+
+% SOURCE: CLAUDE.md/AGENTS.md project guardrails; PREREGISTRATION.md
+% §"Outcomes and Analysis"; docs/MINIGRID_REGISTRATION_2026-07-15.md §5.
+During grid execution, only job health, checksums, expected-file coverage, and
+receipt pairing are inspected; the first accuracy inspection happens only after
+the mini-grid validator passes over the complete expected file set. The
+registered hierarchical analysis is run once per cell, the escalation rule is
+then applied mechanically, and a dated escalation decision record is written the
+same day. The paired-bootstrap rank-flip denominator convention (tie replicates
+included in the denominator, ties also reported separately) was fixed in words in
+the registration, naming the implementing commit, so it cannot be re-chosen after
+inspection. No registered analysis---calibration builder, paired bootstrap, or
+verdict rule---is tuned after results are seen.
+
+\subsection{The H3 reporting rule, stated before the results exist}
+\label{sec:prereg:h3rule}
+
+% SOURCE: PREREGISTRATION.md §"H3 Decision Rule";
+% docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 3, 4.
+% NEVER state an H3 outcome in this file or any other.
+The registered decision rule is defined over eight confirmatory
+model-by-benchmark cells:
+$\{$Qwen2.5-1.5B, Qwen2.5-7B, Llama-3.2-3B, Llama-3.1-8B$\}
+\times \{$MMLU, GSM8K$\}$ at 4 bits, comparing GPTQ seed $s$ against AWQ
+seed $s$ on byte-identical calibration samples. H3 is \emph{supported} if winner
+flips occur in at least 3 of the 8 cells, or the range/gap criterion holds in at
+least 4 of the 8. It is \emph{disconfirmed} if winner flips occur in at most 1
+of the 8 and $\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}})
+< 0.5 \times \mathrm{gap}$ in at least 6 of the 8. Everything else is
+\emph{inconclusive}, reported without post-hoc promotion.
+
+The executed mini-grid covers \textbf{4 of those 8 cells}
+($\{$Qwen2.5-1.5B, Llama-3.2-3B$\} \times \{$MMLU, GSM8K$\}$), with the 7B/8B
+cells deferred behind a pre-committed, mechanical escalation rule. The mini-grid
+registration states the consequence in advance: if all eight cells complete, the
+frozen rule is applied exactly as registered; if they do not, \textbf{the paper
+reports the four completed cells descriptively and H3 is undecided under the
+registered rule}---never supported or disconfirmed on four cells---and no
+reduced-cell variant of the rule is constructed after results are seen.
+Section~\ref{sec:minigrid} reports accordingly.
+\minigridTODO{escalation-rule outcome and the dated escalation decision record}
