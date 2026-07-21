@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-21T22:48:10.354940+00:00",
-  "source_commit": "b346fd146ccd43a2f8ef5320dd0a28ea77e07953",
-  "source_tree": "880df7d4d22902f1e822cf68e3f31ced7b7bbebe",
+  "created_at": "2026-07-21T23:55:55.601218+00:00",
+  "source_commit": "c82e3ebd88f7a047553c34c28b5c2d30beb266f6",
+  "source_tree": "6cbf1f0adf5cbd017a8cbc5d4a0482c19209dc92",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -19,7 +19,7 @@
     "configs/smoke_tiny.yaml": "6d711ac1cd4715d0176c7a109875941297928269990fdafe849a2906a9b47003",
     "container/requirements.lock": "527848eebd6c10dc758200b7fb7cb5fe2fcd2a36a54ab36fcff6469478af60ec",
     "docs/EXPECTED_MAIN_GRID.json": "f9c2bb6f570f1f162e3ab7fda25b25951f180f5f7b42a137bc97b76835895fe3",
-    "docs/PACE_RUNBOOK.md": "531d9a4db68da5e6acc2932d0960b6c5ac5dbcb73de359c978e5727430fa1f7f",
+    "docs/PACE_RUNBOOK.md": "440a22dfd6b0c0e94dcecefef711663054a15e865e31a8c5fdb34a3913e52739",
     "docs/WIKITEXT2_PREFLIGHT_2026-07-13.json": "8b4c107a590df148398685fc36414fa3b1dfc9edefbbbc2b9357de82ffb7dbf8",
     "docs/WIKITEXT2_PROTOCOL_BLOCKER.md": "80665ee1311eefa90b7bdca673e381beba26b777d78f985178cdf3d69f1f9f3e",
     "flipeval/__init__.py": "7ff709482707d2ce81ab9ee58d7f7e1db8c0c719f8ad4f6d3b9965300319217f",
@@ -83,5 +83,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "7aa0d1c9c4adcd3e024160a906d60eb14468dcd8d1003005516cd7ce98d03257"
+  "manifest_payload_sha256": "7418b1e1e08bf9394643c2fbd8069c6450cdcd359d2b23fd304a11551d0455ce"
 }
