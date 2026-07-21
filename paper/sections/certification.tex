@@ -1,0 +1,223 @@
+% =====================================================================
+% Section: Certification tables  -- COMPLETE DRAFT
+%
+% PRIMARY SOURCES for every number in this section:
+%   docs/CERTIFICATION_TABLES_2026-07-20.md  (authoritative narrative)
+%   results/certification_tables.csv         (machine-readable, 3 margins/family)
+%   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §5 (registered metric set)
+%
+% DISCREPANCY (surfaced to the author, unresolved):
+% docs/CERTIFICATION_TABLES_2026-07-20.md line 4 describes the artifact as
+% "12 benchmark families x 3 margins". results/certification_tables.csv contains
+% ELEVEN named families (arc_challenge, bbh, gpqa, gsm8k, hellaswag, ifeval,
+% math, mmlu, mmlu_pro, musr, winogrande) plus an "ALL (pooled)" row, i.e. 12
+% table ROWS at each margin. Table~\ref{tab:certification} below reproduces the
+% document's table exactly (11 families + pooled) and the prose says "eleven
+% families". Reconcile the doc's line 4 wording before submission.
+% =====================================================================
+
+\section{Certification tables: how many items an equivalence claim needs}
+\label{sec:certification}
+
+\subsection{Detection is not certification}
+
+The statistical question behind ``near-lossless'' is not the one usually
+answered. A McNemar test---including the one-sided variant offered by the
+closest existing tool for LLM accuracy statistics
+\citep{llmaccuracystats2026}---asks whether there is evidence that the
+compressed model differs from its baseline. Failing to find such evidence is not
+evidence of equivalence; with a small enough evaluation, nothing is detectable.
+Our registration commits to this in advance: ``we will not interpret failure to
+reject a difference as equivalence''.
+% SOURCE: PREREGISTRATION.md §"Outcomes and Analysis".
+
+Certification asks the other question: \emph{is the difference provably smaller
+than a margin I declare in advance?} The standard instrument is TOST---two
+one-sided tests at level $\alpha$ each, rejecting the composite null
+$|\Delta| \geq m$ in favour of equivalence within $\pm m$. TOST converts an
+equivalence claim into something with a sample-size requirement, and this
+section computes that requirement empirically.
+
+\subsection{Method}
+\label{sec:cert:method}
+
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
+For a discordance rate $p_d$ and margin $m$, at 95\% confidence and 80\% power,
+\begin{align}
+\mathrm{sd}_{\mathrm{paired}}      &= \sqrt{p_d}, &
+\mathrm{sd}_{\mathrm{independent}} &= \sqrt{2p(1-p)}, \label{eq:sds}\\[2pt]
+n_{\mathrm{req}} &= \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil
+ = \left\lceil \left(\frac{(1.6449 + 0.8416)\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil. \label{eq:nreq}
+\end{align}
+The paired standard deviation follows from the flip model: the per-item accuracy
+difference is $d_i \in \{-1,0,+1\}$, and under the null of no true difference
+$\mathrm{Var}(d) = p_d$, the rate at which the two models disagree on
+correctness. The independent form uses $p$, the family's median baseline
+accuracy, because independent-binomial variance depends on accuracy rather than
+on churn. $z_{1-\alpha}$ is \textbf{one-sided}, since TOST rejects two one-sided
+nulls at level $\alpha$ each (\S\ref{sec:prereg:choices}, interpretive
+choice~5).
+
+The discordance rates are not modelled; they are read off the atlas
+(\S\ref{sec:atlas}). For each benchmark family we take the 25th percentile,
+median, and 75th percentile of the per-cell accuracy-state churn observed across
+that family's atlas cells, giving optimistic, typical, and pessimistic
+compression behaviour. Quartiles are \texttt{numpy}'s linear-interpolation
+\texttt{np.quantile}.
+
+\subsection{The table}
+\label{sec:cert:table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Items required to certify equivalence within $\pm 2$\,pp at 95\%
+confidence and 80\% power, by benchmark family, at the 25th/50th/75th
+percentiles of the discordance rates the atlas observes for that family. The
+naive column is the same requirement computed by treating the two runs as
+independent samples. Eleven benchmark families plus the pooled row.}
+\label{tab:certification}
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"The table at the registered
+% 2 pp margin"; every cell cross-checked against results/certification_tables.csv
+% rows with margin_pp = 2.0 (columns n_atlas_cells, discordance_p25/median/p75,
+% required_n_p25/median/p75, required_n_independent_binomial,
+% paired_advantage_at_median).
+\begin{tabular}{lrccrr}
+\toprule
+Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
+\midrule
+musr          &  24 & 0.015 / 0.034 / 0.044 & 232 / \textbf{519} / 681      & 7{,}617 & $14.7\times$ \\
+gpqa          &  24 & 0.035 / 0.048 / 0.067 & 545 / \textbf{749} / 1{,}035  & 7{,}233 & $9.7\times$ \\
+bbh           & 192 & 0.024 / 0.044 / 0.060 & 371 / \textbf{681} / 928      & 6{,}492 & $9.5\times$ \\
+mmlu\_pro     &   5 & 0.048 / 0.053 / 0.059 & 739 / \textbf{827} / 913      & 7{,}695 & $9.3\times$ \\
+hellaswag     &  14 & 0.031 / 0.044 / 0.079 & 475 / \textbf{688} / 1{,}222  & 4{,}992 & $7.3\times$ \\
+arc\_challenge&   8 & 0.076 / 0.078 / 0.087 & 1{,}172 / \textbf{1{,}211} / 1{,}344 & 7{,}524 & $6.2\times$ \\
+ifeval        &   8 & 0.048 / 0.052 / 0.072 & 736 / \textbf{800} / 1{,}108  & 4{,}211 & $5.3\times$ \\
+mmlu          & 798 & 0.098 / 0.137 / 0.216 & 1{,}510 / \textbf{2{,}123} / 3{,}343 & 7{,}355 & $3.5\times$ \\
+winogrande    &  15 & 0.061 / 0.122 / 0.221 & 940 / \textbf{1{,}879} / 3{,}422 & 6{,}267 & $3.3\times$ \\
+math          &  56 & 0.107 / 0.141 / 0.169 & 1{,}661 / \textbf{2{,}186} / 2{,}610 & 5{,}222 & $2.4\times$ \\
+gsm8k         &  11 & 0.006 / 0.049 / 0.076 & 100 / \textbf{750} / 1{,}172  & 1{,}236 & $1.7\times$ \\
+\midrule
+\textbf{ALL (pooled)} & \textbf{1{,}155} & 0.056 / 0.113 / 0.180 & 872 / \textbf{1{,}739} / 2{,}783 & 7{,}663 & $\mathbf{4.4\times}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{How to read a row.} Pick the benchmark family and the equivalence
+margin you intend to certify. The three required-$n$ columns are the item counts
+you need under optimistic, typical, and pessimistic compression behaviour for
+that family. Then compare with the naive column, which is the count you would
+compute if you ignored pairing.
+
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"The table" worked example
+% and results/certification_tables.csv rows mmlu at margin_pp 1.0 / 2.0 / 3.0
+% (required_n_median = 8491 / 2123 / 944; required_n_independent_binomial at
+% 2 pp = 7355).
+% DISCREPANCY (2026-07-21): docs/CERTIFICATION_TABLES_2026-07-20.md line 33
+% states 8,492 for the 1 pp figure; results/certification_tables.csv says 8491.
+% The CSV is authoritative -- it is what scripts/certification_tables.py emitted.
+% The doc's 8,492 appears to be a naive 4x of the 2 pp value (2,123 x 4), but
+% required_n scales as 1/m^2 BEFORE the ceiling: the unrounded 2 pp requirement
+% is ~2122.75, so ceil gives 2,123 at 2 pp and 8,491 at 1 pp, not 8,492.
+% Text uses 8,491. The doc needs a correction; flagged to Amogh.
+\paragraph{Worked example.} \emph{MMLU, 2\,pp margin, typical discordance
+$\Rightarrow$ evaluate at least 2{,}123 items.} Ignoring pairing would have
+demanded 7{,}355---$3.5\times$ the compute for the same conclusion. Tightening
+the margin to 1\,pp raises the requirement to 8{,}491 items; relaxing it to
+3\,pp lowers it to 944. The margin is the practitioner's declaration, and its
+cost is quadratic; a claim of parity within 1\,pp is four times as expensive to
+certify as parity within 2\,pp.
+
+\subsection{Why the naive column belongs in the table}
+
+The independent-binomial column is not a straw man. It is what you get by
+treating the baseline and compressed evaluations as two unrelated samples and
+comparing proportions, which is the default in most reporting. It is wrong in a
+specific, quantifiable way: the two runs are \emph{the same items through two
+nearly identical models}, so they agree on the large majority of items, and
+their difference has far less variance than independence implies.
+
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column is in
+% the table"; results/certification_tables.csv column paired_advantage_at_median.
+The advantage column is exactly that gap. It ranges from $\mathbf{1.7\times}$
+(GSM8K) to $\mathbf{14.7\times}$ (MuSR) and sits at $\mathbf{4.4\times}$ pooled
+over 1{,}155 cells: a practitioner using the paired design reaches the same
+equivalence conclusion on roughly a quarter of the evaluation budget. The
+variation across families is informative in itself---low-churn families (MuSR,
+BBH, GPQA) reward pairing most, while high-churn generative families (MATH,
+MMLU) both need more items \emph{and} gain less from pairing.
+
+\subsection{The requirement is driven by churn, not by difficulty}
+\label{sec:cert:churn-not-difficulty}
+
+The ordering in Table~\ref{tab:certification} is not the intuitive one, and this
+is the section's main conceptual point.
+
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md, closing paragraph of
+% §"Why the naive column is in the table"; results/certification_tables.csv,
+% mmlu vs gpqa at margin_pp = 2.0. Baseline accuracies in the next paragraph are
+% results/certification_tables.csv column median_baseline_accuracy: gpqa 0.3734,
+% mmlu 0.39. Discordances are column discordance_median: mmlu 0.13733,
+% gpqa 0.048397.
+MMLU needs about \textbf{2{,}123} items at a 2\,pp margin. GPQA needs
+\textbf{749}. GPQA is by any ordinary account the harder benchmark---its median
+baseline accuracy in the atlas is 0.373 against MMLU's 0.390, on a task designed
+to resist exactly the models that saturate MMLU. Difficulty is not what sets the
+requirement. What sets it is how much the compressed model's per-item
+correctness \emph{churns} relative to the baseline: MMLU's typical discordance
+is 0.137 against GPQA's 0.048, so MMLU's paired variance is nearly three times
+larger and its required sample size scales with it.
+
+The practical consequence is that a practitioner cannot reason about evaluation
+size from intuitions about task hardness, headroom, or score level. Two
+benchmarks with similar accuracies and similar apparent difficulty can differ by
+a factor of three in the evidence they require, and the only way to know which
+is which is to measure churn. That is what the atlas is for, and it is why the
+certification tables are empirical rather than analytic.
+
+\subsection{Scope and caveats}
+\label{sec:cert:caveats}
+
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats", all five
+% bullets, plus results/certification_tables.csv column n_atlas_cells.
+These caveats travel with the table, and any reuse of it should carry them.
+
+\begin{itemize}
+  \item \textbf{Families with fewer than 4 analysable cells are omitted.} A
+  quartile over three points is not an empirical distribution. This drops
+  nothing from the registered set: all surviving families appear in
+  Table~\ref{tab:certification}.
+  \item \textbf{Four rows rest on thin evidence and are indicative only:}
+  \texttt{mmlu\_pro} (5 cells), \texttt{arc\_challenge} (8), \texttt{ifeval}
+  (8), and \texttt{gsm8k} (11). By contrast \texttt{mmlu} (798), \texttt{bbh}
+  (192), and \texttt{math} (56) are well supported. A reader should treat the
+  thin rows as a starting hypothesis to be replaced by their own measured churn,
+  not as a reference constant.
+  \item \textbf{Family aggregation mixes two sources of variation.} The atlas
+  collapses MMLU's 57 per-subject cells, and BBH/MATH/MuSR/GPQA's per-subtask
+  cells, into families, so a family's spread mixes subject-level variation with
+  model-level variation. This widens the p25--p75 band relative to what a single
+  practitioner evaluating a single model would see, which makes the quartile
+  columns \emph{conservative} rather than optimistic.
+  \item \textbf{Both disclosed feasibility-probe pairs (99 cells) are excluded}
+  per the atlas registration §6. They are tiny hand-built sanity pairs---$n$ as
+  low as 10, discordance up to 0.9---and would distort every quartile.
+  \item \textbf{These are certification sample sizes, not detection sample
+  sizes.} They certify equivalence within $\pm m$; the $n$ required to
+  \emph{detect} a difference at the same margin is larger. Reporting one as the
+  other is the error this section exists to prevent.
+\end{itemize}
+
+\subsection{What this section does and does not support}
+
+Supports: an empirically grounded, family-specific answer to ``how many items do
+I need to certify parity within $\pm m$?''; a quantified $1.7$--$14.7\times$
+($4.4\times$ pooled) reduction in required evaluation from using the paired
+design correctly; and the demonstration that the requirement tracks churn rather
+than difficulty.
+
+Does not support: extrapolation to benchmark families absent from the atlas;
+extrapolation to compression methods absent from the atlas population
+(\S\ref{sec:atlas:caveats}); any claim that a model meeting these counts is
+equivalent---meeting the count makes the test \emph{informative}, and the test
+still has to be run and to pass.

@@ -1,0 +1,49 @@
+% =====================================================================
+% Appendix: the full audit table -- SKELETON.
+% The appendix table is generated from results/audit_verdicts.csv; do not
+% hand-transcribe it. Column semantics below are copied from that file's header
+% and from docs/AUDIT_VERDICTS_2026-07-20.md.
+% =====================================================================
+
+\section{Full audit table}
+\label{app:audit-table}
+
+\TODO{typeset the full 17-row table directly from
+\texttt{results/audit\_verdicts.csv} (one row per claim, landscape, small
+font). Do not retype values.}
+
+The released CSV carries, per claim: identity and frame; method family, bit
+width and benchmark; the reported or imputed $n$ with its \texttt{n\_basis};
+the claimed margin with its \texttt{margin\_basis}; the imputed discordance with
+its match tier and the number of atlas cells behind it; indeterminacy status,
+kind, and reason; the components that remain computable for indeterminate
+claims; the V3 reproducibility value; V1 as paired and independent-binomial MDD
+with both margin ratios; V2 required-$n$ at 1, 2 and 3\,pp under both variance
+models, plus at the claim's own margin; the applicable margin and its basis;
+the margin-sensitivity flag; and both verdicts
+(\texttt{verdict} and \texttt{verdict\_at\_registered\_2pp}).
+
+\paragraph{Reading the transparency columns.} Rows marked indeterminate carry
+numbers in some V1/V2 columns. Those numbers are \emph{not} verdicts and are not
+counted in $K$; they are retained so that a reader can see exactly what the
+analysis could and could not evaluate. R04's GSM8K computation is the largest
+such quantity and is discussed in \S\ref{sec:audit:r04}.
+
+\section{Certification tables at 1\,pp and 3\,pp}
+\label{app:certification-margins}
+
+\TODO{typeset the 1\,pp and 3\,pp margins from
+\texttt{results/certification\_tables.csv}; the 2\,pp margin is
+Table~\ref{tab:certification} in the main text. Note the quadratic margin
+scaling: MMLU's median requirement is 8{,}491 items at 1\,pp, 2{,}123 at 2\,pp,
+and 944 at 3\,pp.}
+% SOURCE: results/certification_tables.csv, rows mmlu at margin_pp 1.0/2.0/3.0,
+% column required_n_median.
+
+\section{Preregistration documents}
+\label{app:registrations}
+
+\TODO{reproduce, verbatim, \texttt{PREREGISTRATION.md} and the three
+2026-07-15 registrations with their dated amendments, or link them at the
+archived commit. Reviewers should be able to read the frozen rule text that
+\S\ref{sec:prereg} describes.}

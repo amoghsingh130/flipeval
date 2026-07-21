@@ -1,0 +1,65 @@
+% =====================================================================
+% Section: Limitations -- SKELETON, but every bullet below is already supported
+% by a committed source and should survive to the final version.
+% =====================================================================
+
+\section{Limitations}
+\label{sec:limitations}
+
+\paragraph{The atlas is a record, not a sample.}
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1 population caveats;
+% docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §2.
+S1 is community quantizations of 2023-era models, conditioned on leaderboard
+coverage; S2 is one vendor's releases, evaluated by that vendor. Statistics
+computed over the atlas describe the evidence the field circulates, not the
+behaviour of quantization in general.
+
+\paragraph{Discordance is imputed for audited claims.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
+No audited source reports a per-item disagreement rate, so the audit imputes one
+from the nearest atlas tier, using the median of the first non-empty tier. Two
+claims fall through to the global tier and one matches at the most specific tier;
+the match tier is released per claim, and the independent-binomial robustness
+column bounds the effect of the imputation in the conservative direction.
+
+\paragraph{Family aggregation in the certification tables.}
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats".
+Per-subject and per-subtask cells are collapsed into families, so a family's
+quartile band mixes subject-level with model-level variation. This makes the
+p25--p75 columns conservative; four families rest on fewer than 12 cells and are
+indicative only.
+
+\paragraph{Claim-level granularity in the audit.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #4.
+Verdicts are computed per claim, at the pooled $n$ the frozen table records,
+rather than per claim\,$\times$\,benchmark, because operating at a finer
+granularity would require inventing rows the freeze does not contain.
+
+\paragraph{Audit scope.}
+The three frames fix the population; sources outside them are not audited, and
+claims discovered after the table freeze would form a separately reported
+post-freeze stratum. The audit measures evidential sufficiency only, and says
+nothing about whether an audited model is in fact equivalent.
+
+\paragraph{Experimental scope.}
+% SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 4.
+The controlled experiment covers 4 of 8 registered confirmatory cells at models
+of 1.5B and 3B parameters, two benchmarks, 4 bits, two methods, and five seeds.
+H3 is undecided under the registered rule (\S\ref{sec:minigrid:scope}). The
+atlas reaches 405B but is observational; the controlled grid is causal but small.
+\minigridTODO{revise if escalation fires and the 7B/8B cells complete}
+
+\paragraph{Benchmarks and languages.}
+All benchmarks are English and predominantly multiple-choice or short-answer,
+with per-item correctness defined by the original harness. Float-scored
+generation tasks are outside the flip model entirely---643 atlas cells were
+excluded for exactly this reason---so nothing here applies to quality claims
+about open-ended generation, including the CIDEr-style metric that made one
+audited claim unscoreable (\S\ref{sec:audit:r04}).
+
+\paragraph{Provisional status of the atlas numbers.}
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7.
+The atlas pipeline had two bugs found and fixed during its run, and the results
+document marks its numbers provisional pending an independent spot-check.
+\TODO{remove this paragraph, or restate it as completed, once that document
+records the spot-check; no external circulation of atlas numbers until then}

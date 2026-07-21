@@ -1,0 +1,261 @@
+% =====================================================================
+% Section: The public-record flip atlas  -- COMPLETE DRAFT
+%
+% PRIMARY SOURCES for every number in this section:
+%   docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1 (cell counts, S1/S2 contrast)
+%   results/atlas_cells_summary.csv           (per-cell, machine-readable)
+%   results/atlas_exclusions.csv              (exclusion reasons)
+%   docs/IDENTICAL_SCORE_CHURN_2026-07-21.md  (identical-score statistics)
+%   results/identical_score_churn.csv         (same, machine-readable)
+%   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md (frozen protocol)
+%
+% TWO POPULATIONS -- DO NOT MIX. Every number below states which one it uses.
+%   1,254 = analysed cells (S1 906 + S2 348), i.e. enumerated minus
+%           excluded/skipped. Used ONLY for pipeline-coverage accounting.
+%   1,155 = analysis population = 1,254 minus the 99 disclosed-probe cells
+%           (S1 846 + S2 309). Used for EVERY statistic, and it is the same
+%           population as the certification tables and the identical-score note.
+%
+% PROVISIONAL-QUOTING CAVEAT: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7
+% mark these numbers provisional for external quoting pending an independent
+% spot-check of the same-day pipeline. Do not circulate this section externally
+% until that doc records the spot-check as completed.
+% =====================================================================
+
+\section{An atlas of the public record of compression evaluation}
+\label{sec:atlas}
+
+\subsection{Construction}
+\label{sec:atlas:construction}
+
+The atlas mines paired per-item records from public evaluation dumps at zero GPU
+cost. Its protocol was registered and frozen on 2026-07-15, before any flip
+statistic was computed beyond two feasibility probes that the registration
+discloses by name; the pair list itself was frozen as a machine-readable
+manifest, with dataset URLs, run timestamps, and task lists, before any flip
+statistic was computed.
+% SOURCE: docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 3.4; manifest freeze
+% commit f06348f per docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3.
+The registration exists to prevent source- or pair-selection after seeing
+results, and it labels these analyses descriptive: they estimate flip and churn
+magnitudes in the wild and feed the certification tables, they test no registered
+hypothesis, and they cannot substitute for any H3 cell.
+
+Two sources are in scope.
+\textbf{S1} is the Open LLM Leaderboard v1 archive---community quantizations
+(GPTQ, AWQ, GGUF, 8-bit and 4-bit bitsandbytes) of 2023-era base models, paired
+with their base model's details dataset whenever one exists.
+\textbf{S2} is the Neural Magic / Red~Hat per-item dumps for quantized
+Llama-3.1, covering W4A16, W8A8-INT8 and W8A8-FP8 at 8B, 70B and 405B.
+Item pairing is mechanical: items join on the source's own item key, duplicated
+keys are dropped entirely on both sides, and an item enters the paired analysis
+only if its full-prompt hash is identical across the pair. A pair-task cell is
+excluded if fewer than 99\% of joinable items pass that identity check. Differing
+harness commits do not exclude a cell---prompt-hash identity is the operative
+control---but are recorded per cell and disclosed.
+
+\subsection{Coverage, and what the exclusions reveal}
+\label{sec:atlas:coverage}
+
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, first bullet;
+% results/atlas_exclusions.csv.
+% POPULATION: this subsection (and only this subsection) uses the 1,254 figure.
+The enumeration yields \textbf{2{,}055} pair-task cells, of which
+\textbf{1{,}254 are analysed} (S1 = 906, S2 = 348) and 801 are excluded or
+skipped. The exclusions are dominated by two causes: \textbf{643} cells whose
+task has no binary correctness column (float-scored tasks, which the flip model
+does not describe), and \textbf{132} cells whose join intersection is empty.
+
+The second cause is a reporting-standards observation in its own right. An empty
+join intersection means the two sides of the pair were evaluated on
+\emph{different item sets}: the leaderboard's baseline run and its quantized run
+do not share the items whose scores are being compared. The resulting difference
+in reported accuracy is not a paired quantity at all, and no per-item analysis
+of it is possible. This is invisible to anyone reading only the aggregate
+leaderboard numbers.
+
+\subsection{The analysis population}
+\label{sec:atlas:population}
+
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §Provenance ("analysable cells
+% 1,155 (1,254 non-excluded - 99 probe)"); docs/IDENTICAL_SCORE_CHURN_2026-07-21.md
+% §Population; docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 6.
+Every statistic in the remainder of this section, in the certification tables of
+\S\ref{sec:certification}, and in the discordance imputation of
+\S\ref{sec:audit:rules} uses a single population: the \textbf{1{,}155} cells that
+are neither excluded nor part of a disclosed feasibility probe
+(S1 = 846, S2 = 309). The 99 probe cells span the two pairs whose results were
+known before the registration was written; the registration requires them to
+appear in the atlas but not in any headline aggregate, and they are tiny
+hand-built sanity pairs ($n$ as low as 10, discordance up to 0.9) that would
+distort any quartile. The 1{,}254 figure of \S\ref{sec:atlas:coverage} is
+pipeline accounting and is never used as an analysis denominator.
+
+\subsection{Net delta understates behavioural change by a factor of five to six}
+\label{sec:atlas:netgross}
+
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, "Reading" bullet.
+Across the atlas, per-item accuracy-state churn runs roughly
+\textbf{five to six times the net accuracy delta}, and that ratio holds at every
+scale represented, from 3B to 405B parameters. The net delta a model card reports
+is the residue left after harmful and beneficial flips cancel; the churn is the
+quantity that describes how much of the model's behaviour actually changed.
+They are different quantities and both should be reported. The consequence for
+inference is direct: churn is the variance term in
+Equations~\eqref{eq:sds}--\eqref{eq:nreq}, so a compressed model whose net delta
+looks reassuringly small can still be sitting on the noisiest possible evidence
+base for the claim that it is unchanged.
+
+\subsection{The gray zone, and how it differs between the two strata}
+\label{sec:atlas:grayzone}
+
+\begin{table}[t]
+\centering
+\caption{The two atlas strata, on the 1{,}155-cell analysis population.
+Percentages are within-stratum shares of cells.}
+\label{tab:atlas-strata}
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, the S1/S2 table
+% ("With the two §1-disclosed probe cells excluded"). Population: 1,155
+% (S1 846 + S2 309) -- NOT the 1,254 figure.
+\begin{tabular}{lrr}
+\toprule
+ & S1 (v1 archive; TheBloke-era GPTQ etc.) & S2 (Neural Magic W4A16/INT8/FP8, 8B--405B) \\
+\midrule
+Cells                                & 846            & 309 \\
+Median accuracy-state churn          & 0.133          & 0.048 \\
+Median $|$net accuracy delta$|$      & 0.023          & 0.009 \\
+TOST-equivalent at 2\,pp             & 47 (5.6\%)     & 53 (17.2\%) \\
+Exact McNemar $p < 0.05$             & 148 (17.5\%)   & 19 (6.1\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:atlas-strata} contains the empirical core of the paper's
+motivation. In S1, 5.6\% of cells can be certified equivalent at the registered
+2\,pp margin and 17.5\% show a detectable difference, which leaves at least
+three-quarters of the public record in a \textbf{gray zone}: neither certifiable
+as equivalent at the margin the field implicitly uses, nor detectably degraded,
+at the sample sizes actually evaluated. In S2 the shares move---17.2\%
+certifiable, 6.1\% detectably different---but at least three-quarters of cells
+remain in the same gray zone.%
+% ARITHMETIC NOTE: 100 - (5.6 + 17.5) = 76.9 for S1 and 100 - (17.2 + 6.1) = 76.7
+% for S2. These are LOWER bounds on the gray zone, since the two categories are
+% not guaranteed disjoint (a large-n cell can be TOST-equivalent at 2 pp and
+% still show a significant, sub-margin difference). Hence "at least", never
+% "exactly". A per-cell cross-tabulation of the two flags would give the exact
+% figure and should be added from results/atlas_cells_summary.csv before
+% submission.
+
+
+The S1$\to$S2 contrast is a genuine improvement in compression method and
+evaluation practice, and should be read as one. Median churn falls from 0.133 to
+0.048 and median absolute net delta from 0.023 to 0.009; a modern vendor
+quantization of an 8B--405B instruction-tuned model perturbs per-item behaviour
+roughly a third as much as a 2023 community quantization of a 7B base model, and
+its evaluations are correspondingly more often certifiable. What does \emph{not}
+improve is the evidential situation: the modal cell in both strata is one where
+the evaluation cannot answer the question the release note answers. Better
+methods have made the difference smaller without making the evidence for
+``no difference'' sufficient, because certifying a smaller margin requires
+\emph{more} items, not fewer (\S\ref{sec:cert:table}).
+
+\subsection{Identical scores, different answers}
+\label{sec:atlas:identical}
+
+% SOURCE: docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
+% results/identical_score_churn.csv (statistic block, rows 2-9).
+% Population: the same 1,155 cells. Zero-delta is defined as
+% abs(net_accuracy_delta) < 1e-12, i.e. exact equality with no rounding
+% tolerance; a rounding-based definition would admit more cells and is not used.
+The clearest single demonstration that aggregate accuracy is not a summary of
+behaviour is the subset of cells where the aggregate does not move at all.
+
+Of the 1{,}155 analysable cells, \textbf{113 (9.78\%) post an exactly identical
+accuracy} to their baseline---not similar, identical, to machine precision.
+Among those 113 cells, the median accuracy-state churn is \textbf{0.0622}, the
+mean is 0.0862, and the maximum is 0.3434; \textbf{96 of the 113} have nonzero
+churn, with a median of 0.0919 among that subset. Roughly one in ten compressed
+model evaluations in the public record reports a score identical to its
+baseline, and half of those still disagree with the baseline on more than 6\% of
+individual items.
+
+\begin{table}[t]
+\centering
+\caption{The most extreme zero-delta cell in the atlas: identical accuracy,
+symmetric flips, $p = 1.0$.}
+\label{tab:identical-extreme}
+% SOURCE: results/identical_score_churn.csv, rank 1 row; reproduced in
+% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Most extreme zero-delta cell".
+\begin{tabular}{ll}
+\toprule
+Field & Value \\
+\midrule
+pair\_index / source & 35 / S1 \\
+Task                 & \texttt{harness\_hendrycksTest\_high\_school\_geography\_5} (MMLU) \\
+Base model           & \texttt{project-baize/baize-v2-7b} \\
+Quantized model      & \texttt{TheBloke/Project-Baize-v2-7B-GPTQ} (GPTQ) \\
+$n$                  & 198 \\
+Baseline accuracy    & 0.429293 \\
+Compressed accuracy  & 0.429293 \quad (net delta $= 0.000000$) \\
+Accuracy-state churn & \textbf{0.343434} \\
+Harmful / beneficial flips & 0.171717 / 0.171717 \\
+Exact McNemar $p$    & 1.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:identical-extreme} makes the mechanism concrete. Exactly 17.17\%
+of items broke and exactly 17.17\% healed. Because the two rates are equal, the
+net delta is exactly zero and the exact McNemar test returns $p = 1.0$---and it
+is \emph{right} to: there is no evidence of a directional difference between the
+two models. Meanwhile a third of the answers changed. A model card reporting
+this cell would truthfully write ``no change in accuracy''; a user who had
+memorised the baseline's outputs would find one item in three behaving
+differently.
+
+\textbf{Caveats, in the same breath as the example.} $n = 198$ is small, and
+symmetric flip counts are easier to hit by chance at small $n$. This is an S1
+cell---a 2023-era community GPTQ of a 7B base model, the noisier of the two
+strata. It is an illustration of the mechanism and not a typical magnitude: the
+median churn among zero-delta cells is 6.22\%, not 34\%. The finding worth
+carrying away is the 113 cells and their 6.22\% median, not this one cell.
+
+\subsection{Population caveats}
+\label{sec:atlas:caveats}
+
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, final bullet ("Population
+% caveats (registered)"), reproduced here in substance;
+% docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §2.
+These caveats are registered, and they are load-bearing.
+
+S1 is community quantizations of 2023-era models, conditioned on leaderboard
+coverage: a pair exists in the atlas only if someone chose to submit both the
+base model and its quantization to the Open LLM Leaderboard, and that choice was
+not random with respect to anything. S2 is one vendor's releases, evaluated by
+that vendor. \textbf{This is the public record of compression evaluation, not a
+census of quantization.} It is the right population for the questions this paper
+asks---what does the evidence that circulates actually look like, and how much
+evidence would suffice---and it is the wrong population for questions about how
+quantization behaves on average, which would require a designed sample rather
+than the record left by the field's own reporting choices. The controlled
+experiment of \S\ref{sec:minigrid} exists precisely because the atlas cannot
+answer causal questions.
+
+Two further limits. S1's archive carries no declared license, recorded as a
+limitation in the datasheet (\S\ref{sec:artifacts}). And the atlas's per-cell
+statistics inherit the item counts of whoever ran the original evaluation, which
+is why many cells are small---an inheritance that is itself part of the finding.
+
+\subsection{What this section does and does not support}
+
+Supports: that per-item churn under compression is five to six times the net
+delta across the public record at every scale from 3B to 405B; that the majority
+of publicly recorded compression evaluations fall in a gray zone where neither
+equivalence nor degradation is established at their own sample sizes; that
+roughly one cell in ten posts an identical score while still disagreeing on
+items; and that S2's methods are measurably gentler than S1's while the
+evidential gap persists.
+
+Does not support: any statement about quantization methods in general, about
+models or methods absent from the two sources, or about causal attribution of
+churn to any design choice. Nothing here is evidence for or against H3.

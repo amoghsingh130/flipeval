@@ -1,0 +1,53 @@
+% =====================================================================
+% Section: Discriminant validity -- SKELETON with pilot numbers wired.
+%
+% SOURCE for every number: results/PILOT_RESULTS.md (archive
+% pilot_outputs_20260711T000427Z.tar.gz, sha256 a72ff2fd...898a72ecb8).
+% The pilot's own caveats are in that file and are reproduced here; the pilot is
+% exploratory evidence from an unpinned Kaggle environment without chat
+% templates, and it cannot test H3.
+% =====================================================================
+
+\section{Discriminant validity: the framework does not call everything noise}
+\label{sec:discriminant}
+
+A certification-first framework invites one obvious objection: a method that
+demands thousands of items before declaring anything will declare nothing, and
+an evaluation that declares nothing is useless. The objection is answerable with
+evidence, because the same analysis applied to two different comparisons returns
+two different answers.
+
+% SOURCE: results/PILOT_RESULTS.md, first table (rows MMLU/GPTQ public and
+% GSM8K/GPTQ public, GSM8K/AWQ public) and second table (required-n columns).
+In the project's public-checkpoint pilot, MMLU with a public GPTQ checkpoint at
+$n = 400$ showed a net delta of $-4.25$\,pp with harmful and beneficial flip
+rates of $0.095$ and $0.0525$, and an exact McNemar $p = 0.036$: a detectable
+degradation. On GSM8K at $n = 200$, the same analysis returned net deltas of
+$+2.0$\,pp (GPTQ, $p = 0.672$) and $+1.0$\,pp (AWQ, $p = 0.880$) with
+accuracy-state churn of $0.250$ and $0.220$ and total answer churn of $0.630$ and
+$0.620$---i.e., differences indistinguishable from noise at that sample size,
+sitting on top of very large behavioural change. Detecting the observed GSM8K
+deltas at 80\% power would have required 4{,}923 and 17{,}347 items
+respectively, against the 200 evaluated.
+
+Three things follow. The framework separates real damage from cancellation
+noise, using one analysis and no post-hoc thresholds. The separation is not an
+artifact of sample size in the convenient direction: the \emph{smaller}
+evaluation is the one that detected nothing, which is exactly what an
+underpowered evaluation should do. And the GSM8K rows are a compact instance of
+the net-versus-gross gap that \S\ref{sec:atlas} measures at scale---a couple of
+points of net delta over roughly a quarter of items changing correctness state
+and roughly three-fifths of generations changing answer.
+
+\paragraph{Caveats, from the pilot's own record.} Prompts were raw text; the
+chat template was not applied, so absolute accuracies sit well below a standard
+instruct-model evaluation. The environment was an unpinned Kaggle image modified
+in place, with package conflicts. Both checkpoints were public, with fixed or
+undocumented calibration, so the pilot cannot test H3 or support controlled
+causal comparisons. Sample sizes were 400 (MMLU) and 200 (GSM8K), so intervals
+are wide. The pilot is exploratory evidence for the framework's discriminant
+behaviour and nothing else.
+
+\TODO{replace or supplement with controlled cells from \S\ref{sec:minigrid}
+once they exist, keeping the pilot as the historical record of the same
+demonstration under worse conditions}

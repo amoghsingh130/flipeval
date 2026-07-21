@@ -1,0 +1,333 @@
+% =====================================================================
+% Section: Audit of published near-lossless claims  -- COMPLETE DRAFT
+%
+% PRIMARY SOURCES for every number in this section:
+%   docs/AUDIT_VERDICTS_2026-07-20.md   (authoritative, computed 2026-07-20)
+%   results/audit_verdicts.csv          (per-claim, machine-readable)
+%   docs/audit_claim_table.csv          (frozen inputs, sha256 in the doc)
+%   docs/AUDIT_REGISTRATION_2026-07-15.md (frozen protocol, §§3-5)
+%
+% SUPERSESSION NOTICE -- do not "fix" this section against the older doc.
+% docs/RESULTS_2026-07-15_ATLAS_AUDIT.md line 54 states "only 1 of 17 claims
+% has per-item outputs released". That line is SUPERSEDED by the 2026-07-20
+% verdicts document, which records 0 yes / 3 partial / 14 no. This paper uses
+% 0 of 17. The three "partial" sources are the ones the older line was
+% gesturing at.
+%
+% DISCREPANCY (surfaced to the author, unresolved):
+% docs/RESULTS_2026-07-15_ATLAS_AUDIT.md line 48 describes the frozen table as
+% "7 method papers, 8 official model cards/blog, 2 vendor docs". The frozen
+% table itself (docs/audit_claim_table.csv, column `frame`) gives F1=7, F2=7,
+% F3=3. The prose below uses the frozen table's own counts (7/7/3). Resolve
+% before submission and update whichever file is wrong.
+% =====================================================================
+
+\section{An audit of published near-lossless claims}
+\label{sec:audit}
+
+\subsection{What was audited, and what was not}
+
+The audit protocol was registered and frozen on 2026-07-15, before any per-claim
+power computation was run, and the claim list itself was frozen separately before
+any verdict was computed.\footnote{%
+% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md (status line, §3.4);
+% docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table freeze commit
+% 715a7ce, sha256 842b9756...5af7b15).
+Registration frozen at commit \texttt{b74fd58}; claim table frozen at commit
+\texttt{715a7ce} with its sha256 recorded in the verdicts document.}
+Sources were enumerated exhaustively within three fixed frames: method papers
+(F1), official quantized model cards (F2), and inference-stack vendor
+blogs and documentation (F3). A source enters the pool if it asserts, in prose
+or a table caption, that a compressed model's benchmark quality is
+equivalent-or-negligibly-different from its uncompressed baseline, using a fixed
+trigger vocabulary (``near-lossless'', ``negligible'', ``no (significant)
+degradation'', ``matches'', ``preserves accuracy'', ``$X\%$ recovery'' with
+$X \geq 98$, or an explicit $\leq 1$\,pp delta framed as parity). Every claim
+meeting the criterion is audited; there is no discretionary sub-selection.
+% SOURCE: docs/audit_claim_table.csv column `frame`: F1=7, F2=7, F3=3.
+The frozen table contains 17 claims: 7 method papers, 7 official model cards or
+official blogs, and 3 inference-stack vendor documents. Each claim's fields were
+extracted twice by mutually blind extraction passes, with source content hashes
+recorded, and discrepancies reconciled before the verdict stage
+(\S\ref{sec:prereg}).
+
+We state the limit of the exercise before its results.
+% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4 closing paragraph.
+\textbf{No audited claim is described as false, and none of our findings implies
+that any audited model is in fact degraded.} The audited property is the
+\emph{evidential sufficiency of the reported evaluation}: whether the evaluation
+offered in support of an equivalence claim was large enough to have detected the
+difference the claim pronounces negligible. A claim can be perfectly correct and
+still be unsupported by the evaluation offered for it, and several of the claims
+below are very probably correct. What the field lacks is not honesty but a
+reporting standard; this section measures the gap that standard would close, and
+Sections~\ref{sec:certification} and \ref{sec:sequential} supply the instrument.
+
+\subsection{The reproducibility zero}
+\label{sec:audit:v3}
+
+The most actionable finding requires no statistics at all.
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"V3 -- reproducibility";
+% results/audit_verdicts.csv column v3_per_item_outputs (0 "yes", 3 "partial",
+% 14 "no"). Supersedes RESULTS_2026-07-15_ATLAS_AUDIT.md line 54.
+\begin{quote}
+\textbf{0 of the 17 audited sources release the per-item outputs that a third
+party would need to rerun the paired comparison the claim asserts.}
+The tally is 0 \emph{yes}, 3 \emph{partial}, 14 \emph{no}.
+\end{quote}
+
+The three partial cases---%
+% SOURCE: results/audit_verdicts.csv rows R08, R15, R16 (v3_per_item_outputs =
+% "partial", with the per-row `notes` column giving the suite mismatch).
+R08, R15 and R16, all Red~Hat AI model cards---are the closest the record comes
+to reproducibility, and they illustrate why the count is nonetheless zero: they
+release per-item outputs for Arena-Hard, OpenLLM~v2 and HumanEval, but
+\emph{not} for the OpenLLM~v1 tasks that the audited equivalence claim is
+actually about. The released artifacts and the asserted claim do not intersect.
+These three sources are ahead of the field in disclosure practice, and the
+correction they need is small: publish the per-item outputs for the suite the
+claim quotes.
+
+This finding is more actionable than any power calculation because the two
+failures have different repair costs. Underpowering is fixable by evaluating
+more items, and Section~\ref{sec:certification} says how many. Irreproducibility
+is not fixable downstream at all: with no per-item outputs, nobody outside the
+releasing organisation can run the paired test at \emph{any} sample size, cannot
+compute churn, and cannot check the arithmetic. Per-item outputs for a
+benchmark of a few thousand items are a file of a few megabytes. The gap between
+that cost and its consequence is the single clearest reporting-standards
+recommendation this paper makes.
+
+\subsection{Verdict rules}
+\label{sec:audit:rules}
+
+For each claim, at its reported (or registered-rule-imputed) sample size $n$,
+the frozen protocol computes three quantities.
+% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4; method restated in
+% docs/AUDIT_VERDICTS_2026-07-20.md §Method.
+
+\paragraph{V1 --- detection power.} The minimum detectable difference (MDD) at
+80\% power and two-sided $\alpha = 0.05$, under the paired-flip model. The
+per-item accuracy difference is $d_i \in \{-1, 0, +1\}$; under the null of no
+true difference, $\mathrm{Var}(d) = p_d$, the discordance rate, so
+$\mathrm{sd} = \sqrt{p_d}$. We report the MDD and the ratio of the MDD to the
+margin the claim asserts is negligible.
+
+\paragraph{V2 --- equivalence support.} The number of items required for TOST at
+the applicable margin,
+\begin{equation}
+n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil ,
+\label{eq:tost-n}
+\end{equation}
+with $z_{1-\alpha}$ \emph{one-sided} ($1.6449$), because TOST rejects two
+one-sided nulls at level $\alpha$ each. A claim is labelled
+\emph{underpowered for its own assertion} iff its reported $n$ is below
+$n_{\mathrm{req}}$ at the applicable margin. The choice of one-sided $z$ is not
+cosmetic; see \S\ref{sec:prereg:choices}, interpretive choice~5.
+
+\paragraph{V3 --- reproducibility.} Binary, read from the frozen
+\texttt{per\_item\_outputs\_released} column and cross-checked against the
+extraction reconciliation memo.
+
+\paragraph{Discordance imputation.} $p_d$ is not reported by any source, so it
+is imputed from the atlas (\S\ref{sec:atlas}) by matching the nearest
+(method family, bit width, benchmark) cell, most-specific tier first, taking the
+\emph{median} over the first non-empty tier because per-cell discordance is
+right-skewed.
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
+One claim matched at tier~1 (family + bits + benchmark), 11 at tier~2
+(family + bits), 2 at tier~3 (bits + benchmark), 1 at tier~4 (bits), and 2 fell
+through to the global tier. A tier whose target field is \texttt{None} cannot
+match, so a pruning claim with no bit width descends automatically rather than
+being forced into a wrong cell. Both disclosed feasibility-probe pairs (99
+atlas cells) are excluded from the imputation pool, per the atlas registration.
+
+\paragraph{Robustness.} Every quantity is recomputed under the
+independent-binomial bound $\mathrm{sd} = \sqrt{2p(1-p)}$ and swept over 1\,pp
+and 3\,pp margins; a verdict that changes across the sweep is reported as
+\emph{margin-sensitive}.
+
+\subsection{Results}
+\label{sec:audit:results}
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts.csv
+% columns verdict, indeterminate, indeterminate_kind.
+Of the 17 claims, 5 are \textbf{indeterminate}---their reporting does not
+support a verdict---leaving 12 determinate claims. Of those 12,
+\textbf{$K = 4$ are underpowered for their own assertion}.
+
+\begin{table}[t]
+\centering
+\caption{Determinate claims underpowered for their own assertion, at the margin
+the claim itself asserts is negligible. Shortfall is
+$n_{\mathrm{req}} / n_{\mathrm{reported}}$.}
+\label{tab:audit-underpowered}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", first table;
+% results/audit_verdicts.csv columns claimed_margin_pp, n,
+% v2_required_n_applicable, verdict.
+\begin{tabular}{llrrrr}
+\toprule
+Claim & Source & Stated margin & Reported $n$ & Required $n$ & Shortfall \\
+\midrule
+R17 & Red~Hat Llama-3-8B W8A16   & 0.15\,pp & 28{,}659 & 369{,}856 & $12.9\times$ \\
+R07 & SparseGPT                  & 0.23\,pp & 12{,}410 & 131{,}482 & $10.6\times$ \\
+R06 & Wanda                      & 0.30\,pp & 18{,}904 &  77{,}282 & $ 4.1\times$ \\
+R15 & Red~Hat Llama-3.1-8B W8A8  & 0.20\,pp & 42{,}701 &  86{,}556 & $ 2.0\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:audit-underpowered} is best read as a statement about resolution
+rather than about error. R17 asserts parity within 0.15\,pp on an evaluation of
+28{,}659 items; certifying parity at that margin, given the discordance rate
+that comparable compressed models actually exhibit, would take roughly 370{,}000
+items. Nothing in that sentence says the model is degraded. It says the
+evaluation was not built to the resolution the sentence about it requires.
+
+The same conclusion appears in the detection direction.
+
+\begin{table}[t]
+\centering
+\caption{Detection resolution (V1): how much coarser each evaluation is than the
+difference it pronounces negligible. The independent-binomial column is the same
+quantity computed without the paired-design benefit.}
+\label{tab:audit-mdd}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", second table;
+% results/audit_verdicts.csv columns v1_mdd_pp_paired, claimed_margin_pp,
+% v1_mdd_over_margin_paired, v1_mdd_over_margin_independent.
+% R04 and R14 are italicised because they are INDETERMINATE: numbers computable,
+% retained for transparency, carrying no verdict and excluded from K.
+\begin{tabular}{lrrrr}
+\toprule
+Claim & MDD (paired) & Claimed margin & Ratio & Ratio (indep.\ binomial) \\
+\midrule
+R17 & 0.61\,pp & 0.15\,pp & $4.05\times$ & $7.25\times$ \\
+R07 & 0.84\,pp & 0.23\,pp & $3.67\times$ & $7.07\times$ \\
+R06 & 0.68\,pp & 0.30\,pp & $2.28\times$ & $4.52\times$ \\
+R15 & 0.32\,pp & 0.20\,pp & $1.60\times$ & $4.20\times$ \\
+\midrule
+\textit{(R04)} & \textit{2.09\,pp} & \textit{0.30\,pp} & \textit{$6.97\times$} & \textit{$12.57\times$} \\
+\textit{(R14)} & \textit{2.27\,pp} & \textit{0.70\,pp} & \textit{$3.25\times$} & \textit{---\ (no baseline)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two features of Table~\ref{tab:audit-mdd} matter for how the audit should be
+read. First, the independent-binomial column is uniformly \emph{worse}, by
+roughly a factor of two: pairing is the generous modelling assumption, and these
+evaluations are underpowered even under it. Second, R04 and R14 are italicised
+because they carry no verdict; their numbers are computable and are retained in
+the released CSV for transparency, but they are excluded from $K$
+(\S\ref{sec:audit:indeterminate}).
+
+\paragraph{The uniform-yardstick secondary reading.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading);
+% results/audit_verdicts.csv column verdict_at_registered_2pp.
+Judging every claim against the uniform registered 2\,pp margin rather than the
+margin it states for itself gives \textbf{1 of 12 underpowered}. Both readings
+are reported, and both are in the released CSV
+(\texttt{verdict}, \texttt{verdict\_at\_registered\_2pp}). The factor-of-four
+difference between them is interpretive, not statistical, and the reasoning that
+selects the primary reading is documented in \S\ref{sec:prereg:choices}
+(interpretive choice~1): the frozen label is ``underpowered for its \emph{own}
+assertion'', and judging a 0.15\,pp parity claim against a 2\,pp yardstick audits
+a claim nobody made.
+
+\paragraph{Margin sensitivity.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Margin-sensitive (1 of 12
+% determinate)"; results/audit_verdicts.csv column margin_sensitive.
+% CARE: this "1 of 12" is a DIFFERENT fact from the "1 of 12" in the paragraph
+% above. Above: one determinate claim is underpowered under the uniform 2 pp
+% yardstick. Here: one determinate claim's verdict is unstable across the
+% 1 pp -> 3 pp sweep. The two facts happen to concern the same claim (R01) and
+% must never be merged into a single sentence.
+Exactly \textbf{1 of the 12 determinate claims is margin-sensitive}: R01, whose
+verdict flips between underpowered and adequately powered across the
+1\,pp\,$\to$\,3\,pp sweep. Its verdict is therefore an artefact of margin choice
+rather than a robust finding, and is reported as such rather than counted as
+evidence in either direction. Margin sensitivity qualifies a headline verdict, so
+it is counted over the claims that have one; R04 and R14 also flip across the
+sweep and retain the \texttt{margin\_sensitive} column in the released CSV, but
+neither carries a verdict to qualify. (R01 is also the single claim that is
+underpowered under the uniform-2\,pp secondary reading. These are two distinct
+properties---a verdict under an alternative yardstick, and instability of a
+verdict across the sweep---that coincide on one claim.)
+
+\subsection{Indeterminate claims: a finding, not a gap}
+\label{sec:audit:indeterminate}
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Indeterminate;
+% results/audit_verdicts.csv columns indeterminate, indeterminate_kind,
+% indeterminate_reason.
+$J = 5$ of the 17 claims are indeterminate, in two kinds.
+
+\textbf{Insufficient reporting (4).} A registered input is genuinely absent.
+R02 (LLM.int8()) and R11 (Meta's quantized-Llama blog) state no sample size, no
+baseline, and no numeric delta---their headline equivalence evidence exists only
+as a chart image. R13 (vLLM FP8 documentation) states $n = 250$ but shows no
+on-page baseline run at all. R14 (vLLM FP8 KV-cache blog) states a margin of
+0.7\,pp and permits $n$ to be imputed, but reports no baseline; its comparison
+lives in a figure.
+
+\textbf{Metric-incompatible (1).} R04 (AWQ) reports enough, but about a quantity
+the registered model cannot score; see below.
+
+Every indeterminate claim retains whatever components its available inputs
+support, listed in the CSV column \texttt{determinate\_components} and reported
+as supplementary transparency only---never verdict-bearing. R13 retains V2 (the
+paired standard deviation depends on discordance, not on baseline accuracy);
+R14 retains V1 (paired) and V2; R04 retains V1 and V2 computed on a substituted
+benchmark.
+
+This category is itself a result. Two of the four insufficiently-reported claims
+are among the most-cited results in the field, and their headline equivalence
+evidence is a chart image with no extractable numbers. That a mechanical,
+pre-registered audit cannot evaluate them is precisely the reporting-standards
+problem this paper exists to address: the claim may well be true, but it has been
+placed beyond the reach of checking.
+
+\subsection{R04: an exclusion we argue against our own interest}
+\label{sec:audit:r04}
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and
+% §Indeterminate bullet for R04; results/audit_verdicts.csv row R04 columns
+% indeterminate_reason, notes, v2_required_n_paired_own_margin (50519 at
+% n = 1319 -> 38.3x).
+R04 is documented here in full because excluding it removed what would have been
+the largest number in Table~\ref{tab:audit-underpowered}.
+
+The AWQ paper's qualifying sentence---the sentence that meets the frozen §3
+inclusion trigger---asserts negligible loss on \textbf{COCO CIDEr}. CIDEr is a
+generation metric: it assigns a graded score to a generated caption and has no
+per-item correct/incorrect state. V1 and V2 are flip-model quantities defined on
+$d_i \in \{-1,0,+1\}$; they do not apply to it. There is no discordance rate to
+impute, because there is no per-item accuracy state to be discordant about.
+
+The first pass of the analysis nonetheless scored R04 on GSM8K, the source's own
+accuracy benchmark ($-0.30$\,pp at $n = 1{,}319$), and reported it as the largest
+shortfall in the table at $38.3\times$. On review this was overruled: computing a
+TOST requirement on GSM8K audits a sentence the source wrote about a different
+benchmark, in different and non-trigger language. The move took the headline
+from $K = 5$, $J = 4$ to $K = 4$, $J = 5$, and it removed the audit's biggest
+number. The GSM8K computation is retained in the released CSV as a transparency
+column, with a note, so that a reader can see exactly what was set aside and
+why. \textbf{It is not claimed anywhere in this paper as an audit result.} An
+audit's currency is unimpeachability, and it is not spent on its own largest
+number.
+
+\subsection{What this section does and does not establish}
+
+Establishes, at the reported sample sizes and under the frozen protocol:
+(i) no audited source releases per-item outputs for the tasks its equivalence
+claim covers; (ii) four determinate claims assert margins finer than their
+evaluations could resolve, by $2.0$--$12.9\times$; (iii) five claims cannot be
+audited at all from what they report; (iv) both conclusions hold, and worsen,
+under the independent-binomial robustness bound.
+
+Does not establish: that any audited model is degraded; that any audited claim
+is false; that the claims' authors reached a wrong conclusion. It also does not
+establish anything about sources outside the three frozen frames, and it
+operates at claim-level rather than claim\,$\times$\,benchmark granularity,
+because that is the granularity of the frozen claim table
+(\S\ref{sec:prereg:choices}, interpretive choice~4).

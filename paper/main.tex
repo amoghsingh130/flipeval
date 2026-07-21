@@ -1,0 +1,58 @@
+% FlipEval main paper
+% Title/framing agreed 2026-07-15; do not change without the author's sign-off.
+%
+% TRACEABILITY CONVENTION (applies to every file under paper/):
+%   Every numeric claim carries a "% SOURCE:" comment naming the committed file
+%   (and section/column) it was read from. If a number has no SOURCE comment it
+%   is not yet checkable and must be treated as a TODO, not as a result.
+%
+% Build: pdflatex main; bibtex main; pdflatex main; pdflatex main
+% Venue targets, in order: COLM 2027, ACL 2027, NeurIPS D&B 2027.
+% Current file set is venue-neutral (article class) so that a style file can be
+% swapped in without touching section prose.
+
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{natbib}
+
+% Marker macro for slots that await the mini-grid. Every H3 quantity in this
+% paper must be wrapped in \minigridTODO until all registered cells exist.
+\newcommand{\minigridTODO}[1]{\textcolor{red}{[TODO-pending-minigrid: #1]}}
+\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
+
+\title{Certifying Compressed Language Models:\\ An Audit and a Statistical Toolkit}
+\author{Amogh Singh\\ Georgia Institute of Technology}
+\date{Draft \today}
+
+\begin{document}
+\maketitle
+
+\input{abstract}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/preregistration}
+\input{sections/audit}
+\input{sections/certification}
+\input{sections/atlas}
+\input{sections/sequential}
+\input{sections/minigrid}
+\input{sections/discriminant}
+\input{sections/artifacts}
+\input{sections/limitations}
+\input{sections/conclusion}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+\input{sections/appendix_audit_table}
+
+\end{document}
