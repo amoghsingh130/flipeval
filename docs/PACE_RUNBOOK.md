@@ -132,6 +132,20 @@ Archive the config, calibration receipts, JSONLs, manifest, validator summary,
 environment lock, image checksum, and SLURM logs together. Then write a short human
 bridge decision record.
 
+> **Checkpoint manifests are scratch-transient by design — this is not a
+> regression.** `verify_bridge.py` resolves its "paired calibration receipts"
+> from `<checkpoint>/calibration_manifest.json` in the **live** checkpoint
+> directories under `$SCRATCH/flipeval/checkpoints/`. Those directories are
+> cleaned up once the run is archived, so **re-running `verify_bridge.py`
+> against a bare scratch tree will fail on missing receipts even though nothing
+> is wrong.** Two things clear it: copies of the manifests are preserved in the
+> archived bundle (`results/bridge_run_20260720.tar.gz`, under
+> `bridge_bundle_20260720/calibration_receipts/`) and can be restored, and
+> **any rebuilt checkpoint regenerates its own manifest at build time**. So a
+> mini-grid re-run needs no special handling here. Do not diagnose this as a
+> provenance loss. See `docs/CALIBRATION_RECEIPTS_RECONSTRUCTION_2026-07-21.md`
+> § 4.
+
 ## Main-grid readiness
 
 Generate the frozen expected matrix with:
