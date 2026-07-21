@@ -12,6 +12,12 @@ from scripts.atlas_flip_analysis import (
     s1_prediction,
     s2_metric_column,
     s2_prediction,
+    binary_correct,
+    parse_next_link,
+    read_field,
+    s1_key,
+    s1_prompt,
+    s1_run_combinations,
 )
 
 
@@ -58,7 +64,10 @@ def test_join_gate_excludes_empty_intersection():
     joined = join_cell([_s1_row("a", "p", 1)], [_s1_row("b", "p", 1)],
                        key_of=_key, identity_of=_key, prompt_of=_prompt)
     assert joined["excluded"]
-    assert joined["exclusion_reason"] == "no joinable items"
+    # Rev-2 (F4): the gate decision is unchanged; the recorded reason now names
+    # the root cause instead of the bare symptom "no joinable items", so an
+    # exclusion is auditable from the archived cell alone.
+    assert "disjoint item sets" in joined["exclusion_reason"]
 
 
 def test_s1_correctness_prefers_acc_norm_then_acc():
@@ -144,3 +153,100 @@ def test_find_s2_task_file_requires_exact_variant_dir_and_task_boundary():
     with pytest.raises(CellSkip):
         find_s2_task_file(files, "Meta-Llama-3.1-8B-Instruct-W4A16", "bbh_logical_deduction",
                           ["2024-09-27T00-03-53.710013"])
+
+
+# ---------------------------------------------------------------------------
+# Rev-2 corrections (findings F1, F2, F4, F5 of the 2026-07-21 spot-check)
+# ---------------------------------------------------------------------------
+
+def _nested_row(example, prompt, acc_norm):
+    """Newer lighteval details schema: no `hashes`, metrics nested (F2)."""
+    return {"example": example, "full_prompt": prompt, "metrics": {"acc_norm": acc_norm}}
+
+
+def test_s1_correctness_column_finds_nested_metrics_struct():
+    rows = [_nested_row("a", "p", 1.0), _nested_row("b", "p", 0.0)]
+    assert s1_correctness_column(rows) == "metrics.acc_norm"
+
+
+def test_s1_correctness_column_prefers_top_level_when_both_present():
+    rows = [{"acc_norm": 1.0, "metrics": {"acc_norm": 0.0}}]
+    assert s1_correctness_column(rows) == "acc_norm"
+
+
+def test_s1_correctness_column_still_skips_genuinely_non_binary_tasks():
+    with pytest.raises(CellSkip):
+        s1_correctness_column([{"metrics": {"mc1": 0.3, "mc2": 0.7}}])
+
+
+def test_read_field_handles_dotted_and_plain_specs():
+    assert read_field({"acc": 1.0}, "acc") == 1.0
+    assert read_field({"metrics": {"acc": 0.0}}, "metrics.acc") == 0.0
+    assert read_field({"metrics": None}, "metrics.acc") is None
+    assert read_field({}, "missing") is None
+
+
+def test_nested_schema_cell_joins_and_analyzes_end_to_end():
+    """The 583 cells rev-1 dropped are analysable once the parser reads them."""
+    base = [_nested_row("i1", "p1", 1.0), _nested_row("i2", "p2", 0.0)]
+    quant = [_nested_row("i1", "p1", 0.0), _nested_row("i2", "p2", 0.0)]
+    joined = join_cell(base, quant, key_of=s1_key, identity_of=s1_key, prompt_of=s1_prompt)
+    assert not joined["excluded"] and joined["joinable"] == 2
+    metrics = analyze_cell(joined, correctness_column=s1_correctness_column(quant),
+                           prediction_of=s1_prediction, bootstrap=10, seed=0)
+    assert metrics["n"] == 2
+    assert metrics["harmful_flip_rate"] == pytest.approx(0.5)
+
+
+def test_s1_key_and_prompt_prefer_hashes_then_fall_back_to_raw_columns():
+    hashed = {"hashes": {"example": "H", "full_prompt": "P"}, "example": "raw", "full_prompt": "rawp"}
+    assert s1_key(hashed) == "H" and s1_prompt(hashed) == "P"
+    raw = _nested_row("R", "RP", 1.0)
+    assert s1_key(raw) == "R" and s1_prompt(raw) == "RP"
+    assert s1_key({}) is None and s1_prompt({}) is None
+
+
+def test_run_combinations_start_at_latest_latest_and_step_back(): 
+    """F1: a strict generalisation of rev-1 -- element 0 is rev-1's choice."""
+    combos = s1_run_combinations(["2023_01_01T00_00_00", "2023_03_01T00_00_00"],
+                                 ["2023_02_01T00_00_00", "2023_04_01T00_00_00"])
+    assert combos[0] == ("2023_03_01T00_00_00", "2023_04_01T00_00_00")
+    assert len(combos) == 4 and len(set(combos)) == 4
+    # every base/quantized timestamp is reachable via some combination
+    assert {b for b, _ in combos} == {"2023_01_01T00_00_00", "2023_03_01T00_00_00"}
+    assert {q for _, q in combos} == {"2023_02_01T00_00_00", "2023_04_01T00_00_00"}
+
+
+def test_run_combinations_single_run_per_side_is_a_single_combination():
+    assert s1_run_combinations(["2023_01_01T00_00_00"], ["2023_02_01T00_00_00"]) == [
+        ("2023_01_01T00_00_00", "2023_02_01T00_00_00")
+    ]
+
+
+def test_no_join_reason_names_the_root_cause_not_the_symptom():
+    """F4: an unreadable join key must not be filed as a missing metric."""
+    unkeyed = [{"metrics": {"acc_norm": 1.0}}, {"metrics": {"acc_norm": 0.0}}]
+    joined = join_cell(unkeyed, unkeyed, key_of=s1_key, identity_of=s1_key, prompt_of=s1_prompt)
+    assert joined["excluded"]
+    assert "join key absent on both sides" in joined["exclusion_reason"]
+    assert "no acc_norm" not in joined["exclusion_reason"]
+
+
+def test_no_join_reason_distinguishes_disjoint_item_sets():
+    left = [_nested_row("a", "p", 1.0)]
+    right = [_nested_row("z", "p", 1.0)]
+    joined = join_cell(left, right, key_of=s1_key, identity_of=s1_key, prompt_of=s1_prompt)
+    assert "disjoint item sets" in joined["exclusion_reason"]
+
+
+def test_binary_correct_rejects_missing_value_as_cellskip():
+    with pytest.raises(CellSkip):
+        binary_correct(None, "metrics.acc_norm")
+
+
+def test_parse_next_link_reads_rfc5988_next_target():
+    header = '<https://huggingface.co/api/x?cursor=abc>; rel="next", <https://x/first>; rel="first"'
+    assert parse_next_link(header) == "https://huggingface.co/api/x?cursor=abc"
+    assert parse_next_link('<https://x>; rel="prev"') is None
+    assert parse_next_link(None) is None
+    assert parse_next_link("") is None
