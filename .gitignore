@@ -20,3 +20,5 @@ Cont-Labelerr-auditing/
 !results/atlas_cells_summary.csv
 !results/atlas_exclusions.csv
 !results/identical_score_churn.csv
+!results/calibration_receipts.json
+!results/calibration_receipts.csv
