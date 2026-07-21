@@ -19,3 +19,4 @@ Cont-Labelerr-auditing/
 !results/atlas_run_20260715.tar.gz.sha256
 !results/atlas_cells_summary.csv
 !results/atlas_exclusions.csv
+!results/identical_score_churn.csv
