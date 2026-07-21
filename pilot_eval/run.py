@@ -95,6 +95,10 @@ def main() -> None:
     parser.add_argument("--config", required=True, help="Path to YAML run config.")
     parser.add_argument("--only-method", action="append", help="Restrict to one or more method names.")
     parser.add_argument("--only-task", action="append", help="Restrict to one or more task names.")
+    parser.add_argument(
+        "--model-tag",
+        help="Select one model from a multi-model grid config (required for those configs).",
+    )
     args = parser.parse_args()
 
     try:
@@ -106,7 +110,7 @@ def main() -> None:
             "Missing evaluation dependency. Install the runtime with `pip install -r requirements.txt`."
         ) from exc
 
-    run = load_config(args.config)
+    run = load_config(args.config, args.model_tag)
     run_dir = run.output_dir / run.run_name
     run_dir.mkdir(parents=True, exist_ok=True)
 
@@ -129,7 +133,14 @@ def main() -> None:
         print(f"  backend={load_info['quantization_backend']} kernel={load_info['kernel']}", flush=True)
         record_load_info(run_dir / "manifest.json", method.name, load_info)
         for task in selected_tasks:
-            items = load_task(task.name, task.split, task.limit, task.subjects, task.fewshot)
+            items = load_task(
+                task.name,
+                task.split,
+                task.limit,
+                task.subjects,
+                task.fewshot,
+                task.dataset_revision,
+            )
             out_path = run_dir / f"{method.name}.{task.name}.jsonl"
             with out_path.open("w", encoding="utf-8") as f:
                 for item in tqdm(items, desc=f"{method.name}/{task.name}"):

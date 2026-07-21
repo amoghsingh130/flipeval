@@ -1,0 +1,190 @@
+# H3 mini-grid: 4 of the 8 registered confirmatory cells.
+#
+# Scope and escalation rule: docs/MINIGRID_REGISTRATION_2026-07-15.md (FROZEN).
+# Staged plan: docs/PACE_EXECUTION_PLAN_2026-07-15.md, Stages 5-7.
+# Pinned identities: configs/main_grid_manifest.yaml (FROZEN).
+#
+# 2 models x {fp16, gptq seeds 0-4, awq seeds 0-4} = 22 variants,
+# x {MMLU full test, GSM8K indices 0-999} = 44 evaluation JSONLs.
+#
+# This is a multi-model grid config. pilot_eval.run requires --model-tag to
+# select one model; it never defaults, because silently picking the first model
+# would evaluate the wrong weights into a correctly-named run directory.
+
+schema_version: 1
+grid: minigrid-h3
+output_dir: results
+device_map: auto
+batch_size: 1
+
+models:
+  # --- Cell pair 1: Qwen2.5-1.5B-Instruct ---------------------------------
+  - tag: qwen25-1p5b
+    run_name: qwen25_1p5b_minigrid_h3
+    baseline:
+      name: fp16
+      model_id: Qwen/Qwen2.5-1.5B-Instruct
+      revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+      dtype: float16
+      trust_remote_code: true
+    # Every quantized variant names its backend explicitly. Framework kernel
+    # auto-selection is the campaign's known hazard class: it fails at load
+    # (missing optimum; absent Marlin runtime) or, worse, substitutes a kernel
+    # silently -- and the kernel is a registered nuisance variable.
+    # See docs/PACE_ENVIRONMENT_NOTE.md, cell-3 backend probes 11285100/11285139.
+    methods:
+      - {name: gptq_s0, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed0, dtype: float16, seed: 0, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s1, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed1, dtype: float16, seed: 1, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s2, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed2, dtype: float16, seed: 2, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s3, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed3, dtype: float16, seed: 3, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s4, model_id: outputs/quantized/qwen25-1p5b-gptq4-seed4, dtype: float16, seed: 4, quantization_backend: gptqmodel_torch}
+      - {name: awq_s0, model_id: outputs/quantized/qwen25-1p5b-awq4-seed0, dtype: float16, seed: 0, quantization_backend: awq_gemm}
+      - {name: awq_s1, model_id: outputs/quantized/qwen25-1p5b-awq4-seed1, dtype: float16, seed: 1, quantization_backend: awq_gemm}
+      - {name: awq_s2, model_id: outputs/quantized/qwen25-1p5b-awq4-seed2, dtype: float16, seed: 2, quantization_backend: awq_gemm}
+      - {name: awq_s3, model_id: outputs/quantized/qwen25-1p5b-awq4-seed3, dtype: float16, seed: 3, quantization_backend: awq_gemm}
+      - {name: awq_s4, model_id: outputs/quantized/qwen25-1p5b-awq4-seed4, dtype: float16, seed: 4, quantization_backend: awq_gemm}
+
+  # --- Cell pair 2: Llama-3.2-3B-Instruct ---------------------------------
+  - tag: llama32-3b
+    run_name: llama32_3b_minigrid_h3
+    baseline:
+      name: fp16
+      model_id: meta-llama/Llama-3.2-3B-Instruct
+      revision: 0cb88a4f764b7a12671c53f0838cd831a0843b95
+      dtype: float16
+      trust_remote_code: true
+    methods:
+      - {name: gptq_s0, model_id: outputs/quantized/llama32-3b-gptq4-seed0, dtype: float16, seed: 0, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s1, model_id: outputs/quantized/llama32-3b-gptq4-seed1, dtype: float16, seed: 1, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s2, model_id: outputs/quantized/llama32-3b-gptq4-seed2, dtype: float16, seed: 2, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s3, model_id: outputs/quantized/llama32-3b-gptq4-seed3, dtype: float16, seed: 3, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s4, model_id: outputs/quantized/llama32-3b-gptq4-seed4, dtype: float16, seed: 4, quantization_backend: gptqmodel_torch}
+      - {name: awq_s0, model_id: outputs/quantized/llama32-3b-awq4-seed0, dtype: float16, seed: 0, quantization_backend: awq_gemm}
+      - {name: awq_s1, model_id: outputs/quantized/llama32-3b-awq4-seed1, dtype: float16, seed: 1, quantization_backend: awq_gemm}
+      - {name: awq_s2, model_id: outputs/quantized/llama32-3b-awq4-seed2, dtype: float16, seed: 2, quantization_backend: awq_gemm}
+      - {name: awq_s3, model_id: outputs/quantized/llama32-3b-awq4-seed3, dtype: float16, seed: 3, quantization_backend: awq_gemm}
+      - {name: awq_s4, model_id: outputs/quantized/llama32-3b-awq4-seed4, dtype: float16, seed: 4, quantization_backend: awq_gemm}
+
+# Tasks are shared by both models, not declared per model: the registered parity
+# requirement is that every variant of a model sees the identical item set, and
+# one shared list makes divergence unrepresentable rather than merely detected.
+tasks:
+  # MMLU: full test split at the pinned revision -- 14,042 items across all 57
+  # subjects (verified against the pinned revision in-image, job 11338439).
+  # `limit` applies per subject in the loader, so it must stay null for "full".
+  - name: mmlu
+    split: test
+    limit: null
+    dataset_revision: c30699e8356da336a370243923dbaf21066bb9fe
+    prompt_style: chat
+    subjects:
+      - abstract_algebra
+      - anatomy
+      - astronomy
+      - business_ethics
+      - clinical_knowledge
+      - college_biology
+      - college_chemistry
+      - college_computer_science
+      - college_mathematics
+      - college_medicine
+      - college_physics
+      - computer_security
+      - conceptual_physics
+      - econometrics
+      - electrical_engineering
+      - elementary_mathematics
+      - formal_logic
+      - global_facts
+      - high_school_biology
+      - high_school_chemistry
+      - high_school_computer_science
+      - high_school_european_history
+      - high_school_geography
+      - high_school_government_and_politics
+      - high_school_macroeconomics
+      - high_school_mathematics
+      - high_school_microeconomics
+      - high_school_physics
+      - high_school_psychology
+      - high_school_statistics
+      - high_school_us_history
+      - high_school_world_history
+      - human_aging
+      - human_sexuality
+      - international_law
+      - jurisprudence
+      - logical_fallacies
+      - machine_learning
+      - management
+      - marketing
+      - medical_genetics
+      - miscellaneous
+      - moral_disputes
+      - moral_scenarios
+      - nutrition
+      - philosophy
+      - prehistory
+      - professional_accounting
+      - professional_law
+      - professional_medicine
+      - professional_psychology
+      - public_relations
+      - security_studies
+      - sociology
+      - us_foreign_policy
+      - virology
+      - world_religions
+
+  # GSM8K: test indices 0-999 in dataset order, at the pinned revision.
+  #
+  # `fewshot: 1` is a BOOLEAN switch, not a count. Any truthy value emits
+  # pilot_eval.tasks.GSM8K_FEWSHOT, a fixed block of THREE worked examples
+  # inline in the user message. The value 1 is kept so this prompt is
+  # byte-identical to the validated bridge canary.
+  # Governing text: docs/MINIGRID_REGISTRATION_2026-07-15.md, Amendment 2
+  # (2026-07-21). Supporting finding: docs/GSM8K_FEWSHOT_FINDING_2026-07-21.md.
+  - name: gsm8k
+    split: test
+    limit: 1000
+    dataset_revision: 740312add88f781978c0658806c59bc2815b9866
+    fewshot: 1
+    fewshot_style: inline
+    max_new_tokens: 256
+    prompt_style: chat
+
+# Operational acceptance criteria for scripts/verify_minigrid.py. These decide
+# whether the grid is mechanically sound; they are not an H3 analysis, and no
+# criterion here applies to a quantized variant's accuracy.
+minigrid_acceptance:
+  expected_jsonl_files: 44
+  expected_item_counts: {mmlu: 14042, gsm8k: 1000}
+
+  task_dataset_revisions:
+    mmlu: c30699e8356da336a370243923dbaf21066bb9fe
+    gsm8k: 740312add88f781978c0658806c59bc2815b9866
+
+  # FP16 operational gates, per model and per task.
+  #
+  # DERIVED, NOT DECLARED. Filled from the trusted lm-eval 0.4.12 reference runs
+  # (scripts/slurm/reference_run.sbatch) by the arithmetic frozen in
+  # docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md section 3, and committed
+  # before any quantized mini-grid result exists.
+  #
+  # The bridge's Qwen ranges are deliberately NOT reused: MMLU [0.365, 0.465]
+  # was derived on the 400-item, 4-subject, hard-STEM-skewed bridge subset and
+  # does not describe full MMLU test; GSM8K [0.55, 0.65] was a declared
+  # expectation checked on 200 items, not 1,000.
+  #
+  # Until the reference runs land this key is absent, and the validator FAILS
+  # CLOSED on it rather than skipping the gate.
+  baseline_accuracy_ranges_status: pending-reference-run-11338637
+
+  calibration:
+    dataset: allenai/c4
+    dataset_config: en
+    dataset_revision: 1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+    sample_count: 128
+    sequence_length: 2048
+    bits: 4
+    paired_seeds: [0, 1, 2, 3, 4]

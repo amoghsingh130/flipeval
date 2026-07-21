@@ -912,3 +912,77 @@ Note the smoke's projections are *conservative*: item 1 of 2 carries
 `TorchLinear` compile warmup, so steady-state is likely below 2.86 s/item. That
 cuts in the safe direction and does not dissolve the problem — 14,042 items has
 no margin to give back.
+
+### RESOLVED 2026-07-21 — the throughput premise was warmup; no change is needed
+
+Measured on the cell-3 A100 by the combined parity+throughput probe, job
+**`11338533`** (6 min 13 s, `atl1-1-02-018-29-0`, gpu-a100/inferno, image
+`8260d04c`), on the existing `qwen25-1p5b-gptq4-seed0` checkpoint through the
+real `pilot_eval` loader, prompt renderer and scorer. 60 MMLU items across 3
+subjects and 20 GSM8K items, chat prompts, per-item timings recorded, first 5
+items excluded from the steady-state mean.
+
+| task | `TorchLinear` | `TritonV2Linear` | TRITON speedup |
+|---|---|---|---|
+| MMLU (scoring) | **0.199 s/item** → 0.78 h / 14,042 | 0.193 s/item → 0.75 h | **1.027×** |
+| GSM8K (generation) | **7.641 s/item** → 2.12 h / 1,000 | 7.519 s/item → 2.09 h | **1.016×** |
+
+**The 2.86 s/item that raised this item was compile warmup, not steady state.**
+The probe measured `TorchLinear`'s first item at **10.29 s** against a 0.199 s
+steady state; a 2-item smoke has no way to separate the two, and its mean was
+therefore dominated by a one-off cost. The section above hedged in exactly this
+direction ("item 1 of 2 carries `TorchLinear` compile warmup, so steady-state is
+likely below 2.86 s/item") — the hedge was right, and 14× larger than expected.
+
+**Independent corroboration.** These rates reproduce the bridge's observed wall
+times, which is why they are trusted over the smoke: 400 MMLU items at 0.199 s
+plus 200 GSM8K items at 7.64 s predicts ~26 min, and five of the six bridge
+quantized jobs ran 22–30 min (`11285959_1..4,6`).
+
+**Parity is exact.** Across the 60 shared MMLU items the two kernels agree on
+every prediction (agreement 1.000) with a **maximum absolute log-probability
+difference of 0.0** — not merely the same argmax, the same numbers. All 20 GSM8K
+generations are byte-identical. So the TRITON fallback is now *proven*
+equivalent rather than merely available, at the cost of one 6-minute probe.
+
+#### Decision: keep `TorchLinear`, split per task, leave the walls alone
+
+1. **Kernel: `TorchLinear`, unchanged.** TRITON buys 1.6–2.7 %, which does not
+   come close to justifying moving a registered nuisance variable. Route 1 of
+   the two routes above is declined — but its parity check is now *done*, so if
+   a future cell ever needs TRITON the evidence already exists and will not have
+   to be gathered under time pressure. Route 2's premise (that GPTQ MMLU needs
+   ~11 h) is simply false.
+2. **Per-task job splitting: adopted, because it is free.** `pilot_eval.run`
+   already accepts `--only-task`, so this is a job-layout choice with no code
+   change and no numerical consequence. `scripts/slurm/run_minigrid.sbatch`
+   fans out 44 jobs, one `(model, method, task)` each. The reason is not
+   throughput but **tail risk**: the bridge's `awq_s1` GSM8K half took 2 h 07 m
+   against 22–30 m for its peers (bridge decision record, observation 1), i.e.
+   ~38 s/item against the 7.6 s/item measured here. Splitting stops a slow
+   generation half from endangering a cheap scoring half, and bounds what a
+   preemption destroys.
+3. **Walls: 12 h, unchanged and now generous.** Measured Qwen cost is ~0.8 h
+   (MMLU) and ~2.1 h (GSM8K) per variant. Llama-3.2-3B is ~2× the parameters;
+   even assuming cost scales linearly with parameter count — which overstates
+   it, since neither task is purely compute-bound — that is ~1.6 h and ~4.2 h.
+   A 12 h wall absorbs the bridge's 5× generation outlier on the GSM8K half and
+   still finishes.
+
+**Revised fan-out estimate.** 44 jobs, ~66 GPU-hours of actual compute for the
+evaluation stage against the ~110 h budgeted in the execution plan's Stage 6
+row. The plan's total (~210 A100-h, budget 300) is unaffected and remains
+conservative.
+
+**Caveat, stated rather than buried.** GSM8K generation cost varies with output
+length and the probe's steady-state mean (7.64 s) exceeded its all-item mean
+(6.87 s), so later items were slower — 20 items is a thin sample of a
+right-skewed distribution, and the bridge outlier proves the tail is real. This
+is why the decision is "12 h walls plus per-task splitting" rather than "tighten
+the walls to the measurement". No projection here is load-bearing for anything
+except scheduling.
+
+Decided before any mini-grid job was submitted and before any mini-grid accuracy
+result existed. The probe reports timings, predictions and score deltas only; it
+loads no gold labels and computes no accuracy, so this is a nuisance-variable
+choice, not a results-contingent one.

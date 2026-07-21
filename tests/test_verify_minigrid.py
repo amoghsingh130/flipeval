@@ -1,0 +1,300 @@
+import hashlib
+import json
+from pathlib import Path
+
+import pytest
+import yaml
+
+from scripts.verify_minigrid import verify_minigrid
+
+
+MODELS = [
+    ("qwen25-1p5b", "fixture/qwen", "qwenrev", "qwen_run"),
+    ("llama32-3b", "fixture/llama", "llamarev", "llama_run"),
+]
+SEEDS = range(5)
+MMLU_REVISION = "mmlu-rev"
+GSM8K_REVISION = "gsm8k-rev"
+
+
+def _receipt(tag: str, model_id: str, revision: str, family: str, seed: int) -> dict:
+    # Artifact identity is per (model, seed): calibration eligibility depends on
+    # the tokenizer, so two models never share one.
+    return {
+        "artifact_sha256": hashlib.sha256(f"{tag}-{seed}".encode()).hexdigest(),
+        "model_id": model_id,
+        "model_revision": revision,
+        "method": family,
+        "bits": 4,
+        "seed": seed,
+        "sample_count": 2,
+        "sequence_length": 4,
+        "dataset": {"repo_id": "fixture/c4", "config": "en", "revision": "c4rev"},
+        "tokenizer": {
+            "model_id": model_id,
+            "model_revision": revision,
+            "class": "FixtureTokenizer",
+            "vocab_sha256": hashlib.sha256(f"{tag}-vocab".encode()).hexdigest(),
+        },
+        "selected_document_indices": [seed * 2, seed * 2 + 1],
+        "selected_token_hashes": [f"{tag}-{seed}-a", f"{tag}-{seed}-b"],
+    }
+
+
+def _write_fixture(tmp_path: Path):
+    project = tmp_path / "project"
+    results = project / "results"
+    model_entries = []
+
+    for tag, model_id, revision, run_name in MODELS:
+        methods = []
+        for family, backend in (("gptq", "gptqmodel_torch"), ("awq", "awq_gemm")):
+            for seed in SEEDS:
+                name = f"{family}_s{seed}"
+                checkpoint = project / "outputs" / tag / name
+                checkpoint.mkdir(parents=True)
+                (checkpoint / "calibration_manifest.json").write_text(
+                    json.dumps(_receipt(tag, model_id, revision, family, seed)), encoding="utf-8"
+                )
+                methods.append(
+                    {
+                        "name": name,
+                        "model_id": str(checkpoint),
+                        "seed": seed,
+                        "quantization_backend": backend,
+                    }
+                )
+        model_entries.append(
+            {
+                "tag": tag,
+                "run_name": run_name,
+                "baseline": {"name": "fp16", "model_id": model_id, "revision": revision},
+                "methods": methods,
+            }
+        )
+
+    config = {
+        "schema_version": 1,
+        "output_dir": str(results),
+        "models": model_entries,
+        "tasks": [
+            {"name": "mmlu", "prompt_style": "chat", "dataset_revision": MMLU_REVISION},
+            {"name": "gsm8k", "prompt_style": "chat", "dataset_revision": GSM8K_REVISION},
+        ],
+        "minigrid_acceptance": {
+            "expected_jsonl_files": 44,
+            "expected_item_counts": {"mmlu": 2, "gsm8k": 2},
+            "task_dataset_revisions": {"mmlu": MMLU_REVISION, "gsm8k": GSM8K_REVISION},
+            "baseline_accuracy_ranges": {
+                "qwen25-1p5b": {"mmlu": [0.4, 0.6], "gsm8k": [0.4, 0.6]},
+                "llama32-3b": {"mmlu": [0.4, 0.6], "gsm8k": [0.4, 0.6]},
+            },
+            "calibration": {
+                "dataset": "fixture/c4",
+                "dataset_config": "en",
+                "dataset_revision": "c4rev",
+                "sample_count": 2,
+                "sequence_length": 4,
+                "bits": 4,
+                "paired_seeds": list(SEEDS),
+            },
+        },
+    }
+    config_path = project / "minigrid.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+
+    for entry in model_entries:
+        run_dir = results / entry["run_name"]
+        run_dir.mkdir(parents=True)
+        names = ["fp16"] + [m["name"] for m in entry["methods"]]
+        (run_dir / "manifest.json").write_text(
+            json.dumps(
+                {
+                    "methods": [{"name": n} for n in names],
+                    "tasks": [{"name": "mmlu"}, {"name": "gsm8k"}],
+                    "runs": [{"methods": names, "tasks": ["mmlu", "gsm8k"]}],
+                    "loaded": {
+                        m["name"]: {
+                            "quantization_backend": m["quantization_backend"],
+                            "kernel": "FixtureLinear",
+                        }
+                        for m in entry["methods"]
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+        for name in names:
+            for task in ("mmlu", "gsm8k"):
+                rows = [
+                    {
+                        "item_id": f"{task}:{index}",
+                        "task": task,
+                        "method": name,
+                        "gold": str(index),
+                        "prediction": str(index),
+                        "correct": index == 0,
+                        "prompt_hash": f"prompt-{task}-{index}",
+                        "metadata": {"prompt_style": "chat"},
+                    }
+                    for index in range(2)
+                ]
+                (run_dir / f"{name}.{task}.jsonl").write_text(
+                    "".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8"
+                )
+    return project, config_path, results
+
+
+def test_minigrid_validator_accepts_the_complete_expected_set(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    summary = verify_minigrid(config, results, project)
+    assert summary["passed"], summary["errors"]
+    assert summary["errors"] == []
+    assert summary["expected_jsonl_files"] == 44
+    assert summary["observed_jsonl_files"] == 44
+    assert len(summary["file_sha256"]) == 44
+    assert summary["baseline_accuracies"] == {
+        "qwen25-1p5b": {"mmlu": 0.5, "gsm8k": 0.5},
+        "llama32-3b": {"mmlu": 0.5, "gsm8k": 0.5},
+    }
+
+
+def test_minigrid_validator_rejects_a_missing_cell(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    (results / "llama_run" / "awq_s4.gsm8k.jsonl").unlink()
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert summary["observed_jsonl_files"] == 43
+    assert "all 44 expected JSONLs are present" in summary["errors"]
+
+
+def test_minigrid_validator_rejects_wrong_item_count(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    path = results / "qwen_run" / "gptq_s3.mmlu.jsonl"
+    rows = [json.loads(line) for line in path.read_text().splitlines()]
+    path.write_text(json.dumps(rows[0]) + "\n", encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert "qwen25-1p5b/gptq_s3.mmlu.jsonl has 2 records" in summary["errors"]
+
+
+def test_minigrid_validator_rejects_prompt_drift_within_a_model(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    path = results / "llama_run" / "awq_s2.gsm8k.jsonl"
+    rows = [json.loads(line) for line in path.read_text().splitlines()]
+    rows[0]["prompt_hash"] = "drifted"
+    path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert "llama32-3b: awq_s2/gsm8k golds and prompts match baseline" in summary["errors"]
+
+
+def test_minigrid_validator_rejects_unpaired_seed(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    path = project / "outputs" / "qwen25-1p5b" / "awq_s4" / "calibration_manifest.json"
+    receipt = json.loads(path.read_text())
+    receipt["artifact_sha256"] = hashlib.sha256(b"unpaired").hexdigest()
+    path.write_text(json.dumps(receipt), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert "qwen25-1p5b: seed 4 GPTQ/AWQ calibration artifacts are identical" in summary["errors"]
+
+
+def test_minigrid_validator_requires_all_five_seeds_paired(tmp_path):
+    """A four-seed grid must not pass; the registered analysis needs five."""
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    for entry in raw["models"]:
+        entry["methods"] = [m for m in entry["methods"] if not m["name"].endswith("_s4")]
+    raw["minigrid_acceptance"]["expected_jsonl_files"] = 44
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert "qwen25-1p5b: seed 4 has GPTQ and AWQ receipts" in summary["errors"]
+    assert "config expands to the declared 44 JSONLs" in summary["errors"]
+
+
+def test_minigrid_validator_rejects_a_shared_artifact_across_models(tmp_path):
+    """Two models cannot legitimately share a C4 artifact: eligibility is
+    tokenizer-dependent. Each model's receipts stay internally consistent here,
+    so only the cross-model check can catch it."""
+    project, config, results = _write_fixture(tmp_path)
+    for family in ("gptq", "awq"):
+        path = project / "outputs" / "llama32-3b" / f"{family}_s0" / "calibration_manifest.json"
+        receipt = json.loads(path.read_text())
+        borrowed = json.loads(
+            (project / "outputs" / "qwen25-1p5b" / f"{family}_s0" / "calibration_manifest.json").read_text()
+        )
+        receipt["artifact_sha256"] = borrowed["artifact_sha256"]
+        path.write_text(json.dumps(receipt), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert "qwen25-1p5b and llama32-3b share no calibration artifact" in summary["errors"]
+
+
+def test_minigrid_validator_fails_closed_without_derived_fp16_ranges(tmp_path):
+    """The gate ranges are derived from the reference runs. Missing ranges must
+    stop the grid, not silently skip the only baseline evidence there is."""
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    del raw["minigrid_acceptance"]["baseline_accuracy_ranges"]
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any("baseline_accuracy_ranges" in error for error in summary["errors"])
+
+
+def test_minigrid_validator_rejects_fp16_outside_its_gate(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    raw["minigrid_acceptance"]["baseline_accuracy_ranges"]["llama32-3b"]["mmlu"] = [0.9, 1.0]
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any("baseline mmlu accuracy 0.500000" in error for error in summary["errors"])
+
+
+def test_minigrid_validator_rejects_a_recorded_backend_that_differs_from_config(tmp_path):
+    """A manifest naming a route that did not run is the failure this catches."""
+    project, config, results = _write_fixture(tmp_path)
+    path = results / "qwen_run" / "manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["loaded"]["gptq_s1"]["quantization_backend"] = "awq_gemm"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert (
+        "qwen25-1p5b/gptq_s1 recorded backend matches the declared 'gptqmodel_torch'"
+        in summary["errors"]
+    )
+
+
+def test_minigrid_validator_rejects_unpinned_dataset_revision(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    raw["tasks"][0].pop("dataset_revision")
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert f"task mmlu pins dataset revision {MMLU_REVISION}" in summary["errors"]
+
+
+def test_minigrid_validator_rejects_raw_prompts(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    path = results / "qwen_run" / "fp16.mmlu.jsonl"
+    rows = [json.loads(line) for line in path.read_text().splitlines()]
+    for row in rows:
+        row["metadata"]["prompt_style"] = "raw"
+    path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert "qwen25-1p5b/fp16.mmlu.jsonl uses chat prompts" in summary["errors"]
+
+
+def test_minigrid_validator_requires_an_acceptance_block(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    del raw["minigrid_acceptance"]
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    with pytest.raises(ValueError, match="minigrid_acceptance"):
+        verify_minigrid(config, results, project)
