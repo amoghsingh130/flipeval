@@ -64,9 +64,18 @@ TASK=${TASKS[$IDX]}
 # configuration's prompt, and pilot_eval.tasks.GSM8K_FEWSHOT is a fixed block of
 # three worked examples. Matching the shot count keeps the comparison to a
 # prompt-format difference rather than stacking a shot-count difference on top.
+#
+# --fewshot_as_multiturn false is REQUIRED, not optional. lm-eval 0.4.12
+# auto-enables multiturn whenever a chat template is applied ("Using default
+# fewshot_as_multiturn=True"), which puts each exemplar in its own
+# user/assistant turn pair. The preregistration (line 43) and pilot_eval both
+# place all three exemplars inline in a single user message. The first attempt
+# (array 11338637, 2026-07-21) omitted this and produced multiturn prompts;
+# see docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md, Amendment 1.
 case "$TASK" in
   mmlu)  TASK_ARGS=(--tasks mmlu --num_fewshot 0) ;;
-  gsm8k) TASK_ARGS=(--tasks gsm8k --num_fewshot 3 --limit 1000) ;;
+  gsm8k) TASK_ARGS=(--tasks gsm8k --num_fewshot 3 --limit 1000
+                    --fewshot_as_multiturn false) ;;
   *) echo "unknown task: $TASK" >&2; exit 1 ;;
 esac
 
@@ -78,11 +87,8 @@ echo "model:      $MODEL_ID @ $REVISION"
 echo "output:     $OUT"
 
 # --apply_chat_template: chat template is ON for every method including FP16
-#   baselines (registered).
-# NOT --fewshot_as_multiturn: the preregistration places GSM8K few-shot examples
-#   inline within the user message, which is what the harness does when the chat
-#   template is applied without that flag. Adding it would move the exemplars
-#   into separate conversation turns and change the prompt.
+#   baselines (registered). Note that it also auto-enables multiturn few-shot,
+#   which is why the GSM8K branch above disables that explicitly.
 # --seed: lm_eval 0.4.12's own default, stated explicitly rather than inherited,
 #   because GSM8K few-shot exemplars are sampled and the selection must be
 #   reproducible.
