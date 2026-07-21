@@ -14,17 +14,36 @@
 source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs outputs/quantized
 
-MODEL_ID="Qwen/Qwen2.5-1.5B-Instruct"
-MODEL_REVISION="989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
-METHODS=(gptq awq)
-M=$((SLURM_ARRAY_TASK_ID / 3))
-SEED=$((SLURM_ARRAY_TASK_ID % 3))
-METHOD=${METHODS[$M]}
-ARTIFACT="/scratch/calibration/qwen25-1p5b-c4-s${SEED}.json"
-OUT="/workspace/outputs/quantized/qwen25-1p5b-${METHOD}4-seed${SEED}"
+# Model/artifact identity is parameterized so one script serves every build
+# cell. The defaults reproduce the registered Qwen2.5-1.5B 3-seed invocation
+# byte-for-byte -- including the array index map -- so existing runbook commands
+# are unchanged. The mini-grid overrides these at submit time, e.g.
+#   sbatch --array=0-9 --export=ALL,BUILD_SEEDS_PER_METHOD=5,\
+#     BUILD_MODEL_ID=meta-llama/Llama-3.2-3B-Instruct,BUILD_TAG=llama32-3b,...
+# Values must match the pinned tag in configs/main_grid_manifest.yaml.
+BUILD_MODEL_ID="${BUILD_MODEL_ID:-Qwen/Qwen2.5-1.5B-Instruct}"
+BUILD_MODEL_REVISION="${BUILD_MODEL_REVISION:-989aa7980e4cf806f80c7fef2b1adb7bc71aa306}"
+BUILD_TAG="${BUILD_TAG:-qwen25-1p5b}"
+# Seeds per method sets the array index map: index = method*SEEDS + seed. It
+# defaults to 3, the bridge's layout, so a bare resubmission of an existing
+# array element still builds exactly what it built before.
+BUILD_SEEDS_PER_METHOD="${BUILD_SEEDS_PER_METHOD:-3}"
 
-if [ ! -f "$CALIBRATION_DIR/qwen25-1p5b-c4-s${SEED}.json" ]; then
-  echo "MISSING paired calibration artifact for seed $SEED; run prepare_calibration.sbatch" >&2
+MODEL_ID="$BUILD_MODEL_ID"
+MODEL_REVISION="$BUILD_MODEL_REVISION"
+METHODS=(gptq awq)
+M=$((SLURM_ARRAY_TASK_ID / BUILD_SEEDS_PER_METHOD))
+SEED=$((SLURM_ARRAY_TASK_ID % BUILD_SEEDS_PER_METHOD))
+METHOD=${METHODS[$M]}
+ARTIFACT_NAME="${BUILD_TAG}-c4-s${SEED}.json"
+ARTIFACT="/scratch/calibration/${ARTIFACT_NAME}"
+OUT="/workspace/outputs/quantized/${BUILD_TAG}-${METHOD}4-seed${SEED}"
+
+echo "build model:    $MODEL_ID @ $MODEL_REVISION"
+echo "build method:   $METHOD seed $SEED -> $OUT"
+
+if [ ! -f "$CALIBRATION_DIR/$ARTIFACT_NAME" ]; then
+  echo "MISSING paired calibration artifact for seed $SEED ($ARTIFACT_NAME); run prepare_calibration.sbatch" >&2
   exit 1
 fi
 

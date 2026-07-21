@@ -64,6 +64,11 @@ class TaskConfig:
     max_new_tokens: int = 256
     prompt_style: str = "raw"
     fewshot_style: str = "inline"
+    # Hub revision of the benchmark dataset. Optional so existing single-model
+    # configs are unaffected, but when set it is enforced at load time and the
+    # loader's alternate-repo fallback is disabled -- a fallback repo carries a
+    # different revision, so substituting it would silently break the pin.
+    dataset_revision: str | None = None
 
 
 @dataclass(frozen=True)
@@ -97,6 +102,7 @@ def _task(raw: dict[str, Any]) -> TaskConfig:
     fewshot_style = str(raw.get("fewshot_style", "inline"))
     if fewshot_style != "inline":
         raise ValueError("only fewshot_style='inline' is currently supported")
+    dataset_revision = raw.get("dataset_revision")
     return TaskConfig(
         name=str(raw["name"]),
         split=str(raw.get("split", "test")),
@@ -106,19 +112,72 @@ def _task(raw: dict[str, Any]) -> TaskConfig:
         max_new_tokens=int(raw.get("max_new_tokens", 256)),
         prompt_style=prompt_style,
         fewshot_style=fewshot_style,
+        dataset_revision=str(dataset_revision) if dataset_revision else None,
     )
 
 
-def load_config(path: str | Path) -> RunConfig:
+def model_tags(raw: dict[str, Any]) -> list[str]:
+    """Tags declared by a multi-model config, in declaration order.
+
+    Empty for a single-model config, which is how callers tell the two shapes
+    apart without reaching into the raw mapping themselves.
+    """
+    return [str(entry["tag"]) for entry in raw.get("models", [])]
+
+
+def read_raw(path: str | Path) -> dict[str, Any]:
+    with Path(path).open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def load_config(path: str | Path, model_tag: str | None = None) -> RunConfig:
+    """Build a run config, selecting one model from a multi-model grid config.
+
+    Two shapes are supported. A single-model config declares `baseline`/`methods`
+    at the top level (every pilot and bridge config). A grid config declares a
+    `models:` list, each entry carrying its own `tag`, `run_name`, `baseline` and
+    `methods`, with `tasks` shared at the top level.
+
+    Tasks are deliberately NOT per-model: the mini-grid's registered parity
+    requirement is that every variant of a model sees the identical item set,
+    and sharing one task list makes divergence unrepresentable rather than
+    merely checked after the fact.
+
+    Selection is required, never defaulted: a grid config with `model_tag=None`
+    raises. Silently picking the first model would let a typo in a job script
+    evaluate the wrong model into a correctly-named run directory.
+    """
     path = Path(path)
-    with path.open("r", encoding="utf-8") as f:
-        raw = yaml.safe_load(f)
+    raw = read_raw(path)
+    tags = model_tags(raw)
+
+    if tags:
+        if model_tag is None:
+            raise ValueError(
+                f"{path} is a multi-model grid config; pass model_tag "
+                f"(available: {', '.join(tags)})"
+            )
+        if model_tag not in tags:
+            raise ValueError(
+                f"unknown model tag {model_tag!r} in {path} "
+                f"(available: {', '.join(tags)})"
+            )
+        entry = next(m for m in raw["models"] if str(m["tag"]) == model_tag)
+        run_name = str(entry.get("run_name", f"{path.stem}_{model_tag}"))
+        baseline_raw = entry["baseline"]
+        methods_raw = entry.get("methods", [])
+    else:
+        if model_tag is not None:
+            raise ValueError(f"{path} is a single-model config; model_tag is not accepted")
+        run_name = str(raw.get("run_name", path.stem))
+        baseline_raw = raw["baseline"]
+        methods_raw = raw.get("methods", [])
 
     return RunConfig(
-        run_name=str(raw.get("run_name", path.stem)),
+        run_name=run_name,
         output_dir=Path(raw.get("output_dir", "results")),
-        baseline=_method(raw["baseline"]),
-        methods=[_method(m) for m in raw.get("methods", [])],
+        baseline=_method(baseline_raw),
+        methods=[_method(m) for m in methods_raw],
         tasks=[_task(t) for t in raw.get("tasks", [])],
         batch_size=int(raw.get("batch_size", 1)),
         device_map=str(raw.get("device_map", "auto")),

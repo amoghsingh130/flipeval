@@ -36,19 +36,31 @@ Answer: Betty has 100 / 2 = $50. Her grandparents give 15 * 2 = $30. She now has
 """
 
 
-def load_task(name: str, split: str, limit: int | None, subjects: list[str] | None, fewshot: int) -> list[EvalItem]:
+def load_task(
+    name: str,
+    split: str,
+    limit: int | None,
+    subjects: list[str] | None,
+    fewshot: int,
+    dataset_revision: str | None = None,
+) -> list[EvalItem]:
     if name == "mmlu":
-        return load_mmlu(split=split, limit=limit, subjects=subjects)
+        return load_mmlu(split=split, limit=limit, subjects=subjects, dataset_revision=dataset_revision)
     if name == "gsm8k":
-        return load_gsm8k(split=split, limit=limit, fewshot=fewshot)
+        return load_gsm8k(split=split, limit=limit, fewshot=fewshot, dataset_revision=dataset_revision)
     raise ValueError(f"unknown task: {name}")
 
 
-def load_mmlu(split: str, limit: int | None, subjects: list[str] | None) -> list[EvalItem]:
+def load_mmlu(
+    split: str,
+    limit: int | None,
+    subjects: list[str] | None,
+    dataset_revision: str | None = None,
+) -> list[EvalItem]:
     subjects = subjects or ["abstract_algebra"]
     items: list[EvalItem] = []
     for subject in subjects:
-        ds = _load_mmlu_subject(subject, split)
+        ds = _load_mmlu_subject(subject, split, dataset_revision)
         for idx, row in enumerate(_take(ds, limit)):
             choices = list(row["choices"])
             answer = row["answer"]
@@ -76,8 +88,15 @@ def load_mmlu(split: str, limit: int | None, subjects: list[str] | None) -> list
     return items
 
 
-def _load_mmlu_subject(subject: str, split: str):
+def _load_mmlu_subject(subject: str, split: str, dataset_revision: str | None = None):
     from datasets import load_dataset
+
+    if dataset_revision:
+        # Pinned: one repository, no fallback. `lukaemon/mmlu` is a different
+        # repository whose history this revision does not name, so falling back
+        # to it would satisfy the load while breaking the pin -- exactly the
+        # silent substitution the pin exists to prevent. Fail closed instead.
+        return load_dataset("cais/mmlu", subject, split=split, revision=dataset_revision)
 
     last_error: Exception | None = None
     for dataset_name, config in [("cais/mmlu", subject), ("lukaemon/mmlu", subject)]:
@@ -88,14 +107,30 @@ def _load_mmlu_subject(subject: str, split: str):
     raise RuntimeError(f"could not load MMLU subject {subject!r}") from last_error
 
 
-def load_gsm8k(split: str, limit: int | None, fewshot: int) -> list[EvalItem]:
+def load_gsm8k(
+    split: str,
+    limit: int | None,
+    fewshot: int,
+    dataset_revision: str | None = None,
+) -> list[EvalItem]:
     jsonl_path = os.environ.get("GSM8K_JSONL")
     if jsonl_path:
+        if dataset_revision:
+            # The local-JSONL path is the offline recovery for environments that
+            # cannot reach the Hub. It carries no revision, so it cannot honour
+            # a pin -- and a run that believes it is pinned while reading an
+            # unverifiable local file is worse than one that stops.
+            raise ValueError(
+                "GSM8K_JSONL cannot satisfy dataset_revision "
+                f"{dataset_revision!r}: a local file carries no Hub revision. "
+                "Unset GSM8K_JSONL to load the pinned revision, or drop "
+                "dataset_revision to use the offline file."
+            )
         ds = _load_gsm8k_jsonl(Path(jsonl_path))
     else:
         from datasets import load_dataset
 
-        ds = load_dataset("openai/gsm8k", "main", split=split)
+        ds = load_dataset("openai/gsm8k", "main", split=split, revision=dataset_revision)
     prefix = GSM8K_FEWSHOT if fewshot else ""
     items: list[EvalItem] = []
     for idx, row in enumerate(_take(ds, limit)):

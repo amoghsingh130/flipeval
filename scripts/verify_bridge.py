@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
 from pathlib import Path
@@ -9,9 +8,28 @@ from typing import Any
 
 import yaml
 
+# Imported both ways: as `scripts.verify_bridge` (tests, repo root on sys.path)
+# and as a bare script (`python /workspace/scripts/verify_bridge.py`, the SLURM
+# invocation, where sys.path[0] is scripts/ and the package name is empty).
+try:
+    from scripts.verify_common import (
+        SHA256_HEX,
+        check as _check,
+        file_sha256 as _file_sha256,
+        load_json_object as _load_json_object,
+        load_jsonl as _load_jsonl,
+    )
+except ImportError:  # pragma: no cover - exercised by the SLURM script path
+    from verify_common import (  # type: ignore[no-redef]
+        SHA256_HEX,
+        check as _check,
+        file_sha256 as _file_sha256,
+        load_json_object as _load_json_object,
+        load_jsonl as _load_jsonl,
+    )
+
 
 PAIR_NAME = re.compile(r"^(gptq|awq)_s(\d+)$")
-SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
 
 
 def main() -> None:
@@ -189,55 +207,6 @@ def verify_bridge(config_path: Path, run_dir: Path, project_root: Path) -> dict[
         "file_sha256": file_checksums,
         "interpretation": "Operational bridge validation only; not an H3 analysis.",
     }
-
-
-def _check(condition: bool, description: str, errors: list[str], checks: list[dict[str, Any]]) -> None:
-    checks.append({"check": description, "passed": bool(condition)})
-    if not condition:
-        errors.append(description)
-
-
-def _load_json_object(path: Path, errors: list[str]) -> dict[str, Any] | None:
-    if not path.exists():
-        errors.append(f"missing file: {path}")
-        return None
-    try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        errors.append(f"invalid JSON file {path}: {exc}")
-        return None
-    if not isinstance(value, dict):
-        errors.append(f"expected JSON object: {path}")
-        return None
-    return value
-
-
-def _load_jsonl(path: Path, errors: list[str]) -> list[dict[str, Any]] | None:
-    if not path.exists():
-        errors.append(f"missing file: {path}")
-        return None
-    rows: list[dict[str, Any]] = []
-    try:
-        with path.open("r", encoding="utf-8") as stream:
-            for line_number, line in enumerate(stream, 1):
-                if not line.strip():
-                    continue
-                value = json.loads(line)
-                if not isinstance(value, dict):
-                    raise ValueError("record is not an object")
-                rows.append(value)
-    except (OSError, json.JSONDecodeError, ValueError) as exc:
-        errors.append(f"invalid JSONL file {path}: {exc}")
-        return None
-    return rows
-
-
-def _file_sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 if __name__ == "__main__":
