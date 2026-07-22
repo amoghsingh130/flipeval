@@ -33,12 +33,23 @@ such quantity and is discussed in \S\ref{sec:audit:r04}.
 \label{app:certification-margins}
 
 \TODO{typeset the 1\,pp and 3\,pp margins from
-\texttt{results/certification\_tables.csv}; the 2\,pp margin is
+\texttt{results/certification\_tables\_rev2.csv}; the 2\,pp margin is
 Table~\ref{tab:certification} in the main text. Note the quadratic margin
 scaling: MMLU's median requirement is 8{,}656 items at 1\,pp, 2{,}164 at 2\,pp,
-and 944 at 3\,pp.}
-% SOURCE: results/certification_tables.csv, rows mmlu at margin_pp 1.0/2.0/3.0,
-% column required_n_median.
+and 962 at 3\,pp.}
+% SOURCE: results/certification_tables_rev2.csv, rows mmlu at margin_pp
+% 1.0/2.0/3.0, column required_n_median.
+%
+% CORRECTION (2026-07-22). This block previously read "944 at 3 pp" and pointed
+% at the rev-1 CSV, while its 1 pp and 2 pp values (8,656 and 2,164) were
+% already rev-2. The triple was mixed: two of three values had been updated and
+% the third had not. Commit 272136b lists the intended change as "944 -> 962",
+% so the value was identified at the time and missed in this one place.
+% Corrected to 962 (results/certification_tables_rev2.csv, mmlu, margin_pp 3.0,
+% required_n_median), and the SOURCE pointer moved to the rev-2 file to match.
+% The stale value sat inside this TODO rather than in typeset body text, so it
+% was never a rendered claim -- but it is the instruction this appendix would
+% have been typeset from.
 
 \section{Preregistration documents}
 \label{app:registrations}
