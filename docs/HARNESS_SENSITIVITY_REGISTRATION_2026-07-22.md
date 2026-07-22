@@ -1,9 +1,20 @@
 # Harness-Defaults Sensitivity Study — Registration (EXPLORATORY)
 
-Status: **FINAL DRAFT, 2026-07-22, unfrozen — ready for freeze.** Drafted by
-agent; both design stops raised at first review were ruled on by Amogh
-2026-07-22 and are resolved in the text below. Frozen by Amogh.
-**No job runs under this protocol until the registration is committed.**
+Status: **FROZEN 2026-07-22 by Amogh**, after a verbatim review of the ratio
+definition (§ 5.1–5.2), the MMLU C ≡ D resolution (§ 3.3), and the declined
+early-inspection amendment (§ 9.1). Both design stops raised at first review
+were ruled on 2026-07-22 and are resolved in the text below.
+
+**Results-blind at freeze.** No accuracy from any mini-grid confirmatory cell
+has been read by anyone at the time of freezing; the only mini-grid surface
+inspected during execution has been job health, file coverage, checksums and
+receipt pairing. This registration was written and signed before any result of
+this study existed, and before `Q̄`'s source data was inspectable at all — see
+§ 5.2, which defers the denominator to the mini-grid's registered first
+inspection, and § 9.1, which records the shortcut that was declined.
+
+Changes after this line require a dated amendment under "Dated Amendments",
+stating whether results had been inspected first (§ 8).
 
 This document does not amend `PREREGISTRATION.md`,
 `docs/MINIGRID_REGISTRATION_2026-07-15.md`, or any other frozen document, and it
