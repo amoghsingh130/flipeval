@@ -47,6 +47,10 @@ if [ ! -f "$CALIBRATION_DIR/$ARTIFACT_NAME" ]; then
   exit 1
 fi
 
+# env.sh sets `set -e`, which would abort this script the instant the build
+# failed -- before the receipt was written. A failed build's resource profile is
+# precisely what a diagnosis needs, so errexit is lifted around the build only.
+set +e
 srun apptainer exec --cleanenv --nv --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python /workspace/scripts/build_quantized.py \
@@ -59,5 +63,35 @@ srun apptainer exec --cleanenv --nv --pwd /workspace \
   --calibration-artifact "$ARTIFACT" \
   --output-dir "$OUT" \
   --trust-remote-code
+BUILD_RC=$?
+set -e
 
-echo "Done: $OUT"
+# Operational receipt, written HERE rather than reconstructed later
+# (ruled 2026-07-21; see docs/CALIBRATION_RECEIPTS_RECONSTRUCTION_2026-07-21.md
+# for what reconstruction cost). It goes to results/, which is durable project
+# storage, not the 60-day-purge scratch. Written on failure too: a failed build's
+# resource profile is exactly what a diagnosis needs.
+CKPT_HOST="$PROJECT_DIR/outputs/quantized/${BUILD_TAG}-${METHOD}4-seed${SEED}"
+ARTIFACT_SHA="absent"
+if [ -r "$CALIBRATION_DIR/$ARTIFACT_NAME" ]; then
+  ARTIFACT_SHA="$(sha256sum "$CALIBRATION_DIR/$ARTIFACT_NAME" | awk '{print $1}')"
+fi
+CKPT_BYTES="0"
+if [ -d "$CKPT_HOST" ]; then
+  CKPT_BYTES="$(du -sb "$CKPT_HOST" 2>/dev/null | awk '{print $1}' || echo 0)"
+fi
+bash "$PROJECT_DIR/scripts/slurm/write_receipt.sh" \
+  build "$PROJECT_DIR/results/receipts/build-${BUILD_TAG}-${METHOD}4-seed${SEED}.json" \
+  "model_id=$MODEL_ID" \
+  "model_revision=$MODEL_REVISION" \
+  "method=$METHOD" \
+  "seed=$SEED" \
+  "bits=4" \
+  "calibration_artifact=$ARTIFACT_NAME" \
+  "calibration_artifact_sha256=$ARTIFACT_SHA" \
+  "output_dir=$CKPT_HOST" \
+  "output_bytes=$CKPT_BYTES" \
+  "build_exit_code=$BUILD_RC" || echo "WARNING: receipt write failed" >&2
+
+echo "Done: $OUT (build rc=$BUILD_RC)"
+exit "$BUILD_RC"
