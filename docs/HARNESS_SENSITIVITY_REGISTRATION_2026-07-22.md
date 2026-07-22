@@ -1,17 +1,23 @@
 # Harness-Defaults Sensitivity Study — Registration (EXPLORATORY)
 
-Status: **DRAFT, 2026-07-22, unfrozen.** Drafted by agent; frozen by Amogh on
-review. **No job runs under this protocol until the registration is committed.**
+Status: **FINAL DRAFT, 2026-07-22, unfrozen — ready for freeze.** Drafted by
+agent; both design stops raised at first review were ruled on by Amogh
+2026-07-22 and are resolved in the text below. Frozen by Amogh.
+**No job runs under this protocol until the registration is committed.**
 
 This document does not amend `PREREGISTRATION.md`,
 `docs/MINIGRID_REGISTRATION_2026-07-15.md`, or any other frozen document, and it
 introduces no confirmatory claim. It registers an **exploratory** study whose
 results are inspectable on completion.
 
-> **Two blocking items require Amogh's decision before this is frozen.** § 9
-> records a design conflict with frozen text that I am not able to resolve
-> silently, and § 3.3 records a condition that collapses into another. Both are
-> flagged rather than adapted around.
+> **Both design stops are resolved.** § 3.3 (MMLU conditions C and D coincide)
+> and § 9 (the quantization comparator) were surfaced rather than adapted around,
+> and Amogh ruled on both on 2026-07-22. The rulings are recorded in place.
+
+**Standing rule for this study, ruled 2026-07-22:** *conditions are read off the
+harness, never invented.* A condition that does not correspond to a
+configuration some user actually runs would measure a fiction and defeat the
+study's purpose. This rule decided § 3.3 and governs every future amendment.
 
 ## 1. Question and motivation
 
@@ -100,28 +106,28 @@ MMLU is `output_type: multiple_choice` with `metric_list: [acc]` and **no
 inapplicable, and A is inapplicable because the protocol is zero-shot and there
 are no exemplars to place. That leaves C and D, as ruled.
 
-### 3.3 BLOCKING: for MMLU, C and D are the same condition
+### 3.3 RESOLVED: for MMLU, C and D are the same condition
 
 Verified in the image: MMLU's stock `num_fewshot` resolves to **`None` → 0**
-(`TaskManager` reports `mmlu_anatomy: num_fewshot=None`; no MMLU YAML sets it).
-The reference is already zero-shot, and MMLU has no filters. Therefore:
+(`TaskManager` reports `mmlu_anatomy: num_fewshot=None`; no MMLU YAML sets it),
+and MMLU ships **no `filter_list`**. The reference is already zero-shot and has
+no extraction filter to vary. **The only difference between stock MMLU and the
+reference config is the chat template** — which is exactly what condition C
+varies. So:
 
 - **C** = chat template off, zero-shot, `acc`
 - **D** = stock defaults = chat template off, zero-shot, `acc`
 
-These are byte-identical configurations. **Options, for Amogh:**
+These are byte-identical configurations.
 
-1. **Run once, report as both** (recommended) — one MMLU non-reference cell,
-   labelled "C ≡ D", with this equivalence stated in the results. Honest and
-   cheapest.
-2. **Drop D for MMLU**, keeping C only.
-3. **Redefine D for MMLU** to include something stock that the reference
-   overrides — but there is nothing else: the reference and stock differ *only*
-   in the chat template. Any redefinition would be inventing a condition, not
-   reading one off the harness.
+**Ruled 2026-07-22 (Amogh): run it once and report it as "C ≡ D",** with the
+equivalence and its cause stated in the results note. The alternative —
+redefining D for MMLU so that it differs from C — was rejected on the standing
+rule above: since stock and reference differ *only* in the chat template, any
+redefinition would be inventing a configuration no user runs, and measuring it
+would defeat the study's purpose.
 
-I recommend option 1 and have costed the plan that way. Nothing is run either
-way until this is settled.
+MMLU therefore contributes **two** cells per model: REF and C ≡ D.
 
 ## 4. Items — and the exclusion that matters most
 
@@ -183,16 +189,65 @@ Both terms must be fixed exactly, before any run:
 - If `Q̄ = 0` the ratio is undefined and is reported as such, never as infinity
   and never by substituting a floor.
 
-### 5.2 The comparison set — see § 9 before reading this as settled
+### 5.2 The comparison set, and when the denominator may be computed
 
-The intended comparison set is the six bridge quantized variants
-`{gptq_s0, gptq_s1, gptq_s2, awq_s0, awq_s1, awq_s2}` for Qwen2.5-1.5B, each
-against `fp16`, on the 400 MMLU / 200 GSM8K bridge items, from
-`results/qwen25_1p5b_bridge_chat/*.jsonl` (archived in
-`results/bridge_run_20260720.tar.gz`, sha256 `26497dc3…`).
+**Ruled 2026-07-22 (Amogh): two-phase.** `R` is fully defined now; its
+denominator is computed later, from a source that does not exist yet. The reason
+is in § 9.
 
-**§ 9 explains why this set cannot be used at the time the study runs, and what
-I propose instead.**
+**Phase 1 — now, on freeze.** The numerator `C_cond` and every § 5 quantity are
+measured immediately. They are FP16-only on the § 4 item sets and touch no
+confirmatory surface, so nothing about them waits.
+
+**Phase 2 — after the mini-grid's registered first inspection.** `Q̄` is computed
+**only** from mini-grid results, after `scripts/verify_minigrid.py` passes over
+the complete 44-JSONL expected set and the first accuracy inspection permitted by
+`docs/MINIGRID_REGISTRATION_2026-07-15.md` § 5 has occurred. It is defined as:
+
+> the mean, over the **ten** Qwen2.5-1.5B quantized variants
+> `{gptq_s0…s4, awq_s0…s4}`, of correctness-state churn against that model's
+> `fp16` cell, **restricted to the § 4 item subset** (the 400 bridge MMLU items
+> and GSM8K indices 0–199), computed per task.
+
+Restriction to the § 4 subset preserves the same-items, same-model control that
+is the entire point of the ratio. Taking the denominator from the mini-grid
+rather than the bridge also **upgrades it from 3 seeds to 5**, so the two-phase
+path yields a strictly better comparator than the one originally contemplated,
+at no cost to blindness.
+
+The same construction applies to Llama-3.2-3B once its cells complete.
+
+Until Phase 2, `R` is reported as **pending**, never estimated, and never
+substituted with a comparator from another population.
+
+### 5.3 Secondary external comparator — atlas rev-2
+
+Reported alongside `R`, **clearly labelled as external and not same-items**: the
+frozen atlas of published compression pairs, rev-2 (`results/identical_score_churn_rev2.csv`,
+current at drafting):
+
+| quantity | rev-2 value |
+|---|---|
+| analysable cells | **1,707** |
+| zero-delta cells | 145 (8.49 %) |
+| median `accuracy_state_churn` **among zero-delta cells** | **0.0720** |
+| mean, same subpopulation | 0.0887 |
+| max | 0.3434 |
+
+Two limitations are stated wherever this is cited, not buried:
+
+1. **It is a different population** — other models, other tasks, other
+   compression methods — so it loses the same-items and same-model control. It
+   contextualises `R`; it is never `Q̄`.
+2. **That median is conditioned on zero-delta cells**, i.e. cells whose net
+   accuracy is unchanged. It is not a general quantization-churn median. If an
+   all-cell median is wanted it is computed at analysis time from the committed
+   rev-2 artifact and labelled as such; this registration deliberately does not
+   introduce an uncommitted statistic.
+
+rev-2 supersedes the rev-1 figures (1,155 analysable / 113 zero-delta / median
+0.0622) that appear in older documents. Whichever revision is current at freeze
+time is the one cited, with its revision named.
 
 ## 6. Compute cap and scheduling
 
@@ -233,22 +288,23 @@ redefined after inspection is reported as such in any write-up.
 Conditions found infeasible in 0.4.12 are **dropped and recorded**, never
 approximated by hand-built substitutes.
 
-## 9. BLOCKING DESIGN CONFLICT — the quantization comparator
+## 9. RESOLVED — the quantization comparator, and an option declined
 
-The design ruling describes the comparator as "the already-inspected bridge
-deltas". **The bridge quantized deltas have not been inspected, and computing
-them now would conflict with frozen text.** Stating this rather than proceeding.
+The first-review design ruling described the comparator as "the already-inspected
+bridge deltas". That premise was wrong, and the correction was accepted in full
+by Amogh on 2026-07-22. Recorded here because the reasoning matters more than the
+outcome.
 
 **The factual point.** The signed bridge decision record
-(`docs/BRIDGE_DECISION_RECORD_2026-07-20.md`) says, in terms: *"no
+(`docs/BRIDGE_DECISION_RECORD_2026-07-20.md`) states in terms: *"no
 quantized-model accuracy has been inspected or characterised, and this record
 makes no claim about compression quality."* The only bridge accuracies ever
-inspected are the two **FP16** baselines. So there is no already-inspected
-quantization delta to cite.
+inspected are the two **FP16** baselines. There were no already-inspected
+quantization deltas to cite.
 
-**Why computing it now is not a free action.** It would be the first inspection
-of quantized accuracy, on items and checkpoints that are inside the confirmatory
-surface:
+**Why computing them would not have been free.** It would have been the first
+inspection of quantized accuracy, on items and checkpoints inside the
+confirmatory surface:
 
 - The bridge's 400 MMLU items are **a strict subset** of the mini-grid's full
   MMLU test set — same subjects, same first-100 indices, same `item_id` scheme.
@@ -257,38 +313,34 @@ surface:
 - The bridge checkpoints `qwen25-1p5b-{gptq,awq}4-seed{0,1,2}` **are** mini-grid
   variants; `configs/pace_minigrid_h3.yaml` points at those exact paths.
 
-Evaluation is deterministic, so those per-item outcomes will reappear inside the
+Evaluation is deterministic, so those per-item outcomes reappear inside the
 mini-grid's confirmatory cells. Computing GPTQ-vs-AWQ churn on them for 3 of the
-5 registered seeds is partial information about the very quantities the
-escalation rule consumes. That is what
-`docs/MINIGRID_REGISTRATION_2026-07-15.md` § 5 ("first accuracy inspection
-happens only after the mini-grid validator passes over the complete 44-JSONL
-expected set") and ruling 7 of 2026-07-21 exist to prevent.
+5 registered seeds is partial information about precisely the quantities the
+escalation rule consumes — what
+`docs/MINIGRID_REGISTRATION_2026-07-15.md` § 5 and ruling 7 of 2026-07-21 exist
+to prevent.
 
-**Options.**
+**Adopted: the two-phase design of § 5.2.** The study's own measurements run
+immediately on freeze; only the denominator waits, and it is then drawn from the
+mini-grid's registered first inspection over all 5 seeds.
 
-1. **Two-phase (recommended).** Freeze this registration in full now, including
-   `R`. Run the config-churn half **immediately** — it is FP16-only and touches
-   no confirmatory surface, so it is unaffected. Compute `Q̄` and therefore `R`
-   **after** the mini-grid validator passes and the registered first inspection
-   occurs. The denominator then comes from the mini-grid itself, restricted to
-   the § 4 item subset, giving all **5** seeds instead of 3 — a strictly better
-   comparator, at zero cost to blindness. The study's own measurements are not
-   delayed at all; only the ratio waits.
-2. **Use the bridge deltas now.** Requires a dated amendment to the frozen
-   mini-grid registration § 5 permitting an early partial inspection, written by
-   you, stating that it happened before grid completion. My recommendation is
-   against: it spends registered blindness on an exploratory convenience.
-3. **Use the atlas as the comparator instead.** `results/identical_score_churn.csv`
-   and the atlas population (1,155 published compression cells, median churn
-   0.0622) are already inspected and public, so there is no blindness cost. But
-   it is a different set of models and items, so the "same items, same model"
-   control — the scientific point of the ratio — is lost. Usable as a *secondary*
-   comparator for external context, not as `Q̄`.
+### 9.1 An option considered and declined, 2026-07-22
 
-**Proposal: option 1 as the registered path, with option 3 reported alongside as
-a secondary, clearly-labelled external comparator.** Nothing is run until you
-rule.
+One route would have produced the ratio roughly five weeks earlier: a dated
+amendment to `docs/MINIGRID_REGISTRATION_2026-07-15.md` § 5, permitting an early
+partial inspection of the bridge quantized deltas.
+
+**This was considered and declined by Amogh on 2026-07-22.** The stated ground:
+*we do not weaken § 5 blindness to get a number five weeks early.* The blindness
+is a registered commitment made before any result existed; spending it for the
+convenience of an exploratory study would have been the cheapest possible reason
+to break it, and the resulting ratio would have been worth less than the
+commitment it cost.
+
+This paragraph is recorded deliberately. A declined shortcut leaves no trace in
+the artifacts unless it is written down, and "we could have looked early and
+chose not to" is evidence about how the campaign was run that cannot be
+reconstructed after the fact.
 
 ## 10. Reporting
 
