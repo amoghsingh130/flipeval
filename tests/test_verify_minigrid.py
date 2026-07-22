@@ -29,7 +29,7 @@ def _receipt(tag: str, model_id: str, revision: str, family: str, seed: int) -> 
         "seed": seed,
         "sample_count": 2,
         "sequence_length": 4,
-        "dataset": {"repo_id": "fixture/c4", "config": "en", "revision": "c4rev"},
+        "dataset": {"repo_id": "allenai/c4", "config": "en", "revision": "c4rev"},
         "tokenizer": {
             "model_id": model_id,
             "model_revision": revision,
@@ -90,7 +90,7 @@ def _write_fixture(tmp_path: Path):
                 "llama32-3b": {"mmlu": [0.4, 0.6], "gsm8k": [0.4, 0.6]},
             },
             "calibration": {
-                "dataset": "fixture/c4",
+                "dataset": "allenai/c4",
                 "dataset_config": "en",
                 "dataset_revision": "c4rev",
                 "sample_count": 2,
@@ -298,3 +298,103 @@ def test_minigrid_validator_requires_an_acceptance_block(tmp_path):
     config.write_text(yaml.safe_dump(raw), encoding="utf-8")
     with pytest.raises(ValueError, match="minigrid_acceptance"):
         verify_minigrid(config, results, project)
+
+
+# --------------------------------------------------------------------------
+# Open implementation items must fail closed BY NAME.
+#
+# configs/main_grid_manifest.yaml records rtn_builder, wanda_builder,
+# arc_challenge_loader and hellaswag_loader as not-implemented, and the
+# WikiText-2 calibration path as blocked. The mini-grid must not be routable
+# into any of them by a config edit. Ruling 6 of 2026-07-21.
+# --------------------------------------------------------------------------
+
+def _manifest_implementation_status():
+    raw = yaml.safe_load(Path("configs/main_grid_manifest.yaml").read_text(encoding="utf-8"))
+    return raw["implementation_status"]
+
+
+def test_the_open_items_are_still_the_ones_these_tests_cover():
+    """If an item is implemented or a new gap appears, this fails and forces the
+    guard list below to be revisited rather than silently going stale."""
+    status = _manifest_implementation_status()
+    open_items = {k for k, v in status.items() if v.startswith(("not-implemented", "blocked"))}
+    assert open_items == {
+        "rtn_builder",
+        "wanda_builder",
+        "arc_challenge_loader",
+        "hellaswag_loader",
+        "real_wikitext2_artifact_preflight",
+    }
+
+
+def test_validator_scope_matches_the_implemented_surface():
+    from scripts.verify_minigrid import IMPLEMENTED_METHOD_FAMILIES, IMPLEMENTED_TASKS
+
+    status = _manifest_implementation_status()
+    assert status["rtn_builder"].startswith("not-implemented")
+    assert status["wanda_builder"].startswith("not-implemented")
+    assert "rtn" not in IMPLEMENTED_METHOD_FAMILIES
+    assert "wanda" not in IMPLEMENTED_METHOD_FAMILIES
+    assert status["arc_challenge_loader"].startswith("not-implemented")
+    assert status["hellaswag_loader"].startswith("not-implemented")
+    assert "arc_challenge" not in IMPLEMENTED_TASKS
+    assert "hellaswag" not in IMPLEMENTED_TASKS
+    assert IMPLEMENTED_METHOD_FAMILIES == {"gptq", "awq"}
+    assert IMPLEMENTED_TASKS == {"mmlu", "gsm8k"}
+
+
+@pytest.mark.parametrize("family", ["rtn", "wanda"])
+def test_minigrid_validator_rejects_an_unimplemented_method_family(tmp_path, family):
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    entry = raw["models"][0]["methods"][0]
+    entry["name"] = f"{family}_s0"
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any(f"{family}_s0" in e and "implemented" in e for e in summary["errors"])
+
+
+@pytest.mark.parametrize("task", ["arc_challenge", "hellaswag"])
+def test_minigrid_validator_rejects_an_unimplemented_task(tmp_path, task):
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    raw["tasks"].append({"name": task, "prompt_style": "chat"})
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any(task in e and "implemented loader" in e for e in summary["errors"])
+
+
+def test_minigrid_validator_rejects_a_wikitext2_calibration_set(tmp_path):
+    """The WikiText-2 document rule is decided but deliberately not implemented;
+    the builder fails closed and so must the validator."""
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    raw["minigrid_acceptance"]["calibration"]["dataset"] = "Salesforce/wikitext"
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any("C4" in e for e in summary["errors"])
+
+
+def test_minigrid_validator_rejects_three_bit(tmp_path):
+    """3-bit dose-response is deferred with the rest of the main grid."""
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    raw["minigrid_acceptance"]["calibration"]["bits"] = 3
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any("4-bit" in e for e in summary["errors"])
+
+
+def test_minigrid_validator_rejects_a_reduced_seed_set(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    raw["minigrid_acceptance"]["calibration"]["paired_seeds"] = [0, 1, 2]
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any("registered {0,1,2,3,4}" in e for e in summary["errors"])
