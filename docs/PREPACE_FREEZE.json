@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-22T00:25:22.226394+00:00",
-  "source_commit": "dbe5ad9f5708a6c4519f517a02feec1d0e0ce709",
-  "source_tree": "c9661e058fd7c422acf6c0514d5b42382c4b5adc",
+  "created_at": "2026-07-22T04:33:14.470084+00:00",
+  "source_commit": "4190a5278063bab9fb8f71609c5112601a92f166",
+  "source_tree": "a563f5da1967d9c35c2f3f245daeead91d42457c",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -48,7 +48,7 @@
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
     "scripts/slurm/build_image.sbatch": "b8353e7363fd4a8688516a1d448d21ab4d858e1415156dbfd3ffe340dcadaf7d",
-    "scripts/slurm/build_quantized.sbatch": "da1f3a5b42fc6d162427210dc0ea50397789967f7034e6f77890b6e90d1e1a77",
+    "scripts/slurm/build_quantized.sbatch": "d936840f06de76daf5e3660533a93b585076da8d8d59bdd6bbe5754d5d2e0cb8",
     "scripts/slurm/env.sh": "8a677e794534055aece7f5294da43db66c79b240b2866b54c73327dcc934181f",
     "scripts/slurm/mirror_c4.sbatch": "ced7de1d241f9fd3e9a05e6a20028cf49bc7eb47410ce75a1fd77215c4f9dc17",
     "scripts/slurm/prepare_calibration.sbatch": "1ed38168233a8e06228ba11ea129929e37be86c326936112e20267e3594410dd",
@@ -58,6 +58,7 @@
     "scripts/slurm/verify_bridge.sbatch": "cc8d8204c6bb3ce3c984768b5b5c3283b99f4d06fbbeb7232c3e9824f14c2f57",
     "scripts/slurm/verify_minigrid.sbatch": "62d7fe6ffc7dd83860129a3182ddf76006b13f9766b52085fd404b1d31e24f84",
     "scripts/slurm/verify_row_count.sbatch": "75ae8091fa3cc425788827ee96ecb1ef342062efc83488a63b8a3b009d0787e8",
+    "scripts/slurm/write_receipt.sh": "ebaff14be07767674778b90b50c0e8d0f1eb0488caab6a36edfc74e105fc403a",
     "scripts/verify_bridge.py": "19ee4914b29dfd9c34822a066d77b8376b96766e1a7a348e289e80443a40c39b",
     "scripts/verify_common.py": "1ff4763a68a82d3397a7c077d7236d815e68ef0f32c82286ef0ce1cdcfbd0531",
     "scripts/verify_minigrid.py": "140a1e2805033222d2c7f260e90da15a4eaf4e1d8ff9a5355c25ea00896cd93d",
@@ -83,5 +84,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "3c32356239900071443d3e9ef2bba5e4a310649824e2183189001ba37d544cf6"
+  "manifest_payload_sha256": "89960bc36ec5ed91de12838cf3fc3f77b66bdd2682d252be9b1d02c2ef8572fe"
 }
