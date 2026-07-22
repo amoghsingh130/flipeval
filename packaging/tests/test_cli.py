@@ -15,9 +15,13 @@ import pytest
 
 from flipeval.core import compare
 from flipeval_cli.loader import (
+    FilterAmbiguity,
     ItemSetMismatch,
+    UnscoredRows,
     align_by_item_id,
+    available_filters,
     load_log_samples,
+    read_raw_samples,
     require_identical_item_sets,
 )
 from flipeval_cli.main import EXIT_INPUT_ERROR, EXIT_UNDERPOWERED, main
@@ -172,6 +176,77 @@ def test_nonpositive_margin_is_rejected(capsys):
     baseline, candidate = paths("equivalent")
     assert main(["compare", baseline, candidate, "--margin", "0"]) == EXIT_INPUT_ERROR
     assert "--margin must be positive" in capsys.readouterr().err
+
+
+class TestFilterSelection:
+    """A multi-filter file must never be scored under a guessed filter."""
+
+    def test_multiple_filters_without_flag_is_refused(self, capsys):
+        baseline, candidate = paths("multifilter")
+        code = main(["compare", baseline, candidate])
+        captured = capsys.readouterr()
+        assert code == EXIT_INPUT_ERROR
+        assert "carries 2 scoring filters" in captured.err
+        assert "'strict-match'" in captured.err
+        assert "'flexible-extract'" in captured.err
+        assert "617" in captured.err, "the refusal should cite why it matters"
+        assert "VERDICT" not in captured.out
+
+    def test_no_silent_default_to_index_zero(self):
+        """The first filter in the file must not win by default."""
+        samples = read_raw_samples(paths("multifilter")[0])
+        assert available_filters(samples)[0] == "strict-match"
+        with pytest.raises(FilterAmbiguity):
+            load_log_samples(paths("multifilter")[0])
+
+    @pytest.mark.parametrize("filter_name", ["strict-match", "flexible-extract"])
+    def test_each_filter_is_selectable(self, filter_name):
+        code, output = run("multifilter", "--filter", filter_name)
+        assert f"filter   : {filter_name}" in output
+        assert "items    : 120" in output
+        assert code in (0, EXIT_UNDERPOWERED)
+
+    def test_the_two_filters_give_different_numbers(self):
+        """The whole reason the tool refuses to choose."""
+        _, strict = run("multifilter", "--filter", "strict-match", "--json")
+        _, flexible = run("multifilter", "--filter", "flexible-extract", "--json")
+        strict_payload = json.loads(strict)
+        flexible_payload = json.loads(flexible)
+        assert strict_payload["baseline_accuracy"] != flexible_payload["baseline_accuracy"]
+        assert strict_payload["n"] == flexible_payload["n"] == 120
+
+    def test_unknown_filter_name_is_refused(self, capsys):
+        baseline, candidate = paths("multifilter")
+        code = main(["compare", baseline, candidate, "--filter", "nope"])
+        assert code == EXIT_INPUT_ERROR
+        assert "not present" in capsys.readouterr().err
+
+    def test_single_filter_file_needs_no_flag(self):
+        code, output = run("equivalent")
+        assert "VERDICT" in output
+        assert code == 0
+
+
+class TestStringCompareGuard:
+    """Correctness must not silently change definition."""
+
+    def test_unscored_rows_are_refused_by_default(self, capsys):
+        baseline, candidate = paths("unscored")
+        code = main(["compare", baseline, candidate])
+        captured = capsys.readouterr()
+        assert code == EXIT_INPUT_ERROR
+        assert "carry no harness metric" in captured.err
+        assert "--allow-string-compare" in captured.err
+        assert "VERDICT" not in captured.out
+
+    def test_opt_in_flag_permits_them(self):
+        code, output = run("unscored", "--allow-string-compare")
+        assert "VERDICT" in output
+        assert code in (0, EXIT_UNDERPOWERED)
+
+    def test_guard_raises_before_conversion(self):
+        with pytest.raises(UnscoredRows, match="different definition of"):
+            load_log_samples(paths("unscored")[0])
 
 
 def test_equivalent_fixture_is_not_trivially_identical():
