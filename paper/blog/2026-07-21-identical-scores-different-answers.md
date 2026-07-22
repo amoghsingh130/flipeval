@@ -1,32 +1,40 @@
 <!--
 DO-NOT-PUBLISH
 ==============
-STATUS: DRAFT, BLOCKED FROM PUBLICATION AS OF 2026-07-21.
+STATUS: DRAFT, BLOCKED FROM PUBLICATION AS OF 2026-07-22.
 
-REASON: every atlas number in this post is marked provisional for external
-quoting at docs/RESULTS_2026-07-15_ATLAS_AUDIT.md, lines 5-7 ("Pending an
-independent spot-check of the same-day pipeline (two bugs were found and fixed
-during the run), treat as provisional for external quoting"). That spot-check is
-running now as a separate task.
+REVISED TO ATLAS REV-2 ON 2026-07-22. Every atlas, certification and
+identical-score figure below is read from the rev-2 artifacts
+(results/atlas_cells_summary_rev2.csv, results/identical_score_churn_rev2.csv,
+results/certification_tables_rev2.csv). The rev-1 figures this post previously
+carried (1,155 cells / 113 zero-delta / 6.22% median / 1,739 pooled required-n /
+4.4x pooled advantage) are superseded. See docs/ATLAS_REV2_CORRECTION_2026-07-21.md.
 
-THE STAMP LIFTS ONLY WHEN docs/RESULTS_2026-07-15_ATLAS_AUDIT.md ITSELF RECORDS
-THE SPOT-CHECK AS COMPLETED. Not when the spot-check finishes; when that document
-says so. Removing this banner is a decision for Amogh, not for any agent.
+THE ORIGINAL BLOCKING REASON IS NOW SATISFIED, BUT THE STAMP IS NOT MINE TO LIFT.
+The earlier banner said the stamp lifts only when
+docs/RESULTS_2026-07-15_ATLAS_AUDIT.md itself records the spot-check as completed.
+It now does (line 6: "SPOT-CHECK COMPLETED 2026-07-21"), and rev-2 has since
+passed its targeted second spot-check (14/14 cells, 126/126 fields, commit
+8b3e0de). So the condition that document set has been met.
 
-Also blocked on: artifact URLs and DOI (all links below are TODO placeholders).
+WHAT STILL BLOCKS PUBLICATION, as of this revision:
+  1. Every link below is still a TODO placeholder. The links can only stop being
+     TODOs when the repo and artifacts are made public, which is an unmade
+     decision (coupled to the H3 read).
+  2. Removing this banner is a decision for Amogh, not for any agent. That was
+     true when the stamp went on and is still true now.
 -->
 
 > # DO NOT PUBLISH — DRAFT
 >
-> **This post is blocked from publication.** The atlas numbers it quotes are
-> marked *provisional for external quoting* in
-> `docs/RESULTS_2026-07-15_ATLAS_AUDIT.md` (lines 5–7), pending an independent
-> spot-check of the analysis pipeline. The block lifts only when that document
-> records the spot-check as completed. Every link below is a placeholder.
+> **This post is blocked from publication.** Its numbers are current as of atlas
+> rev-2 and the spot-check condition that originally blocked it has been met —
+> but every link below is still a placeholder, and those resolve only when the
+> repo and artifacts are made public. That decision has not been taken.
 
 ---
 
-# 113 compressed models scored *exactly* the same as their baselines. Most of them changed their answers.
+# 145 compressed models scored *exactly* the same as their baselines. Most of them changed their answers.
 
 *Draft — Amogh Singh, Georgia Tech*
 
@@ -36,26 +44,26 @@ I mined the public record of compression evaluation — per-item outputs from th
 Open LLM Leaderboard v1 archive and Neural Magic's per-item dumps for quantized
 Llama-3.1 — and built paired comparisons for every model/task cell where the
 baseline and the compressed model were evaluated on the same items with
-byte-identical prompts. That gives 1,155 analysable cells, from 3B up to 405B
+byte-identical prompts. That gives 1,707 analysable cells, from 3B up to 405B
 parameters.
 
-**113 of those 1,155 cells (9.8%) post an accuracy that is *exactly* identical
+**145 of those 1,707 cells (8.5%) post an accuracy that is *exactly* identical
 to the baseline's** — not close, identical to machine precision. Among those
 cells, the median share of items where the two models disagree on correctness is
-**6.22%**. 96 of the 113 have nonzero churn.
+**7.20%**. 128 of the 145 have nonzero churn.
 
-Roughly one in ten compressed-model evaluations in the public record reports "no
-change in accuracy," and half of those still disagree with the baseline on more
-than 6% of individual items.
+Roughly one in twelve compressed-model evaluations in the public record reports
+"no change in accuracy," and half of those still disagree with the baseline on
+more than 7% of individual items.
 
-*(Numbers: `docs/IDENTICAL_SCORE_CHURN_2026-07-21.md`, computed from
-`results/atlas_cells_summary.csv`; the derivation script is stdlib-only and
-included in that note, so you can rerun it.)*
+*(Numbers: `docs/ATLAS_REV2_CORRECTION_2026-07-21.md` §8, computed from
+`results/atlas_cells_summary_rev2.csv`; the derivation script is stdlib-only and
+included in `docs/IDENTICAL_SCORE_CHURN_2026-07-21.md`, so you can rerun it.)*
 
 ## A concrete example you can check
 
 The most extreme zero-delta cell in the atlas, rank 1 of
-`results/identical_score_churn.csv`:
+`results/identical_score_churn_rev2.csv`:
 
 | field | value |
 |---|---|
@@ -90,17 +98,19 @@ behave like the original," because a third of the answers changed.
 - This is an S1 cell: a 2023-era community GPTQ of a 7B base model, which is the
   noisier of the two strata I mined. Modern vendor quantizations churn about a
   third as much (median accuracy-state churn 0.048 for the Neural Magic dumps,
-  versus 0.133 for the leaderboard archive).
+  versus 0.138 for the leaderboard archive).
 - **This is an illustration of the mechanism, not a typical magnitude.** The
-  median among the 113 zero-delta cells is 6.22%, not 34%. If you quote one
-  number from this post, quote 6.22%, not 34%.
+  median among the 145 zero-delta cells is 7.20%, not 34%. If you quote one
+  number from this post, quote 7.20%, not 34%.
 
 ## Why this happens, and why "net delta" is the wrong summary
 
 Aggregate accuracy is a **net** quantity. Compression breaks some items and
 fixes others, and the reported delta is what survives the cancellation. Across
-all 1,155 cells, per-item churn runs roughly **five to six times** the net
-accuracy delta, at every scale from 3B to 405B.
+all 1,707 cells, per-item churn runs roughly **five times** the net accuracy
+delta, at every scale from 3B to 405B — median churn 0.138 against median
+absolute net delta 0.026 in the leaderboard archive, and 0.048 against 0.009 in
+the vendor dumps.
 
 So a model card reporting "−0.1 points on MMLU" is reporting the residue of a
 much larger amount of behavioural change. That is not dishonest, and it is not a
@@ -154,41 +164,41 @@ actually observes, per benchmark family:
 |---|---|---|---|
 | MuSR | 24 | 519 | 7,617 |
 | BBH | 192 | 681 | 6,492 |
-| HellaSwag | 14 | 688 | 4,992 |
+| HellaSwag | 23 | 695 | 4,905 |
 | GPQA | 24 | 749 | 7,233 |
-| GSM8K | 11 | 750 | 1,236 |
 | IFEval | 8 | 800 | 4,211 |
 | MMLU-Pro | 5 | 827 | 7,695 |
-| ARC-Challenge | 8 | 1,211 | 7,524 |
-| Winogrande | 15 | 1,879 | 6,267 |
-| MMLU | 798 | 2,123 | 7,355 |
+| GSM8K | 24 | 1,184 | 2,671 |
+| ARC-Challenge | 17 | 1,218 | 7,363 |
+| Winogrande | 23 | 1,416 | 5,600 |
+| MMLU | 1,311 | 2,164 | 7,727 |
 | MATH | 56 | 2,186 | 5,222 |
-| **pooled** | **1,155** | **1,739** | 7,663 |
+| **pooled** | **1,707** | **1,855** | 7,722 |
 
-The "atlas cells" column is there so you can discount appropriately: MMLU (798
-cells), BBH (192) and MATH (56) rest on a lot of evidence; MMLU-Pro (5), IFEval
-(8), ARC-Challenge (8) and GSM8K (11) are thin and should be treated as a
-starting hypothesis, not a constant. The quartile spread within a family also
-mixes per-subject with per-model variation, which makes these numbers
-conservative rather than optimistic.
+The "atlas cells" column is there so you can discount appropriately: MMLU (1,311
+cells), BBH (192) and MATH (56) rest on a lot of evidence; MMLU-Pro (5) and
+IFEval (8) are thin and should be treated as a starting hypothesis, not a
+constant. The quartile spread within a family also mixes per-subject with
+per-model variation, which makes these numbers conservative rather than
+optimistic.
 
 Two things to notice.
 
 **Pairing is worth a lot.** The right-hand column is what you get by treating the
 two runs as independent samples, which is the default. They are not independent
 — they are the same items through two nearly identical models — and using the
-paired variance cuts the requirement by 1.7× (GSM8K) to 14.7× (MuSR), 4.4×
+paired variance cuts the requirement by 2.3× (GSM8K) to 14.7× (MuSR), 4.2×
 pooled. That is roughly a quarter of the evaluation budget for the same
 conclusion.
 
-**The ordering is not about difficulty.** MMLU needs ~2,123 items at ±2pp; GPQA,
+**The ordering is not about difficulty.** MMLU needs ~2,164 items at ±2pp; GPQA,
 which is much harder, needs 749. What drives the requirement is how much the
 compressed model's per-item correctness *churns*, not how hard the task is. You
 cannot guess your evaluation size from intuitions about task difficulty. You
 have to measure churn.
 
-Margins are quadratic, so they are expensive: MMLU needs 944 items at ±3pp,
-2,123 at ±2pp, and 8,492 at ±1pp. If you want to claim parity within a tenth of
+Margins are quadratic, so they are expensive: MMLU needs 962 items at ±3pp,
+2,164 at ±2pp, and 8,656 at ±1pp. If you want to claim parity within a tenth of
 a point — and several published claims do — the requirement is in the hundreds of
 thousands of items.
 
@@ -211,19 +221,30 @@ evidence would be enough," and the wrong data for "how does quantization behave
 on average." For that you need a designed experiment, which is what the rest of
 the project is.
 
-One more artifact of the record worth knowing about: of the 2,055 pair-task
-cells I enumerated, 132 were dropped because the two sides had **no items in
-common** — the leaderboard evaluated different item sets across the two runs.
-The aggregate numbers were still compared. Nothing on the leaderboard tells you
-that.
+One more thing worth knowing, and it is a correction to an earlier draft of this
+post. Of the 2,055 pair-task cells I enumerated, 248 were excluded: **179 because
+no per-item file could be found for that task at all, 36 because the two sides
+shared no join keys, and 33 because the task is genuinely float-scored with no
+binary correctness column.** An earlier version of this post reported a larger
+empty-join count and attributed it to the leaderboard having evaluated different
+item sets across runs. **That was wrong, and the fault was mine:** an independent
+spot-check of my own pipeline found that my parser could not read the join key in
+a newer results schema, and was recording its own failure as a property of the
+upstream data. The corrected population is what this post now reports; both
+revisions of the atlas are published, and the delta between them is documented.
+I am leaving this paragraph in rather than quietly deleting the claim, because a
+post arguing that the field should make its evaluations recheckable should show
+what happens when someone rechecks mine.
 
 ## Links
 
 - Paper: TODO
 - `flipeval` (Apache-2.0), the analysis tool — paired flip rates, churn,
   McNemar, TOST, required-n, certification tables: TODO
-- The atlas (CC-BY-4.0), per-cell statistics for every enumerated pair: TODO
-- Preregistrations, dated amendments, and the frozen claim table: TODO
+- The atlas (CC-BY-4.0), per-cell statistics for every enumerated pair, rev-1 and
+  rev-2: TODO
+- Preregistrations, dated amendments, the correction memo, and the frozen claim
+  table: TODO
 
 Every number in this post is recomputable from the released artifacts. If you
 find one that isn't, that's a bug and I want to hear about it.
