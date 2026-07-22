@@ -24,13 +24,11 @@
 
 \section{An audit of published near-lossless claims}
 
-\revtwoBanner{$K$, $J$, every MDD, every required-$n$ and every shortfall ratio.
-These depend on the atlas only through the discordance imputation of
-section~\ref{sec:audit-method}, which draws $p_d$ from the atlas's empirical
-distribution --- so a changed cell population can move them. \textbf{If $K$ or
-$J$ moves, that is a new verdict computation and is documented as one, not a
-silent edit.} Unaffected: the reproducibility finding (0 of 17), which is read
-directly from the frozen claim table and touches no atlas quantity.}
+% RESOLVED to rev-2 (2026-07-21). K and J did NOT move under the rev-2
+% discordance imputation: K = 4 of 12, J = 5, uniform-2pp secondary 1 of 12,
+% identical to rev-1. No new verdict computation was triggered.
+% SOURCE: results/audit_verdicts_rev2.csv; delta in
+% docs/ATLAS_REV2_CORRECTION_2026-07-21.md section 8.
 \label{sec:audit}
 
 \subsection{What was audited, and what was not}
@@ -179,8 +177,8 @@ $n_{\mathrm{req}} / n_{\mathrm{reported}}$.}
 Claim & Source & Stated margin & Reported $n$ & Required $n$ & Shortfall \\
 \midrule
 R17 & Red~Hat Llama-3-8B W8A16   & 0.15\,pp & 28{,}659 & 369{,}856 & $12.9\times$ \\
-R07 & SparseGPT                  & 0.23\,pp & 12{,}410 & 131{,}482 & $10.6\times$ \\
-R06 & Wanda                      & 0.30\,pp & 18{,}904 &  77{,}282 & $ 4.1\times$ \\
+R07 & SparseGPT                  & 0.23\,pp & 12{,}410 & 139{,}134 & $11.2\times$ \\
+R06 & Wanda                      & 0.30\,pp & 18{,}904 &  81{,}780 & $ 4.3\times$ \\
 R15 & Red~Hat Llama-3.1-8B W8A8  & 0.20\,pp & 42{,}701 &  86{,}556 & $ 2.0\times$ \\
 \bottomrule
 \end{tabular}
@@ -211,8 +209,8 @@ quantity computed without the paired-design benefit.}
 Claim & MDD (paired) & Claimed margin & Ratio & Ratio (indep.\ binomial) \\
 \midrule
 R17 & 0.61\,pp & 0.15\,pp & $4.05\times$ & $7.25\times$ \\
-R07 & 0.84\,pp & 0.23\,pp & $3.67\times$ & $7.07\times$ \\
-R06 & 0.68\,pp & 0.30\,pp & $2.28\times$ & $4.52\times$ \\
+R07 & 0.87\,pp & 0.23\,pp & $3.77\times$ & $7.07\times$ \\
+R06 & 0.70\,pp & 0.30\,pp & $2.34\times$ & $4.52\times$ \\
 R15 & 0.32\,pp & 0.20\,pp & $1.60\times$ & $4.20\times$ \\
 \midrule
 \textit{(R04)} & \textit{2.09\,pp} & \textit{0.30\,pp} & \textit{$6.97\times$} & \textit{$12.57\times$} \\

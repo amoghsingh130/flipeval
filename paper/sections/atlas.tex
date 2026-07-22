@@ -3,32 +3,34 @@
 %
 % PRIMARY SOURCES for every number in this section:
 %   docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1 (cell counts, S1/S2 contrast)
-%   results/atlas_cells_summary.csv           (per-cell, machine-readable)
-%   results/atlas_exclusions.csv              (exclusion reasons)
-%   docs/IDENTICAL_SCORE_CHURN_2026-07-21.md  (identical-score statistics)
-%   results/identical_score_churn.csv         (same, machine-readable)
+%   results/atlas_cells_summary_rev2.csv      (per-cell, machine-readable)
+%   results/atlas_exclusions_rev2.csv         (exclusion reasons)
+%   docs/ATLAS_REV2_CORRECTION_2026-07-21.md  (rev-1 -> rev-2 delta, section 8)
+%   results/identical_score_churn_rev2.csv    (identical-score, machine-readable)
 %   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md (frozen protocol)
 %
+% ALL FIGURES ARE ATLAS REV-2 (2026-07-21). Rev-1 is superseded; both revisions
+% remain in the record and the delta is reported in the preregistration section.
+%
 % TWO POPULATIONS -- DO NOT MIX. Every number below states which one it uses.
-%   1,254 = analysed cells (S1 906 + S2 348), i.e. enumerated minus
+%   1,807 = analysed cells (S1 1,459 + S2 348), i.e. enumerated minus
 %           excluded/skipped. Used ONLY for pipeline-coverage accounting.
-%   1,155 = analysis population = 1,254 minus the 99 disclosed-probe cells
-%           (S1 846 + S2 309). Used for EVERY statistic, and it is the same
+%   1,707 = analysis population = 1,807 minus the 99 disclosed-probe cells
+%           (S1 1,398 + S2 309). Used for EVERY statistic, and it is the same
 %           population as the certification tables and the identical-score note.
 %
-% PROVISIONAL-QUOTING CAVEAT: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7
-% mark these numbers provisional for external quoting pending an independent
-% spot-check of the same-day pipeline. Do not circulate this section externally
-% until that doc records the spot-check as completed.
+% VERIFICATION: rev-1's per-cell arithmetic was independently reconciled on 10
+% stratified cells (262/262 fields); rev-2's corrected population on a further
+% 14 cells (126/126 fields), across recovered-fallback, newly-admitted and
+% unchanged-control strata. docs/ATLAS_REV2_SPOTCHECK2_2026-07-21.md.
 % =====================================================================
 
 \section{An atlas of the public record of compression evaluation}
 
-\revtwoBanner{the enumerated/analyzed/probe-excluded cell counts
-(2{,}055 / 1{,}254 / 1{,}155 and the S1--S2 splits), every median churn and
-median absolute net delta, the TOST-equivalent and McNemar-significant rates,
-the exclusion breakdown, and the identical-score figures (113 cells, 9.78\%,
-6.22\%).}
+% RESOLVED to rev-2 (2026-07-21) after the targeted second spot-check passed
+% 14/14 cells, 126/126 fields. Every figure below is rev-2.
+% SOURCE: results/atlas_cells_summary_rev2.csv, results/identical_score_churn_rev2.csv;
+% delta table in docs/ATLAS_REV2_CORRECTION_2026-07-21.md section 8.
 \label{sec:atlas}
 
 \subsection{Construction}
@@ -65,20 +67,32 @@ control---but are recorded per cell and disclosed.
 
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, first bullet;
 % results/atlas_exclusions.csv.
-% POPULATION: this subsection (and only this subsection) uses the 1,254 figure.
+% POPULATION: this subsection (and only this subsection) uses the 1,807 figure.
+% SOURCE: results/atlas_cells_summary_rev2.csv, reason column.
 The enumeration yields \textbf{2{,}055} pair-task cells, of which
-\textbf{1{,}254 are analysed} (S1 = 906, S2 = 348) and 801 are excluded or
-skipped. The exclusions are dominated by two causes: \textbf{643} cells whose
-task has no binary correctness column (float-scored tasks, which the flip model
-does not describe), and \textbf{132} cells whose join intersection is empty.
+\textbf{1{,}807 are analysed} (S1 = 1{,}459, S2 = 348) and \textbf{248} are
+excluded or skipped. The exclusions break down as \textbf{179} cells (72.2\%)
+for which no results file exists for that task in any recorded run,
+\textbf{36} (14.5\%) whose join intersection is empty, and \textbf{33}
+(13.3\%) whose task carries no binary correctness metric in the data at all
+(genuinely float-scored tasks, which the flip model does not describe).
 
-The second cause is a reporting-standards observation in its own right. An empty
-join intersection means the two sides of the pair were evaluated on
+Empty join intersections are a reporting-standards observation in their own
+right. An empty intersection means the two sides of the pair were evaluated on
 \emph{different item sets}: the leaderboard's baseline run and its quantized run
 do not share the items whose scores are being compared. The resulting difference
 in reported accuracy is not a paired quantity at all, and no per-item analysis
 of it is possible. This is invisible to anyone reading only the aggregate
 leaderboard numbers.
+
+We state this carefully because an earlier revision of this work overstated it.
+Rev-1 of the atlas reported 643 exclusions as float-scored and 132 as empty
+joins, and attributed both to upstream reporting practice. An independent
+spot-check established that most of those cells were in fact readable and that
+our own parser could not see them; the rev-2 figures above are what survives
+once that defect is fixed. The episode is documented in
+\S\ref{sec:prereg-spotcheck}, and the retraction is recorded rather than
+quietly absorbed.
 
 \subsection{The analysis population}
 \label{sec:atlas:population}
@@ -88,13 +102,13 @@ leaderboard numbers.
 % §Population; docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 6.
 Every statistic in the remainder of this section, in the certification tables of
 \S\ref{sec:certification}, and in the discordance imputation of
-\S\ref{sec:audit:rules} uses a single population: the \textbf{1{,}155} cells that
+\S\ref{sec:audit:rules} uses a single population: the \textbf{1{,}707} cells that
 are neither excluded nor part of a disclosed feasibility probe
-(S1 = 846, S2 = 309). The 99 probe cells span the two pairs whose results were
+(S1 = 1{,}398, S2 = 309). The 99 probe cells span the two pairs whose results were
 known before the registration was written; the registration requires them to
 appear in the atlas but not in any headline aggregate, and they are tiny
 hand-built sanity pairs ($n$ as low as 10, discordance up to 0.9) that would
-distort any quartile. The 1{,}254 figure of \S\ref{sec:atlas:coverage} is
+distort any quartile. The 1{,}807 figure of \S\ref{sec:atlas:coverage} is
 pipeline accounting and is never used as an analysis denominator.
 
 \subsection{Net delta understates behavioural change by a factor of five to six}
@@ -117,34 +131,33 @@ base for the claim that it is unchanged.
 
 \begin{table}[t]
 \centering
-\caption{The two atlas strata, on the 1{,}155-cell analysis population.
+\caption{The two atlas strata, on the 1{,}707-cell analysis population.
 Percentages are within-stratum shares of cells.}
 \label{tab:atlas-strata}
-% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, the S1/S2 table
-% ("With the two §1-disclosed probe cells excluded"). Population: 1,155
-% (S1 846 + S2 309) -- NOT the 1,254 figure.
+% SOURCE: results/atlas_cells_summary_rev2.csv, grouped by source.
+% Population: 1,707 (S1 1,398 + S2 309) -- NOT the 1,807 figure.
 \begin{tabular}{lrr}
 \toprule
  & S1 (v1 archive; TheBloke-era GPTQ etc.) & S2 (Neural Magic W4A16/INT8/FP8, 8B--405B) \\
 \midrule
-Cells                                & 846            & 309 \\
-Median accuracy-state churn          & 0.133          & 0.048 \\
-Median $|$net accuracy delta$|$      & 0.023          & 0.009 \\
-TOST-equivalent at 2\,pp             & 47 (5.6\%)     & 53 (17.2\%) \\
-Exact McNemar $p < 0.05$             & 148 (17.5\%)   & 19 (6.1\%) \\
+Cells                                & 1{,}398        & 309 \\
+Median accuracy-state churn          & 0.138          & 0.048 \\
+Median $|$net accuracy delta$|$      & 0.026          & 0.009 \\
+TOST-equivalent at 2\,pp             & 68 (4.9\%)     & 53 (17.2\%) \\
+Exact McNemar $p < 0.05$             & 371 (26.5\%)   & 19 (6.1\%) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Table~\ref{tab:atlas-strata} contains the empirical core of the paper's
-motivation. In S1, 5.6\% of cells can be certified equivalent at the registered
-2\,pp margin and 17.5\% show a detectable difference, which leaves at least
+motivation. In S1, 4.9\% of cells can be certified equivalent at the registered
+2\,pp margin and 26.5\% show a detectable difference, which leaves at least
 three-quarters of the public record in a \textbf{gray zone}: neither certifiable
 as equivalent at the margin the field implicitly uses, nor detectably degraded,
 at the sample sizes actually evaluated. In S2 the shares move---17.2\%
 certifiable, 6.1\% detectably different---but at least three-quarters of cells
 remain in the same gray zone.%
-% ARITHMETIC NOTE: 100 - (5.6 + 17.5) = 76.9 for S1 and 100 - (17.2 + 6.1) = 76.7
+% ARITHMETIC NOTE: 100 - (4.9 + 26.5) = 68.6 for S1 and 100 - (17.2 + 6.1) = 76.7
 % for S2. These are LOWER bounds on the gray zone, since the two categories are
 % not guaranteed disjoint (a large-n cell can be TOST-equivalent at 2 pp and
 % still show a significant, sub-margin difference). Hence "at least", never
@@ -154,8 +167,8 @@ remain in the same gray zone.%
 
 
 The S1$\to$S2 contrast is a genuine improvement in compression method and
-evaluation practice, and should be read as one. Median churn falls from 0.133 to
-0.048 and median absolute net delta from 0.023 to 0.009; a modern vendor
+evaluation practice, and should be read as one. Median churn falls from 0.138 to
+0.048 and median absolute net delta from 0.026 to 0.009; a modern vendor
 quantization of an 8B--405B instruction-tuned model perturbs per-item behaviour
 roughly a third as much as a 2023 community quantization of a 7B base model, and
 its evaluations are correspondingly more often certifiable. What does \emph{not}
@@ -176,10 +189,10 @@ methods have made the difference smaller without making the evidence for
 The clearest single demonstration that aggregate accuracy is not a summary of
 behaviour is the subset of cells where the aggregate does not move at all.
 
-Of the 1{,}155 analysable cells, \textbf{113 (9.78\%) post an exactly identical
+Of the 1{,}707 analysable cells, \textbf{145 (8.49\%) post an exactly identical
 accuracy} to their baseline---not similar, identical, to machine precision.
-Among those 113 cells, the median accuracy-state churn is \textbf{0.0622}, the
-mean is 0.0862, and the maximum is 0.3434; \textbf{96 of the 113} have nonzero
+Among those 145 cells, the median accuracy-state churn is \textbf{0.0720}, the
+mean is 0.0887, and the maximum is 0.3434; \textbf{128 of the 145} have nonzero
 churn, with a median of 0.0919 among that subset. Roughly one in ten compressed
 model evaluations in the public record reports a score identical to its
 baseline, and half of those still disagree with the baseline on more than 6\% of
@@ -223,8 +236,8 @@ differently.
 symmetric flip counts are easier to hit by chance at small $n$. This is an S1
 cell---a 2023-era community GPTQ of a 7B base model, the noisier of the two
 strata. It is an illustration of the mechanism and not a typical magnitude: the
-median churn among zero-delta cells is 6.22\%, not 34\%. The finding worth
-carrying away is the 113 cells and their 6.22\% median, not this one cell.
+median churn among zero-delta cells is 7.20\%, not 34\%. The finding worth
+carrying away is the 145 cells and their 7.20\% median, not this one cell.
 
 \subsection{Population caveats}
 \label{sec:atlas:caveats}
