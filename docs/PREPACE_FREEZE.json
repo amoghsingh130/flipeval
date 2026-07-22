@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-22T04:40:38.013690+00:00",
-  "source_commit": "1966e5d7d1c336bf7bfcc95ef605afd432a0b84a",
-  "source_tree": "ba2093e710016fa56eefe4c8f07d13625f8cd9b0",
+  "created_at": "2026-07-22T05:40:09.139208+00:00",
+  "source_commit": "c598ac2eb66df3acd571391a5ef9a196e2ec7c7b",
+  "source_tree": "978779eda4e8672550e2386d5ed1a3239fc8a5ed",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -58,7 +58,7 @@
     "scripts/slurm/verify_bridge.sbatch": "cc8d8204c6bb3ce3c984768b5b5c3283b99f4d06fbbeb7232c3e9824f14c2f57",
     "scripts/slurm/verify_minigrid.sbatch": "62d7fe6ffc7dd83860129a3182ddf76006b13f9766b52085fd404b1d31e24f84",
     "scripts/slurm/verify_row_count.sbatch": "75ae8091fa3cc425788827ee96ecb1ef342062efc83488a63b8a3b009d0787e8",
-    "scripts/slurm/write_receipt.sh": "ebaff14be07767674778b90b50c0e8d0f1eb0488caab6a36edfc74e105fc403a",
+    "scripts/slurm/write_receipt.sh": "a4988d4f710b03bbe4b90374688762febea87453d8f80fa1bb8203077dafa7e4",
     "scripts/verify_bridge.py": "19ee4914b29dfd9c34822a066d77b8376b96766e1a7a348e289e80443a40c39b",
     "scripts/verify_common.py": "1ff4763a68a82d3397a7c077d7236d815e68ef0f32c82286ef0ce1cdcfbd0531",
     "scripts/verify_minigrid.py": "c38662f784806fa5ca51c04b062e0d29e064698140299a73f860ab65c04c1e5f",
@@ -84,5 +84,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "6670d1546bfd611b33bd9a5170da11d21ab76e132444ff8915dca4ac8de1c47c"
+  "manifest_payload_sha256": "63f7179976bc5edb3cc8212d96bfc98b805712491de28e68b762bc9e90862e83"
 }
