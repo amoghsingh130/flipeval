@@ -595,6 +595,14 @@ def resolve_s1_cell(
         raise CellSkip(f"no run combinations enumerated for task {task}")
 
     joined, correctness, skip = first
+    # Strip the matched row-pairs before the join travels on the exception.
+    # The success path in run_pair already does this; without the same filter
+    # here, a skipped cell archives every base/quantized row it joined -- one
+    # DROP cell reached 174 MB and the run tarball 306 MB against rev-1's
+    # 735 KB. Statistics are unaffected: `matched` is never read downstream of
+    # analyze_cell, only serialized.
+    if joined is not None:
+        joined = {k: v for k, v in joined.items() if k != "matched"}
     run_choice = {
         "base": combos[0][0],
         "quantized": combos[0][1],

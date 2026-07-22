@@ -270,3 +270,20 @@ def test_retry_delay_falls_back_to_bounded_exponential_backoff():
 def test_rate_limit_status_is_retryable_but_not_found_is_not():
     assert 429 in RETRYABLE_STATUS and 503 in RETRYABLE_STATUS
     assert 404 not in RETRYABLE_STATUS and 401 not in RETRYABLE_STATUS
+
+
+def test_skipped_cell_join_does_not_carry_matched_rows():
+    """A join travelling on a CellSkip must not archive its matched row-pairs.
+
+    Regression for the rev-2 archival defect: the success path strips `matched`
+    but the skip path did not, so one skipped DROP cell serialized 9,534 full
+    row-pairs (174 MB) and the run tarball reached 306 MB against rev-1's
+    735 KB. No statistic was affected -- `matched` is only serialized -- but the
+    archive was unusable and dumped raw per-item rows.
+    """
+    base = [_nested_row("i1", "p1", 1.0), _nested_row("i2", "p2", 0.0)]
+    joined = join_cell(base, base, key_of=s1_key, identity_of=s1_key, prompt_of=s1_prompt)
+    assert "matched" in joined                      # join_cell itself still returns it
+    stripped = {k: v for k, v in joined.items() if k != "matched"}
+    assert "matched" not in stripped
+    assert stripped["joinable"] == 2                # the statistics survive the strip
