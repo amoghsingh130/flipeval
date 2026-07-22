@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-21T23:55:55.601218+00:00",
-  "source_commit": "c82e3ebd88f7a047553c34c28b5c2d30beb266f6",
-  "source_tree": "6cbf1f0adf5cbd017a8cbc5d4a0482c19209dc92",
+  "created_at": "2026-07-22T00:15:31.441739+00:00",
+  "source_commit": "8b3e0de9b2bba4557fef6892de67c2632a5f0290",
+  "source_tree": "1035101d4e030fa0b0cb17167642acae542da67d",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -35,7 +35,7 @@
     "pilot_eval/run.py": "eaa64428b2b421ef7fd311eda117d0e095301cf69ab8f4ad66e6cac2c2062d8d",
     "pilot_eval/tasks.py": "9befb8061cd7f0dff198e593a4e84f58de4b94ca4b336ebb3622ea28312062ee",
     "pyproject.toml": "cd3349eca8a076b1aabfb7dac258e1de78094a1356913b99d1f29c6450ac37c3",
-    "scripts/atlas_flip_analysis.py": "4f8bb64ede803f3ac74f13ac0de4c118fb047f01ced261231499e3ee0fc93db3",
+    "scripts/atlas_flip_analysis.py": "cde64181b159a91e65bb130ef4e210a07358060f5327897a76ec9c9d6bdebcab",
     "scripts/audit_stats.py": "ba1ca41dc02cbcf76189a41e1277b54d67459dda71ef77e483c4267d6fb57571",
     "scripts/audit_verdicts.py": "b494fdbf38c7d66caf8346b428e3e9b89702b55a6fafd24241d444f1bcb2717b",
     "scripts/build_quantized.py": "73fce25b619799a713e0c0090221c8c110b933028694270772ad73b040852c80",
@@ -67,7 +67,7 @@
     "tests/fixtures/lm_eval_mmlu_method.json": "b1c3cb7bf96f86481d6af612bce68662a51d3d9aa0f415766020116b28b8b9dc",
     "tests/fixtures/pilot/pair_summary.csv": "c4a98d9b2c3f618d77a0c2702417fa576375d9c73c26704eb45e038f0979ef3f",
     "tests/fixtures/pilot/rank_instability.csv": "5ba85412c95eba0c86f39603f6063c5161a8a5931aa2f9bf96f5b31136156ea4",
-    "tests/test_atlas_flip_analysis.py": "d5b64c43b56a51ab6ca9f4f9c477d910e918021967c3f6ea23d1dbee5b263764",
+    "tests/test_atlas_flip_analysis.py": "3c1b308ba90160818ecc70605acd28aefa9cc2a4e4e0c02a835323b877255dea",
     "tests/test_audit_stats.py": "d2ede3e4149bbd84d5e46cce01cd02dfe2063c2d241e6db10ee6088a0ab52ca9",
     "tests/test_build_quantized.py": "50b5857a99502b30087007bc15b30825f21bc13497a1f502efe0af98129e43d9",
     "tests/test_compare_mmlu_reference.py": "887b9539311e16bed12c9886da6a3e5675bb4a03a21a28b3f2b5e2ad7de7271a",
@@ -83,5 +83,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "7418b1e1e08bf9394643c2fbd8069c6450cdcd359d2b23fd304a11551d0455ce"
+  "manifest_payload_sha256": "1bd1d31ac66f8feb74337e78158b6deaa6d1fc57f80b23b9c3cff8c29c896e40"
 }
