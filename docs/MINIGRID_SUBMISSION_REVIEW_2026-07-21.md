@@ -16,7 +16,7 @@ independent trusted reference runs, which are the registered gate inputs.
 |---|---|---|---|
 | 1 | Mini-grid config, 22 variants | done | `configs/pace_minigrid_h3.yaml` |
 | 2 | Mini-grid validator | done | `scripts/verify_minigrid.py` (+ `verify_common.py`) |
-| 3 | Llama-3.2-3B FP16 reference ranges | see § 5 | `scripts/slurm/reference_run.sbatch`, job `11338637` |
+| 3 | FP16 reference ranges (4, not 1 — see § 2b) | done | `reference_run.sbatch`, jobs `11338637` + `11342098` |
 | 4 | Wall-time item: TRITON or splitting | done, resolved | `docs/PACE_ENVIRONMENT_NOTE.md` § RESOLVED 2026-07-21 |
 
 Supporting, not asked for but required by what was found:
@@ -203,11 +203,12 @@ plus splitting rather than tightening walls to the measurement.
 
 | gate | result | evidence |
 |---|---|---|
-| in-image suite | **145 passed, 0 skipped, 0 failed** (was 109) | job `11338927` |
+| in-image suite | **161 passed, 0 skipped, 0 failed** | job `11343941` |
 | shell scripts | `bash -n` + `shellcheck` clean | all five sbatch files |
 | source fingerprint | `passed: true` after each commit | `docs/PREPACE_FREEZE.json` |
 | calibration artifacts | **10/10 PASS, 0 failures** | job `11339076` |
 | dataset pins resolve | MMLU 14,042 / 57 subjects; GSM8K 1,319 rows | job `11338439` |
+| FP16 reference derivation | 4/4 derived, placement asserted inline | job `11343903` |
 | lm-eval CLI surface | all flags present, 0.4.12 | jobs `11338567`, `11338615` |
 
 Calibration artifact detail (job-health only): all ten carry 128 distinct
@@ -217,9 +218,15 @@ artifact sha is shared between models.
 
 Commits, each followed by a freeze refresh: `3d24761` (Amendment 2 + derivation
 rule), `123c83c` (reference-run job), `8e9797f` (config, validator, fan-out
-scripts, wall-time resolution). `2699972` committed the untracked `paper/` tree
-at your instruction, after confirming the retired 6.3 % anecdote appears only
-inside its labelled disclosure paragraph.
+scripts, wall-time resolution), `fe69ab4` (gate-rule Amendment 1), `2541984`
+(placement fix), `dbe5ad9` (the four derived gates). `2699972` committed the
+untracked `paper/` tree at your instruction, after confirming the retired 6.3 %
+anecdote appears only inside its labelled disclosure paragraph.
+
+The in-image count moved 109 → 145 on this work, then to **161** when the
+concurrent atlas rev-2 session added 16 tests without updating the recorded
+expectation; `AGENTS.md`, `CLAUDE.md` and `build_image.sbatch` are corrected to
+161 here.
 
 ---
 
