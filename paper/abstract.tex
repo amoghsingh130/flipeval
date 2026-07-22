@@ -1,10 +1,6 @@
-% TODO-pending-rev2 (ruling R5/R7, 2026-07-21): every atlas-derived figure
-% below is superseded pending atlas rev-2. The rev-1 per-cell arithmetic is
-% independently confirmed (10 cells, 262/262 fields, zero discrepancies); what
-% changes is the cell population, because rev-1 omitted the registered
-% earlier-run fallback and could not read a newer details schema. Re-sync every
-% number here against sections/{atlas,certification,audit}.tex once rev-2 lands.
-% See docs/ATLAS_REV2_CORRECTION_2026-07-21.md.
+% Atlas figures below are REV-2 (2026-07-21), resolved after the targeted
+% second spot-check passed 14/14 cells, 126/126 fields. Keep in sync with
+% sections/{atlas,certification,audit}.tex.
 % Abstract. Three bracketed H3 variants; select exactly one once all eight
 % registered confirmatory cells exist. Until then the paper ships variant (C).
 % The mini-grid executes 4 of 8 cells (docs/MINIGRID_REGISTRATION_2026-07-15.md
@@ -40,16 +36,16 @@ baseline. The counts are derived from the per-item disagreement rates actually
 observed under compression rather than from independent-binomial variance, which
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column"
 reduces the required sample size by $1.7\times$ (GSM8K) to $14.7\times$ (MuSR),
-and by $4.4\times$ pooled over 1{,}155 evaluation cells. The requirement is
-driven by answer churn rather than task difficulty: MMLU needs about 2{,}123
+and by $4.2\times$ pooled over 1{,}707 evaluation cells. The requirement is
+driven by answer churn rather than task difficulty: MMLU needs about 2{,}164
 items at a 2\,pp margin while the harder GPQA needs 749.
 
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
 % docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
 Those rates come from an atlas of the public record of compression evaluation:
-1{,}155 paired model-by-task cells mined from public per-item evaluation dumps,
+1{,}707 paired model-by-task cells mined from public per-item evaluation dumps,
 spanning 3B to 405B parameters. Across the atlas, per-item churn runs roughly
-five to six times the net accuracy delta, and 113 cells (9.8\%) post an
+five to six times the net accuracy delta, and 145 cells (8.5\%) post an
 \emph{exactly identical} accuracy to their baseline while still disagreeing with
 it on individual items---at a median of 6.2\% of items among those cells.
 

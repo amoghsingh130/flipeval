@@ -1,10 +1,6 @@
-% TODO-pending-rev2 (ruling R5/R7, 2026-07-21): every atlas-derived figure
-% below is superseded pending atlas rev-2. The rev-1 per-cell arithmetic is
-% independently confirmed (10 cells, 262/262 fields, zero discrepancies); what
-% changes is the cell population, because rev-1 omitted the registered
-% earlier-run fallback and could not read a newer details schema. Re-sync every
-% number here against sections/{atlas,certification,audit}.tex once rev-2 lands.
-% See docs/ATLAS_REV2_CORRECTION_2026-07-21.md.
+% Atlas figures below are REV-2 (2026-07-21), resolved after the targeted
+% second spot-check passed 14/14 cells, 126/126 fields. Keep in sync with
+% sections/{atlas,certification,audit}.tex.
 % =====================================================================
 % Section: Introduction -- SKELETON with drafted opening.
 % Numbers here must mirror sections/audit.tex, certification.tex, atlas.tex
@@ -44,16 +40,16 @@ $\pm m$ points of its baseline---from the per-item disagreement rates actually
 observed under compression rather than from independent-binomial variance.
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column".
 The correction is large: $1.7\times$ to $14.7\times$ fewer items by family,
-$4.4\times$ pooled. And the requirement is set by churn rather than difficulty,
-which defeats the natural intuition: MMLU needs about 2{,}123 items at 2\,pp
+$4.2\times$ pooled. And the requirement is set by churn rather than difficulty,
+which defeats the natural intuition: MMLU needs about 2{,}164 items at 2\,pp
 where the harder GPQA needs 749.
 
 \paragraph{The evidence.}
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
 % docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
-Both rest on an atlas of 1{,}155 paired model-by-task cells mined from public
+Both rest on an atlas of 1{,}707 paired model-by-task cells mined from public
 per-item evaluation dumps spanning 3B to 405B parameters, in which churn runs
-five to six times the net delta, and 113 cells (9.8\%) post an exactly identical
+five to six times the net delta, and 145 cells (8.5\%) post an exactly identical
 accuracy to their baseline while still disagreeing with it on individual items,
 at a median of 6.2\% of items. A preregistered controlled experiment then asks
 whether the calibration \emph{seed} alone can reorder two compression methods.

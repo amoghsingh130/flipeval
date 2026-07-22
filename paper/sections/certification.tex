@@ -3,7 +3,7 @@
 %
 % PRIMARY SOURCES for every number in this section:
 %   docs/CERTIFICATION_TABLES_2026-07-20.md  (authoritative narrative)
-%   results/certification_tables.csv         (machine-readable, 3 margins/family)
+%   results/certification_tables_rev2.csv    (machine-readable, 3 margins/family)
 %   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §5 (registered metric set)
 %
 % DISCREPANCY (surfaced to the author, unresolved):
@@ -18,12 +18,8 @@
 
 \section{Certification tables: how many items an equivalence claim needs}
 
-\revtwoBanner{every \texttt{required\_n} in the 12-row table, every discordance
-quartile, the naive independent-binomial column, the paired-advantage ratios
-(1.7$\times$--14.7$\times$, 4.4$\times$ pooled), the per-family cell counts, and
-the worked MMLU example. The \emph{method} is unaffected: the estimator, the
-one-sided $z$, and the 2\,pp margin do not depend on which cells are in the
-atlas.}
+% RESOLVED to rev-2 (2026-07-21) after the targeted second spot-check passed.
+% SOURCE: results/certification_tables_rev2.csv, margin_pp = 2.0 rows.
 \label{sec:certification}
 
 \subsection{Detection is not certification}
@@ -93,19 +89,19 @@ independent samples. Eleven benchmark families plus the pooled row.}
 \toprule
 Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
 \midrule
-musr          &  24 & 0.015 / 0.034 / 0.044 & 232 / \textbf{519} / 681      & 7{,}617 & $14.7\times$ \\
-gpqa          &  24 & 0.035 / 0.048 / 0.067 & 545 / \textbf{749} / 1{,}035  & 7{,}233 & $9.7\times$ \\
-bbh           & 192 & 0.024 / 0.044 / 0.060 & 371 / \textbf{681} / 928      & 6{,}492 & $9.5\times$ \\
+musr          &  24 & 0.015 / 0.034 / 0.044 & 232 / \textbf{519} / 681 & 7{,}617 & $14.7\times$ \\
+gpqa          &  24 & 0.035 / 0.048 / 0.067 & 545 / \textbf{749} / 1{,}035 & 7{,}233 & $9.7\times$ \\
+bbh           & 192 & 0.024 / 0.044 / 0.060 & 371 / \textbf{681} / 928 & 6{,}492 & $9.5\times$ \\
 mmlu\_pro     &   5 & 0.048 / 0.053 / 0.059 & 739 / \textbf{827} / 913      & 7{,}695 & $9.3\times$ \\
-hellaswag     &  14 & 0.031 / 0.044 / 0.079 & 475 / \textbf{688} / 1{,}222  & 4{,}992 & $7.3\times$ \\
-arc\_challenge&   8 & 0.076 / 0.078 / 0.087 & 1{,}172 / \textbf{1{,}211} / 1{,}344 & 7{,}524 & $6.2\times$ \\
-ifeval        &   8 & 0.048 / 0.052 / 0.072 & 736 / \textbf{800} / 1{,}108  & 4{,}211 & $5.3\times$ \\
-mmlu          & 798 & 0.098 / 0.137 / 0.216 & 1{,}510 / \textbf{2{,}123} / 3{,}343 & 7{,}355 & $3.5\times$ \\
-winogrande    &  15 & 0.061 / 0.122 / 0.221 & 940 / \textbf{1{,}879} / 3{,}422 & 6{,}267 & $3.3\times$ \\
+hellaswag     &  23 & 0.031 / 0.045 / 0.099 & 477 / \textbf{695} / 1{,}538 & 4{,}905 & $7.1\times$ \\
+arc\_challenge&  17 & 0.072 / 0.079 / 0.099 & 1{,}112 / \textbf{1{,}218} / 1{,}536 & 7{,}363 & $6.0\times$ \\
+ifeval        &   8 & 0.048 / 0.052 / 0.072 & 736 / \textbf{800} / 1{,}108 & 4{,}211 & $5.3\times$ \\
+mmlu          & 1311 & 0.093 / 0.140 / 0.259 & 1{,}432 / \textbf{2{,}164} / 4{,}005 & 7{,}727 & $3.6\times$ \\
+winogrande    &  23 & 0.067 / 0.092 / 0.221 & 1{,}031 / \textbf{1{,}416} / 3{,}422 & 5{,}600 & $4.0\times$ \\
 math          &  56 & 0.107 / 0.141 / 0.169 & 1{,}661 / \textbf{2{,}186} / 2{,}610 & 5{,}222 & $2.4\times$ \\
-gsm8k         &  11 & 0.006 / 0.049 / 0.076 & 100 / \textbf{750} / 1{,}172  & 1{,}236 & $1.7\times$ \\
+gsm8k         &  24 & 0.040 / 0.077 / 0.198 & 619 / \textbf{1{,}184} / 3{,}068 & 2{,}671 & $2.3\times$ \\
 \midrule
-\textbf{ALL (pooled)} & \textbf{1{,}155} & 0.056 / 0.113 / 0.180 & 872 / \textbf{1{,}739} / 2{,}783 & 7{,}663 & $\mathbf{4.4\times}$ \\
+\textbf{ALL (pooled)} & \textbf{1{,}707} & 0.064 / 0.120 / 0.225 & 994 / \textbf{1{,}855} / 3{,}478 & 7{,}722 & $\mathbf{4.2\times}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -116,22 +112,15 @@ you need under optimistic, typical, and pessimistic compression behaviour for
 that family. Then compare with the naive column, which is the count you would
 compute if you ignored pairing.
 
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"The table" worked example
-% and results/certification_tables.csv rows mmlu at margin_pp 1.0 / 2.0 / 3.0
-% (required_n_median = 8491 / 2123 / 944; required_n_independent_binomial at
-% 2 pp = 7355).
-% DISCREPANCY (2026-07-21): docs/CERTIFICATION_TABLES_2026-07-20.md line 33
-% states 8,492 for the 1 pp figure; results/certification_tables.csv says 8491.
-% The CSV is authoritative -- it is what scripts/certification_tables.py emitted.
-% The doc's 8,492 appears to be a naive 4x of the 2 pp value (2,123 x 4), but
-% required_n scales as 1/m^2 BEFORE the ceiling: the unrounded 2 pp requirement
-% is ~2122.75, so ceil gives 2,123 at 2 pp and 8,491 at 1 pp, not 8,492.
-% Text uses 8,491. The doc needs a correction; flagged to Amogh.
+% SOURCE: results/certification_tables_rev2.csv, mmlu at margin_pp 1.0/2.0/3.0
+% (required_n_median = 8656 / 2164 / 962; required_n_independent_binomial at
+% 2 pp = 7727). The rev-1 8,491-vs-8,492 discrepancy against the rev-1 narrative
+% doc is moot: both are superseded by rev-2, and the CSV remains authoritative.
 \paragraph{Worked example.} \emph{MMLU, 2\,pp margin, typical discordance
-$\Rightarrow$ evaluate at least 2{,}123 items.} Ignoring pairing would have
-demanded 7{,}355---$3.5\times$ the compute for the same conclusion. Tightening
-the margin to 1\,pp raises the requirement to 8{,}491 items; relaxing it to
-3\,pp lowers it to 944. The margin is the practitioner's declaration, and its
+$\Rightarrow$ evaluate at least 2{,}164 items.} Ignoring pairing would have
+demanded 7{,}727---$3.6\times$ the compute for the same conclusion. Tightening
+the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing it to
+3\,pp lowers it to 962. The margin is the practitioner's declaration, and its
 cost is quadratic; a claim of parity within 1\,pp is four times as expensive to
 certify as parity within 2\,pp.
 
@@ -146,9 +135,9 @@ their difference has far less variance than independence implies.
 
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column is in
 % the table"; results/certification_tables.csv column paired_advantage_at_median.
-The advantage column is exactly that gap. It ranges from $\mathbf{1.7\times}$
-(GSM8K) to $\mathbf{14.7\times}$ (MuSR) and sits at $\mathbf{4.4\times}$ pooled
-over 1{,}155 cells: a practitioner using the paired design reaches the same
+The advantage column is exactly that gap. It ranges from $\mathbf{2.3\times}$
+(GSM8K) to $\mathbf{14.7\times}$ (MuSR) and sits at $\mathbf{4.2\times}$ pooled
+over 1{,}707 cells: a practitioner using the paired design reaches the same
 equivalence conclusion on roughly a quarter of the evaluation budget. The
 variation across families is informative in itself---low-churn families (MuSR,
 BBH, GPQA) reward pairing most, while high-churn generative families (MATH,
@@ -166,7 +155,7 @@ is the section's main conceptual point.
 % results/certification_tables.csv column median_baseline_accuracy: gpqa 0.3734,
 % mmlu 0.39. Discordances are column discordance_median: mmlu 0.13733,
 % gpqa 0.048397.
-MMLU needs about \textbf{2{,}123} items at a 2\,pp margin. GPQA needs
+MMLU needs about \textbf{2{,}164} items at a 2\,pp margin. GPQA needs
 \textbf{749}. GPQA is by any ordinary account the harder benchmark---its median
 baseline accuracy in the atlas is 0.373 against MMLU's 0.390, on a task designed
 to resist exactly the models that saturate MMLU. Difficulty is not what sets the
@@ -194,10 +183,12 @@ These caveats travel with the table, and any reuse of it should carry them.
   quartile over three points is not an empirical distribution. This drops
   nothing from the registered set: all surviving families appear in
   Table~\ref{tab:certification}.
-  \item \textbf{Four rows rest on thin evidence and are indicative only:}
-  \texttt{mmlu\_pro} (5 cells), \texttt{arc\_challenge} (8), \texttt{ifeval}
-  (8), and \texttt{gsm8k} (11). By contrast \texttt{mmlu} (798), \texttt{bbh}
-  (192), and \texttt{math} (56) are well supported. A reader should treat the
+  \item \textbf{Two rows rest on thin evidence and are indicative only:}
+  \texttt{mmlu\_pro} (5 cells) and \texttt{ifeval} (8). Rev-2 moved
+  \texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to 24, \texttt{hellaswag}
+  to 23 and \texttt{winogrande} to 23, so those are no longer in the thin
+  category. By contrast \texttt{mmlu} (1{,}311), \texttt{bbh} (192), and
+  \texttt{math} (56) are well supported. A reader should treat the
   thin rows as a starting hypothesis to be replaced by their own measured churn,
   not as a reference constant.
   \item \textbf{Family aggregation mixes two sources of variation.} The atlas
@@ -218,8 +209,8 @@ These caveats travel with the table, and any reuse of it should carry them.
 \subsection{What this section does and does not support}
 
 Supports: an empirically grounded, family-specific answer to ``how many items do
-I need to certify parity within $\pm m$?''; a quantified $1.7$--$14.7\times$
-($4.4\times$ pooled) reduction in required evaluation from using the paired
+I need to certify parity within $\pm m$?''; a quantified $2.3$--$14.7\times$
+($4.2\times$ pooled) reduction in required evaluation from using the paired
 design correctly; and the demonstration that the requirement tracks churn rather
 than difficulty.
 
