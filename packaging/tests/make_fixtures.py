@@ -21,16 +21,27 @@ FIXTURES = Path(__file__).parent / "fixtures"
 TASK = "gsm8k"
 
 
-def sample(doc_id: int, correct: bool, prediction: str, target: str) -> dict:
-    return {
+def sample(
+    doc_id: int,
+    correct: bool,
+    prediction: str,
+    target: str,
+    filter_name: str | None = None,
+    scored: bool = True,
+) -> dict:
+    row = {
         "doc_id": doc_id,
         "task_name": TASK,
         "doc": {"question": f"question {doc_id}", "answer": f"reasoning #### {target}"},
         "target": target,
         "resps": [[f"chain of thought for {doc_id} #### {prediction}"]],
         "filtered_resps": [prediction],
-        "exact_match": 1.0 if correct else 0.0,
     }
+    if filter_name is not None:
+        row["filter"] = filter_name
+    if scored:
+        row["exact_match"] = 1.0 if correct else 0.0
+    return row
 
 
 def write(path: Path, rows: list[dict]) -> None:
@@ -105,6 +116,39 @@ def main() -> None:
     cand = [sample(i, i % 4 != 0, str(100 + i), str(100 + i)) for i in range(25, 75)]
     write(FIXTURES / "mismatch_baseline.jsonl", base)
     write(FIXTURES / "mismatch_candidate.jsonl", cand)
+
+    # Multi-filter: one row per (doc, filter), the shape lm-eval actually emits
+    # for a task with filter_list. strict-match voids most rows the way the
+    # stock gsm8k regex does; flexible-extract scores them. Same generations,
+    # different numbers -- the CLI must refuse to pick without --filter.
+    for name, path in (("baseline", "multifilter_baseline"), ("candidate", "multifilter_candidate")):
+        rows = []
+        for doc_id in range(120):
+            target = str(100 + doc_id)
+            flexible_correct = doc_id % 4 != 0
+            if name == "candidate" and doc_id in (1, 5, 9, 13):
+                flexible_correct = False
+            # strict-match rejects the '$' the model writes, so it voids many
+            # rows a flexible extractor scores correct.
+            strict_correct = flexible_correct and doc_id % 3 == 0
+            rows.append(
+                sample(doc_id, strict_correct, target if strict_correct else "[invalid]",
+                       target, filter_name="strict-match")
+            )
+            rows.append(
+                sample(doc_id, flexible_correct, target if flexible_correct else "0",
+                       target, filter_name="flexible-extract")
+            )
+        write(FIXTURES / f"{path}.jsonl", rows)
+
+    # Unscored: no exact_match / acc anywhere, so correctness would fall back to
+    # comparing the prediction string against the gold string.
+    for path in ("unscored_baseline", "unscored_candidate"):
+        rows = [
+            sample(doc_id, True, str(100 + doc_id), str(100 + doc_id), scored=False)
+            for doc_id in range(40)
+        ]
+        write(FIXTURES / f"{path}.jsonl", rows)
 
     print(f"wrote fixtures to {FIXTURES}")
 

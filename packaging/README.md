@@ -61,7 +61,8 @@ trusting blindly; pick the number your claim actually needs.
 | `DEGRADED` / `IMPROVED` | McNemar significant; direction from the discordant counts | 0 |
 | `UNDERPOWERED` | neither established — reports the n you would have needed | 1 |
 
-Input errors (missing file, mismatched item sets, bad margin) exit 2.
+Input errors exit 2: missing file, mismatched item sets, bad margin, an
+unresolved scoring filter, or unscored rows.
 
 `UNDERPOWERED` is the common case, and it is a real answer rather than a
 failure. A non-significant McNemar result is **not** evidence of equivalence; it
@@ -121,6 +122,63 @@ Note also `required n @ margin`: even this clearly-degraded pair would need
 **1,645** items to certify equivalence at 2 points, against the 400 it has.
 Certifying equivalence is far more expensive than detecting a difference, which
 is why `UNDERPOWERED` is the usual answer.
+
+## The tool refuses to choose your scoring filter
+
+On a task with a `filter_list`, lm-eval logs **one row per (doc, filter)** and
+scores the *same generations* under each. Stock `gsm8k` ships both
+`strict-match` and `flexible-extract`. If a file carries more than one filter
+and you did not pass `--filter`, the tool exits 2 and lists the names:
+
+```
+$ flipeval-compare compare a.jsonl b.jsonl
+error: a.jsonl carries 2 scoring filters and no --filter was given:
+       'strict-match', 'flexible-extract'.
+  These score the SAME generations and are different numbers, not different
+  views of one number.
+  ...
+  Pass --filter <name> to state which surface you are comparing.
+```
+
+**This choice is semantic, not cosmetic. Strict-match churn and
+flexible-extract churn are different numbers.** The reason the tool will not
+guess comes from this project's own data: on a Qwen2.5-1.5B GSM8K run,
+`strict-match` voided **617 of 1,000** responses, **336 of which a flexible
+extractor scores correct** — the model writes `#### $18` and the strict regex
+`#### (-?[0-9.,]+)` rejects the dollar sign. Accuracy moved **0.232 →
+0.566** on identical generations
+(`docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md` § 4.2).
+
+A tool that silently took `filtered_resps[0]` would have reported the 0.232
+world without ever saying so. There is no defensible default here — not index
+0, and not a hardcoded preference for `flexible-extract` either. The selection
+also governs which row's metric supplies correctness, so churn and answer-churn
+always describe the same filter.
+
+Single-filter files need no flag.
+
+## Correctness is never silently redefined
+
+`flipeval.io` reads correctness from `exact_match`, then `acc`, then the same
+keys under `metrics` — and if all are absent, falls back to comparing the
+extracted prediction against the gold string. That fallback is a *different
+definition of correctness* from the one the harness scored with.
+
+The CLI refuses rows that would reach it:
+
+```
+error: a.jsonl: 40 of 40 rows carry no harness metric ('exact_match' or 'acc',
+       top-level or under 'metrics'); doc_id(s): 0, 1, 2, 3, 4 ...
+  Correctness for these rows would fall back to comparing the extracted
+  prediction against the gold string, which is a different definition of
+  correctness from the one the harness scored with.
+  Pass --allow-string-compare to accept that substitution deliberately.
+```
+
+This is the same defect class as the harness silently enabling
+`fewshot_as_multiturn` under a chat template — a default that quietly changes
+what is being measured. A tool built in response to that problem does not get
+to have one of its own.
 
 ## An honest example on real data
 

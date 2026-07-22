@@ -112,12 +112,14 @@ def render(
     required_n_at_margin: int | None,
     baseline_path: str,
     candidate_path: str,
+    filter_name: str | None = None,
 ) -> str:
     """Human-readable report. Always prints the inputs beside the verdict."""
     lines = [
         f"baseline : {baseline_path}",
         f"candidate: {candidate_path}",
         f"items    : {result.n} (paired on item identity)",
+        f"filter   : {filter_name if filter_name else '(single filter in file)'}",
         "",
         f"VERDICT: {verdict.label}",
         f"  {verdict.headline}",

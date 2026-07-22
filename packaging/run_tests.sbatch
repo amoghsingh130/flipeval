@@ -73,6 +73,26 @@ for stem in equivalent degraded improved underpowered; do
 done
 
 echo
+echo "=== 4b. filter and string-compare guards (each must exit 2) ==="
+for case in "multifilter:" "unscored:"; do
+  stem="${case%%:*}"
+  apptainer exec --cleanenv --pwd /workspace/packaging --bind "$BINDS" \
+    "$IMAGE" python -m flipeval_cli compare \
+    "tests/fixtures/${stem}_baseline.jsonl" "tests/fixtures/${stem}_candidate.jsonl"
+  echo "  [${stem}] exit=$? (expected 2)"
+done
+apptainer exec --cleanenv --pwd /workspace/packaging --bind "$BINDS" \
+  "$IMAGE" python -m flipeval_cli compare \
+  tests/fixtures/multifilter_baseline.jsonl tests/fixtures/multifilter_candidate.jsonl \
+  --filter strict-match | grep -E "^VERDICT|^filter|baseline  "
+echo "  [multifilter --filter strict-match] exit=$?"
+apptainer exec --cleanenv --pwd /workspace/packaging --bind "$BINDS" \
+  "$IMAGE" python -m flipeval_cli compare \
+  tests/fixtures/multifilter_baseline.jsonl tests/fixtures/multifilter_candidate.jsonl \
+  --filter flexible-extract | grep -E "^VERDICT|^filter|baseline  "
+echo "  [multifilter --filter flexible-extract] exit=$?"
+
+echo
 echo "=== 5. mismatch case (must fail with exit 2) ==="
 apptainer exec --cleanenv --pwd /workspace/packaging --bind "$BINDS" \
   "$IMAGE" python -m flipeval_cli compare \

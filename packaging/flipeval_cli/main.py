@@ -9,7 +9,9 @@ from typing import Sequence
 from flipeval.core import compare
 
 from .loader import (
+    FilterAmbiguity,
     ItemSetMismatch,
+    UnscoredRows,
     align_by_item_id,
     load_log_samples,
     require_identical_item_sets,
@@ -53,6 +55,27 @@ def build_parser() -> argparse.ArgumentParser:
         "--seed", type=int, default=0, help="Bootstrap RNG seed (default: 0)."
     )
     cmp_parser.add_argument(
+        "--filter",
+        dest="filter_name",
+        default=None,
+        help=(
+            "Which lm-eval scoring filter to compare (e.g. strict-match, "
+            "flexible-extract). Required when a file records more than one; the "
+            "tool never picks for you, because they are different numbers over "
+            "the same generations."
+        ),
+    )
+    cmp_parser.add_argument(
+        "--allow-string-compare",
+        action="store_true",
+        help=(
+            "Accept rows carrying no harness metric, whose correctness is then "
+            "decided by comparing the extracted prediction against the gold "
+            "string. Off by default: that is a different definition of "
+            "correctness from the one the harness scored with."
+        ),
+    )
+    cmp_parser.add_argument(
         "--json", action="store_true", help="Emit machine-readable JSON instead of a report."
     )
     return parser
@@ -65,12 +88,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         return EXIT_INPUT_ERROR
 
     try:
-        baseline = load_log_samples(args.baseline)
-        candidate = load_log_samples(args.candidate)
+        baseline = load_log_samples(
+            args.baseline, args.filter_name, args.allow_string_compare
+        )
+        candidate = load_log_samples(
+            args.candidate, args.filter_name, args.allow_string_compare
+        )
         item_ids = require_identical_item_sets(
             baseline, candidate, args.baseline, args.candidate
         )
-    except (ItemSetMismatch, FileNotFoundError, ValueError) as error:
+    except (
+        FilterAmbiguity,
+        UnscoredRows,
+        ItemSetMismatch,
+        FileNotFoundError,
+        ValueError,
+    ) as error:
         print(f"error: {error}", file=sys.stderr)
         return EXIT_INPUT_ERROR
 
@@ -95,6 +128,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "notes": verdict.notes,
             "margin": args.margin,
             "alpha": args.alpha,
+            "filter": args.filter_name,
+            "allow_string_compare": args.allow_string_compare,
             "baseline_path": args.baseline,
             "candidate_path": args.candidate,
             "required_n_at_margin": needed,
@@ -110,6 +145,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 needed,
                 args.baseline,
                 args.candidate,
+                args.filter_name,
             )
         )
     return verdict.exit_code
