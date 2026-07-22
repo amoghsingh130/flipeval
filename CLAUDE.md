@@ -21,6 +21,13 @@ require editing frozen content, stop and surface it instead.
 - Never interpret partial main-grid or mini-grid accuracy results. During
   grid execution, inspect only job health, checksums, expected-file
   coverage, and receipt pairing.
+- **LIVE from 2026-07-22, mini-grid eval phase.** Once eval cells begin
+  completing, NO session reads accuracy from any confirmatory cell — not to
+  sanity-check, not in passing, not "just the baseline". The permitted surface
+  is job health, file coverage, checksums and receipt pairing, and the only
+  tool that may aggregate is `scripts/verify_minigrid.py`, whose sole accuracy
+  output is the registered FP16 gate. The escalation rule fires on the
+  registered computation over complete cells, never on anyone's peek.
 - The H3 decision rule is applied only when all eight confirmatory cells
   exist; the mini-grid escalation rule is in the mini-grid registration.
 - Do not tune the calibration builder, paired bootstrap, or any registered
@@ -40,8 +47,14 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 161 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 170 passed, 0 skipped
 ```
+
+**Whichever session adds tests updates this expected count in the same commit.**
+More than one agent session commits to this worktree. A stale expectation is a
+gate that cannot fail, which is worse than no gate: on 2026-07-21 the count sat
+at 145 while the suite was really at 161, because a concurrent session added 16
+tests without touching it. Run `git log` before assuming HEAD is yours.
 
 Run it **before** the commit that triggers a freeze refresh, and cite the
 `IN_IMAGE_PYTEST_SUMMARY:` line and its log path from

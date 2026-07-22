@@ -137,9 +137,25 @@ gate = [ p - half , p + half ]          # clipped to [0, 1]
 | Llama-3.2-3B / MMLU | 14,042 | 0.580900 | 0.050 | **[0.530900, 0.630900]** |
 | Llama-3.2-3B / GSM8K | 1,000 | 0.695000 | 0.060 | **[0.635000, 0.755000]** |
 
-Both MMLU cells land on the 0.05 floor, exactly as designed: at n=14,042 the
+**Confirmed for the record (ruling 1, 2026-07-21): the four half-widths
+0.050 / 0.062 / 0.050 / 0.060 are the mechanical output of the rule quoted
+above, with no per-cell adjustment of any kind.** Each is
+`max(0.05, 2*SE + 0.03)` evaluated at that cell's own `p` and `n` and rounded up
+to three decimals — nothing else entered:
+
+| cell | 2·SE + 0.03 | vs the 0.05 floor | half |
+|---|---:|---|---:|
+| Qwen / MMLU | 0.038323 | floor wins | 0.050 |
+| Qwen / GSM8K | 0.061265 | formula wins | 0.062 |
+| Llama / MMLU | 0.038328 | floor wins | 0.050 |
+| Llama / GSM8K | 0.059119 | formula wins | 0.060 |
+
+Both MMLU cells land on the 0.05 floor exactly as designed: at n=14,042 the
 sampling term is ~0.008, so the gate is carried by the implementation-divergence
-budget rather than by sampling noise.
+budget rather than by sampling noise. Both GSM8K cells clear the floor on the
+formula, at n=1,000 where sampling noise is real. The arithmetic is applied by
+`~/scratch/flipeval/work/derive_fp16_gates.py`, which reads results and
+evaluates the formula; no cell was touched by hand.
 
 **The GSM8K half took two attempts, and the first was wrong.** Full account in
 `docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md` § 4. Briefly: lm-eval 0.4.12

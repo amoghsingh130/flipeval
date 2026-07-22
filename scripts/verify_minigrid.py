@@ -47,6 +47,14 @@ except ImportError:  # pragma: no cover - exercised by the SLURM script path
     )
 
 
+# The surface this pipeline actually implements. Kept in sync with
+# configs/main_grid_manifest.yaml `implementation_status` by
+# tests/test_verify_minigrid.py, which reads that file rather than trusting
+# these literals.
+IMPLEMENTED_TASKS = {"mmlu", "gsm8k"}
+IMPLEMENTED_METHOD_FAMILIES = {"gptq", "awq"}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Fail-closed validation for the H3 mini-grid.")
     parser.add_argument("--config", required=True)
@@ -86,6 +94,54 @@ def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -
 
     errors: list[str] = []
     checks: list[dict[str, Any]] = []
+
+    # ---- scope guard against the open implementation items -----------------
+    # configs/main_grid_manifest.yaml records rtn_builder, wanda_builder,
+    # arc_challenge_loader and hellaswag_loader as not-implemented, and the
+    # WikiText-2 calibration path as blocked (decided by the 2026-07-16
+    # amendment, deliberately not yet implemented). The mini-grid registration
+    # scopes this grid to {GPTQ, AWQ} x 4-bit x C4 x {MMLU, GSM8K}.
+    #
+    # These checks make each of those gaps fail closed BY NAME. Without them a
+    # config edit could route the grid into an unimplemented builder or loader
+    # and the failure would surface as a KeyError or an empty file rather than
+    # as a scope violation.
+    for task_name in tasks:
+        check(
+            task_name in IMPLEMENTED_TASKS,
+            f"task {task_name!r} is an implemented loader "
+            f"(implemented: {', '.join(sorted(IMPLEMENTED_TASKS))}; "
+            "arc_challenge and hellaswag are not-implemented per "
+            "configs/main_grid_manifest.yaml)",
+            errors,
+            checks,
+        )
+        check(
+            task_name in expected_counts,
+            f"task {task_name!r} declares an expected item count",
+            errors,
+            checks,
+        )
+    check(
+        str(calibration["dataset"]) == "allenai/c4",
+        "calibration set is C4 (the mini-grid is C4-only; the WikiText-2 "
+        "builder path is decided but not implemented and fails closed)",
+        errors,
+        checks,
+    )
+    check(
+        int(calibration["bits"]) == 4,
+        "calibration declares 4-bit (3-bit dose-response is deferred with the "
+        "rest of the main grid)",
+        errors,
+        checks,
+    )
+    check(
+        sorted(int(s) for s in paired_seeds) == [0, 1, 2, 3, 4],
+        "paired seeds are exactly the registered {0,1,2,3,4}",
+        errors,
+        checks,
+    )
     file_checksums: dict[str, str] = {}
     baseline_accuracies: dict[str, dict[str, float]] = {}
     per_model_artifacts: dict[str, set[str]] = {}
@@ -146,6 +202,8 @@ def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -
                     continue
                 records[(method, task)] = rows
                 file_checksums[f"{run_name}/{path.name}"] = file_sha256(path)
+                if task not in expected_counts:
+                    continue
                 check(
                     len(rows) == expected_counts[task],
                     f"{tag}/{path.name} has {expected_counts[task]} records",
@@ -233,8 +291,16 @@ def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -
         receipts: dict[tuple[str, int], dict[str, Any]] = {}
         for name, method in method_configs.items():
             family, _, seed_text = name.partition("_s")
-            if family not in {"gptq", "awq"} or not seed_text.isdigit():
-                errors.append(f"{tag}: compressed method has unrecognized paired name: {name}")
+            if family not in IMPLEMENTED_METHOD_FAMILIES or not seed_text.isdigit():
+                check(
+                    False,
+                    f"{tag}: method {name!r} is an implemented, seed-paired family "
+                    f"(implemented: {', '.join(sorted(IMPLEMENTED_METHOD_FAMILIES))}; "
+                    "rtn and wanda are not-implemented per "
+                    "configs/main_grid_manifest.yaml)",
+                    errors,
+                    checks,
+                )
                 continue
             seed = int(seed_text)
             checkpoint = Path(str(method["model_id"]))
