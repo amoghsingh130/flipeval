@@ -41,7 +41,9 @@ would have been caught later anyway", the entry says that.
 | 12 | 2026-07-22 | Stale `pilot_eval` baked into the image's site-packages | Probe launched by file path instead of `-m` |
 | 13 | 2026-07-22 | Missing `/scratch` bind read as a code regression | Rerun with the bind restored |
 | 14 | 2026-07-21 | In-image test-count expectation stale at 145 vs 161 | Gate run that should have failed and could not |
-| 15 | 2026-07-22 | Harness-sensitivity preflight FAIL; config-churn array dead on dependency | The preflight, fail-closed by design — **OPEN** |
+| 15 | 2026-07-22 | Harness-sensitivity preflight FAIL; config-churn array dead on dependency | The preflight, fail-closed by design — **RESOLVED, probe defect** |
+| 16 | 2026-07-22 | Llama-3.2-3B FP16 MMLU baseline below its registered gate | The registered mini-grid validator — **OPEN** |
+| 17 | 2026-07-23 | Sensitivity condition REF would have run as a duplicate of A | Rebuild inspection after the preflight reconciliation |
 
 ---
 
@@ -713,6 +715,115 @@ sensitivity table whose conditions were all the same run.
 
 ---
 
+## 16. Llama-3.2-3B FP16 MMLU baseline fell below its registered gate (2026-07-22) — **OPEN**
+
+**What surfaced.** The mini-grid validator, run over the complete 44-JSONL set as
+the registered first inspection, failed. 408 of 409 checks passed. The one
+failure:
+
+```
+llama32-3b: baseline mmlu accuracy 0.527631 is within [0.5309, 0.6309]
+```
+
+0.527631 against a floor of 0.5309 — short by 0.0033 (0.33 pp). The other three
+FP16 baselines sit inside their gates. `decision_record_written: false`; the
+validator declined to write the record, and the escalation computation did not
+run.
+
+**What caught it.** The FP16 operational gate, which is the only accuracy the
+validator is permitted to compute. It is a gate that exists solely to catch this
+class of problem, and it fired on its first use.
+
+**Root cause — the reference gated a different benchmark than the pipeline
+runs.** Established by a metadata-only Phase 1 diff (no accuracy read) and then
+proven byte-exactly by a prompt-identity probe whose reconstructions hash-match
+the sealed cells (72 of 72, job `11369022`). Three differences between the
+lm-eval reference run and the registered `pilot_eval` MMLU path:
+
+| dimension | lm-eval reference | `pilot_eval` |
+|---|---|---|
+| system message | subject-specific *"The following are multiple choice questions (with answers) about {subject}."* | model template default — Qwen's *"You are Qwen…"* persona; Llama's empty system block |
+| item stem | bare question text | `"Question: "` prefix (`tasks.py:20`) |
+| Llama date block | `Today Date: 21 Jul 2026` | `Today Date: 22 Jul 2026` |
+
+Matching, and therefore not the cause: model revision, dtype, shot count (0-shot
+across all 61 subtasks both sides), metric (`acc` only), item count 14,042, and
+seeds. `fewshot_as_multiturn=True` appears in the MMLU reference but is inert at
+0-shot.
+
+The Llama/Qwen asymmetry follows from the templates: lm-eval supplies a system
+message, and Llama's template renders that block *plus* a date preamble while
+Qwen's renders the instruction alone — so the reference↔pipeline prompt delta is
+strictly larger for Llama. Consistent with the observed 5.3 pp vs 1.2 pp gaps;
+not proven by them.
+
+**Second defect, independent of the first.** The Llama template injects the
+current calendar date. The sealed cells carry `Today Date: 22 Jul 2026`; the
+reference that derived their gates carries `21 Jul 2026`. **The Llama prompts
+are not reproducible by rerunning the same command on a different day**, in
+either implementation, for either task.
+
+**Resolution.** Open. Amendment 3 is drafted and awaiting signature; the stop is
+upheld, quantized JSONLs stay sealed, no gate has been widened or re-derived,
+and the escalation computation has not run. Two points route back to the human
+under his own precondition: the date pin cannot be set to the rerun date without
+reintroducing a byte diff against the cells it gates, and byte-identity for
+Llama may not be reachable from the CLI at all.
+
+**IDs.** Validator `11368769` (FAILED, 1:0, 409 checks); prompt-identity probe
+`11369022` (72/72 hash-match); gates committed `dbe5ad9`; derivation
+`docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md`; references `11338637`,
+`11342098`.
+
+**Without the gate.** The escalation rule would have been applied over four cells
+whose FP16 baselines were never cross-validated, and the 5.3 pp
+implementation gap would have sat underneath every H3 quantity in the paper,
+invisible — the gate is the only artifact in the campaign that compares the
+registered pipeline against an independent implementation at all.
+
+---
+
+## 17. Sensitivity condition REF would have run as a duplicate of condition A (2026-07-23)
+
+**What surfaced.** While rebuilding the config-churn array against the `run`
+subcommand, array cell 2 — condition **REF** — read:
+
+```
+FLAGS="--apply_chat_template --num_fewshot 3"
+```
+
+with no multiturn flag. `lm_eval` auto-enables `fewshot_as_multiturn` under a
+chat template, so REF would have rendered multi-turn prompts: byte-identical to
+condition **A** in cell 3. The study's headline contrast would have been two runs
+of the same configuration, reported as a difference.
+
+**What caught it.** Inspection during the rebuild, prompted by the preflight
+reconciliation having just established what the flag surface actually is. Nothing
+in the array would have failed; both cells would have completed cleanly.
+
+**Root cause.** The same harness default as incident 3, in the study written *to
+measure that default*. The registration names REF as
+`--apply_chat_template --num_fewshot 3 --fewshot_as_multiturn false`; the sbatch
+omitted the third flag, and an omitted flag is not an unset value here.
+
+**Resolution.** REF now passes `--fewshot_as_multiturn false` explicitly and A
+passes `true` explicitly rather than relying on a bare switch. Expressibility was
+confirmed against the pinned image rather than assumed —
+`--fewshot_as_multiturn [<bool>]`, *"Auto-enabled with --apply_chat_template. Use
+'false' to disable."* The array also now invokes `python -m lm_eval run`
+explicitly instead of relying on the documented back-compat shim that
+auto-inserts `run`.
+
+**IDs.** Rebuilt array `11368976`; preflight reconciliation `11368795`,
+`11368817`; dead predecessor `11361531` cancelled.
+
+**Without the gate.** Six cells, two of them the same configuration, producing a
+sensitivity table whose headline row measured nothing. The study's own
+motivating finding is that this harness turns defaults on silently; it would have
+been published having been caught by it.
+
+---
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
@@ -737,5 +848,14 @@ failure.
 
 **Stops that were surfaced rather than adapted around.** The fewshot registration
 inconsistency (2), the six pre-writer receipts (9), the two design stops in the
-sensitivity registration, and the open preflight failure (15). In each case the
-adaptation was available and cheaper, and was not taken.
+sensitivity registration, the preflight failure (15), and the Llama MMLU gate
+(16). In each case the adaptation was available and cheaper, and was not taken.
+
+**Probes that reported on themselves.** Entry 15's preflight declared six flags
+absent that the harness accepts, because it probed a subcommand CLI at top level
+and matched `--tasks` in example prose. Its replacement carries a positive
+control — a flag vector known to have run — on the principle that a probe whose
+control fails is reporting on the probe. The prompt-identity probe of entry 16
+applies the same rule differently: it recomputes `prompt_hash` and matches it
+against the sealed cells, so the prompts it prints are proven to be the ones
+scored rather than the ones the code appears to build.
