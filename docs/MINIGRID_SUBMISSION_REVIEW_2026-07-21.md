@@ -119,11 +119,10 @@ unchanged and its existing tests still pin it.
 
 ---
 
-## 5. FP16 reference ranges — derivation frozen, values pending
+## 5. FP16 reference ranges — derived and committed
 
-**The tolerance rule was committed (`3d24761`) before the reference array was
-submitted**, so nothing about the gates can be tuned to a reference number. From
-`docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md` § 3:
+**The tolerance rule was committed (`3d24761`) before any reference run was
+submitted**, so no gate could be tuned to a reference number:
 
 ```
 SE   = sqrt( p*(1-p)/n )
@@ -131,40 +130,35 @@ half = max( 0.05 , 2*SE + 0.03 )        # rounded UP to 3 decimals
 gate = [ p - half , p + half ]          # clipped to [0, 1]
 ```
 
-Every term is pre-justified: `2*SE` is the sampling noise the 2026-07-13 Qwen
-gate used; `+0.03` is **twice the single measured cross-implementation offset**
-(|0.430 − 0.415|, Qwen MMLU); `max(…, 0.05)` is a floor reproducing the existing
-bridge gate exactly. The `+0.03` term matters because at n=14,042 the sampling
-term collapses to ~0.008, and a gate ignoring implementation divergence is one a
-*correct* implementation would be expected to fail.
+| cell | n (verified) | p | half | **gate** |
+|---|---:|---:|---:|---|
+| Qwen2.5-1.5B / MMLU | 14,042 | 0.582538 | 0.050 | **[0.532538, 0.632538]** |
+| Qwen2.5-1.5B / GSM8K | 1,000 | 0.575000 | 0.062 | **[0.513000, 0.637000]** |
+| Llama-3.2-3B / MMLU | 14,042 | 0.580900 | 0.050 | **[0.530900, 0.630900]** |
+| Llama-3.2-3B / GSM8K | 1,000 | 0.695000 | 0.060 | **[0.635000, 0.755000]** |
 
-Three interpretation branches were fixed in advance, including: **an item-count
-mismatch is a hard stop regardless of the accuracy value**, and a surprising
-reference number is diagnosed as a broken reference, never accommodated by
-widening the tolerance.
+Both MMLU cells land on the 0.05 floor, exactly as designed: at n=14,042 the
+sampling term is ~0.008, so the gate is carried by the implementation-divergence
+budget rather than by sampling noise.
 
-### Status
+**The GSM8K half took two attempts, and the first was wrong.** Full account in
+`docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md` § 4. Briefly: lm-eval 0.4.12
+auto-enables `fewshot_as_multiturn` under a chat template, so exemplars landed
+in separate turns instead of inline as the preregistration requires; and the
+frozen rule never named which GSM8K metric to read, so the derivation script
+took `strict-match`, which voided 617 of 1,000 Qwen rows — 336 of them answers
+`pilot_eval` scores correct, because the model writes `#### $18`. Amendment 1
+named `flexible-extract` (on the ground that `extract_gsm8k_answer` has always
+been marker-else-last-number) and required `--fewshot_as_multiturn false`; **it
+was committed before the rerun was submitted**, and it records openly that the
+metric choice followed seeing the first result. The rerun (`11342098`) verified
+inline placement mechanically — the derivation script now refuses to derive a
+GSM8K gate unless the prompt has exactly one assistant turn.
 
-| cell | job | state | n verified | accuracy |
-|---|---|---|---|---|
-| Qwen2.5-1.5B / MMLU | `11338637_0` | COMPLETE (4 m 21 s) | **14,042 across 57 subtasks** | 0.582538 |
-| Qwen2.5-1.5B / GSM8K | `11338637_1` | running | — | — |
-| Llama-3.2-3B / MMLU | `11338637_2` | queued, est. start 19:28 | — | — |
-| Llama-3.2-3B / GSM8K | `11338637_3` | queued, est. start 19:28 | — | — |
-
-Qwen MMLU sits mid-band of the pre-fixed plausibility range (0.25–0.75), so
-branch 1 applies and the arithmetic will be applied as written.
-
-Until all four land, `configs/pace_minigrid_h3.yaml` carries
-`baseline_accuracy_ranges_status: pending-reference-run-11338637` and **the
-validator fails closed** on the missing ranges — there is no state in which the
-grid can be validated without them. The derivation is mechanical
-(`~/scratch/flipeval/work/derive_fp16_gates.py` applies the formula above and
-makes no choices); the four ranges and their term-by-term arithmetic are
-recorded in `docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md` and committed into
-the config, before any quantized mini-grid result exists.
-
----
+**Independent sanity check:** the bridge's `pilot_eval` FP16 GSM8K figure of
+0.615 falls inside the new Qwen gate [0.513, 0.637]. The correct implementation
+passes — which the voided [0.175, 0.289] would have failed badly. This is an
+observation on an already-published figure, not an input to the derivation.
 
 ## 6. The wall-time item — resolved, and the premise was wrong
 

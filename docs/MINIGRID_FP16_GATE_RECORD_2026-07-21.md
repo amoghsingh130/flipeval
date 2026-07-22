@@ -3,9 +3,17 @@
 Executes `docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md`, whose arithmetic
 was committed (`3d24761`) before reference array `11338637` was submitted.
 
-**Outcome: the MMLU half is sound and its two gates stand. The GSM8K half is
-NOT sound as run and is held for a ruling** (§ 4). No mini-grid job has been
-submitted and no mini-grid accuracy exists.
+**Outcome: all four gates are derived and committed.** The MMLU half was sound
+on the first attempt; the GSM8K half was defective, was ruled on, corrected, and
+rerun (§ 4, § 6). No mini-grid job has been submitted and no mini-grid accuracy
+exists.
+
+| cell | gate |
+|---|---|
+| Qwen2.5-1.5B / MMLU | **[0.532538, 0.632538]** |
+| Qwen2.5-1.5B / GSM8K | **[0.513000, 0.637000]** |
+| Llama-3.2-3B / MMLU | **[0.530900, 0.630900]** |
+| Llama-3.2-3B / GSM8K | **[0.635000, 0.755000]** |
 
 ## 1. Reference run identity
 
@@ -142,9 +150,47 @@ therefore still fails the validator closed on missing ranges.**
 > decision: the replacement reference array `11342098` must complete, and all
 > four ranges are then derived and committed together.
 
-## 5. What is committed
+## 5. GSM8K, as re-run — the derivation that stands
 
-Nothing yet. A half-filled gate block is the dangerous middle state that
+Array **`11342098`** (`--array=1,3`), same image and pinned revisions, with
+`--fewshot_as_multiturn false` and the metric fixed to
+`exact_match,flexible-extract` by Amendment 1 **before submission**. Both tasks
+COMPLETED `0:0` (1 h 08 m, 59 m).
+
+**Placement verified mechanically, not by eye.** The derivation script counts
+assistant-turn markers in the first logged prompt and refuses to derive a GSM8K
+gate unless there is exactly one — inline exemplars produce one (the generation
+prompt), multiturn produces four at 3-shot. Both cells reported
+`placement OK: 1 assistant turn, exemplars inline`.
+
+| cell | n | p | SE | 2·SE+0.03 | half | gate |
+|---|---:|---:|---:|---:|---:|---|
+| Qwen / GSM8K | 1,000 | 0.575000 | 0.015632 | 0.061265 | 0.062 | **[0.513000, 0.637000]** |
+| Llama / GSM8K | 1,000 | 0.695000 | 0.014559 | 0.059119 | 0.060 | **[0.635000, 0.755000]** |
+
+**Independent sanity check, not part of the rule.** The bridge measured
+`pilot_eval` FP16 GSM8K at **0.615** on its 200-item subset. That falls inside
+the new Qwen gate [0.513, 0.637] — the correct implementation passes, which is
+exactly what the voided strict-match gate of [0.175, 0.289] would have failed.
+This is a consistency observation on an already-published bridge figure, not an
+input to the derivation; the gate was fixed by the frozen arithmetic before this
+comparison was made.
+
+Placement mattered less than the metric: Qwen moved 0.566 → 0.575 between
+multiturn and inline, against 0.232 → 0.566 between strict and flexible. Both
+defects were corrected anyway, because a reference that runs a prompt the
+mini-grid never runs is not a reference regardless of how small the difference
+turns out to be.
+
+## 6. What is committed
+
+All four ranges, in `configs/pace_minigrid_h3.yaml` under
+`minigrid_acceptance.baseline_accuracy_ranges`, together in a single change and
+**before any quantized mini-grid result exists**. The config never passed
+through a half-filled state:
 `tests/test_minigrid_config.py::test_fp16_ranges_are_either_derived_or_explicitly_pending`
-deliberately rejects: the config carries either all four ranges or none, and it
-currently carries none.
+requires all four or none, and it held throughout.
+
+The void first-attempt GSM8K outputs are retained as diagnostic evidence at
+`~/scratch/flipeval/reference/{qwen25-1p5b,llama32-3b}.gsm8k.void-multiturn-strictmatch-11338637`
+and are not readable by the derivation script.

@@ -176,9 +176,25 @@ minigrid_acceptance:
   # does not describe full MMLU test; GSM8K [0.55, 0.65] was a declared
   # expectation checked on 200 items, not 1,000.
   #
-  # Until the reference runs land this key is absent, and the validator FAILS
-  # CLOSED on it rather than skipping the gate.
-  baseline_accuracy_ranges_status: pending-reference-run-11338637
+  # Derived 2026-07-21 from reference arrays 11338637 (MMLU) and 11342098
+  # (GSM8K, rerun with inline exemplar placement). Term-by-term arithmetic and
+  # run identities: docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md.
+  #
+  #   cell               n        p         half     gate
+  #   qwen25 / mmlu   14042   0.582538     0.050    [0.532538, 0.632538]
+  #   qwen25 / gsm8k   1000   0.575000     0.062    [0.513000, 0.637000]
+  #   llama32 / mmlu  14042   0.580900     0.050    [0.530900, 0.630900]
+  #   llama32 / gsm8k  1000   0.695000     0.060    [0.635000, 0.755000]
+  #
+  # Applied to FP16 baselines ONLY. No range here applies to any quantized
+  # variant, and none may be constructed after quantized results are seen.
+  baseline_accuracy_ranges:
+    qwen25-1p5b:
+      mmlu: [0.532538, 0.632538]
+      gsm8k: [0.513, 0.637]
+    llama32-3b:
+      mmlu: [0.5309, 0.6309]
+      gsm8k: [0.635, 0.755]
 
   calibration:
     dataset: allenai/c4
