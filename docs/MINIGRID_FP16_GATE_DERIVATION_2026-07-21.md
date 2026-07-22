@@ -212,3 +212,50 @@ widened, and the MMLU gates derived under the original text are unaffected.
 Any GSM8K figure produced under `strict-match` or under multiturn placement is
 void for gate-derivation purposes and is retained only as the diagnostic record
 in `docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md`.
+
+### Amendment 3 (2026-07-23, Amogh Singh) — MMLU FP16 gates voided as derived
+
+**Signed by Amogh 2026-07-23 as amended by him.** Written after the Llama-3.2-3B
+MMLU FP16 baseline failed its gate; the failure was in view when this was
+decided, and that is stated rather than presented as a pre-specified step.
+
+The four FP16 gates were derived from lm-eval reference runs whose MMLU prompts
+differ from the registered `pilot_eval` path in two respects: the reference
+supplies a subject-specific system message where `pilot_eval` supplies none, and
+`pilot_eval` prefixes each item with `"Question: "` where the reference does not.
+The gates therefore gated a benchmark the pipeline does not run. **The MMLU gates
+for both models are void.** This was found after the Llama-3.2-3B MMLU baseline
+failed its gate at 0.527631 against a floor of 0.5309 — the failure was observed
+before the correction, and this amendment is made with that result in view.
+
+The GSM8K clause is struck: Qwen GSM8K matches the reference exactly, and Llama
+GSM8K differs only in an injected calendar date. GSM8K gates stand.
+
+The reference is rerun for MMLU only, on both models uniformly, against a custom
+task definition that reproduces the registered prompt byte-for-byte, with the
+Llama date pinned to 22 Jul 2026 — the date the sealed cells carry. Achieving
+this requires passing `date_string` explicitly in the reference invocation, as
+lm-eval supplies no date itself; this patch is part of the declared independence
+reduction. Gates are re-derived mechanically under the unchanged § 3 tolerance
+rule. The reference's independence is hereby reduced from
+prompt-construction-plus-scorer to scorer-and-model-loading only; this is a real
+loss and is recorded as one.
+
+No quantized result has been inspected. The escalation computation has not run.
+
+#### Record of the decision path (added by the executing session, not part of the signed text)
+
+- The pin was originally ruled 2026-07-23 and corrected to 22 Jul 2026 on the
+  finding that the sealed cells carry that date; pinning to the amendment date
+  would have reintroduced the defect class under repair. Relying on the cluster
+  clock happening to read 22 Jul was rejected: it holds until midnight.
+- The alternative of accepting the date line as a bounded deviation was
+  considered and rejected, on the ground that it would leave the Llama gate
+  permanently unreproducible and one line off the cells it gates.
+- Pinning `pilot_eval` instead was rejected on sight: a fingerprinted change to
+  the registered eval path, invalidating all 44 completed cells.
+- Evidence: Phase-1 metadata diff (no accuracy read); prompt-identity probe
+  `11369022`, 72 of 72 reconstructions hash-matching the sealed cells;
+  date-pin feasibility probe `11369055`, establishing that `date_string` and
+  `strftime_now` appear nowhere in `lm_eval` while the Llama template accepts
+  `date_string`.
