@@ -8,8 +8,10 @@ confirmatory item set**.
 hardware.** Generation speed for the suspect build is normal (branch (b) not
 triggered) *and* generation does not run to the token cap any more than its
 control does (branch (a)'s second condition not met). The evidence isolates the
-fault to one physical GPU. The cell has been resubmitted unchanged with a node
-exclusion (§ 8).
+fault to one physical GPU. The cell has been resubmitted unchanged and is
+running at normal speed on the suspect node's *other* A100, which confirms the
+diagnosis directly (§ 8). The authorized `--exclude` was silently discarded by a
+site plugin and is inert on this cluster (§ 8.1).
 
 **No accuracy was read, from this cell or any other.** The probe records
 timings, token counts, and stop reasons only; generated text, gold answers, and
@@ -184,13 +186,9 @@ Resubmitted as job **`11358057_9`**, array index 9 of the unmodified
 `configs/pace_minigrid_h3.yaml`, same 12 h wall — the 2.4 h projection of § 4
 needs no extension.
 
-**One operational deviation: `--exclude=atl1-1-02-018-27-0`.**
-
-Node selection is operational scheduling, not registered content, so this
-changes nothing the preregistration governs. It is recorded here because a cell
-that ran under a scheduling constraint its siblings did not should say so.
-
-Evidence base for the exclusion, all from § 5:
+**The intended operational deviation, `--exclude=atl1-1-02-018-27-0`, was
+authorized and passed — and did not take effect.** Its evidence base, all from
+§ 5, was:
 
 - The in-situ 7.8× shortfall (2.8 tok/s) vanishes on demand (22.09 tok/s, ratio
   1.00 against the sibling control).
@@ -198,11 +196,46 @@ Evidence base for the exclusion, all from § 5:
   at normal speed throughout (`_5`, `_18`, `_22`, `_28`, `_33`).
 - `nvidia-smi` into the live allocation returned its CSV header and no GPU rows.
 
-Node-level exclusion is the coarsest knob SLURM offers for a single sick device;
-`atl1-1-02-018-27-0` has 2 A100s, so without it a resubmission faces a 1-in-2
-chance of relanding on the same GPU. One node out of the pool is cheap
-insurance.
+Node selection is operational scheduling, not registered content, so it changes
+nothing the preregistration governs.
 
-If this cell completes at a wall time in family with its siblings (~2–2.5 h),
-that is the confirmation that the fault was the device and not the cell. Its
-completion is a job-health observation, not an accuracy one.
+### 8.1 `--exclude` is inert on this cluster
+
+`sbatch` accepted the flag, returned a job id, and discarded it. The submitted
+job records a *different* node than the one passed:
+
+```
+ExcNodeList=atl1-1-01-007-2-0        # not the node passed
+NodeList=atl1-1-02-018-27-0          # the node that was excluded
+```
+
+Cause: PACE runs a site `job_submit` Lua plugin (`JobSubmitPlugins = lua`) that
+**overwrites** `ExcNodeList` rather than merging into it. The three mini-grid
+cells still running, submitted with no `--exclude` whatsoever, carry the
+identical value `atl1-1-01-007-2-0` (`11350246_35`, `_37`, `_43`).
+
+**Treat `--exclude` as unavailable here.** It is a control that reports success
+while doing nothing, which is the failure class this project already guards
+against in its test-count gate. Any future placement constraint must be
+**verified after submission** (`scontrol show job <id>` for `NodeList`) rather
+than assumed from a clean `sbatch` exit. This paragraph exists so the next
+session does not re-derive it from a wasted run.
+
+### 8.2 What happened instead, and why it is the better evidence
+
+The cell relanded on `atl1-1-02-018-27-0` — the suspect node — and **ran at
+normal speed**: 29 items in 4 m 17 s, 6.68 s/it, projecting ~2 h against the
+siblings' 1:42–2:20 and § 4's 2.4 h estimate.
+
+The node has 2 A100s and this run drew the other one. That is a cleaner result
+than the exclusion would have produced: the same node, the same image, the same
+build, the same registered configuration, differing only in which physical
+device the job bound to — 66.4 s/item before, 8.9 s/item now. A run on a
+different node would have left node-level causes formally open. This one does
+not.
+
+**The fault was one physical GPU.** § 5's diagnosis is confirmed, and confirmed
+by accident rather than by the mitigation.
+
+Completion at an in-family wall time is a job-health observation, not an
+accuracy one.
