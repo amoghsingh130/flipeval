@@ -29,5 +29,9 @@ Cont-Labelerr-auditing/
 !results/certification_tables_rev2.csv
 !results/audit_verdicts_rev2.csv
 !results/identical_score_churn_rev2.csv
+!results/minigrid_escalation/
+!results/minigrid_escalation/*.json
+!results/harness_sensitivity/
+!results/harness_sensitivity/*.json
 !results/atlas_run_rev2_20260721.tar.gz
 !results/atlas_run_rev2_20260721.tar.gz.sha256
