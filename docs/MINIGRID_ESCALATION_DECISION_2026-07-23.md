@@ -151,7 +151,12 @@ Escalation rule applied mechanically by the executing session; the numbers above
 are read directly from `results/minigrid_escalation/`. Awaiting Amogh's
 signature to authorize construction of the 7B/8B cells.
 
-**Signed:** ____________________  (Amogh Singh)  **Date:** __________
+**Signed:** Amogh Singh — escalation affirmed  **Date:** 2026-07-23
+
+Signature recorded by the executing session from Amogh's ruling of 2026-07-23,
+which affirmed ESCALATE = TRUE and authorized construction of the 7B/8B cells
+under the full standing discipline, subject to an escalation-stage plan and
+budget confirmation before any submission.
 
 **Provenance.** Validator `11375247`; paired-seeds + § 3 computation `11376064`;
 driver `~/scratch/flipeval/work/escalation_amend.py`; artifacts
