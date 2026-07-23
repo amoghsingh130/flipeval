@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-22T05:40:09.139208+00:00",
-  "source_commit": "c598ac2eb66df3acd571391a5ef9a196e2ec7c7b",
-  "source_tree": "978779eda4e8672550e2386d5ed1a3239fc8a5ed",
+  "created_at": "2026-07-23T01:34:01.708835+00:00",
+  "source_commit": "bd565bd9f7b1cae7f6b31d25b0ea74861e055ddc",
+  "source_tree": "5f94681907a5b49012c2bc530ed8fcc1e86d8979",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -14,7 +14,7 @@
     "configs/kaggle_smoke_tiny.yaml": "a6465f20cc76798b84c595da6e5ef9e5a57558d8e713ce4f7eecdf249edba5dc",
     "configs/main_grid_manifest.yaml": "fca4979e47a2edf09f59c8317a99c783dd535b8d246e4afa79eb6b4ea830e6a6",
     "configs/pace_bridge_chat.yaml": "5b93f4ac85ad4a9da77cb479e17d49626017a7a4c97f503d4d69041647b9f9b7",
-    "configs/pace_minigrid_h3.yaml": "79ad3cc0cf7fb6a7f04d8e30a2e04185077bb47e5b55d14528cd16c964a87feb",
+    "configs/pace_minigrid_h3.yaml": "f5048b33ec1f95f4d70a370c333b550844fed4f042c46bdb9e963bede189d67e",
     "configs/pilot_qwen_1p5b.yaml": "1819c3a1c813ab12f70a430ed347ed1c0d45a762455c1c458d1aa1b1f7bf6022",
     "configs/smoke_tiny.yaml": "6d711ac1cd4715d0176c7a109875941297928269990fdafe849a2906a9b47003",
     "container/requirements.lock": "527848eebd6c10dc758200b7fb7cb5fe2fcd2a36a54ab36fcff6469478af60ec",
@@ -84,5 +84,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "63f7179976bc5edb3cc8212d96bfc98b805712491de28e68b762bc9e90862e83"
+  "manifest_payload_sha256": "2f93c5d955e01484459559d7961b1fdcc08f7c5b084a7068a55661843fb4daae"
 }
