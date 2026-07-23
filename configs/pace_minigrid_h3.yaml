@@ -176,24 +176,40 @@ minigrid_acceptance:
   # does not describe full MMLU test; GSM8K [0.55, 0.65] was a declared
   # expectation checked on 200 items, not 1,000.
   #
-  # Derived 2026-07-21 from reference arrays 11338637 (MMLU) and 11342098
-  # (GSM8K, rerun with inline exemplar placement). Term-by-term arithmetic and
-  # run identities: docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md.
+  # MMLU gates RE-DERIVED 2026-07-23 under Amendment 3 (see the derivation doc's
+  # Dated Amendments). The 2026-07-21 MMLU gates were void: their reference
+  # supplied a subject-specific system message where pilot_eval supplies none,
+  # and omitted pilot_eval's "Question: " stem prefix, so they gated a benchmark
+  # the pipeline does not run. Found after Llama MMLU FP16 (0.527631) failed the
+  # old floor of 0.5309; the failure was in view when the correction was made.
   #
-  #   cell               n        p         half     gate
-  #   qwen25 / mmlu   14042   0.582538     0.050    [0.532538, 0.632538]
-  #   qwen25 / gsm8k   1000   0.575000     0.062    [0.513000, 0.637000]
-  #   llama32 / mmlu  14042   0.580900     0.050    [0.530900, 0.630900]
-  #   llama32 / gsm8k  1000   0.695000     0.060    [0.635000, 0.755000]
+  # Re-derived from the corrected reference array 11373818, which runs the custom
+  # mmlu_pilot task (pilot_eval prompt byte-for-byte, proven by prompt-hash
+  # identity against the sealed cells, job 11373459: 24/24 both models) under a
+  # date-pinned entry point (Llama date -> 22 Jul 2026, the date the sealed cells
+  # carry). Same frozen section-3 tolerance rule, applied mechanically by
+  # derive_fp16_gates_amend3.py (arithmetic byte-identical to the committed
+  # script; only the mmlu_pilot results-key mapping differs). Both models
+  # re-derived uniformly, not just the one that failed.
+  #
+  # GSM8K gates UNCHANGED and NOT rerun: Qwen GSM8K matched the reference exactly
+  # and Llama GSM8K differed only by the injected date, which the pin resolves.
+  # They stand on reference array 11342098 as before.
+  #
+  #   cell               n        p         half     gate                    src
+  #   qwen25 / mmlu   14042   0.573921     0.050    [0.523921, 0.623921]   11373818
+  #   qwen25 / gsm8k   1000   0.575000     0.062    [0.513000, 0.637000]   11342098
+  #   llama32 / mmlu  14042   0.503418     0.050    [0.453418, 0.553418]   11373818
+  #   llama32 / gsm8k  1000   0.695000     0.060    [0.635000, 0.755000]   11342098
   #
   # Applied to FP16 baselines ONLY. No range here applies to any quantized
   # variant, and none may be constructed after quantized results are seen.
   baseline_accuracy_ranges:
     qwen25-1p5b:
-      mmlu: [0.532538, 0.632538]
+      mmlu: [0.523921, 0.623921]
       gsm8k: [0.513, 0.637]
     llama32-3b:
-      mmlu: [0.5309, 0.6309]
+      mmlu: [0.453418, 0.553418]
       gsm8k: [0.635, 0.755]
 
   calibration:
