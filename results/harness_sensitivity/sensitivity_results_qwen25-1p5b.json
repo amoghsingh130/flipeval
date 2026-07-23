@@ -1,0 +1,88 @@
+{
+  "model": "qwen25-1p5b",
+  "qbar_source": "results/harness_sensitivity/qbar_qwen25-1p5b.json",
+  "qbar": {
+    "mmlu": 0.199,
+    "gsm8k": 0.287
+  },
+  "per_task": {
+    "gsm8k": {
+      "qbar": 0.287,
+      "ref_acc": 0.575,
+      "conditions": {
+        "A_multiturn": {
+          "n": 200,
+          "acc_ref": 0.575,
+          "acc_cond": 0.515,
+          "net_acc_delta": -0.05999999999999994,
+          "C_cond": 0.24,
+          "correctness_changed": 48,
+          "answer_churn": 0.66,
+          "answer_changed": 132,
+          "dir_correct_to_incorrect": 30,
+          "dir_incorrect_to_correct": 18,
+          "R_cond": 0.8362369337979094
+        },
+        "B_strict_match": {
+          "n": 200,
+          "acc_ref": 0.575,
+          "acc_cond": 0.12,
+          "net_acc_delta": -0.45499999999999996,
+          "C_cond": 0.455,
+          "correctness_changed": 91,
+          "answer_churn": 0.83,
+          "answer_changed": 166,
+          "dir_correct_to_incorrect": 91,
+          "dir_incorrect_to_correct": 0,
+          "R_cond": 1.5853658536585367
+        },
+        "C_chat_off": {
+          "n": 200,
+          "acc_ref": 0.575,
+          "acc_cond": 0.475,
+          "net_acc_delta": -0.09999999999999998,
+          "C_cond": 0.32,
+          "correctness_changed": 64,
+          "answer_churn": 0.895,
+          "answer_changed": 179,
+          "dir_correct_to_incorrect": 42,
+          "dir_incorrect_to_correct": 22,
+          "R_cond": 1.1149825783972127
+        },
+        "D_stock_defaults": {
+          "n": 200,
+          "acc_ref": 0.575,
+          "acc_cond": 0.495,
+          "net_acc_delta": -0.07999999999999996,
+          "C_cond": 0.3,
+          "correctness_changed": 60,
+          "answer_churn": 0.835,
+          "answer_changed": 167,
+          "dir_correct_to_incorrect": 38,
+          "dir_incorrect_to_correct": 22,
+          "R_cond": 1.0452961672473868
+        }
+      }
+    },
+    "mmlu": {
+      "qbar": 0.199,
+      "ref_acc": 0.415,
+      "note": "C and D are byte-identical for MMLU (reg. sec 3.3); reported once as C == D.",
+      "conditions": {
+        "C_equiv_D": {
+          "n": 400,
+          "acc_ref": 0.415,
+          "acc_cond": 0.46,
+          "net_acc_delta": 0.04500000000000004,
+          "C_cond": 0.21,
+          "correctness_changed": 84,
+          "answer_churn": 0.3925,
+          "answer_changed": 157,
+          "dir_correct_to_incorrect": 33,
+          "dir_incorrect_to_correct": 51,
+          "R_cond": 1.0552763819095476
+        }
+      }
+    }
+  }
+}
