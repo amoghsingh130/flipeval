@@ -173,6 +173,20 @@ after the fact:
 - **8B AWQ host-RAM.** 3B AWQ peaked ~50 GB RSS; 8B may exceed the 64 GB request.
   The canary's build receipt reports peak RSS; if it approaches the ceiling, the
   build jobs move to 128 GB. Flagged, not guessed.
+- **7B AWQ device-memory — RESOLVED by canary (2026-07-23).** The Qwen-7B AWQ
+  seed-0 canary (`11391539_3`) OOM'd on a **40 GB A100** during the AWQ scale
+  search (`down_proj` MLP forward; tried 9.25 GiB, 2.90 GiB free). Qwen2.5-7B's
+  wider MLP (`intermediate_size` 18944 vs Llama-3.1-8B's 14336) pushes the AWQ
+  activation search past 40 GB. Ruling (Amogh, 2026-07-24): resubmit unchanged on
+  an **80 GB A100** — capacity is operational and changes no numerics, whereas
+  shrinking the AWQ batch/chunk to fit 40 GB could perturb reduction order and
+  become an unregistered algorithmic change on a confirmatory build. Resubmitted
+  as `11409297` with `--constraint=A100-80GB` (placement verified via `scontrol`,
+  `Features=A100-80GB`). **All five Qwen-7B AWQ fan-out builds inherit this** —
+  the Qwen-7B AWQ fan-out submission must carry `--constraint=A100-80GB` so
+  seeds 1–4 do not rediscover the OOM at 4× the cost. Llama-8B AWQ's success on
+  40 GB stands; its half is unchanged. This is **device** memory, distinct from
+  the host-RAM item above — the two stay separate in the record.
 - **GSM8K 8B generation wall.** The canary is a build canary, but a short
   generation-speed reading on the seed-0 FP16 8B (off the confirmatory item set,
   the incident-10 probe pattern) would replace the ~7 h/cell estimate with a
