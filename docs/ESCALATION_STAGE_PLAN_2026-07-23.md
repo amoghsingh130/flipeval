@@ -59,6 +59,30 @@ validator.
 
 ## 3. Wall-time and A100-hour estimate
 
+> **Dated note — 2026-07-23, GSM8K cost basis corrected from measurement.**
+> Condition 1's generation-speed probe (job `11378480`,
+> `docs/ESCALATION_GENSPEED_2026-07-23.md`) replaced the ~7 h/cell GSM8K guess
+> below with a measurement: **Qwen2.5-7B FP16 = 4.73 s/item, 46.2 tok/s → 1.31
+> A100-h per 1000-item cell.** The GSM8K eval half therefore projects to **~31
+> A100-h, not ~154** (11 Qwen cells ≈14 h; 11 Llama cells ≈17 h assuming ~15 %
+> slower at 8B). Revised stage total ≈ **110–150 A100-h with margin**, far under
+> the 360 bound, and every GSM8K cell clears the 8 h embers wall. Llama-8B was
+> not measured (access-blocked, `docs/ESCALATION_GENSPEED_2026-07-23.md`); its
+> figure is confirmed once access lands. The § 3 table below is left at its
+> original estimate for provenance; this note is the number the campaign runs
+> against.
+
+
+> **Dated note — 2026-07-23, queue reality (corrects §2/§5).** Two queue lines
+> above are wrong and the campaign does not follow them. (a) Calibration
+> **cannot** run on `embers`: its 48 h wall exceeds the `embers` 8 h MaxWall, so
+> it runs on `inferno` (CPU-only; ~$16 total, in the dollar guard). (b) The 44
+> eval cells run on **inferno**, not `embers` — the mini-grid did the same,
+> because `embers` preemption of a bs=1 pass wastes the whole pass. At the
+> measured ~1.3 h/GSM8K-cell the dollar cost is small and the dollar guard
+> already accounts for inferno eval. "No A100 draw" for calibration stays
+> correct.
+
 Estimates scale the **measured** mini-grid costs to the larger models. Basis:
 completed mini-grid eval = 44 cells, 66.8 A100-h total (median 1.04 h, max
 4.11 h); 3B builds GPTQ 6.6 min / AWQ 12.6 min mean; calibration 14–25 h CPU
