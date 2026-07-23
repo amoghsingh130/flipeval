@@ -42,7 +42,7 @@ would have been caught later anyway", the entry says that.
 | 13 | 2026-07-22 | Missing `/scratch` bind read as a code regression | Rerun with the bind restored |
 | 14 | 2026-07-21 | In-image test-count expectation stale at 145 vs 161 | Gate run that should have failed and could not |
 | 15 | 2026-07-22 | Harness-sensitivity preflight FAIL; config-churn array dead on dependency | The preflight, fail-closed by design — **RESOLVED, probe defect** |
-| 16 | 2026-07-22 | Llama-3.2-3B FP16 MMLU baseline below its registered gate | The registered mini-grid validator — **OPEN** |
+| 16 | 2026-07-22 | Llama-3.2-3B FP16 MMLU baseline below its registered gate | The registered mini-grid validator — **RESOLVED 2026-07-23** |
 | 17 | 2026-07-23 | Sensitivity condition REF would have run as a duplicate of A | Rebuild inspection after the preflight reconciliation |
 
 ---
@@ -763,12 +763,22 @@ reference that derived their gates carries `21 Jul 2026`. **The Llama prompts
 are not reproducible by rerunning the same command on a different day**, in
 either implementation, for either task.
 
-**Resolution.** Open. Amendment 3 is drafted and awaiting signature; the stop is
-upheld, quantized JSONLs stay sealed, no gate has been widened or re-derived,
-and the escalation computation has not run. Two points route back to the human
-under his own precondition: the date pin cannot be set to the rerun date without
-reintroducing a byte diff against the cells it gates, and byte-identity for
-Llama may not be reachable from the CLI at all.
+**Resolution — CLOSED 2026-07-23.** Amendment 3 was signed
+(`docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md`, commit `e3d1341`). The MMLU
+gates were void as derived, not the pipeline: the reference supplied a
+subject-specific system message where `pilot_eval` supplies none and omitted the
+`"Question: "` stem prefix. A custom `mmlu_pilot` task reproduced the registered
+prompt byte-for-byte — proven before any rerun by prompt-hash identity against
+the sealed cells (`11373459`, 24/24 both models) — and the reference was rerun
+under a date-pinned entry point (`22 Jul 2026`, the date the sealed cells carry;
+`date_string` had to be passed explicitly because lm-eval supplies no date, a
+declared independence reduction). Gates re-derived mechanically under the
+unchanged § 3 tolerance rule for both models uniformly (`11373818`, `11375093`),
+committed with the in-image gate at 170 passed (`bd565bd`, gate job `11375139`).
+The validator then passed 409/409 (`11375247`): Llama MMLU FP16 0.527631 now
+sits inside the corrected gate [0.453418, 0.553418]. The 7.8 pp Llama MMLU drop
+under the corrected prompt (0.580900 → 0.503418) is the size of the reference's
+error, and confirms the diagnosis directly.
 
 **IDs.** Validator `11368769` (FAILED, 1:0, 409 checks); prompt-identity probe
 `11369022` (72/72 hash-match); gates committed `dbe5ad9`; derivation
