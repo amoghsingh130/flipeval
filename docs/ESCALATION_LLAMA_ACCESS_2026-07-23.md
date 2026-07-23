@@ -1,7 +1,11 @@
 # Escalation Stage — Llama-3.1-8B Access Status (2026-07-23)
 
-Tracks the one external blocker on the Llama-8B half of the escalation. The
-Qwen-7B half is unblocked and proceeding.
+**RESOLVED 2026-07-23.** Access granted after Amogh edited the fine-grained
+token's scope; re-probe `11381642` downloaded 3.1-8B at the pinned revision.
+The Llama-8B half is proceeding (seed-0 calibration `11381676`). This note is
+retained as the diagnostic record.
+
+Tracks the (now-cleared) external blocker on the Llama-8B half.
 
 ## Timeline
 
