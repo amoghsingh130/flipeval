@@ -170,9 +170,26 @@ after the fact:
 
 ## 7. Open feasibility items the canary resolves (not blockers to the plan)
 
-- **8B AWQ host-RAM.** 3B AWQ peaked ~50 GB RSS; 8B may exceed the 64 GB request.
-  The canary's build receipt reports peak RSS; if it approaches the ceiling, the
-  build jobs move to 128 GB. Flagged, not guessed.
+- **8B/7B AWQ host-RAM — RESOLVED by measurement (2026-07-24).** 3B AWQ peaked
+  ~50 GB RSS; the two 8B-class receipts now bracket the 64 GB default and settle
+  the item:
+    - **Llama-8B AWQ** (`11391540_3`) **COMPLETED at 64 GB**, peak RSS
+      67,045,052 KB ≈ **63.9 GB** — under the 64 GB cap (67,108,864 KB) by a
+      hair. Its half of the fan-out is unchanged at `--mem=64G`.
+    - **Qwen-7B AWQ** (`11409297_3`) was **host-OOM-killed at 82 % of layers**
+      (23/28), peak RSS 67,046,660 KB ≈ **63.9 GB** — the same number, but here
+      it is the ceiling, not the demand: the tail layers and final packing were
+      still ahead and RSS was still climbing when the cgroup killed it.
+  Finding: 8B-class AWQ fits 64 GB at **Llama** widths but exceeds it at
+  **Qwen-7B** widths (`intermediate_size` 18944). Ruling (Amogh, 2026-07-24):
+  move the Qwen-7B AWQ cells to **`--mem=128G`** — plan §7 anticipated exactly
+  this ("move builds to 128 GB if so"); 96 GB would gamble that the unmeasured
+  tail needs under ~32 GB more, and a third failed attempt costs ~20 A100-min and
+  a queue round-trip. `--mem=128G` propagates to all five Qwen-7B AWQ seeds at
+  submit time alongside `--constraint=A100-80GB` (both are submit-time overrides;
+  the `64G` sbatch default stands for every other cell). A successful 128 GB run
+  will record the true Qwen-7B AWQ host peak for the record. This is **host**
+  memory, distinct from the device item below — the two stay separate.
 - **7B AWQ device-memory — RESOLVED by canary (2026-07-23).** The Qwen-7B AWQ
   seed-0 canary (`11391539_3`) OOM'd on a **40 GB A100** during the AWQ scale
   search (`down_proj` MLP forward; tried 9.25 GiB, 2.90 GiB free). Qwen2.5-7B's
