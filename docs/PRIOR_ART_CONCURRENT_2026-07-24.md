@@ -42,6 +42,25 @@ Purpose: differentiate it from FlipEval, on the specific question of whether it
 anticipates **H3** (seed-level *ranking instability* between GPTQ and AWQ under a
 preregistered rule with paired statistics). Read-only on the repo.
 
+### 📋 Verbatim-quote verification checklist (for Amogh — one browser pass)
+
+The cluster cannot reach OpenReview (`pfw3saHzGU`) — Cloudflare-walled — so every
+quote in this section is `[search-derived]` / `[to-verify]`. Open the forum page
+and confirm each item below verbatim; the "supports" column says what the quote is
+load-bearing for, so a wording change there changes the positioning, not just a
+citation. **Rule: no `[to-verify]` quote may survive into a submitted related-work
+section — each must be confirmed verbatim or removed before the preprint.**
+
+| # | claim to confirm (loc) | what it supports |
+|---|---|---|
+| V1 | Authors, affiliations, venue, decision status, and record date (~2026-06-21/22) — §1.1 | citation completeness + the scoop-priority timeline (their measurement predates our registration) |
+| V2 | Seed protocol: *"…seeds that control both sample selection and token order … stability is assessed across three calibration data sampling seeds"* — §1.2 | that they vary the same knob (calibration composition) we do, at 3 seeds vs our 5 — the premise-overlap claim |
+| V3 | Aggregate-variance readings: *"…low variance … ±0.3 on LLaMA and ±0.5 on Qwen…"*, perplexity *"<1%"* — §1.3 | that they read seed variance as stable/noise, not as a ranking test |
+| V4 | ACDM gains: *"+0.95 and +0.49 percentage points over random sampling on Qwen2.5-7B-Instruct and Llama-3.1-8B-Instruct"* — §1.3 | that their head-to-head is data-curation methods, not quantization-method ranking |
+| V5 | GPTQ/AWQ sensitivity: *"domain-matched calibration data helps mainly for GPTQ … little consistent benefit for AWQ…"* — §1.3 | the honesty-flag load-bearing point: a sensitivity-profile contrast, not a seed-indexed GPTQ-vs-AWQ ranking |
+| V6 | GSM8K noise sentence: *"GSM8K shows the largest per-task variance (±0.8 on LLaMA, ±1.7 on Qwen), consistent with the inherent evaluation noise of exact-match scoring…"* — §1.4 | the convergent harness-sensitivity framing — this is the exact quote we would put in the paper |
+| V7 | Absence: that no results table anywhere ranks GPTQ vs AWQ head-to-head across seeds — §1.5 / honesty flag | the H3-independence claim (they do not run H3's test) |
+
 ### ⚠️ Source-access caveat — READ FIRST
 
 **I could not open the paper's full text or its OpenReview metadata with the
@@ -377,38 +396,41 @@ one `equivalen` hit is the prose word "Equivalently").
 
 ## Drafted related-work paragraph (for `paper-writer` to integrate after Amogh's read)
 
-> Several concurrent papers corroborate the premise that aggregate accuracy hides
-> quantization-induced behavioral change, without providing certification
-> machinery, a seed experiment, an audit, or a preregistered protocol.
-> \citet{TODO-calibdata2026} resample the calibration set across three seeds for
-> GPTQ, AWQ, and SmoothQuant+GPTQ on six Qwen2.5 and Llama-3.1 models and report
-> that aggregate accuracy is stable in the seed dimension while reading GSM8K's
-> largest per-task spread as ``inherent evaluation noise of exact-match scoring''
-> --- evidence for our premise that calibration choice moves the numbers a
-> comparison rests on, but not a paired test of whether that variance reorders
-> method rankings. \citet{TODO-illusion2026} independently introduce
-> \emph{correctness agreement}, a per-item joint-correctness statistic on the same
-> paired-input join our churn metric uses, and report that quantized models
-> diverge behaviorally from their base model even when aggregate accuracy is
-> preserved; their metric is recoverable into our churn statistic given the two
-> reported accuracies, but their paper reports no hypothesis test, equivalence
-> margin, or required-sample-size computation over the divergence it documents.
-> \citet{TODO-beyondmean2026} adapt the clinical Reliable Change Index to per-item
-> LLM version comparisons and likewise recommend reporting a churn rate alongside
-> aggregate accuracy, though their object of study is full-precision
-> model-version transitions rather than compression, and their reliable-change
-> classifier is a repeated-measures threshold rather than a paired equivalence
-> test at a chosen margin. \citet{TODO-displacement2026} extend the flips metric
-> of \citet{dutta2024} into a leapfrog/drop decomposition over dozens of
-> community-published quantized checkpoints and show that fidelity proxies such as
-> KL divergence lose their ranking signal precisely in the near-baseline regime
-> our certification tables are built to adjudicate --- further motivating direct
-> per-item measurement over proxy metrics, but again without an equivalence test,
-> a required-\emph{n} table, or a calibration-seed experiment. Taken together,
-> this concurrent work corroborates FlipEval's central premise from four
-> independent directions; none of it supplies the fail-closed statistical
-> certification, the seed-instability experiment, the published-claims audit, or
-> the preregistration that distinguish our contribution.
+> Concurrent work independently corroborates the premise on which FlipEval
+> rests --- that aggregate accuracy conceals per-item behavioral change under
+> quantization. Most directly, \citet{TODO-illusion2026}, posted two days before
+> our preregistration froze and unknown to us until this prior-art sweep, define
+> \emph{correctness agreement} $\mathrm{CA} = \frac{1}{n}\sum_i \mathbb{1}[z_i^{\mathrm{base}}{=}1 \wedge z_i^{\mathrm{quant}}{=}1]$,
+> the per-item both-correct rate on the identical paired-input join our
+> accuracy-state churn is built from. The two metrics are algebraically
+> equivalent given the marginal accuracies: since
+> $\mathrm{Acc_{base}} = a{+}b$ and $\mathrm{Acc_{quant}} = a{+}c$, their
+> $\mathrm{CA} = a$ and our churn $=(b{+}c) = \mathrm{Acc_{base}} +
+> \mathrm{Acc_{quant}} - 2\,\mathrm{CA}$. They study a quantization family
+> disjoint from ours --- \texttt{llama.cpp} GGUF ($Q_0$ legacy and $Q_K$
+> $k$-quant) rather than GPTQ and AWQ --- and reach a conclusion consistent with
+> ours: two independently developed studies, on non-overlapping quantization
+> methods, measuring the same per-item phenomenon through algebraically equivalent
+> statistics, both find that preserved aggregate accuracy hides substantial
+> per-item disagreement. We read this as external corroboration of our premise,
+> not competition on it. \citet{TODO-calibdata2026} reach the premise from a
+> third direction, resampling the calibration set across three seeds for GPTQ,
+> AWQ, and SmoothQuant+GPTQ on six Qwen2.5 and Llama-3.1 models and reading
+> GSM8K's largest per-task spread as ``inherent evaluation noise of exact-match
+> scoring''; \citet{TODO-beyondmean2026} adapt the clinical Reliable Change Index
+> to per-item model-\emph{version} comparisons and likewise recommend reporting a
+> churn rate alongside the mean; and \citet{TODO-displacement2026} extend the
+> flips metric of \citet{dutta2024} into a leapfrog/drop decomposition over dozens
+> of community-published quantized checkpoints, showing that fidelity proxies such
+> as KL divergence lose their ranking signal in precisely the near-baseline regime
+> our certification tables adjudicate --- motivating direct per-item measurement
+> over proxy metrics. What none of this concurrent work provides, and what
+> distinguishes our contribution, is the machinery that turns the shared premise
+> into a decision: fail-closed statistical certification with equivalence testing
+> and required-$n$ at a user-chosen margin, a preregistered test of whether the
+> calibration seed \emph{reorders} the GPTQ-vs-AWQ ranking, a controlled study of
+> harness and scoring sensitivity, and an audit of published near-lossless claims
+> against a reproducible per-item protocol.
 
 Citation keys are placeholders for `paper/refs.bib`: `TODO-illusion2026`
 (2607.08734), `TODO-beyondmean2026` (2604.27405), `TODO-displacement2026`
@@ -417,12 +439,17 @@ Citation keys are placeholders for `paper/refs.bib`: `TODO-illusion2026`
 ## Drafted blog sentence (acknowledging 2607.08734)
 
 > We're glad to see Rababah, Akcora, and Leung's concurrent "The Illusion of
-> Equivalency" (arXiv:2607.08734) reach a strikingly consistent conclusion — that
-> quantized models diverge from their base model on a per-item basis even when
-> aggregate accuracy looks preserved — via an independent route (attention-weight
-> distortion analysis and a joint-correctness metric on llama.cpp GGUF quants),
-> and we point to it as external corroboration of the premise this project puts to
-> a preregistered statistical test.
+> Equivalency" (arXiv:2607.08734) reach a conclusion consistent with ours — that
+> quantized models diverge from their base model item by item even when aggregate
+> accuracy looks preserved. They get there on a quantization family we don't touch
+> (llama.cpp GGUF, rather than GPTQ/AWQ) and with a metric, "correctness
+> agreement," that turns out to be algebraically the same measurement as our
+> per-item churn (churn = base accuracy + quantized accuracy − 2 × correctness
+> agreement). Two independently developed studies, disjoint methods, the same
+> phenomenon by equivalent math, the same answer: we read that as external
+> corroboration of the premise this project then puts to a preregistered
+> statistical test — with equivalence testing, a calibration-seed experiment, and
+> an audit of published claims that their study, by design, doesn't set out to do.
 
 ---
 
