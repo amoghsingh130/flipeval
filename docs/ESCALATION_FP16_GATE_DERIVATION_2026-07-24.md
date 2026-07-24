@@ -141,16 +141,25 @@ sealed eval cell, because Qwen is date-free:
 > render the same MMLU items through the registered `pilot_eval` path
 > (`render_prompt(tok, item.prompt, "chat")`) on the same pinned tokenizer.
 > Hash both and require byte-identical prompt hashes on every checked item
-> (≥ 2 subjects, ≥ 10 items each). GSM8K identity is checked the same way against
-> the stock task.
+> (≥ 2 subjects, ≥ 10 items each).
 
-This is the escalation analogue of the mini-grid's custom-task identity check
-(job 11373459), differing only in that it compares the custom task against the
-**`pilot_eval` reconstruction** rather than against sealed cells — because for a
+The byte-identity precondition covers **MMLU only** — the cell where the reference
+uses a custom task built to reproduce the registered prompt exactly. **GSM8K is
+deliberately not byte-identical:** its reference is the *stock* lm-eval task, an
+independent implementation whose exemplar set and answer-extraction differ from
+`pilot_eval.GSM8K_FEWSHOT`, and that divergence is exactly what the § 3 `+0.03`
+term budgets for. Requiring byte-identity there would defeat the purpose of an
+independent reference. (The mini-grid treated GSM8K the same way: its identity
+work only confirmed the `pilot_eval` reconstruction was faithful and, for the
+date-injecting model, that the sole *template* divergence was the calendar date.)
+
+This MMLU check is the escalation analogue of the mini-grid's custom-task identity
+check (job 11373459), differing only in that it compares the custom task against
+the **`pilot_eval` reconstruction** rather than against sealed cells — because for a
 date-free model the reconstruction *is* what the cells will contain, exactly, and
-no cell need exist to know it. On zero diffs the Qwen-7B reference runs (MMLU via
-`mmlu_pilot`, GSM8K stock); its two ranges are derived mechanically under § 3 and
-**held uncommitted** (see § 5).
+no cell need exist to know it. On zero MMLU diffs the Qwen-7B reference runs (MMLU
+via `mmlu_pilot`, GSM8K stock); its two ranges are derived mechanically under § 3
+and **held uncommitted** (see § 5).
 
 ### 4b. Llama-8B track — deferred by design (date-bound)
 
