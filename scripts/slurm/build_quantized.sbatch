@@ -22,13 +22,19 @@ mkdir -p logs outputs/quantized
 #     BUILD_MODEL_ID=meta-llama/Llama-3.2-3B-Instruct,BUILD_TAG=llama32-3b,...
 # Values must match the pinned tag in configs/main_grid_manifest.yaml.
 #
-# GPU sizing: AWQ builds of Qwen2.5-7B REQUIRE an 80 GB A100 -- add
-# `--constraint=A100-80GB` at submit time for every Qwen-7B AWQ cell (all 5
-# seeds). Its wider MLP (intermediate_size 18944) OOMs the AWQ scale search on a
-# 40 GB card (canary 11391539_3, 2026-07-23; see ESCALATION_STAGE_PLAN_2026-07-23.md
-# ss7). This is a capacity accommodation only -- do NOT shrink the AWQ batch to
-# fit 40 GB, which would change build numerics. GPTQ-7B and all Llama-8B cells
-# build fine on the default 40 GB A100.
+# GPU/host sizing: AWQ builds of Qwen2.5-7B REQUIRE an 80 GB A100 AND 128 GB host
+# RAM -- add BOTH `--constraint=A100-80GB` and `--mem=128G` at submit time for
+# every Qwen-7B AWQ cell (all 5 seeds); the `--mem=64G` default below stands for
+# every other cell. Two separate ceilings, each measured by the seed-0 canary:
+#   * Device: its wider MLP (intermediate_size 18944) OOMs the AWQ scale search
+#     on a 40 GB card (canary 11391539_3, 2026-07-23).
+#   * Host: at Qwen-7B widths the AWQ working set exceeds 64 GB too -- canary
+#     11409297_3 (2026-07-24) was host-OOM-killed at 23/28 layers, peak RSS
+#     63.9 GB pressed against the 64 GB cap, true demand still climbing.
+# See ESCALATION_STAGE_PLAN_2026-07-23.md ss7. Both are capacity accommodations
+# only -- do NOT shrink the AWQ batch to fit, which would change build numerics.
+# GPTQ-7B and all Llama-8B cells build fine at the 40 GB / 64 GB defaults
+# (Llama-8B AWQ completed at 64 GB, peak RSS 63.9 GB -- fit by a hair).
 BUILD_MODEL_ID="${BUILD_MODEL_ID:-Qwen/Qwen2.5-1.5B-Instruct}"
 BUILD_MODEL_REVISION="${BUILD_MODEL_REVISION:-989aa7980e4cf806f80c7fef2b1adb7bc71aa306}"
 BUILD_TAG="${BUILD_TAG:-qwen25-1p5b}"

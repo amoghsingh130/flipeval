@@ -44,6 +44,7 @@ would have been caught later anyway", the entry says that.
 | 15 | 2026-07-22 | Harness-sensitivity preflight FAIL; config-churn array dead on dependency | The preflight, fail-closed by design — **RESOLVED, probe defect** |
 | 16 | 2026-07-22 | Llama-3.2-3B FP16 MMLU baseline below its registered gate | The registered mini-grid validator — **RESOLVED 2026-07-23** |
 | 17 | 2026-07-23 | Sensitivity condition REF would have run as a duplicate of A | Rebuild inspection after the preflight reconciliation |
+| 18 | 2026-07-23 | Qwen-7B AWQ build hit two distinct memory ceilings (40 GB device, then 64 GB host) | The escalation build canary, twice |
 
 ---
 
@@ -831,6 +832,55 @@ auto-inserts `run`.
 sensitivity table whose headline row measured nothing. The study's own
 motivating finding is that this harness turns defaults on silently; it would have
 been published having been caught by it.
+
+---
+
+## 18. Qwen-7B AWQ build hit two distinct memory ceilings, one per attempt (2026-07-23)
+
+**What surfaced.** The Qwen-7B AWQ seed-0 build — the escalation stage's build
+canary, deliberately run before the five-seed fan-out — failed twice, each time
+on a *different* resource:
+
+- **Attempt 1** (`11391539_3`, 2026-07-23): OOM on a **40 GB A100** during the
+  AWQ scale search, ~70 s in. **Device** memory.
+- **Attempt 2** (`11409297_3`, resubmitted on an **80 GB** A100 with
+  `--constraint=A100-80GB`): the device side was now fine — it ran 20× longer
+  and reached **23 of 28 layers (82 %)** — but was **host-OOM-killed** at
+  `oom_kill` StepId `11409297.0`, `step_state OUT_OF_MEMORY`, peak RSS
+  67,046,660 KB ≈ **63.9 GB** against the `--mem=64G` cgroup cap. **Host** RAM.
+
+**What caught it.** The build canary, functioning exactly as placed — a single
+seed-0 build run ahead of the fan-out precisely so a fresh model's memory
+envelope is discovered at 1× cost, not rediscovered by seeds 1–4 at 5×. It fired
+twice and converted **two** separate ceilings into recorded facts.
+
+**Root cause.** Qwen2.5-7B is wider than Llama-3.1-8B where AWQ is expensive:
+`intermediate_size` 18944 vs 14336. That width pushes the AWQ activation search
+past a 40 GB card (device) *and* pushes the host working set past 64 GB (host) —
+two independent limits that happen to bite the same model. The 63.9 GB "peak" is
+not a demand measurement: the build died at 82 % of layers with the tail and
+final packing still ahead, so true host demand is unknown and was still rising.
+The near-identical Llama-8B AWQ figure (67,045,052 KB, **COMPLETED** at 64 GB)
+confirms the reading — that model fit under the same cap by a hair, so 63.9 GB is
+the ceiling both builds pressed against, not the ceiling either one needed.
+
+**Resolution.** Ruling (Amogh, 2026-07-24): Qwen-7B AWQ cells move to
+**`--mem=128G`** (not 96 GB — 96 would gamble that the unmeasured tail needs
+under ~32 GB more, and a third failed attempt costs ~20 A100-min plus a queue
+round-trip). Scoped to the Qwen-7B AWQ cells only, as a submit-time override
+alongside `--constraint=A100-80GB`; the `64G` sbatch default is unchanged for
+every other cell, and Llama-8B AWQ's 64 GB half is untouched. Both envelopes are
+now on record in `ESCALATION_STAGE_PLAN_2026-07-23.md` §7 and the
+`build_quantized.sbatch` header. Failure receipt for attempt 2 committed as the
+record. Placement of the 128 GB resubmit verified via `scontrol`
+(constraint + memory grant) before it is trusted.
+
+**Without the gate.** Both ceilings would have been discovered inside the
+five-seed fan-out instead of ahead of it — the device OOM at ~5× the wasted GPU
+time, and the host OOM at 82 % of a ~30-minute build × up to five seeds, each
+producing an empty output dir and a confusing OUT_OF_MEMORY with the GPU
+apparently idle. The canary is a build canary by design; here it earned its cost
+twice over.
 
 ---
 
