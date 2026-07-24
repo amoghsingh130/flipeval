@@ -458,8 +458,8 @@ Citation keys are placeholders for `paper/refs.bib`: `TODO-illusion2026`
 ### Independence note re: arXiv:2607.08734 (2026-07-24, Amogh Singh)
 
 Ruled and dictated by Amogh 2026-07-24; drafted into this file by the executing
-session, awaiting his read and his fill of the external-evidence date below. This
-is a factual record, stated flatly and without an independence *argument*.
+session. This is a factual record, stated flatly and without an independence
+*argument*.
 
 - **(a) First awareness.** The first awareness of arXiv:2607.08734 ("The Illusion
   of Equivalency," Rababah, Akcora, Leung) was **2026-07-24**, through this
@@ -484,9 +484,5 @@ is a factual record, stated flatly and without an independence *argument*.
   paired per-item correctness join their "correctness agreement" and our churn
   both measure; see Section 2). We cite it as **concurrent, corroborating work**.
 
-**[EXTERNAL EVIDENCE — Kaggle pilot notebook version history, earliest run date:
-TBD by Amogh]** — This item is **outside this repository's git history** and is
-offered as context only, not as a committed-artifact precedence claim. (If the
-earliest Kaggle notebook version is on or after 2026-07-09, this placeholder is to
-be deleted rather than filled, since a date on or after the posting supports
-nothing.)
+**Reviewed and affirmed — Amogh Singh, 2026-07-24.** The facts as written are
+accurate to my knowledge.
