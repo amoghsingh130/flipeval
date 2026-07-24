@@ -455,4 +455,38 @@ Citation keys are placeholders for `paper/refs.bib`: `TODO-illusion2026`
 
 ## Dated Amendments
 
-None.
+### Independence note re: arXiv:2607.08734 (2026-07-24, Amogh Singh)
+
+Ruled and dictated by Amogh 2026-07-24; drafted into this file by the executing
+session, awaiting his read and his fill of the external-evidence date below. This
+is a factual record, stated flatly and without an independence *argument*.
+
+- **(a) First awareness.** The first awareness of arXiv:2607.08734 ("The Illusion
+  of Equivalency," Rababah, Akcora, Leung) was **2026-07-24**, through this
+  prior-art sweep.
+
+- **(b) Independent development.** The FlipEval registrations were developed and
+  frozen without knowledge of that paper. `PREREGISTRATION.md` carries a
+  doc-internal freeze date of **2026-07-11** and was first committed as `a8092df`
+  on **2026-07-13**; the mini-grid, atlas-mining, and audit registrations, the
+  frozen atlas pair manifest, and the audit claim table were committed on
+  **2026-07-15** (`b74fd58`, `f06348f`, `715a7ce`).
+
+- **(c) No precedence claim from the repository, stated without hedging.** **No
+  committed artifact in this repository predates 2026-07-09**, the paper's arXiv
+  posting date. The earliest commit of any kind is `a8092df` (2026-07-13); the
+  earliest internal date-reference to project work anywhere in committed files is
+  2026-07-10. Independence therefore rests on **independent development and
+  non-knowledge, not on precedence**. We do not claim our work predates the paper.
+
+- **(d) No priority claim on the shared premise.** We make **no priority claim**
+  over arXiv:2607.08734 on the shared per-item accuracy-state-churn premise (the
+  paired per-item correctness join their "correctness agreement" and our churn
+  both measure; see Section 2). We cite it as **concurrent, corroborating work**.
+
+**[EXTERNAL EVIDENCE — Kaggle pilot notebook version history, earliest run date:
+TBD by Amogh]** — This item is **outside this repository's git history** and is
+offered as context only, not as a committed-artifact precedence claim. (If the
+earliest Kaggle notebook version is on or after 2026-07-09, this placeholder is to
+be deleted rather than filled, since a date on or after the posting supports
+nothing.)
