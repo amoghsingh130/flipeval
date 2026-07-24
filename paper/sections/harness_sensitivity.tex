@@ -1,0 +1,260 @@
+% =====================================================================
+% Section: Harness-defaults sensitivity study  -- COMPLETE DRAFT
+%
+% PRIMARY SOURCES for every number in this section:
+%   docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md  (FROZEN protocol)
+%   docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md       (results narrative)
+%   docs/HARNESS_SENSITIVITY_QBAR_2026-07-23.md          (the denominator Qbar)
+%   results/harness_sensitivity/sensitivity_results_qwen25-1p5b.json (machine-readable)
+%
+% DISCIPLINE FOR THIS FILE:
+%  - Exploratory study; it states NO H3 outcome and licenses no confirmatory read.
+%  - The only confirmatory-derived quantity quoted is the committed denominator
+%    Qbar (mean over the ten Qwen quantized variants). No per-variant / per-cell
+%    confirmatory accuracy or churn is quoted -- see the Qbar artifact only.
+%  - R is never printed without C_cond and Qbar beside it (registration §5.1).
+% =====================================================================
+
+\section{How much does the harness move the score? A configuration-sensitivity study}
+\label{sec:sensitivity}
+
+The certification apparatus of \S\ref{sec:certification} treats the compressed
+model as the source of per-item churn and the evaluation as a fixed instrument.
+This section asks the complementary question, and finds the instrument is not
+fixed: \emph{how much does evaluation-harness configuration move accuracy and
+per-item answers on a single, unchanged model, relative to how much quantization
+moves them under a fixed configuration?}
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §1 (question statement).
+It is a small, preregistered, \emph{exploratory} study---one model, the bridge
+item subsets, results inspectable on completion---registered and frozen before
+any of its own results existed.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md header + §7
+% (exploratory status; results-blind at freeze).
+
+\subsection{Two live defects, not a hypothetical}
+\label{sec:sensitivity:motivation}
+
+The motivation is on the record: this campaign produced two configuration
+effects inside eight days, both on the pinned \texttt{lm\_eval}~0.4.12.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §1.
+
+First, \texttt{fewshot\_as\_multiturn} was auto-enabled under a chat template
+with no flag set: the harness turns it on whenever \texttt{apply\_chat\_template}
+is set (\texttt{lm\_eval/config/evaluate\_config.py:306--308}), moving every
+few-shot exemplar out of the user message into its own conversation turn.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §1 item 1;
+% docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md Amendment 1.
+Second, and starker, the stock \texttt{gsm8k} task ships two extraction filters,
+\texttt{strict-match} and \texttt{flexible-extract}, and scores the \emph{same}
+generations under both. On Qwen2.5-1.5B, \texttt{strict-match} voided
+\textbf{617 of 1{,}000} responses, \textbf{336} of which \texttt{pilot\_eval}'s
+extractor scores correct, because the model writes \texttt{\#\#\#\# \$18} and the
+strict regex rejects the \texttt{\$}. Reported accuracy moved
+\textbf{$0.232 \to 0.566$} with not one token of the model's output changed.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §1 item 2;
+% docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md §4.2 (617/1000, 336 correct,
+% #### $18, 0.232 -> 0.566).
+If a scoring switch on unchanged generations can move aggregate accuracy by a
+third of the scale, the size of that effect \emph{relative to} quantization is an
+empirical quantity worth measuring rather than asserting.
+
+\subsection{Design and the pre-named ratio}
+\label{sec:sensitivity:design}
+
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §§3-4.
+The study varies one native \texttt{lm\_eval} knob at a time from a fixed
+reference---chat template on, three inline GSM8K exemplars (zero-shot for MMLU),
+\texttt{flexible-extract} scoring---which is the configuration the mini-grid's
+own reference runs use. All runs are FP16-only, on the bridge item subsets
+exclusively: the four bridge MMLU subjects at 100 items each ($n=400$) and GSM8K
+test indices 0--199 ($n=200$). No quantized checkpoint is loaded under this
+protocol, and the full mini-grid item definitions are never evaluated, so no
+confirmatory surface is touched.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §2 (FP16 only),
+% §4 (bridge subsets n=400/200; exclusion of the mini-grid item definitions).
+
+The headline statistic is fixed before any run:
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §5.1.
+\begin{equation}
+R_{\mathrm{cond}} \;=\; \frac{C_{\mathrm{cond}}}{\bar{Q}},
+\label{eq:sensitivity-R}
+\end{equation}
+where the numerator $C_{\mathrm{cond}}$ is the correctness-state churn between
+the reference and a condition---the fraction of items whose correct/incorrect
+state changes, the same churn definition the atlas uses
+(\S\ref{sec:atlas})---on the FP16 model over the item set above, and the
+denominator $\bar{Q}$ is the mean, over the ten Qwen2.5-1.5B quantized variants
+$\{\mathrm{gptq}_{s0\ldots s4},\ \mathrm{awq}_{s0\ldots s4}\}$, of
+correctness-state churn against that model's FP16 cell on the \emph{same} item
+subset, per task. Both terms are reported beside every $R$; the registration
+forbids printing the ratio without its inputs, and if $\bar{Q}=0$ the ratio is
+undefined rather than infinite.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §5.1 (numerator,
+% denominator, "C_cond and Qbar always reported beside it", undefined-if-zero rule).
+
+The two denominators are
+$\bar{Q}(\text{MMLU})=\mathbf{0.199}$ and
+$\bar{Q}(\text{GSM8K})=\mathbf{0.287}$; neither is zero, so no undefined case
+arises.
+% SOURCE: docs/HARNESS_SENSITIVITY_QBAR_2026-07-23.md (Qbar(mmlu)=0.199000,
+% Qbar(gsm8k)=0.287000); results/harness_sensitivity/qbar_qwen25-1p5b.json.
+Their provenance is deliberate. Under the registration's two-phase design the
+numerators run immediately on freeze, but $\bar{Q}$ is computed \emph{only} from
+mini-grid results after the registered validator passed over the complete
+44-JSONL set (409/409 checks) and the first accuracy inspection that
+\texttt{MINIGRID\_REGISTRATION} \S5 permits had been authorized---so the
+denominator is not an early look at the confirmatory grid under another name.
+% SOURCE: docs/HARNESS_SENSITIVITY_QBAR_2026-07-23.md (validator 11375247,
+% 409/409, first inspection authorized 2026-07-23);
+% docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §5.2 (two-phase deferral).
+A shortcut that would have produced the ratio roughly five weeks earlier---a
+dated amendment permitting an early partial inspection of the bridge quantized
+deltas---was considered and declined, on the ground that the registered
+blindness is not weakened to obtain a number sooner.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §9.1
+% (option considered and declined by Amogh 2026-07-22).
+
+\subsection{GSM8K: three of four conditions churn more than quantization does}
+\label{sec:sensitivity:gsm8k}
+
+% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K table
+% (n=200, REF acc 0.5750, Qbar 0.287); every cell cross-checked against
+% results/harness_sensitivity/sensitivity_results_qwen25-1p5b.json
+% per_task.gsm8k.conditions (acc_cond, net_acc_delta, C_cond,
+% correctness_changed, answer_churn, dir_correct_to_incorrect,
+% dir_incorrect_to_correct, R_cond).
+\begin{table}[t]
+\centering
+\small
+\caption{GSM8K configuration sensitivity on FP16 Qwen2.5-1.5B, $n=200$,
+reference accuracy $0.575$, against the quantization denominator
+$\bar{Q}=0.287$. $C_{\mathrm{cond}}$ is correctness-state churn versus the
+reference; $R=C_{\mathrm{cond}}/\bar{Q}$ is reported only with both inputs in
+view. The $\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column splits churned
+items by direction so churn is never read as net degradation.}
+\label{tab:sensitivity-gsm8k}
+\begin{tabular}{llrrrrr}
+\toprule
+Cond & Configuration vs.\ reference & Acc & Net $\Delta$ & $C_{\mathrm{cond}}$ & c$\to$i / i$\to$c & $R=C_{\mathrm{cond}}/\bar{Q}$ \\
+\midrule
+A & exemplars as separate turns   & 0.515 & $-0.060$ & \textbf{0.240} & 30 / 18 & \textbf{0.836} $=0.240/0.287$ \\
+B & \texttt{strict-match} rescore & 0.120 & $-0.455$ & \textbf{0.455} & 91 / 0  & \textbf{1.585} $=0.455/0.287$ \\
+C & chat template off, 3-shot     & 0.475 & $-0.100$ & \textbf{0.320} & 42 / 22 & \textbf{1.115} $=0.320/0.287$ \\
+D & stock defaults (chat off, 5-shot) & 0.495 & $-0.080$ & \textbf{0.300} & 38 / 22 & \textbf{1.045} $=0.300/0.287$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:sensitivity-gsm8k} reads directly against the denominator. Three
+of the four GSM8K conditions---C, D, and B---have $R \geq 1$: turning the chat
+template off (C, $R=1.115$), accepting every stock default at once (D,
+$R=1.045$), and switching the extraction filter (B, $R=1.585$) each move a fixed
+model's per-item correctness by \emph{as much as or more than} swapping GPTQ for
+one of ten quantized variants moves it. Only condition~A, the multiturn
+exemplar placement, stays below the quantization scale ($R=0.836$). The net
+accuracy deltas ($-0.06$ to $-0.455$) understate the movement in every case,
+because they net directional churn that the $\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$
+column keeps separate.
+% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K table (R values
+% 0.836/1.585/1.115/1.045; net deltas -0.060/-0.455/-0.100/-0.080).
+
+\paragraph{Condition B: the scoring rule alone exceeds the quantization effect.}
+Condition~B is the sharpest result and deserves isolating, because it holds the
+generations fixed. It costs zero GPU time: the stock \texttt{gsm8k} task applies
+both \texttt{strict-match} and \texttt{flexible-extract} to the same outputs in a
+single run, so B is read out of the reference run's own samples file---a genuine
+rescore of \emph{identical} generations, not a second pass.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §3.1 (B is a filter
+% rescore of REF, zero GPU); docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md
+% (B derived from REF samples).
+Its correctness churn is therefore the pure effect of the extraction filter:
+$C_B = 0.455$ ($91$ of $200$ items), with a directional split of
+$\textbf{91}/\textbf{0}$---every changed item went correct$\to$incorrect, so the
+$0.455$ accuracy drop equals the churn exactly and \texttt{strict-match} accepts
+a strict subset of what \texttt{flexible-extract} accepts here. The resulting
+$R_B = 0.455/0.287 = \textbf{1.585}$: on these items, choosing one of two
+built-in scoring filters that ship with the same task moves the fixed model's
+per-item correctness \emph{more than half again as much} as quantization does.
+% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K row B (C_cond
+% 0.4550, 91/200, dir 91/0, R 1.585); results JSON per_task.gsm8k.conditions.B_strict_match.
+No compression method in the comparison set produces a swing of that kind from a
+choice a practitioner never records.
+
+\subsection{MMLU: the defaults are different, not uniformly worse---and unreported}
+\label{sec:sensitivity:mmlu}
+
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §3.3 (C == D for
+% MMLU); docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, MMLU table.
+For MMLU the design collapses to a single off-reference cell, and the
+registration ruled it be reported once as ``$C \equiv D$''. MMLU is zero-shot
+with no extraction filter, so conditions~A and~B do not apply; its stock
+\texttt{num\_fewshot} resolves to $0$ and it ships no \texttt{filter\_list}, so
+stock defaults and the reference differ in \emph{nothing but the chat template}.
+Conditions~C (chat off) and~D (stock defaults) are then byte-identical
+configurations, and inventing a distinct~D would mean measuring a configuration
+no user runs.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §3.3 (num_fewshot
+% resolves to 0, no filter_list, C and D byte-identical, ruled "run once, report
+% as C == D").
+
+% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, MMLU table (n=400,
+% REF acc 0.4150, Qbar 0.199; C==D acc 0.4600, net +0.0450, C_cond 0.2100
+% (84/400), dir 33/51, R 1.055); results JSON per_task.mmlu.conditions.C_equiv_D.
+\begin{table}[t]
+\centering
+\small
+\caption{MMLU configuration sensitivity on FP16 Qwen2.5-1.5B, $n=400$,
+reference accuracy $0.415$, against $\bar{Q}=0.199$. Conditions~C and~D are
+byte-identical for MMLU and are reported once as $C\equiv D$ (registration
+\S3.3).}
+\label{tab:sensitivity-mmlu}
+\begin{tabular}{llrrrrr}
+\toprule
+Cond & Configuration vs.\ reference & Acc & Net $\Delta$ & $C_{\mathrm{cond}}$ & c$\to$i / i$\to$c & $R=C_{\mathrm{cond}}/\bar{Q}$ \\
+\midrule
+$C\equiv D$ & chat template off, zero-shot & 0.460 & $\mathbf{+0.045}$ & \textbf{0.210} & 33 / 51 & \textbf{1.055} $=0.210/0.199$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The MMLU cell makes a point the net delta hides. Turning the chat template off
+\emph{raises} reported accuracy by $+4.5$\,pp ($0.415 \to 0.460$), with a
+directional split of $33/51$---more items recovered than lost.
+% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, MMLU row (net +0.0450,
+% dir 33/51).
+So the harness default is not uniformly worse than the reference: on MMLU it is
+better, on GSM8K it is worse, and either way it is \emph{different}. The churn
+behind the $+4.5$\,pp is $C_{C\equiv D}=0.210$ ($84$ of $400$ items), giving
+$R=1.055$---again on the quantization scale. The movement is real, it is
+signed differently on the two tasks, and it is the kind of choice that
+compression papers do not report: which almost never states its chat-template or
+few-shot setting is precisely which is silently moving the number a
+``near-lossless'' claim rests on.
+
+\subsection{What this section supports, and its scope}
+\label{sec:sensitivity:scope}
+
+Supports: on a fixed FP16 model and matched items, evaluation-harness
+configuration moves per-item correctness by an amount comparable to
+quantization---$R \in [0.836,\,1.585]$ across the five conditions, with the
+scoring-filter choice (condition~B, $R=1.585$) exceeding the quantization
+denominator outright---so a compression comparison run under an unstated or
+mismatched harness configuration can be dominated by the configuration.
+% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md (all R values, range
+% 0.836--1.585).
+
+These caveats travel with the numbers. This is \textbf{one model}
+(Qwen2.5-1.5B-Instruct); the Llama-3.2-3B arm is admitted by the protocol only
+after its seed-0 sensitivity canary passes, which has not run, so no Llama
+numerator and no Llama $R$ is reported here.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §2 (Llama added
+% only after its canary pair passes); docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md
+% (Qwen only; no Llama R).
+The items are the \textbf{bridge subsets} ($n=400$ MMLU, $n=200$ GSM8K), not full
+benchmarks, chosen exactly so the study touches no confirmatory item definition.
+And the study is \textbf{exploratory}: it is registered and frozen, but it
+adjusts no gate, no escalation rule, and no confirmatory analysis, and it states
+no H3 outcome. It contextualises how a compression score should be read; it does
+not certify or decide anything about the compression methods themselves.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §7 (exploratory;
+% licenses no confirmatory read; no gate/rule adjusted).
