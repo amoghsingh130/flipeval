@@ -156,10 +156,27 @@ minigrid_acceptance:
 
   # FP16 operational gates, per model and per task -- DERIVED, NOT DECLARED, and
   # committed ALL-OR-NOTHING (docs/ESCALATION_FP16_GATE_DERIVATION_2026-07-24.md
-  # section 5). Until all four exist, this block declares an explicit pending
-  # status and NO baseline_accuracy_ranges key, so the validator fails closed
-  # (a grid validated without FP16 gates has no baseline evidence the eval path
-  # was intact). Qwen's pair is derived and HELD uncommitted; Llama's reference
-  # is deferred by design until its eval cells exist. The four ranges land here
-  # together in one commit citing the derivation doc's commit hash.
-  baseline_accuracy_ranges_status: pending-reference-runs-qwen-held-llama-deferred
+  # section 5). All four landed together 2026-07-25; the pending status key is
+  # gone, which is what the validator's fail-closed branch keys on.
+  #
+  # The tolerance rule that produced these was committed at 1b235a8 (corrected
+  # at 948e780) BEFORE any escalation reference job ran, so the rule provably
+  # predates every number below. half = ceil3(max(0.05, 2*SE + 0.03)); gate =
+  # p +/- half. Arithmetic byte-identical to the frozen mini-grid rule
+  # (docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md section 3) -- unchanged
+  # after reading any reference number, per section 6.
+  #
+  #   qwen25-7b  mmlu   n=14042  p=0.650263  SE=0.004024  half=0.050
+  #   qwen25-7b  gsm8k  n= 1000  p=0.749000  SE=0.013711  half=0.058
+  #   llama31-8b mmlu   n=14042  p=0.542444  SE=0.004204  half=0.050
+  #   llama31-8b gsm8k  n= 1000  p=0.785000  SE=0.012991  half=0.056
+  #
+  # These gate the FP16 BASELINE only. No quantized accuracy is computed or
+  # gated anywhere in this pipeline.
+  baseline_accuracy_ranges:
+    qwen25-7b:
+      mmlu: [0.600263, 0.700263]
+      gsm8k: [0.691, 0.807]
+    llama31-8b:
+      mmlu: [0.492444, 0.592444]
+      gsm8k: [0.729, 0.841]
