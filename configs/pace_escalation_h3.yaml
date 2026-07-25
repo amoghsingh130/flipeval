@@ -1,0 +1,165 @@
+# H3 escalation grid: the deferred 4 of the 8 registered confirmatory cells.
+#
+# Scope and eight-cell H3 rule: PREREGISTRATION.md, docs/MINIGRID_REGISTRATION_
+# 2026-07-15.md (FROZEN). Stage plan: docs/ESCALATION_STAGE_PLAN_2026-07-23.md
+# (authorized by docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md, ESCALATE=TRUE).
+# Pinned identities: configs/main_grid_manifest.yaml (FROZEN).
+# FP16 gate derivation: docs/ESCALATION_FP16_GATE_DERIVATION_2026-07-24.md.
+#
+# 2 models x {fp16, gptq seeds 0-4, awq seeds 0-4} = 22 variants,
+# x {MMLU full test, GSM8K indices 0-999} = 44 evaluation JSONLs.
+#
+# Multi-model grid config (pilot_eval.run requires --model-tag; never defaults).
+# The acceptance block is keyed `minigrid_acceptance` because that is the
+# contract name scripts/verify_minigrid.py reads; the validator is model-agnostic
+# and is reused unchanged over this grid (it validates whatever models the config
+# declares). This is the escalation grid, not the mini-grid.
+
+schema_version: 1
+grid: escalation-h3
+output_dir: results
+device_map: auto
+batch_size: 1
+
+models:
+  # --- Cell pair 3: Qwen2.5-7B-Instruct -----------------------------------
+  - tag: qwen25-7b
+    run_name: qwen25_7b_escalation_h3
+    baseline:
+      name: fp16
+      model_id: Qwen/Qwen2.5-7B-Instruct
+      revision: a09a35458c702b33eeacc393d103063234e8bc28
+      dtype: float16
+      trust_remote_code: true
+    # Every quantized variant names its backend explicitly -- framework kernel
+    # auto-selection is the campaign's known hazard class (missing optimum,
+    # absent Marlin runtime, silent kernel substitution).
+    methods:
+      - {name: gptq_s0, model_id: outputs/quantized/qwen25-7b-gptq4-seed0, dtype: float16, seed: 0, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s1, model_id: outputs/quantized/qwen25-7b-gptq4-seed1, dtype: float16, seed: 1, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s2, model_id: outputs/quantized/qwen25-7b-gptq4-seed2, dtype: float16, seed: 2, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s3, model_id: outputs/quantized/qwen25-7b-gptq4-seed3, dtype: float16, seed: 3, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s4, model_id: outputs/quantized/qwen25-7b-gptq4-seed4, dtype: float16, seed: 4, quantization_backend: gptqmodel_torch}
+      - {name: awq_s0, model_id: outputs/quantized/qwen25-7b-awq4-seed0, dtype: float16, seed: 0, quantization_backend: awq_gemm}
+      - {name: awq_s1, model_id: outputs/quantized/qwen25-7b-awq4-seed1, dtype: float16, seed: 1, quantization_backend: awq_gemm}
+      - {name: awq_s2, model_id: outputs/quantized/qwen25-7b-awq4-seed2, dtype: float16, seed: 2, quantization_backend: awq_gemm}
+      - {name: awq_s3, model_id: outputs/quantized/qwen25-7b-awq4-seed3, dtype: float16, seed: 3, quantization_backend: awq_gemm}
+      - {name: awq_s4, model_id: outputs/quantized/qwen25-7b-awq4-seed4, dtype: float16, seed: 4, quantization_backend: awq_gemm}
+
+  # --- Cell pair 4: Llama-3.1-8B-Instruct ---------------------------------
+  - tag: llama31-8b
+    run_name: llama31_8b_escalation_h3
+    baseline:
+      name: fp16
+      model_id: meta-llama/Llama-3.1-8B-Instruct
+      revision: 0e9e39f249a16976918f6564b8830bc894c89659
+      dtype: float16
+      trust_remote_code: true
+    methods:
+      - {name: gptq_s0, model_id: outputs/quantized/llama31-8b-gptq4-seed0, dtype: float16, seed: 0, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s1, model_id: outputs/quantized/llama31-8b-gptq4-seed1, dtype: float16, seed: 1, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s2, model_id: outputs/quantized/llama31-8b-gptq4-seed2, dtype: float16, seed: 2, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s3, model_id: outputs/quantized/llama31-8b-gptq4-seed3, dtype: float16, seed: 3, quantization_backend: gptqmodel_torch}
+      - {name: gptq_s4, model_id: outputs/quantized/llama31-8b-gptq4-seed4, dtype: float16, seed: 4, quantization_backend: gptqmodel_torch}
+      - {name: awq_s0, model_id: outputs/quantized/llama31-8b-awq4-seed0, dtype: float16, seed: 0, quantization_backend: awq_gemm}
+      - {name: awq_s1, model_id: outputs/quantized/llama31-8b-awq4-seed1, dtype: float16, seed: 1, quantization_backend: awq_gemm}
+      - {name: awq_s2, model_id: outputs/quantized/llama31-8b-awq4-seed2, dtype: float16, seed: 2, quantization_backend: awq_gemm}
+      - {name: awq_s3, model_id: outputs/quantized/llama31-8b-awq4-seed3, dtype: float16, seed: 3, quantization_backend: awq_gemm}
+      - {name: awq_s4, model_id: outputs/quantized/llama31-8b-awq4-seed4, dtype: float16, seed: 4, quantization_backend: awq_gemm}
+
+# Tasks are shared by both models, byte-identical to the mini-grid's: same item
+# populations, same pinned dataset revisions. The escalation cells measure the
+# same two benchmarks on the larger models.
+tasks:
+  - name: mmlu
+    split: test
+    limit: null
+    dataset_revision: c30699e8356da336a370243923dbaf21066bb9fe
+    prompt_style: chat
+    subjects:
+      - abstract_algebra
+      - anatomy
+      - astronomy
+      - business_ethics
+      - clinical_knowledge
+      - college_biology
+      - college_chemistry
+      - college_computer_science
+      - college_mathematics
+      - college_medicine
+      - college_physics
+      - computer_security
+      - conceptual_physics
+      - econometrics
+      - electrical_engineering
+      - elementary_mathematics
+      - formal_logic
+      - global_facts
+      - high_school_biology
+      - high_school_chemistry
+      - high_school_computer_science
+      - high_school_european_history
+      - high_school_geography
+      - high_school_government_and_politics
+      - high_school_macroeconomics
+      - high_school_mathematics
+      - high_school_microeconomics
+      - high_school_physics
+      - high_school_psychology
+      - high_school_statistics
+      - high_school_us_history
+      - high_school_world_history
+      - human_aging
+      - human_sexuality
+      - international_law
+      - jurisprudence
+      - logical_fallacies
+      - machine_learning
+      - management
+      - marketing
+      - medical_genetics
+      - miscellaneous
+      - moral_disputes
+      - moral_scenarios
+      - nutrition
+      - philosophy
+      - prehistory
+      - professional_accounting
+      - professional_law
+      - professional_medicine
+      - professional_psychology
+      - public_relations
+      - security_studies
+      - sociology
+      - us_foreign_policy
+      - virology
+      - world_religions
+
+  - name: gsm8k
+    split: test
+    limit: 1000
+    dataset_revision: 740312add88f781978c0658806c59bc2815b9866
+    fewshot: 1
+    fewshot_style: inline
+    max_new_tokens: 256
+    prompt_style: chat
+
+# Operational acceptance criteria for scripts/verify_minigrid.py. Mechanical
+# soundness only; no criterion applies to a quantized variant's accuracy.
+minigrid_acceptance:
+  expected_jsonl_files: 44
+  expected_item_counts: {mmlu: 14042, gsm8k: 1000}
+
+  task_dataset_revisions:
+    mmlu: c30699e8356da336a370243923dbaf21066bb9fe
+    gsm8k: 740312add88f781978c0658806c59bc2815b9866
+
+  # FP16 operational gates, per model and per task -- DERIVED, NOT DECLARED, and
+  # committed ALL-OR-NOTHING (docs/ESCALATION_FP16_GATE_DERIVATION_2026-07-24.md
+  # section 5). Until all four exist, this block declares an explicit pending
+  # status and NO baseline_accuracy_ranges key, so the validator fails closed
+  # (a grid validated without FP16 gates has no baseline evidence the eval path
+  # was intact). Qwen's pair is derived and HELD uncommitted; Llama's reference
+  # is deferred by design until its eval cells exist. The four ranges land here
+  # together in one commit citing the derivation doc's commit hash.
+  baseline_accuracy_ranges_status: pending-reference-runs-qwen-held-llama-deferred
