@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-25T14:42:58.178923+00:00",
-  "source_commit": "1b263b4bd9b648daad19000be2b306daee46683e",
-  "source_tree": "2f834797e5a69c9946798f6d78af23e4c1588f0e",
+  "created_at": "2026-07-25T17:31:11.649836+00:00",
+  "source_commit": "505d5eac5622e43b6c6a83b6326f9c3adbb2fee6",
+  "source_tree": "79dbb4cdf71284dd7fb60a23366b575fd5e8194c",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -14,7 +14,7 @@
     "configs/kaggle_smoke_tiny.yaml": "a6465f20cc76798b84c595da6e5ef9e5a57558d8e713ce4f7eecdf249edba5dc",
     "configs/main_grid_manifest.yaml": "fca4979e47a2edf09f59c8317a99c783dd535b8d246e4afa79eb6b4ea830e6a6",
     "configs/pace_bridge_chat.yaml": "5b93f4ac85ad4a9da77cb479e17d49626017a7a4c97f503d4d69041647b9f9b7",
-    "configs/pace_escalation_h3.yaml": "7dc6da8c83ddf13d088767cd937ab42e21910620b866145d4031a4c1cbd07ddb",
+    "configs/pace_escalation_h3.yaml": "efb4aff571a9090578e899f85c21202a1fd37a2909a43c4f41ed1a8874e4d1e1",
     "configs/pace_minigrid_h3.yaml": "f5048b33ec1f95f4d70a370c333b550844fed4f042c46bdb9e963bede189d67e",
     "configs/pilot_qwen_1p5b.yaml": "1819c3a1c813ab12f70a430ed347ed1c0d45a762455c1c458d1aa1b1f7bf6022",
     "configs/smoke_tiny.yaml": "6d711ac1cd4715d0176c7a109875941297928269990fdafe849a2906a9b47003",
@@ -48,7 +48,7 @@
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
-    "scripts/slurm/build_image.sbatch": "9be1e424dce9dd8cfce117e5c1834e41edd8eacaa90ce6d52d524c9f00a2bd1c",
+    "scripts/slurm/build_image.sbatch": "0e6f06e8a75c4c85f2e5a4d81d1883fb1a175e147072e43031d777287952e56b",
     "scripts/slurm/build_quantized.sbatch": "aad46a1a4a55c7f9d061270a49c78e3c0429f90802da9d3e294fde90b747dcfe",
     "scripts/slurm/env.sh": "8a677e794534055aece7f5294da43db66c79b240b2866b54c73327dcc934181f",
     "scripts/slurm/mirror_c4.sbatch": "ced7de1d241f9fd3e9a05e6a20028cf49bc7eb47410ce75a1fd77215c4f9dc17",
@@ -74,7 +74,7 @@
     "tests/test_build_quantized.py": "50b5857a99502b30087007bc15b30825f21bc13497a1f502efe0af98129e43d9",
     "tests/test_compare_mmlu_reference.py": "887b9539311e16bed12c9886da6a3e5675bb4a03a21a28b3f2b5e2ad7de7271a",
     "tests/test_core.py": "3a7bbabf822bc89c08db5b4d49e4c5d9c2347e24105a0d796c671847d9d6e6b5",
-    "tests/test_escalation_config.py": "72a99e6579ffda613a622c44499a5de44618742c55b51150fc2a15a25069e799",
+    "tests/test_escalation_config.py": "1dadd3e596a6e6ac8b2af2397bf5c8f9c773bb6e71f0ce566e740c25acf22405",
     "tests/test_expected_grid.py": "4239d32d9d4b667a6d6680fd22be857d24023fe79054a9f42a68a55cdaea4ccc",
     "tests/test_golden.py": "0a386ff15be16876bbb9f6f9e929639714c0ec853ed3760ea0bdbf57d2d50ea7",
     "tests/test_io_cli.py": "ca0036acee6889321342bb870975090827bfe503171b8536f4f71a17ff730f81",
@@ -86,5 +86,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "abb4a9de69798865167c1dfb520e308c8ebe5f7f020c2ae4e1e8b34fbdf66971"
+  "manifest_payload_sha256": "ff21c3e916cc3863d9028f6e3d77715cd1a7cc8ffde5530a46995e571790a446"
 }
