@@ -161,7 +161,40 @@ no cell need exist to know it. On zero MMLU diffs the Qwen-7B reference runs (MM
 via `mmlu_pilot`, GSM8K stock); its two ranges are derived mechanically under § 3
 and **held uncommitted** (see § 5).
 
-### 4b. Llama-8B track — deferred by design (date-bound)
+### 4b. Llama-8B track — ~~deferred by design (date-bound)~~ **SUPERSEDED, see the correction below**
+
+> **Correction (2026-07-25, Amogh Singh): Llama-8B deferral premise falsified.**
+> § 4 deferred the Llama-3.1-8B reference until its eval cells existed, on the
+> stated reasoning that the reference must be pinned to the date rendered in the
+> cells and that date was unknowable in advance. That reasoning was inherited
+> from Llama-3.2-3B, whose chat template calls `strftime_now` and therefore
+> renders the run date. Llama-3.1-8B's template does not: it renders the constant
+> `26 Jul 2024`, verified in-image through the real render path (probe
+> `11477560`) against a 3B control that rendered the true current date in the
+> same environment, confirming the helper is available and the constant
+> originates in the 8B template. The deferral was therefore unnecessary. The
+> reference runs in parallel with the eval array, gated on a prompt-identity
+> probe as with Qwen-7B. **No `date_string` patch is applied for the 8B, so its
+> reference retains full invocation independence**, unlike the 3B case corrected
+> by Amendment 3. The four gates still commit all-or-nothing, and the eight-cell
+> rule remains unrun.
+>
+> **Consequence for what the 8B gate checks.** Because the 8B reference needs no
+> `date_string` patch, it does not incur the independence reduction the 3B
+> reference did: its gate exercises the scorer, model loading, tokenization, and
+> an *unpatched* invocation, making it a slightly stronger check than the
+> mini-grid's counterpart. This is a real difference between the two grids that a
+> careful reader would otherwise have to reconstruct.
+>
+> The probe's date handling is **reconstruction-and-hash, not date-pinning**: it
+> renders through `pilot_eval.render_prompt` and compares hashes, asserting the
+> `26 Jul 2024` constant rather than assuming it. It therefore never asserts a
+> date of its own and fails closed on any divergence, including one nobody
+> anticipated.
+>
+> The original § 4b text is retained unaltered below as the superseded record.
+
+
 
 The Llama-8B reference **runs after the Llama-8B FP16 eval cells exist**, with the
 identity probe hash-matching reconstructed prompts against those **sealed cells** —
