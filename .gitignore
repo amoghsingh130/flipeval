@@ -35,3 +35,6 @@ Cont-Labelerr-auditing/
 !results/harness_sensitivity/*.json
 !results/atlas_run_rev2_20260721.tar.gz
 !results/atlas_run_rev2_20260721.tar.gz.sha256
+!results/minigrid_run_20260722.tar.gz
+!results/minigrid_run_20260722.tar.gz.sha256
+!results/minigrid_run_20260722.manifest.json
