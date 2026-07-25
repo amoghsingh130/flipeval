@@ -84,15 +84,42 @@ def _full_ranges() -> dict:
 def test_escalation_fp16_ranges_are_either_derived_or_explicitly_pending():
     """Bound to configs/pace_escalation_h3.yaml; pairs with the mini-grid guard.
 
-    While the gates are pending (Qwen's pair derived but held uncommitted,
-    Llama's reference deferred by design) the real config takes the pending
-    branch. When step 5 lands all four together this still passes; a half-filled
-    commit does not (see the rejection tests below)."""
+    The config takes exactly one of the two permitted branches. It held the
+    pending branch until 2026-07-25; step 5 then landed all four ranges in one
+    commit and it takes the derived branch. A half-filled commit takes neither
+    (see the rejection tests below)."""
     acceptance = read_raw(CONFIG)["minigrid_acceptance"]
     assert _ranges_all_or_nothing_ok(acceptance)
-    # concretely, right now it is the pending state, not the filled one
-    assert acceptance.get("baseline_accuracy_ranges") is None
-    assert acceptance.get("baseline_accuracy_ranges_status", "").startswith("pending")
+    # concretely, it is now the filled state: four ranges, no pending status
+    assert acceptance.get("baseline_accuracy_ranges_status") is None
+    assert acceptance["baseline_accuracy_ranges"] == {
+        "qwen25-7b": {"mmlu": [0.600263, 0.700263], "gsm8k": [0.691, 0.807]},
+        "llama31-8b": {"mmlu": [0.492444, 0.592444], "gsm8k": [0.729, 0.841]},
+    }
+
+
+def test_escalation_fp16_ranges_match_the_derivation_arithmetic():
+    """The committed gates must be exactly what section 3 produces from the
+    recorded reference (p, n) -- not merely well-formed numbers.
+
+    Recomputes half = ceil3(max(0.05, 2*SE + 0.03)) and gate = p +/- half from
+    the reference accuracies and item counts, so a hand-edited bound, a
+    transcription slip, or a silently changed tolerance fails here rather than
+    passing as 'plausible'."""
+    import math
+
+    # (p, n) as recorded by the reference runs, derivation job 11478290.
+    REFERENCE = {
+        "qwen25-7b": {"mmlu": (0.6502634952285999, 14042), "gsm8k": (0.749, 1000)},
+        "llama31-8b": {"mmlu": (0.5424440962825808, 14042), "gsm8k": (0.785, 1000)},
+    }
+    ranges = read_raw(CONFIG)["minigrid_acceptance"]["baseline_accuracy_ranges"]
+    for tag, per_task in REFERENCE.items():
+        for task, (p, n) in per_task.items():
+            se = math.sqrt(p * (1 - p) / n)
+            half = math.ceil(max(0.05, 2 * se + 0.03) * 1000 - 1e-9) / 1000
+            expected = [round(max(0.0, p - half), 6), round(min(1.0, p + half), 6)]
+            assert ranges[tag][task] == expected, f"{tag}/{task}"
 
 
 # --------------------------------------------------------------------------
