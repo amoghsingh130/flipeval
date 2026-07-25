@@ -1014,12 +1014,105 @@ chain re-checks which grid the validator looked at.
 
 ---
 
+## 21. `--requeue` is accepted and inert; the eval array ran on the wrong queue (2026-07-25)
+
+**Evidence.** `scontrol show config` → `PreemptType = preempt/qos`,
+`PreemptMode = CANCEL`; `sacctmgr show qos embers` → `PreemptMode=cluster`
+(inherits CANCEL); `scontrol show job 11476696` → `Requeue=1`; `scontrol show job
+11476696_3` → **"not found"**; `sacct -j 11476696` showing tasks 3, 5, 7, 8
+`PREEMPTED` at 01:40:21 / 01:29:12 / 01:00:11 / 01:00:06;
+`docs/ESCALATION_STAGE_PLAN_2026-07-23.md` § 3 dated note; resubmission
+`11477918`.
+
+**What happened.** Two failures compounded, one inherited and one mine.
+
+*The wrong queue.* The stage plan's own table lists the 44 eval cells on
+`embers`, and a **dated note in the same document explicitly corrects it**: the
+cells run on `inferno`, "because `embers` preemption of a bs=1 pass wastes the
+whole pass," and the dollar guard already accounts for inferno eval. The
+resubmission after incident 19 carried the prior session's `-q embers`
+submission line forward without checking it against that correction. The
+predicted failure then happened, for the stated reason.
+
+*The inert control.* The array carried `--requeue`, and `Requeue=1` is set on
+the job — but Phoenix preempts with `PreemptMode = CANCEL`, so preempted jobs
+are **destroyed, not requeued**. Four cells died and none came back; the
+controller no longer knows they existed. `--requeue` was accepted at submission,
+reported as set by `scontrol`, and did nothing.
+
+**Cost.** 5.16 A100-h of preempted work discarded (3 Qwen GSM8K cells and one
+MMLU cell), plus calendar. Those hours were free — the waste was in wall-clock,
+not dollars. **No data-integrity impact:** the six completed cells were verified
+at their exact expected counts (14,042 / 1,000) before being write-protected,
+and no confirmatory result was corrupted or read.
+
+**A stub hazard the preemption exposed.** `pilot_eval/run.py` opens each output
+`"w"` *before* the item loop and writes incrementally, so a killed cell leaves a
+**zero-byte or truncated JSONL on disk**, not nothing. Two 0-byte files
+(`gptq_s0.gsm8k.jsonl`, `gptq_s1.gsm8k.jsonl`) sat in the results directory
+looking exactly like completed cells to any existence-only coverage check. The
+registered validator catches them on exact item counts; a weaker check would
+not. Worth stating because the intuition — "it writes at the end, so a killed
+job leaves nothing" — is the opposite of the truth.
+
+**Resolution.** Pending cells 11–43 cancelled; cells 3, 5, 7, 8 and 11–43
+resubmitted on `inferno` as `11477918`. Cell 9 was left running on `embers`
+rather than discarding live work, tracked explicitly for preemption. The six
+completed cells were `chmod a-w`'d **before** the resubmit, since a hand-typed
+array range next to a runner that opens `"w"` unconditionally is one typo away
+from destroying finished work — the standing archive/protect convention arriving
+a few hours early.
+
+Two details of the recovery are worth recording. The resubmit range given was
+`3,5,11-43`; between it being written and being run, cells 7 and 8 were
+preempted and cell 10 completed, so the range was corrected to `3,5,7,8,11-43`
+and six cells were protected rather than five. Queue state read once and reused
+is stale state. And the cancel and the resubmit must not overlap: two arrays
+holding the same task id would both open the same JSONL `"w"`, so the cancel is
+strictly ordered before the submit.
+
+**The third accepted-but-inert control, and one never logged.** This joins
+`--exclude` (11) and a third that was caught, recovered, and recorded only in a
+commit message: on 2026-07-24 the build fan-out was first submitted with
+`--array/--export/--constraint/--mem/--dependency` placed **after** the script
+path, so `sbatch` parsed them as script arguments and the jobs silently fell
+back to script defaults — targeting Qwen2.5-1.5B with `--array=0-5`. One task
+started against a **frozen mini-grid checkpoint** before all eight were
+cancelled within ~8 s; mtimes confirmed every frozen checkpoint untouched. It
+belongs here and had no entry until now.
+
+All three share one shape: **the scheduler accepted the flag and the flag did
+nothing**, and in every case `sbatch` exited 0.
+
+**Without the gate.** There was no gate — that is the finding. Nothing in the
+submission path checks that a requested scheduler behaviour is actually in
+force, so the loss was discovered by noticing cells missing from `squeue` rather
+than by any control firing. The rule adopted in `AGENTS.md` is that a scheduler
+control is not in effect until **independently observed** — `scontrol` after
+submission, the QOS/partition configuration, or observed behaviour. Acceptance
+at submission proves nothing. That rule would have caught all three of these
+before they cost anything.
+
+The queue error carries its own lesson, separate from preemption: **a correction
+that lives only in a plan document is easy to carry past.** The `embers` line in
+the plan's table is still there, still wrong, contradicted by a note further down
+the same file. Constraints that must bind a submission belong in the `sbatch`
+script, where the submission line cannot ignore them.
+
+---
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
 
-**Controls that report success while doing nothing.** `--exclude` accepted and
-discarded (11); the test-count expectation held at 145 (14); the mocked
+**Controls that report success while doing nothing.** Three of these are now
+*scheduler* controls specifically: `--exclude` accepted and discarded (11),
+`--requeue` set and inert under `PreemptMode=CANCEL` (21), and sbatch options
+placed after the script path and parsed as script arguments (21). Every one was
+accepted at submission, `sbatch` exited 0, and nothing was in force. Hence the
+`AGENTS.md` rule: **a scheduler control is not in effect until independently
+observed** — `scontrol`, the QOS/partition config, or behaviour. Outside the
+scheduler: the test-count expectation held at 145 (14); the mocked
 `gptqmodel` unit test certifying a runtime it never touched (1); `verify_bridge.py`
 checking a different file than the plan required (6); the validator's own
 run-dir check, skipped for one gate run because it branched on a function
