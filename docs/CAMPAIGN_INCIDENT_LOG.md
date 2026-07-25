@@ -961,6 +961,59 @@ never examined. That gap was closed by the fix, not by the gate.
 
 ---
 
+## 20. The validator would have validated the wrong grid, and green (2026-07-25)
+
+**Evidence.** `scripts/slurm/verify_minigrid.sbatch` before commit `1b263b4`
+(hardcoded `--config /workspace/configs/pace_minigrid_h3.yaml --results-root
+/workspace/results`); `configs/pace_escalation_h3.yaml` vs
+`configs/pace_minigrid_h3.yaml` (`output_dir: results` in both, disjoint
+`run_name`s); gate job `11477117`; `tests/test_verify_minigrid.py`.
+
+**What happened.** Found by the scan ordered after incident 19, before the
+validator was due to run. The Stage 6 → Stage 7 gate hardcoded the mini-grid
+config and results root. Pointed at the escalation grid it would not have
+errored: it would have found the complete, self-consistent, already-validated
+mini-grid, checked all 44 of *those* cells, and exited **0**. A green validator
+certifying nothing about the grid it claimed to check.
+
+This is a different failure from entry 19, and worse in kind. A wrong config is
+not a crash — it is a *valid run of the wrong thing*, and every signal it emits
+is genuine. Nothing downstream could distinguish it from the intended run.
+
+**Resolution.** Ruling (Amogh, 2026-07-25): fix at the root, not by repointing
+the hardcoded value. Every input is now required with no default —
+`MINIGRID_CONFIG`, `MINIGRID_RESULTS`, `MINIGRID_MODELS`, `MINIGRID_CELLS`, each
+via `${VAR:?}`, all four verified to abort `rc=1` before the image starts. The
+last two are the operator's declaration of *intent*, made independently of the
+config and checked against it, because both grids live under the same results
+root and the results root therefore cannot disambiguate them. Only two
+declarations that must agree can. `verify_minigrid.py` also now asserts each run
+dir holds **exactly** the cells the config declares — equality, not containment,
+so a missing cell and a foreign cell both fail — and these checks run first,
+before any per-file work.
+
+**A control that reported success while doing nothing, caught in the writing.**
+The first draft branched on `verify_common.check()`, which returns `None`. So
+`if not check(...): continue` was unconditionally true and the cell-equality
+check never executed once — the fixture with a deliberately planted foreign
+JSONL returned `passed: True`. The new test caught it on the first gate run
+(`1 failed, 181 passed`). The call site now evaluates the condition into a
+variable and carries a comment saying why `check()`'s return must never be
+branched on. Worth recording plainly: the check added to prevent a vacuous pass
+was itself vacuous for one gate run, and only a test written to fail caught it.
+
+Six tests, in-image gate **176 → 182** (job `11477117`, 182 passed, 0 skipped,
+0 failed).
+
+**Without the gate.** The mini-grid was complete and passing, so the wrong-grid
+run would have produced a summary indistinguishable from a real one: 44 files,
+all checks green, `passed: true`. It would have been cited as the escalation
+grid's validation in the step-6 → step-7 handoff, and the H3 decision would have
+rested on a validator that never opened an escalation cell. Nothing later in the
+chain re-checks which grid the validator looked at.
+
+---
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
@@ -968,7 +1021,9 @@ Recorded because they recur, not as a summary.
 **Controls that report success while doing nothing.** `--exclude` accepted and
 discarded (11); the test-count expectation held at 145 (14); the mocked
 `gptqmodel` unit test certifying a runtime it never touched (1); `verify_bridge.py`
-checking a different file than the plan required (6). Every one passed. The
+checking a different file than the plan required (6); the validator's own
+run-dir check, skipped for one gate run because it branched on a function
+returning `None` (20). Every one passed. The
 project's response has been to make controls **verify after the fact** —
 `scontrol` after submission, exact test counts rather than floors, a real GPU
 canary, and receipt gating by vintage against git history.
