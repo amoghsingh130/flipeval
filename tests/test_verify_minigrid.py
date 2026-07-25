@@ -398,3 +398,88 @@ def test_minigrid_validator_rejects_a_reduced_seed_set(tmp_path):
     summary = verify_minigrid(config, results, project)
     assert not summary["passed"]
     assert any("registered {0,1,2,3,4}" in e for e in summary["errors"])
+
+
+# ---- grid identity: the config must be the grid the operator asked for ------
+# Regression tests for the hazard found 2026-07-25: verify_minigrid.sbatch
+# hardcoded the mini-grid config, so running it after the escalation eval would
+# have validated the complete mini-grid and exited 0 -- a green validator
+# certifying nothing about the grid it claimed to check. A wrong config is not a
+# crash; it is a *valid* run of the wrong thing, which only an independent
+# declaration of intent can catch.
+
+
+def test_minigrid_validator_accepts_a_matching_grid_declaration(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    summary = verify_minigrid(
+        config,
+        results,
+        project,
+        expect_model_tags=["qwen25-1p5b", "llama32-3b"],
+        expect_cells=44,
+    )
+    assert summary["passed"], summary["errors"]
+    assert summary["declared_model_tags"] == ["qwen25-1p5b", "llama32-3b"]
+    assert summary["expect_cells"] == 44
+
+
+def test_minigrid_validator_rejects_a_config_for_a_different_grid(tmp_path):
+    """The escalation-vs-mini-grid mixup, which is otherwise a silent PASS."""
+    project, config, results = _write_fixture(tmp_path)
+    summary = verify_minigrid(
+        config,
+        results,
+        project,
+        expect_model_tags=["qwen25-7b", "llama31-8b"],
+        expect_cells=44,
+    )
+    assert not summary["passed"]
+    assert any("expected model tags" in e for e in summary["errors"])
+
+
+def test_minigrid_validator_rejects_a_cell_count_mismatch(tmp_path):
+    project, config, results = _write_fixture(tmp_path)
+    summary = verify_minigrid(
+        config,
+        results,
+        project,
+        expect_model_tags=["qwen25-1p5b", "llama32-3b"],
+        expect_cells=88,
+    )
+    assert not summary["passed"]
+    assert any("expected 88 cells" in e for e in summary["errors"])
+
+
+def test_minigrid_validator_rejects_a_run_dir_holding_a_foreign_cell(tmp_path):
+    """A JSONL the config does not declare means config and results disagree."""
+    project, config, results = _write_fixture(tmp_path)
+    (results / "qwen_run" / "rtn_s0.mmlu.jsonl").write_text("{}\n", encoding="utf-8")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any("unaccounted=['rtn_s0.mmlu.jsonl']" in e for e in summary["errors"])
+
+
+def test_minigrid_validator_rejects_a_missing_run_dir(tmp_path):
+    import shutil
+
+    project, config, results = _write_fixture(tmp_path)
+    shutil.rmtree(results / "llama_run")
+    summary = verify_minigrid(config, results, project)
+    assert not summary["passed"]
+    assert any("run dir 'llama_run' exists" in e for e in summary["errors"])
+
+
+def test_minigrid_validator_cli_requires_the_grid_declaration():
+    """The CLI must not let the operator omit the intent declaration."""
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [sys.executable, "scripts/verify_minigrid.py", "--config", "x", "--results-root", "y"],
+        capture_output=True,
+        text=True,
+        cwd=Path(__file__).resolve().parents[1],
+    )
+    assert result.returncode != 0
+    assert "--expect-model-tags" in result.stderr
+    assert "--expect-cells" in result.stderr

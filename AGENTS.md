@@ -33,6 +33,46 @@ require editing frozen content, stop and surface it instead.
 - Do not tune the calibration builder, paired bootstrap, or any registered
   analysis after seeing results.
 
+## Preserving a completed confirmatory result set
+
+**Standing convention, effective 2026-07-25 (Amogh).** The moment a
+confirmatory result set is complete, and **before any downstream job runs
+against a different config**, do both of these, in this order:
+
+1. **Archive it** — tarball + `.sha256` + a per-file manifest, committed to git
+   past the `results/*` ignore (the atlas precedent, e.g.
+   `results/minigrid_run_20260722.tar.gz`). Verify the round-trip before
+   committing: `sha256sum -c`, then extract and re-hash every file against the
+   manifest.
+2. **Write-protect it** — `chmod a-w` on every JSONL and `manifest.json` in the
+   set. This is permanent, not a temporary measure.
+
+**Why.** `results/*` is gitignored, so a completed set has no version history to
+recover from — a stray `rm`, a scratch purge, or a mis-specified rerun destroys
+it outright, and these cells cannot be regenerated without rerunning the
+campaign. The write-protection specifically closes a live hazard found
+2026-07-25: `pilot_eval/run.py` opens each output `"w"` unconditionally, and
+every grid writes under the same `results/` root, so a single unset
+`MINIGRID_CONFIG` would have truncated the sealed mini-grid at file-open,
+before any log line could warn. `0444` turns that into a `PermissionError`.
+
+Applied to the mini-grid on 2026-07-25. **Apply to the escalation cells the
+moment their validator passes.**
+
+## Validators must be told which grid they are validating
+
+`scripts/slurm/verify_minigrid.sbatch` takes `MINIGRID_CONFIG`,
+`MINIGRID_RESULTS`, `MINIGRID_MODELS` and `MINIGRID_CELLS` — **all required, no
+defaults**. `MINIGRID_MODELS`/`MINIGRID_CELLS` are the operator's declaration of
+intent, checked against the config by `verify_minigrid.py`, and each run dir
+must hold exactly the cells the config declares.
+
+The failure this prevents is not a crash. A validator pointed at the wrong
+config validates a complete, self-consistent grid and exits **0**, certifying
+nothing about the grid it was meant to check. Both grids live under the same
+results root, so only an independent declaration of intent can catch it. Never
+reintroduce a default here.
+
 ## Verification gates
 
 Which gate applies depends on where you are and what you touched.
@@ -47,7 +87,7 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 176 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 182 passed, 0 skipped
 ```
 
 **Whichever session adds tests updates this expected count in the same commit.**
