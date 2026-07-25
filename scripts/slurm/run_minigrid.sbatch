@@ -30,7 +30,13 @@ source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs
 
 CONFIG="${MINIGRID_CONFIG:-/workspace/configs/pace_minigrid_h3.yaml}"
-MODELS=(qwen25-1p5b llama32-3b)
+# Model tags are parameterized alongside the config so this one script also serves
+# the escalation grid (MINIGRID_CONFIG=.../pace_escalation_h3.yaml with
+# MINIGRID_MODELS="qwen25-7b llama31-8b"). The default reproduces the mini-grid
+# invocation byte-for-byte; the idx->cell mapping is unchanged because both grids
+# are 2 models x 22 variants = 44.
+# shellcheck disable=SC2206  # word-splitting into the array is intended here
+MODELS=(${MINIGRID_MODELS:-qwen25-1p5b llama32-3b})
 METHODS=(fp16 gptq_s0 gptq_s1 gptq_s2 gptq_s3 gptq_s4 awq_s0 awq_s1 awq_s2 awq_s3 awq_s4)
 TASKS=(mmlu gsm8k)
 
