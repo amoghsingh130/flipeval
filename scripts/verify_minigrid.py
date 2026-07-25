@@ -4,6 +4,9 @@ The bridge validator's counterpart at grid scale, per
 `docs/PACE_EXECUTION_PLAN_2026-07-15.md` Stage 6. It enforces, over the complete
 expected set and nothing less:
 
+  * the config is the grid the operator asked for -- model tags and cell count
+    are declared independently at invocation and must match the config, and
+    each run dir must hold exactly the cells the config declares;
   * 44 expected JSONLs -- 2 models x 11 variants x 2 tasks -- all present;
   * exact item counts: MMLU 14,042, GSM8K 1,000;
   * identical item / gold / prompt-hash sets across every variant WITHIN a model;
@@ -61,11 +64,35 @@ def main() -> None:
     parser.add_argument("--results-root", required=True, help="Directory holding each model's run dir.")
     parser.add_argument("--project-root", default=".")
     parser.add_argument("--output", help="Defaults to RESULTS_ROOT/minigrid_validation_summary.json")
+    # The grid the OPERATOR believes they are validating, declared independently
+    # of the config so the two can be made to disagree. Required, because the
+    # dangerous invocation is not a missing config -- it is a *valid* config for
+    # the wrong grid, which validates a complete set and exits 0 while saying
+    # nothing about the grid the operator meant. Two independent declarations
+    # that must agree is the only thing that catches that.
+    parser.add_argument(
+        "--expect-model-tags",
+        required=True,
+        nargs="+",
+        help="Model tags this run is expected to cover; must match the config's models exactly.",
+    )
+    parser.add_argument(
+        "--expect-cells",
+        required=True,
+        type=int,
+        help="Number of JSONL cells this grid must expand to; must match the config.",
+    )
     args = parser.parse_args()
 
     results_root = Path(args.results_root)
     output = Path(args.output) if args.output else results_root / "minigrid_validation_summary.json"
-    summary = verify_minigrid(Path(args.config), results_root, Path(args.project_root).resolve())
+    summary = verify_minigrid(
+        Path(args.config),
+        results_root,
+        Path(args.project_root).resolve(),
+        expect_model_tags=args.expect_model_tags,
+        expect_cells=args.expect_cells,
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", encoding="utf-8") as stream:
         json.dump(summary, stream, indent=2)
@@ -76,7 +103,14 @@ def main() -> None:
         raise SystemExit(1)
 
 
-def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -> dict[str, Any]:
+def verify_minigrid(
+    config_path: Path,
+    results_root: Path,
+    project_root: Path,
+    *,
+    expect_model_tags: list[str] | None = None,
+    expect_cells: int | None = None,
+) -> dict[str, Any]:
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
     acceptance = config.get("minigrid_acceptance")
     if not isinstance(acceptance, dict):
@@ -94,6 +128,68 @@ def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -
 
     errors: list[str] = []
     checks: list[dict[str, Any]] = []
+
+    # ---- grid identity: the config must be the grid the operator asked for --
+    # A validator pointed at the wrong config does not fail -- it validates a
+    # complete, self-consistent grid and exits 0, certifying nothing about the
+    # grid it was meant to check. Both grids in this campaign live under the
+    # same results root, so the results root cannot disambiguate them; only an
+    # independent declaration of intent can. These run FIRST so a mismatched
+    # pairing errors before any per-file work.
+    declared_tags = [str(model["tag"]) for model in models]
+    declared_runs = {str(model["tag"]): str(model["run_name"]) for model in models}
+    expected_files = sum(
+        (1 + len(model.get("methods", []))) * len(tasks) for model in models
+    )
+
+    if expect_model_tags is not None:
+        check(
+            sorted(declared_tags) == sorted(str(t) for t in expect_model_tags),
+            f"config covers the expected model tags {sorted(expect_model_tags)} "
+            f"(config declares {sorted(declared_tags)})",
+            errors,
+            checks,
+        )
+    if expect_cells is not None:
+        check(
+            expected_files == int(expect_cells),
+            f"config expands to the expected {expect_cells} cells "
+            f"(config expands to {expected_files})",
+            errors,
+            checks,
+        )
+
+    # ---- the results root holds exactly this grid's cells, nothing else -----
+    # Equality, not containment: a missing cell and a foreign cell are both
+    # pairing failures. A run dir carrying another grid's JSONLs means the
+    # config and the results do not describe the same run.
+    for model in models:
+        tag = str(model["tag"])
+        run_dir = results_root / declared_runs[tag]
+        # NB: verify_common.check() returns None, so its result must never be
+        # branched on -- `if not check(...)` is always true and would skip the
+        # check below unconditionally. Evaluate the condition separately.
+        run_dir_exists = run_dir.is_dir()
+        check(run_dir_exists, f"{tag}: run dir {declared_runs[tag]!r} exists", errors, checks)
+        if not run_dir_exists:
+            continue
+        declared_cells = {
+            f"{name}.{task}.jsonl"
+            for name in [str(model["baseline"]["name"])]
+            + [str(m["name"]) for m in model.get("methods", [])]
+            for task in tasks
+        }
+        observed_cells = {p.name for p in run_dir.glob("*.jsonl")}
+        missing = sorted(declared_cells - observed_cells)
+        foreign = sorted(observed_cells - declared_cells)
+        check(
+            observed_cells == declared_cells,
+            f"{tag}: run dir holds exactly the {len(declared_cells)} cells the "
+            f"config declares (missing={missing or 'none'}, "
+            f"unaccounted={foreign or 'none'})",
+            errors,
+            checks,
+        )
 
     # ---- scope guard against the open implementation items -----------------
     # configs/main_grid_manifest.yaml records rtn_builder, wanda_builder,
@@ -160,7 +256,6 @@ def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -
     )
     ranges = ranges if isinstance(ranges, dict) else {}
 
-    expected_files = 0
     for model in models:
         tag = str(model["tag"])
         run_name = str(model["run_name"])
@@ -170,7 +265,6 @@ def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -
         baseline_revision = model["baseline"].get("revision")
         method_configs = {str(m["name"]): m for m in model.get("methods", [])}
         methods = [baseline_name] + list(method_configs)
-        expected_files += len(methods) * len(tasks)
 
         check(bool(baseline_revision), f"{tag}: baseline declares a pinned model revision", errors, checks)
 
@@ -411,6 +505,9 @@ def verify_minigrid(config_path: Path, results_root: Path, project_root: Path) -
         "expected_jsonl_files": expected_files,
         "observed_jsonl_files": len(file_checksums),
         "expected_tasks": tasks,
+        "declared_model_tags": declared_tags,
+        "expect_model_tags": list(expect_model_tags) if expect_model_tags is not None else None,
+        "expect_cells": int(expect_cells) if expect_cells is not None else None,
         "baseline_accuracies": baseline_accuracies,
         "checks": checks,
         "errors": errors,
