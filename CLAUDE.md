@@ -73,6 +73,40 @@ nothing about the grid it was meant to check. Both grids live under the same
 results root, so only an independent declaration of intent can catch it. Never
 reintroduce a default here.
 
+## Scheduler controls are not in effect until independently observed
+
+**Standing rule, effective 2026-07-25.** A scheduler flag is in force only when
+you have *observed* it — via `scontrol show job/node/partition` after
+submission, the QOS or partition configuration (`sacctmgr show qos`,
+`scontrol show config`), or the job's actual behaviour. **Acceptance at
+submission proves nothing**: `sbatch` exiting 0 means the command parsed, not
+that the request took effect.
+
+Three controls have now been found accepted-but-inert in this campaign, all with
+a clean `sbatch` exit:
+
+- `--exclude` — accepted and silently discarded by Phoenix's `job_submit` Lua
+  plugin, which overwrites `ExcNodeList` (incident 11).
+- `--requeue` — set, and `scontrol` reports `Requeue=1`, but Phoenix preempts
+  with `PreemptMode=CANCEL`, so preempted jobs are destroyed, never requeued
+  (incident 21). Four eval cells vanished.
+- **Options placed after the script path** — parsed as *script arguments*, so
+  `--array/--export/--constraint/--mem/--dependency` were all ignored and the
+  job ran with script defaults (incident 21). **Every `sbatch` option must
+  precede the script path.**
+
+Check the specific thing you asked for: `NodeList` for placement, `Requeue` plus
+the cluster's `PreemptMode` for retry, `Dependency` for chaining, `Features` and
+`MinMemoryNode` for resources, and the job's own first log line for anything
+passed by environment.
+
+**Corollary: a constraint that must bind a submission belongs in the `sbatch`
+script, not only in a plan document.** The 44 eval cells ran on `embers` because
+a dated correction naming `inferno` lived in a plan file while the table above it
+still said `embers`; the submission line carried the stale value forward and
+preemption then destroyed the work exactly as the correction predicted. Prose
+corrections do not bind submissions. Script defaults and required variables do.
+
 ## Verification gates
 
 Which gate applies depends on where you are and what you touched.
