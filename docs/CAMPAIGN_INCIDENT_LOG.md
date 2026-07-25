@@ -884,6 +884,83 @@ twice over.
 
 ---
 
+## 19. The acceptance sweep assumed single-file weights; 7B/8B are sharded (2026-07-25)
+
+**Evidence.** `logs/escalation_acceptance_sweep_11470366.err` (`FileNotFoundError:
+.../qwen25-7b-gptq4-seed0/model.safetensors`), `.out` (`ESCALATION_SWEEP_EXIT: 1`
+after three PASS lines); `scontrol show job 11470455`
+(`Reason=DependencyNeverSatisfied Dependency=afterok:11470366(failed)`); the
+checkpoint listing showing `model-00001-of-00002.safetensors`,
+`model-00002-of-00002.safetensors`, `model.safetensors.index.json`;
+`logs/proof_shard_reload_11476608.out` for the fix.
+
+**What happened.** The escalation acceptance sweep — standing-order step 2, the
+gate that releases the 44-cell eval fan-out — died 25 s in, on the first cell it
+touched. Its reload check opened a literal `model.safetensors`. Every mini-grid
+checkpoint (1.5 B, 3 B) is a single file; every escalation checkpoint (7 B, 8 B)
+is 2-way sharded. The script was the mini-grid sweep with `MODELS` swapped, and
+it inherited a file-layout assumption that only becomes false at scale.
+
+The sweep had passed three checks (presence, receipt, quant_method/bits) on that
+one cell before dying, so **nothing was verified**: the reload, receipt pairing,
+provenance and disjointness checks never ran on any of the 20 checkpoints. The
+builds themselves were fine — all 16 seed-3/4 builds COMPLETED exit 0, all 20
+checkpoints complete on disk.
+
+**This is the third scale-inherited defect in this stage**, and the pattern is
+now named: *mini-grid-era code carries assumptions that hold at 1.5 B/3 B and
+are false at 7 B/8 B, and they surface only when the larger models run.* The
+prior two were resource envelopes — device memory 40 GB → 80 GB, host memory
+64 G → 128 G (entry 18). This one is data layout, which is the more dangerous
+kind: an envelope breach announces itself as an OOM, while a layout assumption
+can read part of a file and return success.
+
+**Resolution.** Ruling (Amogh, 2026-07-25): fix, prove, then resume — with the
+proof required to demonstrate *shard completeness*, not merely absence of a
+crash. The stated danger was a sweep that reads shard 1, skips shard 2, and
+reports PASS on a half-verified checkpoint; that outcome is worse than the
+crash, because it is a gate that certifies what it never looked at.
+
+The reload was rewritten (`work/shard_reload.py`, imported by the sweep so the
+proof exercises the same code) to be **index-driven and complete by
+construction**: iteration comes from `model.safetensors.index.json`'s
+`weight_map`; every shard the index names must exist *and* be recorded as
+opened; the tensor keys actually read are compared against the index's full key
+set; a missing index is an explicit branch on "no index present", never a
+`try`/`except` that could swallow a real absence — sharded files on disk with no
+index fail loudly rather than falling through to the single-file path.
+
+Proof job `11476608` (CPU-only, 32 s, exit 0) reported per-shard counts for
+`qwen25-7b-gptq4-seed0`: shard 1 = 611 tensors / 1,634,576,384 elements, shard 2
+= 316 / 329,896,448, **sum 927 = the index's 927-key `weight_map`**. A
+shard-1-only read sums to 611 and fails that check, which is what makes the
+proof discriminating rather than decorative. It also carried the 3 B single-file
+cell as a regression (still PASS, `layout=single-file`) and two negative
+controls: an index naming two shards with only one on disk, and sharded files
+with the index removed. Both were refused.
+
+A scan of the rest of the chain for the same class of assumption found no
+further layout dependency — `pilot_eval` loads through
+`from_pretrained`/`from_quantized`, which read the index natively; the validator
+opens no weights; the receipt writer measures the checkpoint *directory* with
+`du -sb`. It did find one live vacuous-pass hazard of a different kind:
+`scripts/slurm/verify_minigrid.sbatch` hardcodes the **mini-grid** config and
+results root, so running it unchanged after the escalation eval would validate
+the already-complete mini-grid and exit 0 — a PASS carrying no information about
+the escalation grid. Recorded here; it must be pointed at the escalation config
+before step 6.
+
+**Without the gate.** The sweep is fail-closed by construction and its `afterok`
+link held: the 44-cell eval array went to `DependencyNeverSatisfied` rather than
+launching over an unverified checkpoint set, and no confirmatory cell was
+touched. The crash itself cost nothing. What the gate did *not* catch on its own
+is the half-read failure mode — had the checkpoints been sharded in a way that
+let `safe_open` succeed on a partial set, this sweep would have returned PASS
+and the eval would have been released over checkpoints whose second shard was
+never examined. That gap was closed by the fix, not by the gate.
+
+---
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
@@ -895,6 +972,17 @@ checking a different file than the plan required (6). Every one passed. The
 project's response has been to make controls **verify after the fact** —
 `scontrol` after submission, exact test counts rather than floors, a real GPU
 canary, and receipt gating by vintage against git history.
+
+**Scale-inherited assumptions.** Code written against the 1.5 B/3 B mini-grid
+carries assumptions that are true at that scale and false at 7 B/8 B, and they
+surface only when the larger models run: device memory 40 GB → 80 GB and host
+memory 64 G → 128 G (18), then single-file → 2-way-sharded weights (19). Three
+in one stage. Resource breaches announce themselves as an OOM; layout and shape
+assumptions do not, and can return success over data they never read — so the
+rule adopted at (19) is that a fix for one of these must be proven to do the
+*whole* job (all shards opened, counts summing to the manifest), never merely to
+stop erroring. Anything ported from the mini-grid era is suspect until the
+larger models have actually exercised it.
 
 **Defects found by comparison, not by reading.** The AWQ receipt's borrowed
 resources (8) and the sick GPU (10) were both individually plausible and only
