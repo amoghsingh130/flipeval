@@ -1101,6 +1101,89 @@ script, where the submission line cannot ignore them.
 
 ---
 
+## 22. A limit copied from a faster configuration is an unmeasured limit (2026-07-25)
+
+**Evidence.** `sacct -j 11477918 --format=SubmitLine` →
+`sbatch ... --array=3,5,7,8,11-43 --time=08:00:00 ...`;
+`scripts/slurm/run_minigrid.sbatch` line 10 at the time → `#SBATCH
+--time=12:00:00`; `scontrol show job 11477918_13` → `TimeLimit=08:00:00`,
+`RunTime=06:25:16`; tqdm progress recovered from `logs/minigrid_11477918_*.err`;
+`scontrol update JobId=11477918_13 TimeLimit=16:00:00` → **"Access/permission
+denied"**; resubmission `11485972` observed at `TimeLimit=20:00:00`.
+
+**What happened.** Ten of the 44 escalation eval cells were on course to hit
+their walltime with **nothing written**. GSM8K cells emit their JSONL only at
+the end, so an overrun destroys the entire cell rather than truncating it.
+
+Measured rates, from the logs, against an 8 h wall:
+
+| cell | done | cumulative s/it | projected |
+|---|---|---:|---:|
+| qwen AWQ GSM8K ×5 | 468–596 / 1000 | 38–48 | 10.5–12.4 h |
+| llama AWQ GSM8K ×5 | 162–419 / 1000 | 25–36 | 7.3–10.0 h |
+| qwen GPTQ GSM8K (idx 9) | 558 / 1000 | 11.1 | 3.1 h |
+
+**Two causes, not one.** The proximate cause was a hand-composed
+`--time=08:00:00` on the submission line, overriding the script. But the
+script's own **12 h default would also have truncated the slowest cells** — it
+derived from the ~7.6 s/item FP16 genspeed probe, fixed at a time when no
+quantized GSM8K cell had completed anywhere. It was never measured against the
+configuration it governed. Fixing only the override would have left a limit that
+still failed, just less often.
+
+**The limit could not be repaired in place.** `scontrol update TimeLimit` is
+denied to unprivileged users for an increase; only reduction is permitted. Once
+a job is running under a short wall, the sole remedy is cancel-and-rerun.
+
+**A rate-reading trap.** tqdm's `s/it` is a *smoothed recent* rate, not the
+cumulative average, and the two disagreed materially. Task 35 reported 20 s/it
+(projecting 6.4 h — apparently safe) while its cumulative `elapsed/done` was
+**29.6 s/it**, projecting 8.23 h, past the wall; its instantaneous rate then
+drifted to 40.7. The first read of the logs classified it as safe on the
+displayed figure. Cumulative rate is the honest projector for a walltime
+decision; the displayed one flatters a job that is slowing down.
+
+**Cost.** ~17 A100-h of guaranteed-waste burn avoided by cancelling early;
+~35 A100-h of already-spent work discarded across the ten cells. **No
+data-integrity impact:** all 33 completed cells were verified at exact counts
+(14,042 / 1,000) and write-protected `0444` before the cancels, and the ten
+target cells were confirmed 0-byte and writable before resubmission.
+
+**Fixes.** `--time` raised to 20:00:00 **in the script** (~61 % headroom over the
+worst measured projection), with the measured per-backend rates recorded in the
+comment beside it, and the resubmission carries **no `--time` on the line at
+all** — a hand-composed override being the defect under repair, the fix must not
+reproduce its shape.
+
+## 23. Qwen AWQ GSM8K runs 3.6× slower than GPTQ on identical hardware (2026-07-25)
+
+**Evidence.** tqdm cumulative rates from `logs/minigrid_11477918_*.err` and
+`logs/minigrid_11478252_9.err`, same A100 partition (`gpu-a100`), same
+`batch_size: 1`, same `max_new_tokens: 256`, same 1,000 GSM8K items.
+
+| model | backend | s/item | per-cell |
+|---|---|---:|---:|
+| Qwen2.5-7B | `gptqmodel_torch` | ~11–13 | ~3.1 h |
+| Qwen2.5-7B | `awq_gemm` | ~38–48 | ~10.5–12.4 h |
+| Llama-3.1-8B | `awq_gemm` | ~25–36 | ~7.3–10.0 h |
+
+Qwen AWQ decode works out to roughly **5 tokens/s on an A100** — far below what
+the hardware supports, and slower than the *unoptimised* portable TORCH kernel
+it is nominally an optimisation over. The asymmetry does not appear on MMLU:
+AWQ and GPTQ MMLU cells both completed in ~1:02–1:12, because MMLU is scored by
+log-likelihood and never enters the decode loop. It is generation-specific.
+
+**Not acted on, deliberately.** `quantization_backend: awq_gemm` is registered
+in `configs/pace_escalation_h3.yaml`, and 33 cells were already sealed at `0444`
+under it. Swapping backends mid-grid would tune a registered parameter *and*
+break comparability with frozen cells. Walltime was the only legitimate lever,
+and it is the one that was pulled (22).
+
+**Recorded because it is a finding, not only an obstacle.** A widely-deployed
+4-bit kernel being ~3.6× slower than the reference implementation at batch 1 is
+the kind of artifact this campaign exists to surface. It earns a sentence in the
+paper's artifacts discussion. It changes nothing about this run's numbers.
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
@@ -1124,13 +1207,23 @@ canary, and receipt gating by vintage against git history.
 **Scale-inherited assumptions.** Code written against the 1.5 B/3 B mini-grid
 carries assumptions that are true at that scale and false at 7 B/8 B, and they
 surface only when the larger models run: device memory 40 GB → 80 GB and host
-memory 64 G → 128 G (18), then single-file → 2-way-sharded weights (19). Three
-in one stage. Resource breaches announce themselves as an OOM; layout and shape
+memory 64 G → 128 G (18), then single-file → 2-way-sharded weights (19), then
+walltime 12 h → 20 h (22). Four in one stage. Resource breaches announce
+themselves as an OOM; layout and shape
 assumptions do not, and can return success over data they never read — so the
 rule adopted at (19) is that a fix for one of these must be proven to do the
 *whole* job (all shards opened, counts summing to the manifest), never merely to
 stop erroring. Anything ported from the mini-grid era is suspect until the
 larger models have actually exercised it.
+
+The walltime case (22) sharpens the shape of the family: **a value correct for
+the configuration it was written against is silently wrong for the one it is
+applied to**, and the giveaway is that it was never *measured* against the new
+configuration. The 12 h came from an FP16 genspeed probe and governed quantized
+cells that had never been timed; 40 GB was measured on 3 B and applied to 7 B.
+Each was a real measurement, reused past its domain. When a limit is inherited,
+the question is not "is it big enough?" but "what configuration was it measured
+on, and is that the one it now governs?"
 
 **Defects found by comparison, not by reading.** The AWQ receipt's borrowed
 resources (8) and the sick GPU (10) were both individually plausible and only
