@@ -1184,6 +1184,180 @@ and it is the one that was pulled (22).
 the kind of artifact this campaign exists to surface. It earns a sentence in the
 paper's artifacts discussion. It changes nothing about this run's numbers.
 
+## 24. A seal cannot cover a write path its author did not know existed (2026-07-25)
+
+**Rerun job ID: pending** — the ten cells this incident interrupted were
+resubmitted after the fix below; amend this line with the array ID when it lands.
+
+**Evidence.** `sacct -j 11485972 --format=SubmitLine` →
+`sbatch --parsable -A paceship-compressedlm -q inferno
+--array=13,15,17,19,21,35,37,39,41,43 --chdir=... scripts/slurm/run_minigrid.sbatch`
+(no grid declaration); ten identical tracebacks in
+`logs/minigrid_11485972_*.err` at `pilot_eval/run.py:145`,
+`PermissionError: [Errno 13] Permission denied:
+'results/qwen25_1p5b_minigrid_h3/awq_s0.gsm8k.jsonl'`; log line
+`minigrid cell: model=qwen25-1p5b method=awq_s0 task=gsm8k` against
+`model=qwen25-7b` for the same index under `11477918`; archive manifest
+`results/minigrid_run_20260722.manifest.json` recording
+`results/*_minigrid_h3/manifest.json` at **`mode: 0o444`**; those same two files
+found at `0644` with mtimes `20:57`/`21:00` matching the last qwen and llama
+task starts; both corrupted files preserved at
+`docs/forensics/20260725_wrongconfig/`.
+
+### The mechanism, first
+
+`os.replace()` is a **rename**. A rename needs write permission on the
+**directory**. It does not consult the mode of the file it replaces. So this,
+in `pilot_eval/run.py::_atomic_write`:
+
+```python
+temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+...
+os.replace(temporary, path)
+```
+
+is entirely unaffected by `chmod a-w manifest.json`. The seal was applied. The
+seal was correct. The seal was **irrelevant to that write path**. And because
+the replacement file is newly created under the default umask, it lands at
+`0644` — which is why the manifests were found writable afterwards, and why the
+loss of protection is silent and self-erasing: the evidence that a file was
+sealed is destroyed by the very write the seal failed to stop.
+
+**File-level sealing therefore cannot stop an atomic-rename writer.** This is
+not an incomplete control that missed some files. It is the *wrong control* for
+that write path, and it would have failed on 100 % of files it was applied to.
+
+### Two write paths in one program, indistinguishable at the convention level
+
+`pilot_eval/run.py` writes its outputs two different ways:
+
+| what | how | `0444` on the file stops it? |
+|---|---|---|
+| cell JSONLs | `out_path.open("w")` (line 145) | **yes** — `PermissionError` |
+| `manifest.json` | temp file + `os.replace()` (line 89) | **no** — mode not consulted |
+
+Nothing at the level the convention was written at — "`chmod a-w` on every JSONL
+and `manifest.json` in the set" — distinguishes these. Both are "the program
+writes a file in the run directory." The author enumerated the right files and
+still got a control that worked on 44 of them and was inert on 2, with no signal
+that the coverage was partial. **Enumerate-and-protect fails the moment the
+thing you enumerated is not the thing that grants access.**
+
+The fix is to seal the **container**: `chmod a-w` the run directory itself.
+A read-only directory blocks rename-in-place, blocks new file creation, and
+needs no knowledge of how any writer is implemented. Verified after sealing:
+reads of `manifest.json` and the directory listing still succeed, and creating
+any file in it raises `PermissionError`. `verify_minigrid.py` is unaffected —
+it only reads run dirs, and writes its summary to the results *root*.
+
+### What was actually written
+
+The corruption was **purely append-only**, and coherent. Every scalar field —
+`run_name`, `created_at`, `config`, `methods`, `tasks`, `loaded` — stayed
+byte-identical to the archived original, and the existing `runs` prefix was
+untouched. What changed was five appended run-start records per file:
+
+```json
+{"started_at": "2026-07-26T00:55:25+00:00", "methods": ["awq_s0"], "tasks": ["gsm8k"]}
+```
+
+`runs` went 23 → 28 and 22 → 27. The result is a manifest asserting that five
+mini-grid AWQ GSM8K cells were re-run on Jul 26 when nothing was written and the
+JSONLs are the Jul 22 originals. **It parses, it validates, and it is false** —
+invisible to any check that asks whether the file is well-formed rather than
+whether it is the same file.
+
+### Proximate cause
+
+The submission omitted `MINIGRID_CONFIG` and `MINIGRID_MODELS`. The exports had
+lived in a terminal that was closed mid-campaign; the resubmit was composed in a
+fresh shell where they were simply unset. The line also dropped the `--export=ALL`
+that the working `11477918` line carried — but that was a symptom of recomposing
+the line from memory, **not the cause**: `scontrol show config` shows no
+`SBATCH_EXPORT` override, so Slurm's default `--export=ALL` was in force and
+would have propagated the variables had they existed.
+
+### Root cause
+
+`scripts/slurm/verify_minigrid.sbatch` was hardened on 2026-07-21 so every grid
+variable is required via `${VAR:?}` (incident 20). `run_minigrid.sbatch` was
+not. **The hardening was applied to the reader and not to the writer.** So the
+validator failed *closed* on a missing grid declaration, while the runner failed
+*open* — into write mode, against whatever its default happened to point at.
+
+That asymmetry is backwards from the risk. A validator with a default grid
+returns a wrong answer. A runner with a default grid **destroys the other grid**.
+The more dangerous of the two was the one left unguarded, for four days, while
+the campaign's attention was on the one that had already been caught.
+
+### The inverse of the accepted-but-inert family
+
+Incidents 11, 21 and 22 share a shape: a control that *appeared* present and did
+nothing — `--exclude` silently discarded by a `job_submit` plugin, `--requeue`
+set and reported but defeated by `PreemptMode=CANCEL`, options after the script
+path parsed as arguments.
+
+This is the mirror image, and worth separating from them. The `0444` seal was
+**genuinely present, genuinely correct, and genuinely worked** — on the write
+path its author had in mind. It covered less than the author believed because
+the program contained a second write path that was not in the author's model of
+it. The lesson does not generalise to "verify your controls are in effect"; that
+would have passed here. It generalises to **verify what your control is
+attached to, and whether the access it governs is the access the writer needs.**
+
+### "Nothing was lost" is conditional, and both conditions were luck
+
+All 44 mini-grid JSONLs verified byte-identical to the archive by `sha256`
+(44/44, both against the tarball and on disk). That outcome required **two**
+independent protections, on two different write paths:
+
+- the `0444` seal, which stopped `open("w")` on the JSONLs — created 2026-07-25
+  as general prudence about a gitignored result set, **not** in anticipation of
+  a runner defaulting to the wrong grid;
+- the git-committed tarball, which is the only reason the manifests were
+  recoverable at all — since the seal did not protect them, restoration was the
+  *only* remedy available.
+
+Neither was load-bearing by design at the time it was created. Had the archive
+been made a day later, or the seal skipped as premature, this is a destroyed
+confirmatory grid — archived, hash-verified, analysed, its escalation decision
+signed and cited in the paper — with no version history to recover from. The
+correct reading of this incident is not that the defences worked. It is that
+**the campaign was one unrelated decision away from an unrecoverable loss, and
+found out by accident.**
+
+### Fixes
+
+- `run_minigrid.sbatch`: `MINIGRID_CONFIG` and `MINIGRID_MODELS` required via
+  `${VAR:?}`, defaults **removed entirely**; `SLURM_ARRAY_TASK_ID` required; the
+  model list length-checked against the 2×22 index map and the resolved cell
+  checked non-empty; the grid declaration echoed as the job's own first log line.
+  Deliberately **no** `MINIGRID_RESULTS` — `pilot_eval.run` takes no results root
+  and derives `run_dir` from the config alone, so requiring one would be a
+  control that looks present and does nothing, i.e. this incident's own lesson
+  applied in reverse. (A real version — `run.py` asserting the config-derived
+  `run_dir` against an independently declared path — is queued for the
+  post-campaign hygiene batch, as an assertion in code, not an env var.)
+- `tests/test_run_minigrid_guards.py`: 12 tests driving the real script with a
+  stubbed `srun`, so "did execution reach the container?" is a file-existence
+  check. Includes a positive control, so an always-abort guard cannot pass, and
+  static guards that the defaults cannot return and that runner and validator
+  cannot drift apart again. In-image suite 183 → 195.
+- Convention widened: **no job script is ever given a default grid** — reader or
+  writer — replacing "validators must be told which grid they are validating".
+- Convention corrected: **seal the container, not a file list.** Archive-and-seal
+  now `chmod a-w`s the run directory as well as its files, with write restored
+  per-file only for cells a pending job must write. Applied to both mini-grid
+  directories on 2026-07-25; applies to the escalation directories the moment
+  their validator passes.
+- Manifests restored from `results/minigrid_run_20260722.tar.gz` and re-sealed,
+  hashes confirmed `6e5057d6…` / `695e394d…`.
+
+**Cost.** ~7 minutes of A100 time across ten jobs that died in 30–55 s each. No
+data lost. The expensive part was that the ten escalation cells cancelled under
+incident 22 went un-rerun for the time it took to find this, and that the finding
+required suspecting a mode bit that had already been set correctly.
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
