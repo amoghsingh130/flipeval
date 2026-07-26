@@ -1,0 +1,479 @@
+{
+  "run_name": "llama32_3b_minigrid_h3",
+  "created_at": "2026-07-22T09:59:21.045377+00:00",
+  "config": "/workspace/configs/pace_minigrid_h3.yaml",
+  "methods": [
+    {
+      "name": "fp16",
+      "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+      "dtype": "float16",
+      "seed": null,
+      "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+      "trust_remote_code": true,
+      "quantization_backend": null
+    },
+    {
+      "name": "gptq_s0",
+      "model_id": "outputs/quantized/llama32-3b-gptq4-seed0",
+      "dtype": "float16",
+      "seed": 0,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "gptqmodel_torch"
+    },
+    {
+      "name": "gptq_s1",
+      "model_id": "outputs/quantized/llama32-3b-gptq4-seed1",
+      "dtype": "float16",
+      "seed": 1,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "gptqmodel_torch"
+    },
+    {
+      "name": "gptq_s2",
+      "model_id": "outputs/quantized/llama32-3b-gptq4-seed2",
+      "dtype": "float16",
+      "seed": 2,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "gptqmodel_torch"
+    },
+    {
+      "name": "gptq_s3",
+      "model_id": "outputs/quantized/llama32-3b-gptq4-seed3",
+      "dtype": "float16",
+      "seed": 3,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "gptqmodel_torch"
+    },
+    {
+      "name": "gptq_s4",
+      "model_id": "outputs/quantized/llama32-3b-gptq4-seed4",
+      "dtype": "float16",
+      "seed": 4,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "gptqmodel_torch"
+    },
+    {
+      "name": "awq_s0",
+      "model_id": "outputs/quantized/llama32-3b-awq4-seed0",
+      "dtype": "float16",
+      "seed": 0,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "awq_gemm"
+    },
+    {
+      "name": "awq_s1",
+      "model_id": "outputs/quantized/llama32-3b-awq4-seed1",
+      "dtype": "float16",
+      "seed": 1,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "awq_gemm"
+    },
+    {
+      "name": "awq_s2",
+      "model_id": "outputs/quantized/llama32-3b-awq4-seed2",
+      "dtype": "float16",
+      "seed": 2,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "awq_gemm"
+    },
+    {
+      "name": "awq_s3",
+      "model_id": "outputs/quantized/llama32-3b-awq4-seed3",
+      "dtype": "float16",
+      "seed": 3,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "awq_gemm"
+    },
+    {
+      "name": "awq_s4",
+      "model_id": "outputs/quantized/llama32-3b-awq4-seed4",
+      "dtype": "float16",
+      "seed": 4,
+      "revision": null,
+      "trust_remote_code": true,
+      "quantization_backend": "awq_gemm"
+    }
+  ],
+  "tasks": [
+    {
+      "name": "gsm8k",
+      "split": "test",
+      "limit": 1000,
+      "subjects": null,
+      "fewshot": 1,
+      "max_new_tokens": 256,
+      "prompt_style": "chat",
+      "fewshot_style": "inline",
+      "dataset_revision": "740312add88f781978c0658806c59bc2815b9866"
+    },
+    {
+      "name": "mmlu",
+      "split": "test",
+      "limit": null,
+      "subjects": [
+        "abstract_algebra",
+        "anatomy",
+        "astronomy",
+        "business_ethics",
+        "clinical_knowledge",
+        "college_biology",
+        "college_chemistry",
+        "college_computer_science",
+        "college_mathematics",
+        "college_medicine",
+        "college_physics",
+        "computer_security",
+        "conceptual_physics",
+        "econometrics",
+        "electrical_engineering",
+        "elementary_mathematics",
+        "formal_logic",
+        "global_facts",
+        "high_school_biology",
+        "high_school_chemistry",
+        "high_school_computer_science",
+        "high_school_european_history",
+        "high_school_geography",
+        "high_school_government_and_politics",
+        "high_school_macroeconomics",
+        "high_school_mathematics",
+        "high_school_microeconomics",
+        "high_school_physics",
+        "high_school_psychology",
+        "high_school_statistics",
+        "high_school_us_history",
+        "high_school_world_history",
+        "human_aging",
+        "human_sexuality",
+        "international_law",
+        "jurisprudence",
+        "logical_fallacies",
+        "machine_learning",
+        "management",
+        "marketing",
+        "medical_genetics",
+        "miscellaneous",
+        "moral_disputes",
+        "moral_scenarios",
+        "nutrition",
+        "philosophy",
+        "prehistory",
+        "professional_accounting",
+        "professional_law",
+        "professional_medicine",
+        "professional_psychology",
+        "public_relations",
+        "security_studies",
+        "sociology",
+        "us_foreign_policy",
+        "virology",
+        "world_religions"
+      ],
+      "fewshot": 0,
+      "max_new_tokens": 256,
+      "prompt_style": "chat",
+      "fewshot_style": "inline",
+      "dataset_revision": "c30699e8356da336a370243923dbaf21066bb9fe"
+    }
+  ],
+  "runs": [
+    {
+      "started_at": "2026-07-22T09:59:21.045377+00:00",
+      "methods": [
+        "fp16"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T09:59:21.177605+00:00",
+      "methods": [
+        "fp16"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:05:10.716987+00:00",
+      "methods": [
+        "gptq_s0"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:07:48.517330+00:00",
+      "methods": [
+        "gptq_s0"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:19:22.054872+00:00",
+      "methods": [
+        "gptq_s1"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:20:58.360355+00:00",
+      "methods": [
+        "gptq_s1"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:23:04.034971+00:00",
+      "methods": [
+        "gptq_s2"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:41:27.866115+00:00",
+      "methods": [
+        "gptq_s2"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:50:33.587839+00:00",
+      "methods": [
+        "gptq_s3"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T10:52:36.464808+00:00",
+      "methods": [
+        "gptq_s3"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:03:22.080100+00:00",
+      "methods": [
+        "gptq_s4"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:08:30.092727+00:00",
+      "methods": [
+        "gptq_s4"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:11:04.519860+00:00",
+      "methods": [
+        "awq_s0"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:12:36.299990+00:00",
+      "methods": [
+        "awq_s0"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:36:13.855673+00:00",
+      "methods": [
+        "awq_s1"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:46:29.599762+00:00",
+      "methods": [
+        "awq_s1"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:48:01.549261+00:00",
+      "methods": [
+        "awq_s2"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T11:57:46.243673+00:00",
+      "methods": [
+        "awq_s2"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T12:03:56.752076+00:00",
+      "methods": [
+        "awq_s3"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T12:18:49.584797+00:00",
+      "methods": [
+        "awq_s3"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T12:29:07.071257+00:00",
+      "methods": [
+        "awq_s4"
+      ],
+      "tasks": [
+        "mmlu"
+      ]
+    },
+    {
+      "started_at": "2026-07-22T12:38:53.711945+00:00",
+      "methods": [
+        "awq_s4"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-26T00:57:50.146866+00:00",
+      "methods": [
+        "awq_s0"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-26T00:58:23.106001+00:00",
+      "methods": [
+        "awq_s1"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-26T00:59:00.278789+00:00",
+      "methods": [
+        "awq_s2"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-26T00:59:35.349134+00:00",
+      "methods": [
+        "awq_s3"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    },
+    {
+      "started_at": "2026-07-26T01:00:08.410589+00:00",
+      "methods": [
+        "awq_s4"
+      ],
+      "tasks": [
+        "gsm8k"
+      ]
+    }
+  ],
+  "loaded": {
+    "fp16": {
+      "quantization_backend": null,
+      "kernel": "none"
+    },
+    "gptq_s0": {
+      "quantization_backend": "gptqmodel_torch",
+      "kernel": "TorchLinear"
+    },
+    "gptq_s1": {
+      "quantization_backend": "gptqmodel_torch",
+      "kernel": "TorchLinear"
+    },
+    "gptq_s2": {
+      "quantization_backend": "gptqmodel_torch",
+      "kernel": "TorchLinear"
+    },
+    "gptq_s3": {
+      "quantization_backend": "gptqmodel_torch",
+      "kernel": "TorchLinear"
+    },
+    "gptq_s4": {
+      "quantization_backend": "gptqmodel_torch",
+      "kernel": "TorchLinear"
+    },
+    "awq_s0": {
+      "quantization_backend": "awq_gemm",
+      "kernel": "WQLinear_GEMM"
+    },
+    "awq_s1": {
+      "quantization_backend": "awq_gemm",
+      "kernel": "WQLinear_GEMM"
+    },
+    "awq_s2": {
+      "quantization_backend": "awq_gemm",
+      "kernel": "WQLinear_GEMM"
+    },
+    "awq_s3": {
+      "quantization_backend": "awq_gemm",
+      "kernel": "WQLinear_GEMM"
+    },
+    "awq_s4": {
+      "quantization_backend": "awq_gemm",
+      "kernel": "WQLinear_GEMM"
+    }
+  }
+}

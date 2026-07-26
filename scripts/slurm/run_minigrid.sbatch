@@ -34,21 +34,53 @@
 # Index map: idx -> model = idx/22, then rem = idx%22 -> method = rem/2,
 # task = rem%2. Model-major so a single model's 22 jobs are a contiguous range
 # and can be submitted alone (e.g. --array=0-21 for Qwen).
+#
+# EVERY GRID-SELECTING INPUT IS REQUIRED -- there are no defaults, deliberately.
+#
+#   MINIGRID_CONFIG    container path to the grid config
+#   MINIGRID_MODELS    space-separated model tags, in index order
+#
+# This script had defaults for both until 2026-07-25. On that date a resubmit of
+# ten escalation cells omitted the declaration, fell through to the mini-grid
+# defaults, and opened ten cells of the SEALED, ARCHIVED, PAPER-CITED mini-grid
+# in write mode (array 11485972, incident 24). Only the 0444 seal on those JSONLs
+# turned it into a PermissionError instead of a truncation.
+#
+# The asymmetry that allowed it: verify_minigrid.sbatch was hardened to ${VAR:?}
+# weeks earlier, so the READER fails closed on a missing grid declaration while
+# the WRITER failed open, into write mode, against whatever the default pointed
+# at. A runner that can silently target the wrong grid is strictly more dangerous
+# than a validator that can, because it writes. NO JOB SCRIPT IS EVER GIVEN A
+# DEFAULT GRID -- never reintroduce one here.
+#
+# There is deliberately no MINIGRID_RESULTS: unlike verify_minigrid.py,
+# pilot_eval.run takes no results root and derives run_dir from the config alone
+# (`run.output_dir / run.run_name`). Requiring a variable this script cannot act
+# on would be a control that looks present and does nothing -- the exact family
+# of defect as the inert --exclude and --requeue flags (incidents 11 and 21).
+# MINIGRID_CONFIG is the single thing that selects where output lands.
 
 # shellcheck source=scripts/slurm/env.sh
 source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
 mkdir -p logs
 
-CONFIG="${MINIGRID_CONFIG:-/workspace/configs/pace_minigrid_h3.yaml}"
-# Model tags are parameterized alongside the config so this one script also serves
-# the escalation grid (MINIGRID_CONFIG=.../pace_escalation_h3.yaml with
-# MINIGRID_MODELS="qwen25-7b llama31-8b"). The default reproduces the mini-grid
-# invocation byte-for-byte; the idx->cell mapping is unchanged because both grids
-# are 2 models x 22 variants = 44.
+: "${MINIGRID_CONFIG:?required (no default: a default targets the wrong grid IN WRITE MODE)}"
+: "${MINIGRID_MODELS:?required (space-separated model tags; no default, see above)}"
+: "${SLURM_ARRAY_TASK_ID:?required (this script is an array job and has no single-cell mode)}"
+
+CONFIG="$MINIGRID_CONFIG"
 # shellcheck disable=SC2206  # word-splitting into the array is intended here
-MODELS=(${MINIGRID_MODELS:-qwen25-1p5b llama32-3b})
+MODELS=(${MINIGRID_MODELS})
 METHODS=(fp16 gptq_s0 gptq_s1 gptq_s2 gptq_s3 gptq_s4 awq_s0 awq_s1 awq_s2 awq_s3 awq_s4)
 TASKS=(mmlu gsm8k)
+
+# The idx->cell map assumes exactly 2 models x 22 variants. A MINIGRID_MODELS of
+# the wrong length would otherwise index past the array and hand pilot_eval.run
+# an empty --model-tag rather than failing.
+if [ "${#MODELS[@]}" -ne 2 ]; then
+  echo "FATAL: MINIGRID_MODELS must name exactly 2 model tags, got ${#MODELS[@]}: ${MODELS[*]}" >&2
+  exit 1
+fi
 
 IDX=$SLURM_ARRAY_TASK_ID
 MODEL=${MODELS[$((IDX / 22))]}
@@ -56,6 +88,15 @@ REM=$((IDX % 22))
 METHOD=${METHODS[$((REM / 2))]}
 TASK=${TASKS[$((REM % 2))]}
 
+if [ -z "$MODEL" ] || [ -z "$METHOD" ] || [ -z "$TASK" ]; then
+  echo "FATAL: array index $IDX does not map to a cell (model='$MODEL' method='$METHOD' task='$TASK')" >&2
+  exit 1
+fi
+
+# Echo the declaration itself, not just its consequences: per the standing rule
+# that a scheduler control is in force only when observed, the job's own first
+# lines are the record of what it was actually told to run.
+echo "minigrid grid: config=$CONFIG models=${MODELS[*]}"
 echo "minigrid cell: model=$MODEL method=$METHOD task=$TASK (array index $IDX)"
 
 srun apptainer exec --cleanenv --nv --pwd /workspace \
