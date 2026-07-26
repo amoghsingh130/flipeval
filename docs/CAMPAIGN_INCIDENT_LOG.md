@@ -1186,8 +1186,19 @@ paper's artifacts discussion. It changes nothing about this run's numbers.
 
 ## 24. A seal cannot cover a write path its author did not know existed (2026-07-25)
 
-**Rerun job ID: pending** — the ten cells this incident interrupted were
-resubmitted after the fix below; amend this line with the array ID when it lands.
+**Rerun: array `11494460`** (submitted 2026-07-26, ten cells, **outcome
+pending**). Submitted only after the fix below, with the grid declared
+explicitly and every control observed rather than assumed:
+`ArrayTaskId=13,15,17,19,21,35,37,39,41,43`, `TimeLimit=20:00:00`,
+`Partition=gpu-a100`, `QOS=inferno`, `MinMemoryNode=64G`. Amend with the
+outcome when the cells land.
+
+Note on the queue, since incident 21 turned on it: `gpu-a100` has
+`PreemptMode=CANCEL`, and `sacctmgr show qos inferno` gives `Preempt=embers` —
+`inferno` is the *preemptor*, not the preemptee. That asymmetry is why the
+`embers` array `11476696` lost cells to preemption while `11477918` on `inferno`
+did not. `Requeue=1` is reported on this job and remains inert under
+`PreemptMode=CANCEL`; it is not load-bearing here.
 
 **Evidence.** `sacct -j 11485972 --format=SubmitLine` →
 `sbatch --parsable -A paceship-compressedlm -q inferno
