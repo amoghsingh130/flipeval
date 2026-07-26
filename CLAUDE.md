@@ -44,8 +44,9 @@ against a different config**, do both of these, in this order:
    `results/minigrid_run_20260722.tar.gz`). Verify the round-trip before
    committing: `sha256sum -c`, then extract and re-hash every file against the
    manifest.
-2. **Write-protect it** — `chmod a-w` on every JSONL and `manifest.json` in the
-   set. This is permanent, not a temporary measure.
+2. **Write-protect it** — `chmod a-w` on the run **directory** and on every file
+   in it. This is permanent, not a temporary measure. **Seal the container, not
+   a file list** (revised 2026-07-25 after incident 24 — see below).
 
 **Why.** `results/*` is gitignored, so a completed set has no version history to
 recover from — a stray `rm`, a scratch purge, or a mis-specified rerun destroys
@@ -55,11 +56,35 @@ campaign. The write-protection specifically closes a live hazard found
 every grid writes under the same `results/` root, so a single unset
 `MINIGRID_CONFIG` would have truncated the sealed mini-grid at file-open,
 before any log line could warn. `0444` turns that into a `PermissionError`.
+That is exactly what happened on 2026-07-25 (array 11485972): the seal held on
+all 44 JSONLs and nothing was lost.
+
+**Why the directory, and not just the files.** The same incident showed the
+file-list form of this rule is *mechanically* insufficient, not merely
+incomplete. `pilot_eval/run.py::_atomic_write` updates `manifest.json` by
+writing a temp file and calling `os.replace()`. A rename needs write permission
+on the **directory**, never on the target file — so `0444` on `manifest.json` is
+inert against that write path, and the replacement lands at the umask default of
+`0644`. Both sealed mini-grid manifests were `0o444` in the archive and were
+still overwritten, then found writable afterwards. Sealing individual files
+protects only against `open("w")`; sealing the directory is what actually closes
+rename-in-place. Never conclude a set is protected from its file modes alone.
+
+**Cells a pending job must still write stay writable, individually.** Restore
+write on exactly those paths (and, while any cell is pending, on the directory),
+and re-seal the moment each one lands. A blanket `chmod a-w` over a directory
+holding 0-byte stubs makes the rerun fail at `open()` in precisely the way
+11485972 did.
 
 Applied to the mini-grid on 2026-07-25. **Apply to the escalation cells the
 moment their validator passes.**
 
-## Validators must be told which grid they are validating
+## No job script is ever given a default grid
+
+**Widened 2026-07-25 (incident 24), from "validators must be told which grid
+they are validating".** Every job script that reads *or writes* a grid must be
+told which grid, with no fallback. An unset grid variable aborts the job before
+the image starts.
 
 `scripts/slurm/verify_minigrid.sbatch` takes `MINIGRID_CONFIG`,
 `MINIGRID_RESULTS`, `MINIGRID_MODELS` and `MINIGRID_CELLS` — **all required, no
@@ -67,11 +92,26 @@ defaults**. `MINIGRID_MODELS`/`MINIGRID_CELLS` are the operator's declaration of
 intent, checked against the config by `verify_minigrid.py`, and each run dir
 must hold exactly the cells the config declares.
 
+`scripts/slurm/run_minigrid.sbatch` takes `MINIGRID_CONFIG` and
+`MINIGRID_MODELS` — **also required, also no defaults**, plus a length check on
+the model list and a non-empty check on the resolved cell. It deliberately takes
+no `MINIGRID_RESULTS`: `pilot_eval.run` has no results-root argument and derives
+`run_dir` from the config alone, so requiring one would be a control that looks
+present and does nothing.
+
 The failure this prevents is not a crash. A validator pointed at the wrong
 config validates a complete, self-consistent grid and exits **0**, certifying
 nothing about the grid it was meant to check. Both grids live under the same
-results root, so only an independent declaration of intent can catch it. Never
-reintroduce a default here.
+results root, so only an independent declaration of intent can catch it.
+
+**The runner is the more dangerous of the two, because it writes.** The
+validator was hardened on 2026-07-21; the runner kept its defaults until
+2026-07-25, so the reader failed closed while the writer failed open — into
+write mode, against whatever the default pointed at. Array 11485972 then omitted
+the declaration and opened ten cells of the sealed, archived, paper-cited
+mini-grid for truncation. Only the `0444` seal stopped it. Never reintroduce a
+default in either script, and treat any new grid-touching script as covered by
+this rule from its first commit.
 
 ## Scheduler controls are not in effect until independently observed
 
@@ -121,7 +161,7 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 183 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 195 passed, 0 skipped
 ```
 
 **Whichever session adds tests updates this expected count in the same commit.**
