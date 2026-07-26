@@ -1193,6 +1193,36 @@ explicitly and every control observed rather than assumed:
 `Partition=gpu-a100`, `QOS=inferno`, `MinMemoryNode=64G`. Amend with the
 outcome when the cells land.
 
+**Interim, 2026-07-26 13:40** — eight of ten landed, indices 41 and 43 still
+running, so this is not yet the outcome. All eight `COMPLETED 0:0`, all exactly
+1000 records, each sealed at `0444` as it landed. Elapsed 07:38:54–12:09:44: the
+Llama arm 07:38–08:05, the Qwen arm 10:29–12:10.
+
+**The 12 h counterfactual, stated precisely, because the loose version
+understates it.** Under the pre-(22) walltime, index 19 (`12:09:44`) would have
+been killed — and index 21 finished at `11:55:11`, clearing 12 h by **five
+minutes**. Four of the five Qwen cells landed between 10:29 and 12:10. The arm's
+distribution therefore *straddles* 12 h rather than sitting under it, and a
+five-minute margin on a write-at-close job is not a margin at all: GSM8K writes
+its JSONL only at the end, so a cell that crosses the wall loses everything, not
+a suffix. The finding that generalizes is not "12 h would have killed one cell"
+but **"12 h would have killed one cell and nearly killed another"** — the
+inherited default was not slightly short, it was *inside the noise band of the
+quantity it was bounding*. That is what makes a limit unsafe irrespective of
+whether any particular run clears it, and it is why (22)'s rule asks what
+configuration a limit was measured on rather than whether it looks big enough.
+
+**Concurrency, for scheduling future arrays.** The array never ran wider than
+**9** of its ten cells, and index 43 started at `10:48:36`, one second after
+index 13 ended at `10:48:35` — a slot handoff, not a coincidence. The effect is
+a ~19 h span for the rerun against ~12.4 h had it gone ten-wide; the tenth cell
+alone contributes ~6 h of tail. Whether this is a QOS `MaxJobs`/`MaxSubmitJobs`
+ceiling, an association limit, or simply A100 availability is **unresolved and
+queued for the post-campaign hygiene batch** (`sacctmgr show qos inferno`,
+`sacctmgr show assoc`) — it decides whether this is a constraint to plan array
+width around or one to request a change to. Per the standing rule, the cap is an
+*observation* of behaviour here, not a confirmed configured limit.
+
 Note on the queue, since incident 21 turned on it: `gpu-a100` has
 `PreemptMode=CANCEL`, and `sacctmgr show qos inferno` gives `Preempt=embers` —
 `inferno` is the *preemptor*, not the preemptee. That asymmetry is why the
@@ -1388,6 +1418,35 @@ returning `None` (20). Every one passed. The
 project's response has been to make controls **verify after the fact** —
 `scontrol` after submission, exact test counts rather than floors, a real GPU
 canary, and receipt gating by vintage against git history.
+
+**Controls that pass for a reason other than the one their user believed.** A
+narrower and nastier relative of the family above: the control is real and its
+result is correct, but the stated grounds for trusting it are false — so it goes
+on passing until the mechanism nobody examined changes, and the passing record
+is not evidence about the mechanism anyone cited. Three instances in the week of
+2026-07-19, which is what makes it a pattern rather than a coincidence:
+
+- The `0444` seal (24). It did hold the 44 JSONLs — but against `open("w")`
+  only, while the two `manifest.json` files it was equally believed to cover fell
+  to `os.replace`, which needs directory write and never touches the target's
+  mode. "The set is sealed" was true for a narrower reason than believed.
+- The validator's run-dir check (20), green because it branched on a helper
+  returning `None`, not because the run dir was right.
+- The pre-submission **C1 check** for array `11494460`, which compared the
+  proposed `MINIGRID_CONFIG` against `manifest["config"]`, justified as "the
+  value the run that produced 33 good cells used." It is not that.
+  `merge_manifest` (`pilot_eval/run.py:30-37`) sets `run_name`, `created_at` and
+  `config` **only on the branch that creates the file**, so the field records
+  whichever escalation job wrote the manifest *first* — plausibly `11476696`
+  rather than `11477918`. The check passed correctly, because every legitimate
+  escalation job used the same config; it would have passed just as readily had
+  the first writer been an illegitimate one, which is precisely the case it was
+  put there to catch.
+
+The remedy is the same in all three: name the mechanism the control actually
+exercises, and confirm that mechanism is the one that matters. A control whose
+justification is wrong is not a control that happens to work — it is an
+untested control with a passing record attached.
 
 **Scale-inherited assumptions.** Code written against the 1.5 B/3 B mini-grid
 carries assumptions that are true at that scale and false at 7 B/8 B, and they
