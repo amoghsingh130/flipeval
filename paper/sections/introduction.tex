@@ -49,12 +49,17 @@ where the harder GPQA needs 749.
 
 \paragraph{The evidence.}
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
-% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
+% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
+% results/identical_score_churn_rev2.csv (analysable_cells 1707,
+% zero_delta_cells 145, zero_delta_share 0.084944, churn_median 0.072000).
+% REV-2: "a median of 6.2%" was rev-1's churn_median 0.062176 and was corrected
+% to 7.2% on 2026-07-26, in step with the abstract and
+% \S\ref{sec:atlas:identical}. All three state the same quantity.
 Both rest on an atlas of 1{,}707 paired model-by-task cells mined from public
 per-item evaluation dumps spanning 3B to 405B parameters, in which churn runs
 five to six times the net delta, and 145 cells (8.5\%) post an exactly identical
 accuracy to their baseline while still disagreeing with it on individual items,
-at a median of 6.2\% of items. A preregistered controlled experiment then asks
+at a median of 7.2\% of items. A preregistered controlled experiment then asks
 whether the calibration \emph{seed} alone can reorder two compression methods.
 \minigridTODO{one-sentence status; H3 is undecided under the registered rule
 until all eight registered cells exist}

@@ -187,10 +187,26 @@ methods have made the difference smaller without making the evidence for
 \label{sec:atlas:identical}
 
 % SOURCE: docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
-% results/identical_score_churn.csv (statistic block, rows 2-9).
-% Population: the same 1,155 cells. Zero-delta is defined as
+% results/identical_score_churn_rev2.csv (statistic block, rows 2-9):
+% analysable_cells 1707, zero_delta_cells 145, zero_delta_share 0.084944,
+% churn_median 0.072000, churn_mean 0.088725, churn_max 0.343434,
+% zero_delta_nonzero_churn_cells 128, churn_median_nonzero_only 0.092215.
+% Population: the same 1,707 cells. Zero-delta is defined as
 % abs(net_accuracy_delta) < 1e-12, i.e. exact equality with no rounding
 % tolerance; a rounding-based definition would admit more cells and is not used.
+% REV-2 CORRECTION 2026-07-26. This comment previously cited the REV-1 file
+% results/identical_score_churn.csv and the 1,155-cell population while the
+% prose beneath it had already been updated to rev-2 -- the provenance comment
+% contradicted the text it governed. Two rev-1 restatements survived here and
+% were corrected in the same pass: the nonzero-churn subset median (0.0919 is
+% rev-1's churn_median_nonzero_only 0.091868; rev-2 is 0.092215 -> 0.0922), and
+% "more than 6% of individual items", which restated rev-1's churn_median
+% 0.062176 where rev-2 gives 0.072000 -> "more than 7%".
+% "ROUGHLY ONE IN TEN" RECONSIDERED AND TIGHTENED, not merely inherited: it was
+% near-exact for rev-1's 9.78% share and is a stretch for rev-2's 8.49%
+% (= 1 in 11.8), rounding away from the true value in the direction that
+% overstates the finding. Replaced with "about one in twelve" here and in
+% \S"What this section does and does not support". Do not restore "one in ten".
 The clearest single demonstration that aggregate accuracy is not a summary of
 behaviour is the subset of cells where the aggregate does not move at all.
 
@@ -198,9 +214,9 @@ Of the 1{,}707 analysable cells, \textbf{145 (8.49\%) post an exactly identical
 accuracy} to their baseline---not similar, identical, to machine precision.
 Among those 145 cells, the median accuracy-state churn is \textbf{0.0720}, the
 mean is 0.0887, and the maximum is 0.3434; \textbf{128 of the 145} have nonzero
-churn, with a median of 0.0919 among that subset. Roughly one in ten compressed
+churn, with a median of 0.0922 among that subset. About one in twelve compressed
 model evaluations in the public record reports a score identical to its
-baseline, and half of those still disagree with the baseline on more than 6\% of
+baseline, and half of those still disagree with the baseline on more than 7\% of
 individual items.
 
 \begin{table}[t]
@@ -208,8 +224,11 @@ individual items.
 \caption{The most extreme zero-delta cell in the atlas: identical accuracy,
 symmetric flips, $p = 1.0$.}
 \label{tab:identical-extreme}
-% SOURCE: results/identical_score_churn.csv, rank 1 row; reproduced in
+% SOURCE: results/identical_score_churn_rev2.csv, rank 1 row; reproduced in
 % docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Most extreme zero-delta cell".
+% The rank-1 row is byte-identical between rev-1 and rev-2 (pair_index 35,
+% high_school_geography_5, churn 0.343434); the citation was repointed to rev-2
+% on 2026-07-26 for consistency, not because the values moved.
 \begin{tabular}{ll}
 \toprule
 Field & Value \\
@@ -276,7 +295,7 @@ Supports: that per-item churn under compression is five to six times the net
 delta across the public record at every scale from 3B to 405B; that the majority
 of publicly recorded compression evaluations fall in a gray zone where neither
 equivalence nor degradation is established at their own sample sizes; that
-roughly one cell in ten posts an identical score while still disagreeing on
+about one cell in twelve posts an identical score while still disagreeing on
 items; and that S2's methods are measurably gentler than S1's while the
 evidential gap persists.
 

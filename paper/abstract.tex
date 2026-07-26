@@ -44,13 +44,20 @@ driven by answer churn rather than task difficulty: MMLU needs about 2{,}164
 items at a 2\,pp margin while the harder GPQA needs 749.
 
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
-% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
+% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
+% results/identical_score_churn_rev2.csv (analysable_cells 1707,
+% zero_delta_cells 145, zero_delta_share 0.084944, churn_median 0.072000).
+% REV-2: "a median of 6.2%" was rev-1's churn_median 0.062176 and was corrected
+% to 7.2% on 2026-07-26; it is the SAME quantity as \S\ref{sec:atlas:identical}'s
+% 0.0720 and must never diverge from it again. 8.5% is 8.49% rounded coarser,
+% which the summary invariant permits; 6.2% was a different revision, which it
+% does not.
 Those rates come from an atlas of the public record of compression evaluation:
 1{,}707 paired model-by-task cells mined from public per-item evaluation dumps,
 spanning 3B to 405B parameters. Across the atlas, per-item churn runs roughly
 five to six times the net accuracy delta, and 145 cells (8.5\%) post an
 \emph{exactly identical} accuracy to their baseline while still disagreeing with
-it on individual items---at a median of 6.2\% of items among those cells.
+it on individual items---at a median of 7.2\% of items among those cells.
 
 % ---------------------------------------------------------------------------
 % H3 VARIANT (A) -- SUPPORTED. Selectable only if all 8 registered confirmatory

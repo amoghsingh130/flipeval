@@ -16,6 +16,28 @@ Venue order: COLM 2027 (~March), ACL 2027, NeurIPS D&B 2027 (~May).
    registered rule. **No section of this paper may state an H3 outcome.**
 3. The audit is constructive: no claim is described as false. The audited
    property is the evidential sufficiency of the reported evaluation.
+4. **The summary-restatement invariant** (adopted 2026-07-26). `abstract.tex`
+   and `sections/introduction.tex` are *derivative*: they contain no primary
+   figures. Therefore —
+
+   > **Every number in the abstract and introduction must appear in the section
+   > it summarises, and must be the same number at a coarser or equal
+   > precision.**
+
+   A summary figure may round (§ 8.49 % → abstract 8.5 %). It may **never** be
+   a different revision, a different statistic, or a rounding of a superseded
+   value. Verify by walking both files figure-by-figure against the body
+   section — they are ~1,400 words together, so this is bounded — and record the
+   walk in the commit that changes any headline number.
+
+   *Why this rule and not a token grep.* On 2026-07-26 a `grep` for rev-1
+   tokens (`643`, `1155`, `113`, `9.78`, `6.22`, `1.7`) passed the abstract
+   clean while it still read "a median of 6.2 % of items" — the rev-1 churn
+   median 0.062176, **rounded**, and therefore invisible to any search for the
+   unrounded form. Rounded restatements are exactly what a summary contains, so
+   token search is structurally unable to police summaries. It is retained only
+   as a secondary sweep, and when run it must include the rounded forms of
+   *both* revisions.
 
 ---
 
@@ -186,11 +208,11 @@ per-item outputs; cite the required $n$ you met.
 |---|---|---|
 | T1 | Underpowered claims, shortfall factors | `results/audit_verdicts.csv` |
 | T2 | MDD / claimed margin ratios | `results/audit_verdicts.csv` |
-| T3 | Certification table at 2 pp | `results/certification_tables.csv` |
-| T4 | S1 vs S2 gray-zone contrast | `docs/RESULTS_2026-07-15_ATLAS_AUDIT.md` §1 |
-| T5 | Identical-score churn | `results/identical_score_churn.csv` |
-| F1 | Churn vs net delta scatter, atlas cells | `results/atlas_cells_summary.csv` |
-| F2 | Required $n$ vs margin, by family | `results/certification_tables.csv` |
+| T3 | Certification table at 2 pp | `results/certification_tables_rev2.csv` |
+| T4 | S1 vs S2 gray-zone contrast | `results/atlas_cells_summary_rev2.csv` |
+| T5 | Identical-score churn | `results/identical_score_churn_rev2.csv` |
+| F1 | Churn vs net delta scatter, atlas cells | `results/atlas_cells_summary_rev2.csv` |
+| F2 | Required $n$ vs margin, by family | `results/certification_tables_rev2.csv` |
 | F3 | Sequential certification stopping-time replay | pending §7 registration |
 | F4 | H3 seed dispersion vs method gap | `\minigridTODO` |
 
