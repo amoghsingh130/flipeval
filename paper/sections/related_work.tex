@@ -46,11 +46,15 @@ difference; a non-significant result is not equivalence, and at the sample sizes
 in \S\ref{sec:audit} it is frequently just an absence of resolution. Our deltas
 are: (i) TOST certification at a \emph{declared} margin;
 (ii) required-$n$ certification tables computed from empirical churn rather than
-from independent-binomial variance, with the $1.7$--$14.7\times$ correction that
-implies; (iii) anytime-valid sequential certification via confidence sequences,
-so a practitioner can stop evaluating as soon as the model is certified
-(\S\ref{sec:sequential}); and (iv) the audit of published claims, which is the
-empirical case that the distinction matters in practice.
+% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
+% (GSM8K 2.25--2.26, MuSR 14.66--14.68). REV-2: the low end was 1.7 under rev-1;
+% corrected 2026-07-26 with the abstract, introduction and §5.
+from independent-binomial variance, with the $2.3$--$14.7\times$ correction that
+implies; and (iii) the audit of published claims, which is the
+empirical case that the distinction matters in practice. An anytime-valid
+sequential extension---confidence sequences that let a practitioner stop as soon
+as the model is certified---is registered and in progress; it reports no results
+here and is not claimed as a contribution of this paper.
 \TODO{verify arXiv 2602.10144 metadata against the primary source before
 submission; do not cite from memory}
 

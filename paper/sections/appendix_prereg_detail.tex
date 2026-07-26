@@ -1,0 +1,289 @@
+% =====================================================================
+% Appendix: Preregistration detail
+% -- Relocated from sections/preregistration.tex on 2026-07-26 as part of the
+%    structural trim. NOTHING WAS DELETED IN THE MOVE: the disclosed-contact
+%    subsection, all seven interpretive choices, and the full spot-check
+%    narrative appear here verbatim, with their % SOURCE comments.
+%
+% PRIMARY SOURCES:
+%   docs/AUDIT_REGISTRATION_2026-07-15.md     (frozen; Amendment 1 appended)
+%   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md (frozen)
+%   docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices", §Provenance
+%   docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Why this note exists"
+%   docs/ATLAS_REV2_CORRECTION_2026-07-21.md  (spot-check, rev-1 -> rev-2 delta)
+%
+% DISCLOSURE BOUNDARY -- ENFORCE ON EVERY EDIT.
+% The retired "6.3% flips at identical score" anecdote (bnb-4bit same-repo
+% rerun) may appear in THIS FILE ONLY, labelled as (i) pre-registration data
+% contact and (ii) outside the frozen 59-pair manifest. It must appear nowhere
+% else in the paper -- including sections/preregistration.tex, which held it
+% until 2026-07-26 -- and nowhere at all in the blog post. It is a motivating
+% anecdote inside the honest-disclosure narrative, never an atlas statistic.
+% THE BOUNDARY TRAVELS WITH THE ANECDOTE: if this paragraph is ever moved again,
+% move this comment with it and update the pointer in preregistration.tex.
+% =====================================================================
+
+\section{Preregistration detail}
+\label{app:prereg-detail}
+
+This appendix holds the full text of three items summarised in
+\S\ref{sec:prereg}: the disclosed pre-registration data contact, the seven
+interpretive choices, and the spot-check narrative.
+
+\subsection{Disclosed pre-registration data contact}
+\label{app:prereg:contact}
+
+Preregistration is a claim about ordering, so the places where our order was
+imperfect are disclosed by the registrations themselves rather than discovered
+by a reader.
+
+% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §1.
+\textbf{Audit.} Five candidate claims were collected with exact quotes on
+2026-07-15 during a feasibility sweep, before the registration was written
+(GPTQ, LLM.int8(), and SmoothQuant abstracts; the Red~Hat AI W4A16 Llama-3.1-8B
+model card; Meta's quantized-Llama blog). No power computation had been run on
+any of them. They enter the pool through the same §3 criteria as
+later-collected claims, and they are not treated as a separate stratum, because
+the contact was with the \emph{quotes}, not with any verdict quantity.
+
+% SOURCE: docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §1; the 99 probe cells
+% are excluded per §6 and per docs/AUDIT_VERDICTS_2026-07-20.md ruling #6.
+\textbf{Atlas.} Two feasibility probes were run on 2026-07-15 before the
+registration was drafted, and their results were known: TheBloke/Llama-2-7B-GPTQ
+against meta-llama/Llama-2-7b-hf on ARC-Challenge (74 flips of 1{,}170, net
+$-1.03$\,pp), and a Neural~Magic Llama-3.1-8B baseline against its W4A16
+quantization on \texttt{bbh\_boolean\_expressions} (17 flips of 250, net
+$+1.2$\,pp). Those pairs are flagged in the atlas and excluded from every
+headline aggregate; the exclusion covers all 99 cells belonging to the two probe
+\emph{pairs}, not merely the two probe tasks (\S\ref{app:prereg:choices},
+interpretive choice~6).
+
+% SOURCE: docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Why this note exists".
+% DISCLOSURE BOUNDARY: this paragraph is the ONLY place the 6.3% anecdote may
+% appear in any FlipEval public-facing text. Never in the blog, never in the
+% abstract, never in §\ref{sec:atlas}, never in §\ref{sec:prereg}.
+\textbf{A retired anecdote.} The project's original motivating observation was a
+feasibility rerun of a bnb-4bit checkpoint against its own repository's
+full-precision weights, in which roughly 6.3\% of items flipped correctness while
+the aggregate score was unchanged. That observation is what made the project
+seem worth doing, and it is reported here for that reason. It is
+\textbf{retired from every quantitative use}, on two independent grounds: it is
+pre-registration data contact, and it lies outside the frozen 59-pair manifest,
+since same-repository multi-precision runs are an amendment candidate that was
+never acted upon. The registered replacement is the identical-score statistic of
+\S\ref{sec:atlas:identical}, computed on the frozen atlas population: 113 of
+1{,}155 cells (9.78\%) at a median churn of 6.22\%. Where an anecdote and a
+registered statistic point the same way, the paper cites the statistic.
+% REV-1 SURVIVOR FLAGGED 2026-07-26, NOT CHANGED (outside the authorised scope
+% of this editing pass). The four figures in the preceding sentence are rev-1:
+% results/identical_score_churn.csv gives analysable_cells 1155, zero_delta_cells
+% 113, zero_delta_share 0.097835, churn_median 0.062176. The rev-2 file
+% results/identical_score_churn_rev2.csv gives 1707, 145, 0.084944 and 0.072000
+% respectively, which is what \S\ref{sec:atlas:identical} and the abstract's
+% "145 cells (8.5%)" already report. The abstract's companion figure "a median of
+% 6.2%" is the SAME rev-1 churn median and must move with this sentence, or the
+% two will disagree. Awaiting the author's ruling; see the edit report.
+
+\subsection{The interpretive choices that moved the headline}
+\label{app:prereg:choices}
+
+Frozen protocols do not eliminate analyst judgement; they make it visible and
+datable. Seven passages of the audit registration were ambiguous enough to
+require a ruling before verdicts could be computed. All seven were ruled on
+2026-07-20, each is implemented in code, and each is reversible by re-running
+with the alternative. Four matter for how the results should be read.
+
+\paragraph{Choice 1: which margin is ``the applicable margin''---and the
+$K = 1 \to 5 \to 4$ correction.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1,
+% including the "Methods-narrative note" paragraph; K values cross-checked
+% against results/audit_verdicts.csv columns verdict and
+% verdict_at_registered_2pp.
+The frozen §4 names the 2\,pp registered margin first, adds ``(and at the
+claim's own margin when it states one)'', and then labels the verdict
+``underpowered for its own assertion'' \emph{at the applicable margin}. Two
+readings survive that text. Judged against a uniform 2\,pp yardstick,
+$K = 1$ of 12. Judged against each claim's own stated margin, with 2\,pp as the
+fallback for claims that state none, $K = 5$---and $K = 4$ after choice~3 below.
+
+The order in which those numbers arrived is the point, so we report it exactly.
+\textbf{The first pass of this analysis returned $K = 1$}, by applying the 2\,pp
+margin uniformly. Re-reading the frozen label---``underpowered for its
+\emph{own} assertion''---produced \textbf{$K = 5$}: a source that asserts parity
+within 0.15\,pp has made a 0.15\,pp claim, and judging it against a 2\,pp
+yardstick audits a claim nobody made. Ruling on choice~3 then moved one claim
+out of the determinate set, yielding the reported \textbf{$K = 4$}.
+
+We draw a specific methodological conclusion from this sequence, and it is not
+that the frozen text was perfect. It is that the correction ran \emph{against}
+the direction the analyst's first instinct had gone. The first pass had already
+produced a defensible, publishable, conservative number; the frozen text
+required a larger one, and the frozen text governed. That is the evidence
+available, from inside a solo-authored project, that the rule text drove the
+analysis rather than the desired result. Had the correction run the other
+way---first pass large, frozen text small---the same discipline would have
+required reporting the small number, and this paragraph would say so. Both
+readings are reported in the paper (\S\ref{sec:audit:results}) and shipped in
+the released CSV, so a reader who prefers the uniform yardstick can have it.
+
+\paragraph{Choice 2: what counts as the claim's own margin.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #2;
+% results/audit_verdicts.csv columns claimed_margin_pp, margin_basis, and the
+% R01 note in column `notes`.
+Most claims cover several benchmarks with different deltas. We define the
+claimed margin as \textbf{the largest $|\Delta|$ the source asserts is
+negligible}. This is the reading most favourable to the source: it grants the
+claim the widest margin its own sentence can bear, and therefore the smallest
+required sample size. The harsher alternative---matching the delta to the
+benchmark whose $n$ was actually used---would, for R01 alone (whose $n$ is
+PIQA's 1{,}838 while its largest delta is ARC-Easy's), raise the MDD-to-margin
+ratio by roughly $34\times$. We did not take it.
+
+The principle generalises to the whole audit. Every ambiguity was resolved in
+the source's favour: pairing rather than independent binomial variance for the
+variance model (the paired assumption is the generous one, and
+Table~\ref{tab:audit-mdd} shows the independent bound is uniformly worse); the
+largest asserted delta as the margin; a claim's own margin rather than a uniform
+one; and imputation by \emph{median} discordance from the most specific matching
+atlas tier rather than by any upper quantile. \textbf{An audit that resolves
+every ambiguity in the audited source's favour and still finds shortfalls of
+$2$--$13\times$ is the armoured version of the finding.}
+
+\paragraph{Choice 3: R04 is indeterminate rather than scored on a substituted
+benchmark.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and the
+% R04 bullet in §Indeterminate; results/audit_verdicts.csv row R04.
+Discussed in full at \S\ref{sec:audit:r04}. It is recorded here as a ruling
+because it is the second correction that cost the paper a number: it removed
+what the first pass had reported as the audit's largest shortfall ($38.3\times$)
+and moved the headline from $K = 5, J = 4$ to $K = 4, J = 5$. The GSM8K
+computation is retained in the released CSV as a labelled transparency column so
+that the set-aside quantity is inspectable rather than deleted.
+
+\paragraph{Choice 5: TOST uses the one-sided $z$.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #5;
+% docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
+The project's own helper, \texttt{flipeval.required\_n\_for\_effect}, uses the
+two-sided $z_{1-\alpha/2}$. That is correct for \emph{detection} and wrong for
+TOST, which rejects two one-sided nulls at level $\alpha$ each. Reusing the
+helper unchanged would have inflated every required $n$ in this paper by about
+27\%---in the conservative direction, under the name ``TOST'', and with no
+symptom visible in any output. It would have made every audit shortfall and
+every certification count larger than the correct value. The TOST formula is
+therefore implemented locally with the one-sided $z_{1-\alpha} = 1.6449$,
+documented, and cross-checked against the project implementation on the
+quantities the two share; the paired standard deviation is pinned against
+\texttt{flipeval.core.minimum\_detectable\_difference} on synthetic delta vectors
+in the test suite, so the audit cannot silently fork from the tested library.
+
+\paragraph{The remaining three rulings, in brief.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #4, #6, #7.
+Choice~4: verdicts are computed at claim level rather than
+claim\,$\times$\,benchmark, because the frozen table stores one pooled $n$ per
+claim and operating at a finer granularity would mean inventing rows the freeze
+does not contain; every summed task is listed in the released
+\texttt{n\_basis} column. Choice~6: ``the two probe-tagged cells'' is read as
+two probe \emph{pairs}, comprising 99 cells, all excluded. Choice~7: degenerate
+rows are handled per input rather than discarded whole, so an indeterminate
+claim keeps the components its available inputs support, reported as
+supplementary and never verdict-bearing.
+
+\subsection{The spot-check found a selection bias in our own pipeline}
+\label{app:prereg-spotcheck}
+% SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md; the spot-check report of
+% 2026-07-21 (10 cells, 262/262 fields); ruling R7.
+
+The protocol required an independent spot-check of the atlas pipeline before any
+atlas number could be quoted externally. We report what it found, because the
+finding is the paper's thesis applied to the paper.
+
+The check re-downloaded the raw per-item files for ten cells, stratified across
+both sources and across zero-delta, high-churn, McNemar-significant and excluded
+strata, and recomputed the joins, pairing gates, flip counts, churn, net deltas
+and exact McNemar $p$ values from a \emph{fresh reimplementation of the
+registered definitions}---deliberately not a rerun of our own pipeline, since
+rerunning the same code confirms determinism rather than correctness. All
+262 compared fields reconciled exactly, including dyadic $p$ values reproduced
+without \texttt{scipy}, and no upstream data drift was detected.
+
+The arithmetic was right. The \emph{population} was not. Two defects surfaced.
+First, our implementation omitted a clause of our own registration: when the
+prompt-hash gate fails, the protocol requires trying earlier run combinations in
+reverse-chronological order, and the code simply took the newest run and gave
+up. Eleven pairs contributed zero cells as a result. Crucially, the loss was
+\textbf{not random}: it removed exactly those pairs whose quantized side had
+been re-evaluated later, a property correlated with a model being popular enough
+to re-run. Second, a newer details schema nested its metrics one level deeper
+than our parser looked, so 583 cells were recorded as having no binary
+correctness metric when in fact they had one, and a sentence in our own results
+note attributed that gap to the upstream leaderboard's reporting standards. We
+retracted the sentence.
+
+We draw three points from this, and none of them is that we were unlucky.
+
+\textbf{An aggregate can be exactly right and still be built on the wrong
+population.} Every cell we checked was computed correctly. Had we validated by
+recomputing our own numbers---the natural, and useless, form of self-check---we
+would have confirmed all of them and shipped the selection bias intact. What
+caught it was reconstructing the measurement from the protocol text rather than
+from the code.
+
+\textbf{Preregistration did the work it is supposed to do.} The registration
+text was frozen before any statistic existed, and it fully determined the
+direction of the repair: we did not choose a rule that flattered a result, we
+executed a rule that was already binding and had been under-implemented. That
+is why the fix is a correction rather than a post-hoc adjustment, and it is why
+we can say so without asking to be trusted. The correction was nevertheless made
+\emph{after} results had been inspected, and we disclose that plainly rather
+than presenting the repair as a pre-specified step.
+
+\textbf{Both revisions are public.} We publish rev-1 and rev-2 and report the
+delta between them, rather than replacing the record with its corrected version.
+A field in which near-lossless claims cannot be rechecked because per-item
+outputs are never released---the finding of Section~\ref{sec:audit}---is a field
+whose corrections are invisible. Ours is not, and the difference is the point of
+the artifact rather than an apology for it.
+
+\subsection{The rev-1 to rev-2 delta}
+\label{app:prereg:rev2delta}
+% SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md §8 "Rev-1 -> rev-2 delta
+% record", all four sub-tables (Population; Headline descriptives per stratum;
+% Audit verdicts; Certification tables). Rev-2 ran as embers job 11341992
+% (exit 0, 59/59 pairs), downstream regeneration as job 11343383 (exit 0).
+% \revtwoTODO CLOSED 2026-07-26: this subsection is the narrative the marker
+% asked for. Its own note recorded that every input already existed in §8 and
+% that it was not blocked on any pending result.
+
+The repair recovered cells rather than removing them, and the recovery was
+confined to S1. The enumerated population is unchanged at 2{,}055 pair-task
+cells; analysed cells rise from 1{,}254 to \textbf{1{,}807}, and the
+probe-excluded analysable population from 1{,}155 to \textbf{1{,}707}. All of
+that movement is S1 (846 $\to$ 1{,}398); S2 is unchanged at 309 cells, which is
+the expected control, since no S2 cell's eligibility was affected by either
+defect. The reverse-chronological run fallback was exercised for 1{,}007 cells
+across 19 pairs, recorded per cell with the accepted run timestamps.
+
+The descriptives moved in the direction a recovered population predicts rather
+than in the direction that would flatter the paper. S1 median churn rises
+slightly (0.1327 $\to$ 0.1375) and S1 median $|$net delta$|$ rises
+(0.0226 $\to$ 0.0263), while the share of S1 cells certifiable at 2\,pp
+\emph{falls} from 5.6\% to 4.9\% and the share showing a detectable difference
+rises sharply from 17.5\% to 26.5\%---the recovered pairs are larger-$n$ cells,
+which resolve more differences. Every S2 field is identical across revisions.
+
+\textbf{The headline verdicts did not move.} $K = 4$ of 12 determinate claims
+underpowered for their own assertion and $J = 5$ indeterminate, identical to
+rev-1 under the rev-2 discordance imputation, with the uniform-2\,pp secondary
+reading unchanged at 1 of 12. No new verdict computation was triggered. In the
+certification tables no family entered or left, and \texttt{bbh}, \texttt{gpqa},
+\texttt{ifeval}, \texttt{math}, \texttt{mmlu\_pro} and \texttt{musr} are
+unchanged in both cell count and required $n$; the families that moved are
+\texttt{mmlu} (798 $\to$ 1{,}311 cells, required $n$ 2{,}123 $\to$ 2{,}164),
+\texttt{gsm8k} (11 $\to$ 24, 750 $\to$ 1{,}184), \texttt{winogrande}
+(15 $\to$ 23, 1{,}879 $\to$ 1{,}416), \texttt{arc\_challenge} (8 $\to$ 17,
+1{,}211 $\to$ 1{,}218), \texttt{hellaswag} (14 $\to$ 23, 688 $\to$ 695) and the
+pooled row (1{,}155 $\to$ 1{,}707, 1{,}739 $\to$ 1{,}855).
+
+That the audit's headline survived a 44\% enlargement of the atlas population is
+worth stating plainly, and it is also worth stating that we did not know it
+would when the repair was authorised.

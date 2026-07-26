@@ -23,10 +23,13 @@ the match tier is released per claim, and the independent-binomial robustness
 column bounds the effect of the imputation in the conservative direction.
 
 \paragraph{Family aggregation in the certification tables.}
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats".
+% SOURCE: results/certification_tables_rev2.csv column n_atlas_cells
+% (mmlu_pro 5, ifeval 8; all other families >= 17); docs/CERTIFICATION_TABLES_
+% 2026-07-20.md §"Scope and caveats". REV-2: this read "four families" under
+% rev-1; corrected 2026-07-26 to agree with \S\ref{sec:cert:caveats}.
 Per-subject and per-subtask cells are collapsed into families, so a family's
 quartile band mixes subject-level with model-level variation. This makes the
-p25--p75 columns conservative; four families rest on fewer than 12 cells and are
+p25--p75 columns conservative; two families rest on fewer than 12 cells and are
 indicative only.
 
 \paragraph{Claim-level granularity in the audit.}
@@ -50,16 +53,36 @@ atlas reaches 405B but is observational; the controlled grid is causal but small
 \minigridTODO{revise if escalation fires and the 7B/8B cells complete}
 
 \paragraph{Benchmarks and languages.}
+% SOURCE: results/atlas_cells_summary_rev2.csv reason column, via
+% \S\ref{sec:atlas:construction} (33 cells, 13.3% of 248 exclusions, carry no
+% binary correctness metric). REV-2: this cited 643, the rev-1 float-scored
+% count that the spot-check retracted (\S\ref{sec:prereg-spotcheck}); corrected
+% 2026-07-26 so the paper no longer retracts a number in one section and cites
+% it in another.
 All benchmarks are English and predominantly multiple-choice or short-answer,
 with per-item correctness defined by the original harness. Float-scored
-generation tasks are outside the flip model entirely---643 atlas cells were
+generation tasks are outside the flip model entirely---33 atlas cells were
 excluded for exactly this reason---so nothing here applies to quality claims
 about open-ended generation, including the CIDEr-style metric that made one
 audited claim unscoreable (\S\ref{sec:audit:r04}).
 
-\paragraph{Provisional status of the atlas numbers.}
-% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7.
-The atlas pipeline had two bugs found and fixed during its run, and the results
-document marks its numbers provisional pending an independent spot-check.
-\TODO{remove this paragraph, or restate it as completed, once that document
-records the spot-check; no external circulation of atlas numbers until then}
+\paragraph{Status of the atlas numbers.}
+% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7 (the original
+% provisional marking); docs/ATLAS_REV2_CORRECTION_2026-07-21.md §Verification
+% (first spot-check 2026-07-21, 10 cells, 262/262 fields, 0 discrepancies,
+% embers jobs 11338401/11338619/11338712/11338745) and §"targeted second
+% spot-check" (14/14 cells, 126/126 fields).
+% \TODO CLOSED 2026-07-26 by restating as completed, per its own instruction:
+% both spot-checks have now passed and are documented, so the precondition the
+% marker named is met. The independent-check requirement did real work -- it is
+% what produced the rev-1 -> rev-2 correction -- so the paragraph is restated
+% rather than removed.
+The atlas pipeline had two bugs found and fixed during its run, and its numbers
+were held provisional pending an independent spot-check. That check has since
+been completed twice: a first pass over ten stratified cells reconciled all 262
+compared fields and surfaced the population defect that produced rev-2
+(\S\ref{sec:prereg-spotcheck}), and a targeted second pass over the recovered
+cells reconciled 14 of 14 cells and 126 of 126 fields. The figures reported here
+are rev-2 and are no longer provisional. The correction itself, and the delta
+between the two revisions, are reported rather than absorbed
+(Appendix~\ref{app:prereg:rev2delta}).

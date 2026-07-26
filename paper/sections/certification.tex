@@ -6,14 +6,18 @@
 %   results/certification_tables_rev2.csv    (machine-readable, 3 margins/family)
 %   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §5 (registered metric set)
 %
-% DISCREPANCY (surfaced to the author, unresolved):
+% DISCREPANCY -- CLOSED 2026-07-26 as a wording mismatch, not a data mismatch.
 % docs/CERTIFICATION_TABLES_2026-07-20.md line 4 describes the artifact as
-% "12 benchmark families x 3 margins". results/certification_tables.csv contains
-% ELEVEN named families (arc_challenge, bbh, gpqa, gsm8k, hellaswag, ifeval,
-% math, mmlu, mmlu_pro, musr, winogrande) plus an "ALL (pooled)" row, i.e. 12
-% table ROWS at each margin. Table~\ref{tab:certification} below reproduces the
-% document's table exactly (11 families + pooled) and the prose says "eleven
-% families". Reconcile the doc's line 4 wording before submission.
+% "12 benchmark families x 3 margins". Re-verified against
+% results/certification_tables_rev2.csv on 2026-07-26: it holds ELEVEN named
+% families (arc_challenge, bbh, gpqa, gsm8k, hellaswag, ifeval, math, mmlu,
+% mmlu_pro, musr, winogrande) plus an "ALL (pooled)" row = 12 table ROWS at each
+% of 3 margins (33 rows total). So the doc's "12 families" is loose wording for
+% 12 rows; there is no missing or extra family and no number is affected.
+% The paper is already correct and stays as written: Table~\ref{tab:certification}
+% reproduces 11 families + pooled, and the prose says "eleven families".
+% Nothing is outstanding for the paper; the doc's line-4 wording is the only
+% artefact and it lies outside this tree.
 % =====================================================================
 
 \section{Certification tables: how many items an equivalence claim needs}
@@ -134,7 +138,10 @@ nearly identical models}, so they agree on the large majority of items, and
 their difference has far less variance than independence implies.
 
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column is in
-% the table"; results/certification_tables.csv column paired_advantage_at_median.
+% the table"; results/certification_tables_rev2.csv column
+% paired_advantage_at_median (GSM8K 2.25--2.26, MuSR 14.66--14.68, pooled 4.16).
+% Pointer corrected 2026-07-26: the values here are rev-2, but this comment
+% named the rev-1 CSV, whose GSM8K entry is 1.7.
 The advantage column is exactly that gap. It ranges from $\mathbf{2.3\times}$
 (GSM8K) to $\mathbf{14.7\times}$ (MuSR) and sits at $\mathbf{4.2\times}$ pooled
 over 1{,}707 cells: a practitioner using the paired design reaches the same
@@ -175,36 +182,34 @@ certification tables are empirical rather than analytic.
 \label{sec:cert:caveats}
 
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats", all five
-% bullets, plus results/certification_tables.csv column n_atlas_cells.
+% bullets, plus results/certification_tables_rev2.csv column n_atlas_cells.
+% PROSE-IFIED 2026-07-26 from a five-item list. All five caveats survive as
+% content, in order: (1) <4-cell families omitted, (2) the two thin rows,
+% (3) family aggregation mixes two variation sources, (4) the 99 probe cells,
+% (5) certification n != detection n.
 These caveats travel with the table, and any reuse of it should carry them.
-
-\begin{itemize}
-  \item \textbf{Families with fewer than 4 analysable cells are omitted.} A
-  quartile over three points is not an empirical distribution. This drops
-  nothing from the registered set: all surviving families appear in
-  Table~\ref{tab:certification}.
-  \item \textbf{Two rows rest on thin evidence and are indicative only:}
-  \texttt{mmlu\_pro} (5 cells) and \texttt{ifeval} (8). Rev-2 moved
-  \texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to 24, \texttt{hellaswag}
-  to 23 and \texttt{winogrande} to 23, so those are no longer in the thin
-  category. By contrast \texttt{mmlu} (1{,}311), \texttt{bbh} (192), and
-  \texttt{math} (56) are well supported. A reader should treat the
-  thin rows as a starting hypothesis to be replaced by their own measured churn,
-  not as a reference constant.
-  \item \textbf{Family aggregation mixes two sources of variation.} The atlas
-  collapses MMLU's 57 per-subject cells, and BBH/MATH/MuSR/GPQA's per-subtask
-  cells, into families, so a family's spread mixes subject-level variation with
-  model-level variation. This widens the p25--p75 band relative to what a single
-  practitioner evaluating a single model would see, which makes the quartile
-  columns \emph{conservative} rather than optimistic.
-  \item \textbf{Both disclosed feasibility-probe pairs (99 cells) are excluded}
-  per the atlas registration §6. They are tiny hand-built sanity pairs---$n$ as
-  low as 10, discordance up to 0.9---and would distort every quartile.
-  \item \textbf{These are certification sample sizes, not detection sample
-  sizes.} They certify equivalence within $\pm m$; the $n$ required to
-  \emph{detect} a difference at the same margin is larger. Reporting one as the
-  other is the error this section exists to prevent.
-\end{itemize}
+Families with fewer than four analysable cells are omitted, because a quartile
+over three points is not an empirical distribution; this drops nothing from the
+registered set, and all surviving families appear in
+Table~\ref{tab:certification}. Of those that survive, two rest on thin evidence
+and are indicative only---\texttt{mmlu\_pro} (5 cells) and \texttt{ifeval}
+(8)---while rev-2 moved \texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to
+24, \texttt{hellaswag} to 23 and \texttt{winogrande} to 23, taking those out of
+the thin category, and \texttt{mmlu} (1{,}311), \texttt{bbh} (192) and
+\texttt{math} (56) are well supported; a reader should treat the thin rows as a
+starting hypothesis to be replaced by their own measured churn, not as a
+reference constant. Family aggregation mixes two sources of variation, since the
+atlas collapses MMLU's 57 per-subject cells and BBH/MATH/MuSR/GPQA's per-subtask
+cells into families, so a family's spread combines subject-level with
+model-level variation---which widens the p25--p75 band relative to what a single
+practitioner evaluating a single model would see, and therefore makes the
+quartile columns \emph{conservative} rather than optimistic. Both disclosed
+feasibility-probe pairs (99 cells) are excluded per the atlas registration §6, as
+tiny hand-built sanity pairs---$n$ as low as 10, discordance up to 0.9---that
+would distort every quartile. Finally, these are certification sample sizes, not
+detection sample sizes: they certify equivalence within $\pm m$, the $n$ required
+to \emph{detect} a difference at the same margin is larger, and reporting one as
+the other is the error this section exists to prevent.
 
 \subsection{What this section does and does not support}
 
