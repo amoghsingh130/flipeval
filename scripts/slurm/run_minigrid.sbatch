@@ -7,7 +7,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:A100:1
-#SBATCH --time=12:00:00
+#SBATCH --time=20:00:00
 #SBATCH --array=0-43
 
 # H3 mini-grid evaluation fan-out: 44 jobs, one (model, method, task) each.
@@ -20,6 +20,16 @@
 # 22-30 m for its peers -- so splitting them keeps a slow generation half from
 # putting a cheap scoring half at risk, and costs nothing: pilot_eval.run
 # already accepts --only-task. It also bounds what preemption can destroy.
+#
+# WALLTIME (raised 12h -> 20h, 2026-07-25). The 12 h above was derived from the
+# ~7.6 s/item FP16 genspeed figure, at a time when no QUANTIZED GSM8K cell had
+# completed anywhere -- an unmeasured limit inherited from a faster
+# configuration. Measured on the escalation grid: Qwen-7B AWQ GSM8K runs ~47
+# s/item (~12.4 h/cell), Llama-8B AWQ 20-36 s/item, against ~13 s/item for the
+# same models under GPTQ. 12 h would have truncated the slowest cells too.
+# 20 h is ~61% headroom over the worst measured projection. GSM8K writes its
+# JSONL only at the end, so a walltime overrun destroys the whole cell -- never
+# trim this to a thin margin, and never override it on the sbatch line.
 #
 # Index map: idx -> model = idx/22, then rem = idx%22 -> method = rem/2,
 # task = rem%2. Model-major so a single model's 22 jobs are a contiguous range
