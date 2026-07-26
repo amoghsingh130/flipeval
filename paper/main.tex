@@ -52,7 +52,10 @@
 \input{sections/audit}
 \input{sections/certification}
 \input{sections/atlas}
-\input{sections/sequential}
+% sections/sequential removed 2026-07-26: a results-free \section with no
+% registration document. Reduced to one sentence in the conclusion and one
+% clause in related_work; restore only when the dated registration exists under
+% docs/ AND the component has run.
 \input{sections/minigrid}
 \input{sections/harness_sensitivity}
 \input{sections/discriminant}
@@ -65,5 +68,10 @@
 
 \appendix
 \input{sections/appendix_audit_table}
+% Detail relocated from the main text on 2026-07-26 (structural trim). Nothing
+% was deleted in the move; each file names its source section at the top.
+\input{sections/appendix_prereg_detail}
+\input{sections/appendix_harness_detail}
+\input{sections/appendix_artifacts_detail}
 
 \end{document}

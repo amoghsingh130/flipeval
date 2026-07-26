@@ -151,19 +151,24 @@ Exact McNemar $p < 0.05$             & 371 (26.5\%)   & 19 (6.1\%) \\
 
 Table~\ref{tab:atlas-strata} contains the empirical core of the paper's
 motivation. In S1, 4.9\% of cells can be certified equivalent at the registered
-2\,pp margin and 26.5\% show a detectable difference, which leaves at least
-three-quarters of the public record in a \textbf{gray zone}: neither certifiable
-as equivalent at the margin the field implicitly uses, nor detectably degraded,
-at the sample sizes actually evaluated. In S2 the shares move---17.2\%
-certifiable, 6.1\% detectably different---but at least three-quarters of cells
-remain in the same gray zone.%
-% ARITHMETIC NOTE: 100 - (4.9 + 26.5) = 68.6 for S1 and 100 - (17.2 + 6.1) = 76.7
-% for S2. These are LOWER bounds on the gray zone, since the two categories are
-% not guaranteed disjoint (a large-n cell can be TOST-equivalent at 2 pp and
-% still show a significant, sub-margin difference). Hence "at least", never
-% "exactly". A per-cell cross-tabulation of the two flags would give the exact
-% figure and should be added from results/atlas_cells_summary.csv before
-% submission.
+2\,pp margin and 26.5\% show a detectable difference, which leaves
+\textbf{967 cells (69.2\%)} of the public record in a \textbf{gray zone}:
+neither certifiable as equivalent at the margin the field implicitly uses, nor
+detectably degraded, at the sample sizes actually evaluated. In S2 the shares
+move---17.2\% certifiable, 6.1\% detectably different---and
+\textbf{240 cells (77.7\%)} remain in the same gray zone.%
+% ARITHMETIC NOTE -- RESOLVED 2026-07-26 by per-cell cross-tabulation of the
+% tost_equivalent and mcnemar_p flags in results/atlas_cells_summary_rev2.csv,
+% over analysable cells (excluded_or_skipped false, contains_disclosed_probe_cell
+% false; S1 n=1,398, S2 n=309).
+%   S1: TOST 68, McNemar 371, BOTH 8, neither 967 = 69.17%
+%   S2: TOST 53, McNemar  19, BOTH 3, neither 240 = 77.67%
+% The categories are indeed not disjoint, as this note anticipated -- 8 S1 and
+% 3 S2 cells are simultaneously TOST-equivalent at 2 pp and McNemar-significant.
+% NOTE THE DIRECTION OF THE CORRECTION: the prose previously said "at least
+% three-quarters" for BOTH strata. That was an OVERSTATEMENT for S1, whose exact
+% gray zone is 69.2%, below three-quarters. S2 at 77.7% was understated. The
+% exact figures replace the bound in both places.
 
 
 The S1$\to$S2 contrast is a genuine improvement in compression method and
@@ -232,12 +237,13 @@ this cell would truthfully write ``no change in accuracy''; a user who had
 memorised the baseline's outputs would find one item in three behaving
 differently.
 
-\textbf{Caveats, in the same breath as the example.} $n = 198$ is small, and
-symmetric flip counts are easier to hit by chance at small $n$. This is an S1
-cell---a 2023-era community GPTQ of a 7B base model, the noisier of the two
-strata. It is an illustration of the mechanism and not a typical magnitude: the
-median churn among zero-delta cells is 7.20\%, not 34\%. The finding worth
-carrying away is the 145 cells and their 7.20\% median, not this one cell.
+% COMPRESSED 2026-07-26. All four caveats retained: small n, symmetric flips
+% easier at small n, S1 provenance, and illustration-not-magnitude.
+\textbf{Caveats, in the same breath as the example.} At $n = 198$ symmetric flip
+counts are easier to hit by chance, and this is an S1 cell---a 2023-era
+community GPTQ of a 7B base model, the noisier stratum. It illustrates the
+mechanism, not a typical magnitude: the finding worth carrying away is the 145
+cells and their 7.20\% median churn, not this one cell's 34\%.
 
 \subsection{Population caveats}
 \label{sec:atlas:caveats}
@@ -245,25 +251,24 @@ carrying away is the 145 cells and their 7.20\% median, not this one cell.
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, final bullet ("Population
 % caveats (registered)"), reproduced here in substance;
 % docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §2.
-These caveats are registered, and they are load-bearing.
-
-S1 is community quantizations of 2023-era models, conditioned on leaderboard
-coverage: a pair exists in the atlas only if someone chose to submit both the
-base model and its quantization to the Open LLM Leaderboard, and that choice was
-not random with respect to anything. S2 is one vendor's releases, evaluated by
-that vendor. \textbf{This is the public record of compression evaluation, not a
-census of quantization.} It is the right population for the questions this paper
-asks---what does the evidence that circulates actually look like, and how much
-evidence would suffice---and it is the wrong population for questions about how
-quantization behaves on average, which would require a designed sample rather
-than the record left by the field's own reporting choices. The controlled
+% COMPRESSED 2026-07-26. The census-vs-record distinction and the S1 license
+% limitation are both retained verbatim in substance, as instructed.
+These caveats are registered, and they are load-bearing. S1 is community
+quantizations of 2023-era models conditioned on leaderboard coverage---a pair
+exists only if someone chose to submit both the base model and its quantization
+to the Open LLM Leaderboard, and that choice was not random with respect to
+anything---while S2 is one vendor's releases, evaluated by that vendor.
+\textbf{This is the public record of compression evaluation, not a census of
+quantization.} It is the right population for what this paper asks (what the
+circulating evidence looks like, and how much would suffice) and the wrong one
+for how quantization behaves on average, which would need a designed sample
+rather than the record left by the field's own reporting choices; the controlled
 experiment of \S\ref{sec:minigrid} exists precisely because the atlas cannot
-answer causal questions.
-
-Two further limits. S1's archive carries no declared license, recorded as a
-limitation in the datasheet (\S\ref{sec:artifacts}). And the atlas's per-cell
-statistics inherit the item counts of whoever ran the original evaluation, which
-is why many cells are small---an inheritance that is itself part of the finding.
+answer causal questions. Two further limits: \textbf{S1's archive carries no
+declared license}, recorded as a limitation in the datasheet
+(\S\ref{sec:artifacts}), and per-cell statistics inherit the item counts of
+whoever ran the original evaluation, which is why many cells are small---an
+inheritance that is itself part of the finding.
 
 \subsection{What this section does and does not support}
 

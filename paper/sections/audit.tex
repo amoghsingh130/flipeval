@@ -14,12 +14,16 @@
 % 0 of 17. The three "partial" sources are the ones the older line was
 % gesturing at.
 %
-% DISCREPANCY (surfaced to the author, unresolved):
+% DISCREPANCY -- CLOSED 2026-07-26. THE FROZEN TABLE GOVERNS.
 % docs/RESULTS_2026-07-15_ATLAS_AUDIT.md line 48 describes the frozen table as
-% "7 method papers, 8 official model cards/blog, 2 vendor docs". The frozen
-% table itself (docs/audit_claim_table.csv, column `frame`) gives F1=7, F2=7,
-% F3=3. The prose below uses the frozen table's own counts (7/7/3). Resolve
-% before submission and update whichever file is wrong.
+% "7 method papers, 8 official model cards/blog, 2 vendor docs" (7/8/2). The
+% frozen table itself gives F1=7, F2=7, F3=3, re-verified 2026-07-26 by counting
+% the `frame` column of docs/audit_claim_table.csv (7/7/3, 17 rows total).
+% docs/audit_claim_table.csv is a FROZEN artifact and is authoritative over the
+% older narrative doc, so the prose below (7/7/3) is correct as written and no
+% paper-side change is required. The stale line survives in the older results
+% doc; it is outside this paper's tree and is not edited here. No action is
+% outstanding for the paper.
 % =====================================================================
 
 \section{An audit of published near-lossless claims}
@@ -67,7 +71,7 @@ difference the claim pronounces negligible. A claim can be perfectly correct and
 still be unsupported by the evaluation offered for it, and several of the claims
 below are very probably correct. What the field lacks is not honesty but a
 reporting standard; this section measures the gap that standard would close, and
-Sections~\ref{sec:certification} and \ref{sec:sequential} supply the instrument.
+Section~\ref{sec:certification} supplies the instrument.
 
 \subsection{The reproducibility zero}
 \label{sec:audit:v3}
@@ -227,38 +231,35 @@ because they carry no verdict; their numbers are computable and are retained in
 the released CSV for transparency, but they are excluded from $K$
 (\S\ref{sec:audit:indeterminate}).
 
-\paragraph{The uniform-yardstick secondary reading.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading);
-% results/audit_verdicts.csv column verdict_at_registered_2pp.
-Judging every claim against the uniform registered 2\,pp margin rather than the
-margin it states for itself gives \textbf{1 of 12 underpowered}. Both readings
-are reported, and both are in the released CSV
-(\texttt{verdict}, \texttt{verdict\_at\_registered\_2pp}). The factor-of-four
-difference between them is interpretive, not statistical, and the reasoning that
-selects the primary reading is documented in \S\ref{sec:prereg:choices}
-(interpretive choice~1): the frozen label is ``underpowered for its \emph{own}
-assertion'', and judging a 0.15\,pp parity claim against a 2\,pp yardstick audits
-a claim nobody made.
-
-\paragraph{Margin sensitivity.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Margin-sensitive (1 of 12
-% determinate)"; results/audit_verdicts.csv column margin_sensitive.
-% CARE: this "1 of 12" is a DIFFERENT fact from the "1 of 12" in the paragraph
-% above. Above: one determinate claim is underpowered under the uniform 2 pp
-% yardstick. Here: one determinate claim's verdict is unstable across the
-% 1 pp -> 3 pp sweep. The two facts happen to concern the same claim (R01) and
-% must never be merged into a single sentence.
-Exactly \textbf{1 of the 12 determinate claims is margin-sensitive}: R01, whose
-verdict flips between underpowered and adequately powered across the
-1\,pp\,$\to$\,3\,pp sweep. Its verdict is therefore an artefact of margin choice
-rather than a robust finding, and is reported as such rather than counted as
-evidence in either direction. Margin sensitivity qualifies a headline verdict, so
-it is counted over the claims that have one; R04 and R14 also flip across the
-sweep and retain the \texttt{margin\_sensitive} column in the released CSV, but
-neither carries a verdict to qualify. (R01 is also the single claim that is
-underpowered under the uniform-2\,pp secondary reading. These are two distinct
+\paragraph{Two robustness notes.}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
+% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts.csv columns
+% verdict_at_registered_2pp and margin_sensitive.
+% CARE -- THE TWO "1 of 12" FIGURES BELOW ARE DIFFERENT FACTS. First: one
+% determinate claim is underpowered under the uniform 2 pp yardstick. Second:
+% one determinate claim's verdict is unstable across the 1 pp -> 3 pp sweep.
+% They happen to concern the same claim (R01) and MUST NEVER be merged into a
+% single sentence or read as one finding. This paragraph merges the two former
+% paragraphs (2026-07-26) but deliberately keeps the two facts in separate
+% sentences with the coincidence stated explicitly.
+First, judging every claim against the uniform registered 2\,pp margin rather
+than the margin it states for itself gives \textbf{1 of 12 underpowered}; both
+readings are reported and both ship in the released CSV (\texttt{verdict},
+\texttt{verdict\_at\_registered\_2pp}). The factor-of-four difference between
+them is interpretive, not statistical, and the reasoning that selects the
+primary reading is at \S\ref{sec:prereg:choices}: the frozen label is
+``underpowered for its \emph{own} assertion'', and judging a 0.15\,pp parity
+claim against a 2\,pp yardstick audits a claim nobody made. Second, and
+separately, exactly \textbf{1 of the 12 determinate claims is margin-sensitive}:
+R01, whose verdict flips between underpowered and adequately powered across the
+1\,pp\,$\to$\,3\,pp sweep, making that verdict an artefact of margin choice
+rather than a robust finding; it is reported as such rather than counted as
+evidence in either direction. Margin sensitivity qualifies a headline verdict,
+so it is counted over the claims that have one---R04 and R14 also flip across
+the sweep and retain the \texttt{margin\_sensitive} column in the released CSV,
+but neither carries a verdict to qualify. These are two distinct
 properties---a verdict under an alternative yardstick, and instability of a
-verdict across the sweep---that coincide on one claim.)
+verdict across the sweep---that coincide on one claim.
 
 \subsection{Indeterminate claims: a finding, not a gap}
 \label{sec:audit:indeterminate}
@@ -300,24 +301,21 @@ placed beyond the reach of checking.
 % §Indeterminate bullet for R04; results/audit_verdicts.csv row R04 columns
 % indeterminate_reason, notes, v2_required_n_paired_own_margin (50519 at
 % n = 1319 -> 38.3x).
-R04 is documented here in full because excluding it removed what would have been
-the largest number in Table~\ref{tab:audit-underpowered}.
-
-The AWQ paper's qualifying sentence---the sentence that meets the frozen §3
-inclusion trigger---asserts negligible loss on \textbf{COCO CIDEr}. CIDEr is a
-generation metric: it assigns a graded score to a generated caption and has no
-per-item correct/incorrect state. V1 and V2 are flip-model quantities defined on
-$d_i \in \{-1,0,+1\}$; they do not apply to it. There is no discordance rate to
-impute, because there is no per-item accuracy state to be discordant about.
-
-The first pass of the analysis nonetheless scored R04 on GSM8K, the source's own
-accuracy benchmark ($-0.30$\,pp at $n = 1{,}319$), and reported it as the largest
-shortfall in the table at $38.3\times$. On review this was overruled: computing a
-TOST requirement on GSM8K audits a sentence the source wrote about a different
-benchmark, in different and non-trigger language. The move took the headline
-from $K = 5$, $J = 4$ to $K = 4$, $J = 5$, and it removed the audit's biggest
-number. The GSM8K computation is retained in the released CSV as a transparency
-column, with a note, so that a reader can see exactly what was set aside and
+R04 is recorded because excluding it removed what would have been the largest
+number in Table~\ref{tab:audit-underpowered}. The AWQ paper's qualifying
+sentence---the one that meets the frozen §3 inclusion trigger---asserts
+negligible loss on \textbf{COCO CIDEr}, a generation metric that assigns a
+graded score to a caption and has no per-item correct/incorrect state; V1 and V2
+are flip-model quantities defined on $d_i \in \{-1,0,+1\}$ and do not apply to
+it, and there is no discordance rate to impute because there is no per-item
+accuracy state to be discordant about. The first pass nonetheless scored R04 on
+GSM8K, the source's own accuracy benchmark ($-0.30$\,pp at $n = 1{,}319$), and
+reported it as the table's largest shortfall at $38.3\times$. On review this was
+overruled---computing a TOST requirement on GSM8K audits a sentence the source
+wrote about a different benchmark, in different and non-trigger language---taking
+the headline from $K = 5$, $J = 4$ to $K = 4$, $J = 5$ and removing the audit's
+biggest number. The GSM8K computation is retained in the released CSV as a
+labelled transparency column so a reader can see exactly what was set aside and
 why. \textbf{It is not claimed anywhere in this paper as an audit result.} An
 audit's currency is unimpeachability, and it is not spent on its own largest
 number.

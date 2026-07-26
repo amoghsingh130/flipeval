@@ -38,8 +38,11 @@ Equivalence is a certification problem. We compute certification tables---how
 many items an evaluation needs in order to certify a compressed model within
 $\pm m$ points of its baseline---from the per-item disagreement rates actually
 observed under compression rather than from independent-binomial variance.
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column".
-The correction is large: $1.7\times$ to $14.7\times$ fewer items by family,
+% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
+% (GSM8K 2.25--2.26, MuSR 14.66--14.68); docs/CERTIFICATION_TABLES_2026-07-20.md
+% §"Why the naive column". REV-2: GSM8K end was 1.7x under rev-1; corrected
+% 2026-07-26 to agree with Table~\ref{tab:certification} and §5.
+The correction is large: $2.3\times$ to $14.7\times$ fewer items by family,
 $4.2\times$ pooled. And the requirement is set by churn rather than difficulty,
 which defeats the natural intuition: MMLU needs about 2{,}164 items at 2\,pp
 where the harder GPQA needs 749.
@@ -62,13 +65,11 @@ Per-item flips as a diagnostic for compressed models are due to
 quality are due to \citet{williamsaletras2024}; we claim neither. Our
 contributions are (i) the preregistered audit and its verdict artifact,
 (ii) empirical certification tables and the paired-design correction they
-quantify, (iii) anytime-valid sequential certification, which lets an evaluation
-stop as soon as the model is certified, (iv) the atlas of the public record, and
-(v) the seed-level pairing design and its ranking-instability analysis. Relative
+quantify, (iii) the atlas of the public record, and
+(iv) the seed-level pairing design and its ranking-instability analysis. Relative
 to the closest existing tool \citep{llmaccuracystats2026}, which performs
 one-sided McNemar \emph{detection}, our delta is the shift from detection to
-certification: a declared margin, TOST, required-$n$ tables, and sequential
-stopping.
+certification: a declared margin, TOST, and required-$n$ tables.
 
 \paragraph{Preregistration.}
 All protocols were frozen before the analyses they govern

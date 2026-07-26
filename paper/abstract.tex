@@ -34,8 +34,11 @@ and we compute \emph{certification tables} that state how many items an
 evaluation needs to certify a compressed model within $\pm m$ points of its
 baseline. The counts are derived from the per-item disagreement rates actually
 observed under compression rather than from independent-binomial variance, which
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column"
-reduces the required sample size by $1.7\times$ (GSM8K) to $14.7\times$ (MuSR),
+% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
+% (GSM8K 2.25--2.26, MuSR 14.66--14.68); docs/CERTIFICATION_TABLES_2026-07-20.md
+% §"Why the naive column". REV-2: the GSM8K end was 1.7x under rev-1; corrected
+% 2026-07-26 to agree with Table~\ref{tab:certification} and §5.
+reduces the required sample size by $2.3\times$ (GSM8K) to $14.7\times$ (MuSR),
 and by $4.2\times$ pooled over 1{,}707 evaluation cells. The requirement is
 driven by answer churn rather than task difficulty: MMLU needs about 2{,}164
 items at a 2\,pp margin while the harder GPQA needs 749.
