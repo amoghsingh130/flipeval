@@ -1,5 +1,10 @@
 # H3 Eight-Cell Confirmatory Decision Record — 2026-07-26
 
+**STATUS: SIGNED — 2026-07-26, by Amogh Singh.** See § Sign-off. Drafted by the
+executing session the same day the analysis ran, as the registration requires,
+and signed unmodified: no number, threshold, verdict or tie count in this record
+changed between drafting and signature.
+
 **The registered primary confirmatory analysis, run once.** Authorized by Amogh
 2026-07-26 after the escalation validator passed (job `11511179`,
 `passed: true`, 415/415 checks, 0 errors, 44/44 cells), and after the two
@@ -301,10 +306,32 @@ gates the baseline only.
 
 ---
 
-## Status: UNSIGNED — awaiting Amogh
+## Sign-off
 
-This record is written the same day the analysis ran, as the registration
-requires. **It is not yet signed.** Per the 2026-07-26 ruling, nothing downstream
-moves until it is: the paper is untouched, no `\minigridTODO` is filled, and the
-abstract's H3 variant is not selected. Those are Amogh's to authorize after
-signing.
+**SIGNED.** Amogh Singh, 2026-07-26 — verbatim instruction: *"sign H3"*, given
+after this record was written and committed at `264095f`, in response to the
+reported verdict, the two precondition results, and the per-cell table above.
+
+**What the signature attaches to.** The record as committed at `264095f`, whose
+content is unchanged by this signature — only this block and the status header
+were added. The verdict, the eight per-cell quantities, the two threshold counts,
+the tie counts and both precondition results are byte-identical to what was
+reported before the signature was given.
+
+**Results-inspection basis.** This is the registered primary confirmatory
+analysis; reading these quantized accuracies is its authorized purpose and the
+point at which the campaign's inspection lockdown ends for the confirmatory set.
+Before it, the only accuracy any session read from an escalation cell was the
+FP16 baseline gate. The analysis ran once, and is not to be run again — no
+variation, no unregistered sensitivity check, no second denominator convention,
+no re-reading with different rounding.
+
+**What the signature authorizes.** Downstream use of the verdict: selecting the
+abstract's H3 variant, filling `\minigridTODO`, and writing the eight-cell result
+into the paper. Each of those remains a separate piece of work, to be done
+against this record and reviewed on its own terms.
+
+**What it does not authorize.** Any statement beyond the eight cells of `S` at
+4 bits. The registration is explicit that 3-bit results, ARC-Challenge,
+HellaSwag and calibration-dataset effects are reported separately and cannot
+substitute for this rule; the signature does not extend to them.
