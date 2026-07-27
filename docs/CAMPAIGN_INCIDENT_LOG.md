@@ -1610,6 +1610,61 @@ agree while the axis along which they differ went unexamined. Same family, one
 step earlier in the process: it is possible to verify the wrong property before
 there is any control to justify.
 
+## 26. The validator has a default output path, and it is named after one grid (2026-07-26)
+
+**Caught and recovered, same session.** Immediately after the escalation
+validator passed (job `11511179`), `results/minigrid_validation_summary.json`
+was found holding the **escalation** summary: 415 checks over `qwen25-7b` /
+`llama31-8b`, mtime 21:46. The mini-grid's own summary — 409 checks over
+`qwen25-1p5b` / `llama32-3b`, written 2026-07-22 21:35 — had been overwritten.
+
+**Mechanism.** `verify_minigrid.py` defaults `--output` to
+`RESULTS_ROOT/minigrid_validation_summary.json`, and `verify_minigrid.sbatch`
+never passes `--output`. Both grids share one results root, so **both grids'
+validators write the same filename.** The escalation invocation was correct in
+every respect the campaign has hardened — `MINIGRID_CONFIG`, `MINIGRID_RESULTS`,
+`MINIGRID_MODELS` and `MINIGRID_CELLS` all declared, the grid confirmed from the
+job's own first log line — and it still clobbered the other grid's record,
+because none of those controls governs where the output lands.
+
+This is incident 24's rule pointed at the one place it was not applied. That rule
+was widened to *"every job script that reads **or writes** a grid must be told
+which grid, with no fallback"*, and the validator was treated as the reader of
+the pair. It reads the grid and **writes a summary**, and its write path kept a
+default named after the grid it was originally built for.
+
+**Recovery.** The file was gitignored and untracked, so there was no history to
+restore from — but the validator prints the complete summary to stdout before
+writing it, so `logs/verify_minigrid_11375247.out` held the mini-grid summary
+verbatim. Restored from that log through the same serializer
+(`json.dump(..., indent=2)` plus a trailing newline): **50,143 bytes, byte-for-byte
+the pre-clobber size** recorded in this session's first listing of `results/`.
+The escalation summary was preserved first, under
+`results/escalation_validation_summary.json`. Both now exist; neither validation
+has to be re-run.
+
+**Not fixed here.** The fix is one required variable —
+`MINIGRID_OUTPUT`, no default, passed through as `--output` — and it is a new
+control rather than a recovery, so it is surfaced rather than taken: the
+authorized sequence for this session ended at reporting the validator's outcome,
+and the H3 go is pending. Until it lands, **a validator rerun will clobber
+whichever summary it is not producing**, recoverably from the job log.
+
+**What made this survivable was an accident, again.** The summary is recoverable
+only because the validator happens to `print` it before writing it. Had it
+written silently, a completed validation record would have been destroyed with no
+copy anywhere — `results/*` is gitignored and the archive convention covers run
+*directories*, not the loose artifacts at the results root. **The archive
+convention has a gap: `minigrid_validation_summary.json` was never in
+`minigrid_run_20260722.tar.gz`**, because that tarball covers the two run dirs
+and nothing else.
+
+**Without the gate:** it would have gone unnoticed indefinitely. Nothing checks
+that file's mtime or content, no test covers the output path, and both summaries
+say `"passed": true` — so the only symptom was a filename whose contents belonged
+to the other grid. It was caught because the clobbered file was listed at the
+start of this session and again after, not because any control fired.
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
