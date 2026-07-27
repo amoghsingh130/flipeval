@@ -24,6 +24,15 @@
 #   MINIGRID_RESULTS   container path to the results root
 #   MINIGRID_MODELS    space-separated model tags this run must cover
 #   MINIGRID_CELLS     number of JSONL cells the grid must expand to
+#   MINIGRID_OUTPUT    container path for the validation summary
+#
+# MINIGRID_OUTPUT is required for the same reason as the rest, and was added
+# after it bit (incident 26, 2026-07-26). --output used to default to
+# RESULTS_ROOT/minigrid_validation_summary.json: a filename naming ONE grid, in a
+# results root BOTH grids share. The escalation run therefore overwrote the
+# mini-grid's completed validation summary while declaring config, results root,
+# model tags and cell count correctly -- none of which governs where output goes.
+# The validator was hardened as this pair's reader; it also WRITES.
 #
 # MINIGRID_MODELS and MINIGRID_CELLS are the operator's declaration of which
 # grid this is, made independently of the config. verify_minigrid.py checks both
@@ -34,7 +43,8 @@
 #   export MINIGRID_CONFIG=/workspace/configs/pace_escalation_h3.yaml \
 #          MINIGRID_RESULTS=/workspace/results \
 #          MINIGRID_MODELS="qwen25-7b llama31-8b" \
-#          MINIGRID_CELLS=44
+#          MINIGRID_CELLS=44 \
+#          MINIGRID_OUTPUT=/workspace/results/escalation_validation_summary.json
 #   sbatch -A "$ACCOUNT" -q inferno --export=ALL scripts/slurm/verify_minigrid.sbatch
 
 # shellcheck source=scripts/slurm/env.sh
@@ -45,8 +55,9 @@ mkdir -p logs
 : "${MINIGRID_RESULTS:?required (no default: a default validates the wrong grid)}"
 : "${MINIGRID_MODELS:?required (space-separated model tags, checked against the config)}"
 : "${MINIGRID_CELLS:?required (expected cell count, checked against the config)}"
+: "${MINIGRID_OUTPUT:?required (no default: a default output path names one grid and overwrites the summary of the other -- incident 26)}"
 
-echo "verify: config=$MINIGRID_CONFIG results=$MINIGRID_RESULTS models=$MINIGRID_MODELS cells=$MINIGRID_CELLS"
+echo "verify: config=$MINIGRID_CONFIG results=$MINIGRID_RESULTS models=$MINIGRID_MODELS cells=$MINIGRID_CELLS output=$MINIGRID_OUTPUT"
 
 # shellcheck disable=SC2086  # word-splitting MINIGRID_MODELS into argv is intended
 apptainer exec --cleanenv --pwd /workspace \
@@ -56,4 +67,5 @@ apptainer exec --cleanenv --pwd /workspace \
   --results-root "$MINIGRID_RESULTS" \
   --project-root /workspace \
   --expect-model-tags $MINIGRID_MODELS \
-  --expect-cells "$MINIGRID_CELLS"
+  --expect-cells "$MINIGRID_CELLS" \
+  --output "$MINIGRID_OUTPUT"

@@ -38,6 +38,36 @@ Derivation job **`11478290`**, `DERIVATION_RESULT: ALL4_OK (4/4 cells derived)`.
 Both MMLU cells and Llama's GSM8K take the 0.05 floor or near it; only Qwen's
 GSM8K is driven by its own standard error.
 
+## Outcome, 2026-07-26: all four gates passed, one of them narrowly
+
+The escalation validator (job `11511179`, `passed: true`, 415 checks, 0 errors)
+evaluated these gates against the FP16 cells:
+
+| model | task | observed | gate | margin to nearer bound |
+|---|---|---:|---|---:|
+| qwen25-7b | mmlu | 0.664506 | [0.600263, 0.700263] | 0.035757 |
+| qwen25-7b | gsm8k | 0.789000 | [0.691, 0.807] | 0.018000 |
+| llama31-8b | mmlu | **0.590514** | [0.492444, **0.592444**] | **0.001930** |
+| llama31-8b | gsm8k | 0.789000 | [0.729, 0.841] | 0.052000 |
+
+**Llama-8B MMLU passed by 0.0019, under a ceiling of 0.592444.** Recorded here,
+and deliberately not acted on. The gate was derived from a reference run,
+committed, and frozen on 2026-07-25 — before any of these cells existed — so a
+thin pass is a pass, and thinness is not evidence of anything about the cell.
+
+For context and not for action: at n = 14,042 the binomial standard error on this
+baseline is ≈ 0.0042 (the table above records 0.004204). **A 0.0019 margin is well
+inside one standard error**, so the observation is statistically indistinguishable
+from its own ceiling. That is ordinary sampling behaviour, and it is also an
+honest statement of what a gate of this width can and cannot resolve: it
+discriminates a broken eval path from an intact one, not a 0.002 shift in
+accuracy.
+
+The reason to record it is that it is **evidence the gates were tight enough to
+be falsifiable**. A gate nothing could ever fail is decoration; this one came
+within a fifth of a percentage point of firing on a cell that was in every other
+respect correct. That earns a sentence in the paper's methods discussion.
+
 ## § 6 branches — which fired
 
 **Branch 1 for all four cells** (reference completes, accuracy plausible):

@@ -1,0 +1,1742 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "decision_record_written": false,
+  "config": "/workspace/configs/pace_escalation_h3.yaml",
+  "results_root": "/workspace/results",
+  "expected_jsonl_files": 44,
+  "observed_jsonl_files": 44,
+  "expected_tasks": [
+    "mmlu",
+    "gsm8k"
+  ],
+  "declared_model_tags": [
+    "qwen25-7b",
+    "llama31-8b"
+  ],
+  "expect_model_tags": [
+    "qwen25-7b",
+    "llama31-8b"
+  ],
+  "expect_cells": 44,
+  "baseline_accuracies": {
+    "qwen25-7b": {
+      "mmlu": 0.6645064805583251,
+      "gsm8k": 0.789
+    },
+    "llama31-8b": {
+      "mmlu": 0.5905141717704031,
+      "gsm8k": 0.789
+    }
+  },
+  "checks": [
+    {
+      "check": "config covers the expected model tags ['llama31-8b', 'qwen25-7b'] (config declares ['llama31-8b', 'qwen25-7b'])",
+      "passed": true
+    },
+    {
+      "check": "config expands to the expected 44 cells (config expands to 44)",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: run dir 'qwen25_7b_escalation_h3' exists",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: run dir holds exactly the 22 cells the config declares (missing=none, unaccounted=none)",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: run dir 'llama31_8b_escalation_h3' exists",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: run dir holds exactly the 22 cells the config declares (missing=none, unaccounted=none)",
+      "passed": true
+    },
+    {
+      "check": "task 'mmlu' is an implemented loader (implemented: gsm8k, mmlu; arc_challenge and hellaswag are not-implemented per configs/main_grid_manifest.yaml)",
+      "passed": true
+    },
+    {
+      "check": "task 'mmlu' declares an expected item count",
+      "passed": true
+    },
+    {
+      "check": "task 'gsm8k' is an implemented loader (implemented: gsm8k, mmlu; arc_challenge and hellaswag are not-implemented per configs/main_grid_manifest.yaml)",
+      "passed": true
+    },
+    {
+      "check": "task 'gsm8k' declares an expected item count",
+      "passed": true
+    },
+    {
+      "check": "calibration set is C4 (the mini-grid is C4-only; the WikiText-2 builder path is decided but not implemented and fails closed)",
+      "passed": true
+    },
+    {
+      "check": "calibration declares 4-bit (3-bit dose-response is deferred with the rest of the main grid)",
+      "passed": true
+    },
+    {
+      "check": "paired seeds are exactly the registered {0,1,2,3,4}",
+      "passed": true
+    },
+    {
+      "check": "config declares FP16 baseline_accuracy_ranges (see docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md)",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: baseline declares a pinned model revision",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: manifest method coverage",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: manifest task coverage",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: manifest has invocation history",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/fp16.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: baseline mmlu accuracy 0.664506 is within [0.600263, 0.700263]",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: fp16/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: fp16/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s0/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s0/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s1/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s1/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s2/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s2/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s3/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s3/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s4/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s4/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s0/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s0/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s1/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s1/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s2/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s2/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s3/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s3/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s4/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s4/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: baseline gsm8k accuracy 0.789000 is within [0.691, 0.807]",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: fp16/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: fp16/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s0/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s0/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s1/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s1/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s2/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s2/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s3/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s3/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s4/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: gptq_s4/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s0/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s0/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s1/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s1/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s2/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s2/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s3/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s3/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s4/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: awq_s4/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s0 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s1 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s2 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s3 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/gptq_s4 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s0 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s1 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s2 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s3 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b/awq_s4 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 0 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 0 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 1 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 1 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 2 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 2 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 3 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 3 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 4 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b: seed 4 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: baseline declares a pinned model revision",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: manifest method coverage",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: manifest task coverage",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: manifest has invocation history",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/fp16.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.mmlu.jsonl has 14042 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.mmlu.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.mmlu.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.mmlu.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.gsm8k.jsonl has 1000 records",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.gsm8k.jsonl item IDs are unique",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.gsm8k.jsonl record labels match filename",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4.gsm8k.jsonl uses chat prompts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4 recorded backend matches the declared 'gptqmodel_torch'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4 declares an explicit quantization_backend",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4 recorded backend matches the declared 'awq_gemm'",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4 records the kernel it actually loaded",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: baseline mmlu accuracy 0.590514 is within [0.492444, 0.592444]",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: fp16/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: fp16/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s0/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s0/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s1/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s1/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s2/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s2/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s3/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s3/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s4/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s4/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s0/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s0/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s1/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s1/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s2/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s2/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s3/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s3/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s4/mmlu item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s4/mmlu golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: baseline gsm8k accuracy 0.789000 is within [0.729, 0.841]",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: fp16/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: fp16/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s0/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s0/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s1/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s1/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s2/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s2/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s3/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s3/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s4/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: gptq_s4/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s0/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s0/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s1/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s1/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s2/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s2/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s3/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s3/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s4/gsm8k item set matches baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: awq_s4/gsm8k golds and prompts match baseline",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s0 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s1 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s2 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s3 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/gptq_s4 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s0 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s1 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s2 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s3 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4 calibration receipt matches frozen protocol",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b/awq_s4 calibration receipt provenance matches config",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 0 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 0 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 1 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 1 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 2 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 2 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 3 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 3 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 4 has GPTQ and AWQ receipts",
+      "passed": true
+    },
+    {
+      "check": "llama31-8b: seed 4 GPTQ/AWQ calibration artifacts are identical",
+      "passed": true
+    },
+    {
+      "check": "task mmlu pins dataset revision c30699e8356da336a370243923dbaf21066bb9fe",
+      "passed": true
+    },
+    {
+      "check": "task gsm8k pins dataset revision 740312add88f781978c0658806c59bc2815b9866",
+      "passed": true
+    },
+    {
+      "check": "qwen25-7b and llama31-8b share no calibration artifact",
+      "passed": true
+    },
+    {
+      "check": "all 44 expected JSONLs are present",
+      "passed": true
+    },
+    {
+      "check": "config expands to the declared 44 JSONLs",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "file_sha256": {
+    "qwen25_7b_escalation_h3/fp16.mmlu.jsonl": "0e0461045412b338cc1858adda673dbdb6f6126ef2a02a56cb2100e7309105a9",
+    "qwen25_7b_escalation_h3/fp16.gsm8k.jsonl": "1823d8d762b87670fa28cebcde561fb9f7904f772e86e42e5783191b2c5c67ff",
+    "qwen25_7b_escalation_h3/gptq_s0.mmlu.jsonl": "1dbb13ef7a64149fc9c8ccd48e497ba74526e6b37ccc8afd0c0bc8d2faaeaa91",
+    "qwen25_7b_escalation_h3/gptq_s0.gsm8k.jsonl": "5e1dc9e0312740737375384d9c184ce654aeab8ee3806e4be80252badec1bc39",
+    "qwen25_7b_escalation_h3/gptq_s1.mmlu.jsonl": "89266415851aaaa229c6747102839d62823d34490dbdcda00b255f3ab1e34f1b",
+    "qwen25_7b_escalation_h3/gptq_s1.gsm8k.jsonl": "ba5a781a26e70fa6d7e5c07007181d5e9e7833d6a2af9c4df64fa541fb32bf56",
+    "qwen25_7b_escalation_h3/gptq_s2.mmlu.jsonl": "870caa8601bb8e545cc74362377601511ad9a573952b6c5a972e0c2e34df3f36",
+    "qwen25_7b_escalation_h3/gptq_s2.gsm8k.jsonl": "d24e9014b147ea1dffb1a56c99e721672d6515ab8a8ac03ee2cb6c4aee01c6e3",
+    "qwen25_7b_escalation_h3/gptq_s3.mmlu.jsonl": "215ebc51e9bda69cad927358749e4329ce1e0c88669721c33e58fbbf9694dec0",
+    "qwen25_7b_escalation_h3/gptq_s3.gsm8k.jsonl": "4af1064660bc9c7f2637da101bf71ce51130949fb14def0206bc290107b777b5",
+    "qwen25_7b_escalation_h3/gptq_s4.mmlu.jsonl": "e5c2c1b0436dd2f67bc2ac486c05aef9826c9b5b206cc66eda4444e180b47902",
+    "qwen25_7b_escalation_h3/gptq_s4.gsm8k.jsonl": "b40ac2fe329209938d5d7718e99dbb48d99695a55e4f71f54bdeb38b59a8290b",
+    "qwen25_7b_escalation_h3/awq_s0.mmlu.jsonl": "9fdbafbde221529106266d6ae6672217d788fd023876226de655dd622bc74aca",
+    "qwen25_7b_escalation_h3/awq_s0.gsm8k.jsonl": "ecc9578ce07a27c369ce58ecae48c7e691dcafd5c0e82979d9c0d3c7d44ca6e7",
+    "qwen25_7b_escalation_h3/awq_s1.mmlu.jsonl": "9e7b6190252c6678c683ed364039427e387f0b47b1d084e08d26f670928ae4b7",
+    "qwen25_7b_escalation_h3/awq_s1.gsm8k.jsonl": "e7ac4f538829541a6f1e60f8e680253088ed1027ad1ed3b919b2afbb0f08efe6",
+    "qwen25_7b_escalation_h3/awq_s2.mmlu.jsonl": "f67721adad0d0866afca67587186940b8a6198fa6df8a21e8bc8b9f4eab82182",
+    "qwen25_7b_escalation_h3/awq_s2.gsm8k.jsonl": "4df5edf256d0d13046990050d5372f09241ef13796a2f7cbd7bc7e1ac67c1c34",
+    "qwen25_7b_escalation_h3/awq_s3.mmlu.jsonl": "78a4e523a38032fb1d6ca9110c706d6acffe15416af120a751f64ceb2859bcbf",
+    "qwen25_7b_escalation_h3/awq_s3.gsm8k.jsonl": "fe97c4cefe13b7b63b844e383930629e1b6e5a97c2c1225222ff3dffa7d4ddc0",
+    "qwen25_7b_escalation_h3/awq_s4.mmlu.jsonl": "0096a0c4a3e4b4f5fc93c06e10df14323da2cd3f69ea97410b468ec19bb0d9a7",
+    "qwen25_7b_escalation_h3/awq_s4.gsm8k.jsonl": "c763cc1c11d56bf5c83322994761f50a42c9db5f79d9a2da699dd1f0367c68ae",
+    "llama31_8b_escalation_h3/fp16.mmlu.jsonl": "d54a211388c5ed5f433024c4155ab3c41af3fe1cd8e8a2cf3d9dc3529cc69e1c",
+    "llama31_8b_escalation_h3/fp16.gsm8k.jsonl": "3f551890d6578d271d63b9f7d4a45fde367538e8788d9f7e30183a1873e5898e",
+    "llama31_8b_escalation_h3/gptq_s0.mmlu.jsonl": "012a9a8b2e3464fb0df1d014975af7be48b911c31b62e8f48cb587c7fae73d8d",
+    "llama31_8b_escalation_h3/gptq_s0.gsm8k.jsonl": "f2e93deaa3ffd8e656f7eda01c43ea9f59120de4e1483e4520ff62f0e957b9fe",
+    "llama31_8b_escalation_h3/gptq_s1.mmlu.jsonl": "159144506db258ef632b5ac109928cb1afc770fd1a232571ccb61f84d2472845",
+    "llama31_8b_escalation_h3/gptq_s1.gsm8k.jsonl": "42b82304dd996da4d3c2e6859c50ef044c25f9f4975a05fe0e76ed7473f6016a",
+    "llama31_8b_escalation_h3/gptq_s2.mmlu.jsonl": "ffcf3596aa5bf78c54eaffb05b83b3355993c341308ac0f001b5d0431c25389c",
+    "llama31_8b_escalation_h3/gptq_s2.gsm8k.jsonl": "e0e31ff35812b6f173a89ac59659244e19b95b925feb40d2124bfd17ee457eac",
+    "llama31_8b_escalation_h3/gptq_s3.mmlu.jsonl": "64af691e80def357f42a0097d603834f48f0d080403b4b3bd691b6fb5858602a",
+    "llama31_8b_escalation_h3/gptq_s3.gsm8k.jsonl": "65716f95b3d7dca8987b672ab1bcb37945d4372282ddfb9af9028ba5e3c6d986",
+    "llama31_8b_escalation_h3/gptq_s4.mmlu.jsonl": "45e37a02f9dea1fcb70254b8d8eb2b8c00bc80913995757df8f68878ca8b56ed",
+    "llama31_8b_escalation_h3/gptq_s4.gsm8k.jsonl": "95bd6963355f8ee30142e33d6b6a16765a555dfa9d3ad0879694255b4ac47643",
+    "llama31_8b_escalation_h3/awq_s0.mmlu.jsonl": "f9a6e21d4203ec6362d568077677b90c175f4c782cb2348ef58fc7639a655f09",
+    "llama31_8b_escalation_h3/awq_s0.gsm8k.jsonl": "d7b78f368707016072e927564f5e490a2e24710561cfc60f9383fdcca533066a",
+    "llama31_8b_escalation_h3/awq_s1.mmlu.jsonl": "5ba165ef8c2a518e694741f850e91eb6fe2b74a9c40aa7d8bf5d3b69c50d6bc5",
+    "llama31_8b_escalation_h3/awq_s1.gsm8k.jsonl": "117c2a2094549d2a86f56cd6b588cb93ae74a166f776f96e160220538c356ae8",
+    "llama31_8b_escalation_h3/awq_s2.mmlu.jsonl": "5f30b09d542c8bf9f91348a0a3334e8ecf14d4916eeb240bad215567c4ce4b54",
+    "llama31_8b_escalation_h3/awq_s2.gsm8k.jsonl": "13b01b159b07966673798b5389fba8d7218d104a65774d242d5755d9a5d25f50",
+    "llama31_8b_escalation_h3/awq_s3.mmlu.jsonl": "724b8170f47b95a6908f2247caca30b80d218959f13448a274100a408d4830b9",
+    "llama31_8b_escalation_h3/awq_s3.gsm8k.jsonl": "2639d39b8706819f0bf11831e6a6fa299c60b68019dcb0ae4e49c7951a98fc8d",
+    "llama31_8b_escalation_h3/awq_s4.mmlu.jsonl": "f1f640450df7cec5a8fb63ea3b6807e8b84ef986b8c598d3a466536c442b76fb",
+    "llama31_8b_escalation_h3/awq_s4.gsm8k.jsonl": "eee126c5eafb00d6e288ea91287a55b3cfc07996d577000ecad2540e8afb32eb"
+  },
+  "interpretation": "Operational mini-grid validation only. FP16 baseline rates are registered gates; no quantized accuracy is computed or gated here, and this is not an H3 analysis."
+}
