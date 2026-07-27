@@ -1,0 +1,374 @@
+% =====================================================================
+% FlipEval bibliography -- VERIFIED ENTRIES.
+%
+% Supersedes paper/refs.bib (placeholder-only, removed 2026-07-27).
+%
+% RULE, unchanged from the placeholder file: no entry in this file may contain
+% an invented DOI, page range, volume, or venue. Every field below was read
+% from a primary source on the date given in the "Verified" comment above the
+% entry; the URL named there is the source that was read. Where a field could
+% not be read from a primary source it is OMITTED, never guessed.
+%
+% Where a preprint was later published, the published version is cited and the
+% arXiv identifier is carried in a note field.
+%
+% Verification pass: 2026-07-27, single session, all entries. Source hosts
+% reached: arxiv.org (abs pages and the export API), proceedings.mlr.press,
+% proceedings.mlsys.org, papers.nips.cc, aclanthology.org, api.openalex.org.
+% Hosts that refused the cluster (HTTP 403): dl.acm.org, cacm.acm.org -- the
+% one entry affected (gebru2021datasheets) records how its issue/page data was
+% obtained instead.
+% =====================================================================
+
+
+% =====================================================================
+% Compression methods under audit
+% =====================================================================
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2210.17323 (v2, 22 Mar
+% 2023). Comments and Journal-ref fields both read "ICLR 2023". Author list
+% also matches docs/audit_claim_table.csv row R01.
+@inproceedings{gptq2022,
+  title     = {{GPTQ}: Accurate Post-Training Quantization for Generative Pre-trained Transformers},
+  author    = {Frantar, Elias and Ashkboos, Saleh and Hoefler, Torsten and Alistarh, Dan},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023},
+  note      = {arXiv:2210.17323}
+}
+
+% Verified 2026-07-27 against the MLSys proceedings record
+% https://proceedings.mlsys.org/paper_files/paper/2024/hash/42a452cbafa9dd64e9ba4aa95cc1ef21-Abstract-Conference.html
+% and https://arxiv.org/abs/2306.00978 (Journal-ref "MLSys 2024"; Comments
+% "MLSys 2024 Best Paper Award").
+% NOTE ON THE TITLE: the published MLSys title inserts "On-Device" --
+% "...for On-Device LLM Compression and Acceleration" -- where the arXiv title
+% (and docs/audit_claim_table.csv row R04) reads "...for LLM Compression and
+% Acceleration". The published form is used here. The audit table quotes the
+% arXiv version it actually audited and is correct as it stands.
+% Page range not printed on the MLSys landing page; omitted rather than guessed.
+@inproceedings{awq2023,
+  title     = {{AWQ}: Activation-aware Weight Quantization for On-Device {LLM} Compression and Acceleration},
+  author    = {Lin, Ji and Tang, Jiaming and Tang, Haotian and Yang, Shang and Chen, Wei-Ming and Wang, Wei-Chen and Xiao, Guangxuan and Dang, Xingyu and Gan, Chuang and Han, Song},
+  booktitle = {Proceedings of Machine Learning and Systems (MLSys)},
+  volume    = {6},
+  year      = {2024},
+  note      = {arXiv:2306.00978. MLSys 2024 Best Paper Award}
+}
+
+% Verified 2026-07-27 against https://proceedings.mlr.press/v202/xiao23c.html
+% (BibTeX read from the proceedings page) and https://arxiv.org/abs/2211.10438
+% (Journal-ref "ICML 2023").
+@inproceedings{smoothquant2022,
+  title     = {{SmoothQuant}: Accurate and Efficient Post-Training Quantization for Large Language Models},
+  author    = {Xiao, Guangxuan and Lin, Ji and Seznec, Mickael and Wu, Hao and Demouth, Julien and Han, Song},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {202},
+  pages     = {38087--38099},
+  publisher = {PMLR},
+  year      = {2023},
+  note      = {arXiv:2211.10438}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2208.07339 (v2, 10 Nov
+% 2022). Comments field reads "Published at NeurIPS 2022. Camera-ready
+% version"; no Journal-ref. Author list matches docs/audit_claim_table.csv R02.
+@inproceedings{llmint82022,
+  title     = {{LLM.int8()}: 8-bit Matrix Multiplication for Transformers at Scale},
+  author    = {Dettmers, Tim and Lewis, Mike and Belkada, Younes and Zettlemoyer, Luke},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2022},
+  note      = {arXiv:2208.07339}
+}
+
+% Verified 2026-07-27 against https://proceedings.mlr.press/v235/kim24f.html
+% (BibTeX read from the proceedings page) and https://arxiv.org/abs/2306.07629
+% (Comments "ICML 2024"). The proceedings render Hooper's name in full as
+% "Coleman Richard Charles Hooper"; that form is used here.
+@inproceedings{squeezellm2023,
+  title     = {{SqueezeLLM}: Dense-and-Sparse Quantization},
+  author    = {Kim, Sehoon and Hooper, Coleman Richard Charles and Gholami, Amir and Dong, Zhen and Li, Xiuyu and Shen, Sheng and Mahoney, Michael W. and Keutzer, Kurt},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {235},
+  pages     = {23901--23923},
+  publisher = {PMLR},
+  year      = {2024},
+  note      = {arXiv:2306.07629}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2306.11695 (v3, 6 May 2024;
+% Comments "ICLR 2024"). "Wanda" is the method name, not part of the title.
+@inproceedings{wanda2023,
+  title     = {A Simple and Effective Pruning Approach for Large Language Models},
+  author    = {Sun, Mingjie and Liu, Zhuang and Bair, Anna and Kolter, J. Zico},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  note      = {Wanda. arXiv:2306.11695}
+}
+
+% Verified 2026-07-27 against https://proceedings.mlr.press/v202/frantar23a.html
+% (BibTeX read from the proceedings page). The arXiv abs page for 2301.00774
+% carries no Comments/Journal-ref field, so the venue comes from PMLR alone.
+% The proceedings capitalise "Can be"; the arXiv title reads "Can Be".
+@inproceedings{sparsegpt2023,
+  title     = {{SparseGPT}: Massive Language Models Can Be Accurately Pruned in One-Shot},
+  author    = {Frantar, Elias and Alistarh, Dan},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {202},
+  pages     = {10323--10337},
+  publisher = {PMLR},
+  year      = {2023},
+  note      = {arXiv:2301.00774}
+}
+
+% Verified 2026-07-27 against the arXiv export API record for 2405.16406v4
+% (published 26 May 2024, updated 20 Feb 2025; comment field "ICLR 2025").
+% Title capitalisation is as arXiv prints it: "LLM quantization with learned
+% rotations", lowercase after the colon.
+@inproceedings{spinquant2024,
+  title     = {{SpinQuant}: {LLM} quantization with learned rotations},
+  author    = {Liu, Zechun and Zhao, Changsheng and Fedorov, Igor and Soran, Bilge and Choudhary, Dhruv and Krishnamoorthi, Raghuraman and Chandra, Vikas and Tian, Yuandong and Blankevoort, Tijmen},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2025},
+  note      = {arXiv:2405.16406}
+}
+
+% Verified 2026-07-27 against https://proceedings.mlr.press/v235/tseng24a.html
+% (BibTeX read from the proceedings page) and the arXiv export API record for
+% 2402.04396v2 (comment field "ICML 2024").
+@inproceedings{quipsharp2024,
+  title     = {{QuIP\#}: Even Better {LLM} Quantization with Hadamard Incoherence and Lattice Codebooks},
+  author    = {Tseng, Albert and Chee, Jerry and Sun, Qingyao and Kuleshov, Volodymyr and De Sa, Christopher},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {235},
+  pages     = {48630--48656},
+  publisher = {PMLR},
+  year      = {2024},
+  note      = {arXiv:2402.04396}
+}
+
+
+% =====================================================================
+% Per-item behaviour under compression
+% =====================================================================
+
+% Verified 2026-07-27 against the NeurIPS proceedings record
+% https://papers.nips.cc/paper_files/paper/2024/hash/e0e956681b04ac126679e8c7dd706b2e-Abstract-Conference.html
+% ("Advances in Neural Information Processing Systems 37 (NeurIPS 2024), Main
+% Conference Track") and https://arxiv.org/abs/2407.09141 (12 Jul 2024).
+% The placeholder entry's "Dutta and others" is replaced by the full list.
+% Page range not printed on the proceedings landing page; omitted.
+@inproceedings{dutta2024flips,
+  title     = {Accuracy is Not All You Need},
+  author    = {Dutta, Abhinav and Krishnan, Sanjeev and Kwatra, Nipun and Ramjee, Ramachandran},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {37},
+  year      = {2024},
+  note      = {arXiv:2407.09141}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2607.08734 (v1, 9 Jul 2026,
+% cs.AI). No venue field; unreviewed preprint. Author affiliations and the
+% methodological reading are recorded in
+% docs/PRIOR_ART_CONCURRENT_2026-07-24.md §2, which was verified against the
+% raw arXiv HTML rendering.
+@misc{rababah2026illusion,
+  title        = {The Illusion of Equivalency: Statistical Characterization of Quantization Effects in {LLM}s},
+  author       = {Rababah, Baha and Akcora, Cuneyt Gurcan and Leung, Carson K.},
+  year         = {2026},
+  eprint       = {2607.08734},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.AI},
+  note         = {arXiv:2607.08734}
+}
+
+
+% =====================================================================
+% Calibration sensitivity in post-training quantization
+% =====================================================================
+
+% Verified 2026-07-27 against https://aclanthology.org/2024.acl-long.544/
+% (BibTeX read from the Anthology page) and https://arxiv.org/abs/2311.09755
+% (v2, 12 Aug 2024). This replaces the placeholder key's unverified
+% "Williams and Aletras 2024" stub; title, venue, pages and DOI are now read
+% from the Anthology record.
+@inproceedings{williamsaletras2024,
+  title     = {On the Impact of Calibration Data in Post-training Quantization and Pruning},
+  author    = {Williams, Miles and Aletras, Nikolaos},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages     = {10100--10118},
+  address   = {Bangkok, Thailand},
+  publisher = {Association for Computational Linguistics},
+  year      = {2024},
+  doi       = {10.18653/v1/2024.acl-long.544},
+  note      = {arXiv:2311.09755}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2405.20835 (v3, 5 Jun 2024;
+% cs.LG, cs.AI, cs.CL) for metadata, and against the full-text HTML rendering
+% https://arxiv.org/html/2405.20835v3 for the methodological claims used in
+% §2 (calibration sets varied by "quality, content and language"; RedPajama,
+% ASCII-punctuation, FLORES+ multilingual, ARC-Challenge and PiQA; GPTQ W4A16,
+% AWQ W4A16, SmoothQuant W8A8 and a naive W8A8 baseline reported separately;
+% no head-to-head method ranking; no seed-only variation; no TOST / McNemar /
+% power / required-n).
+% No venue field on the arXiv record; cited as a preprint.
+@misc{paglieri2024outliers,
+  title        = {Outliers and Calibration Sets have Diminishing Effect on Quantization of Modern {LLM}s},
+  author       = {Paglieri, Davide and Dash, Saurabh and Rockt{\"a}schel, Tim and Parker-Holder, Jack},
+  year         = {2024},
+  eprint       = {2405.20835},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.LG},
+  note         = {arXiv:2405.20835}
+}
+
+
+% =====================================================================
+% Losslessness definitions and quantization fidelity metrics
+% =====================================================================
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2605.02404 (4 May 2026,
+% cs.LG) for metadata and against https://arxiv.org/html/2605.02404v1 for the
+% content claims used in §2 (task-lossless and distribution-lossless
+% definitions, the Expected Acceptance Rate metric, the gamma-squared variance
+% law, and the SLQ method; zero occurrences of TOST, equivalence testing,
+% McNemar, statistical power, or required sample size; no audit of others'
+% published claims).
+% No venue field on the arXiv record; cited as a preprint.
+@misc{helcig2026slq,
+  title        = {Statistically-Lossless Quantization of Large Language Models},
+  author       = {Helcig, Michael and Kurtic, Eldar and Alistarh, Dan},
+  year         = {2026},
+  eprint       = {2605.02404},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.LG},
+  note         = {arXiv:2605.02404}
+}
+
+
+% =====================================================================
+% Statistics for language-model evaluation
+% =====================================================================
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2602.10144 (v2, 6 May 2026;
+% stat.ML, cs.AI, cs.LG). Comments field reads "ICLR 2026" with an OpenReview
+% discussion link (openreview.net/forum?id=cM3gsqEI4K).
+%
+% PLACEHOLDER CORRECTED. The placeholder entry titled this work
+% "LLM-Accuracy-Stats" -- that is the name of the released tooling, not the
+% paper. The paper's title is the one below. The key is retained so that the
+% three \citet sites in the paper are unaffected.
+@inproceedings{llmaccuracystats2026,
+  title     = {When {LLM}s get significantly worse: A statistical approach to detect model degradations},
+  author    = {K{\"u}bler, Jonas and Budhathoki, Kailash and Kleindessner, Matth{\"a}us and Zhou, Xiong and Yin, Junming and Khetan, Ashish and Karypis, George},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  note      = {arXiv:2602.10144}
+}
+
+
+% =====================================================================
+% Reporting-standards audits and preregistration precedent
+% =====================================================================
+
+% Verified 2026-07-27 against https://aclanthology.org/D19-1224/ (BibTeX read
+% from the Anthology page) and https://arxiv.org/abs/1909.03004 (6 Sep 2019).
+% The placeholder's "Dodge, Jesse and others" is replaced by the full list.
+@inproceedings{dodge2019showyourwork,
+  title     = {Show Your Work: Improved Reporting of Experimental Results},
+  author    = {Dodge, Jesse and Gururangan, Suchin and Card, Dallas and Schwartz, Roy and Smith, Noah A.},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)},
+  pages     = {2185--2194},
+  address   = {Hong Kong, China},
+  publisher = {Association for Computational Linguistics},
+  year      = {2019},
+  doi       = {10.18653/v1/D19-1224},
+  note      = {arXiv:1909.03004}
+}
+
+% Verified 2026-07-27 against https://aclanthology.org/2021.acl-long.566/
+% (BibTeX read from the Anthology page). The placeholder's "Marie, Benjamin and
+% others" is replaced by the full list; the title was not recorded in the
+% placeholder at all.
+@inproceedings{marie2021mtaudit,
+  title     = {Scientific Credibility of Machine Translation Research: A Meta-Evaluation of 769 Papers},
+  author    = {Marie, Benjamin and Fujita, Atsushi and Rubino, Raphael},
+  booktitle = {Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
+  pages     = {7297--7306},
+  address   = {Online},
+  publisher = {Association for Computational Linguistics},
+  year      = {2021},
+  doi       = {10.18653/v1/2021.acl-long.566},
+  note      = {arXiv:2106.15195}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2606.27687 (26 Jun 2026;
+% cs.CL, cs.AI, cs.DL). No venue field; cited as a preprint.
+@misc{thomas2026prereg,
+  title        = {Mitigating {LLM}-based p-Hacking by Preregistering for the Next {LLM}},
+  author       = {Thomas, Maria and Gligoric, Kristina and Shah, Nihar B.},
+  year         = {2026},
+  eprint       = {2606.27687},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.CL},
+  note         = {arXiv:2606.27687}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2605.04135 (v1 5 May 2026,
+% v2 3 Jun 2026; cs.CY, cs.AI, cs.CL). Comments field records OSF
+% preregistration doi.org/10.17605/OSF.IO/7XM3D. No venue field; preprint.
+@misc{gringras2026frontierlag,
+  title        = {Frontier Lag: A Bibliometric Audit of Capability Misrepresentation in Academic {AI} Evaluation},
+  author       = {Gringras, David and Salahshoor, Misha},
+  year         = {2026},
+  eprint       = {2605.04135},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.CY},
+  note         = {arXiv:2605.04135. Preregistered on OSF: 10.17605/OSF.IO/7XM3D}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2607.14399 (15 Jul 2026;
+% cs.AI, cs.CL) and the full-text HTML rendering
+% https://arxiv.org/html/2607.14399v1 for the claims used in §9 (four measured
+% instrument effects -- outcome grammar, criterion disclosure, budget
+% rendering, register presence -- with the player model held fixed; the paper
+% discloses that preregistration strength varies by series). No venue field.
+@misc{bronder2026instrument,
+  title        = {Instrument Effects in Language-Model Honesty Evaluation: An Auditable Single-System Demonstration},
+  author       = {Bronder, Justin},
+  year         = {2026},
+  eprint       = {2607.14399},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.AI},
+  note         = {arXiv:2607.14399}
+}
+
+
+% =====================================================================
+% D&B hygiene
+% =====================================================================
+
+% Verified 2026-07-27. Title, authors and revision history from
+% https://arxiv.org/abs/1803.09010 (v8, 1 Dec 2021), whose Journal-ref reads
+% "Communications of the ACM, December 2021".
+% VOLUME/ISSUE/PAGES PROVENANCE: dl.acm.org and cacm.acm.org both returned
+% HTTP 403 to the cluster, so the publisher record could not be read directly.
+% Volume 64, issue 12, pages 86--92 were read from the OpenAlex record for DOI
+% 10.1145/3458723 (https://api.openalex.org/works/doi:10.1145/3458723), a
+% Crossref-derived index. Flagged here because it is the only bibliographic
+% field in this file not taken from a publisher or preprint-server record.
+@article{gebru2021datasheets,
+  title   = {Datasheets for Datasets},
+  author  = {Gebru, Timnit and Morgenstern, Jamie and Vecchione, Briana and Vaughan, Jennifer Wortman and Wallach, Hanna and Daum{\'e} III, Hal and Crawford, Kate},
+  journal = {Communications of the ACM},
+  volume  = {64},
+  number  = {12},
+  pages   = {86--92},
+  year    = {2021},
+  doi     = {10.1145/3458723},
+  note    = {arXiv:1803.09010}
+}

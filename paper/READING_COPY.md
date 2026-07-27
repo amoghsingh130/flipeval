@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-26T06:13:06Z from `paper/main.tex` at commit `849fa3f`.**
+**Generated 2026-07-27T14:50:09Z from `paper/main.tex` at commit `ddb6158`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -58,13 +58,20 @@ driven by answer churn rather than task difficulty: MMLU needs about 2{,}164
 items at a 2\,pp margin while the harder GPQA needs 749.
 
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
-% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
+% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
+% results/identical_score_churn_rev2.csv (analysable_cells 1707,
+% zero_delta_cells 145, zero_delta_share 0.084944, churn_median 0.072000).
+% REV-2: "a median of 6.2%" was rev-1's churn_median 0.062176 and was corrected
+% to 7.2% on 2026-07-26; it is the SAME quantity as \S\ref{sec:atlas:identical}'s
+% 0.0720 and must never diverge from it again. 8.5% is 8.49% rounded coarser,
+% which the summary invariant permits; 6.2% was a different revision, which it
+% does not.
 Those rates come from an atlas of the public record of compression evaluation:
 1{,}707 paired model-by-task cells mined from public per-item evaluation dumps,
 spanning 3B to 405B parameters. Across the atlas, per-item churn runs roughly
 five to six times the net accuracy delta, and 145 cells (8.5\%) post an
 \emph{exactly identical} accuracy to their baseline while still disagreeing with
-it on individual items---at a median of 6.2\% of items among those cells.
+it on individual items---at a median of 7.2\% of items among those cells.
 
 % ---------------------------------------------------------------------------
 % H3 VARIANT (A) -- SUPPORTED. Selectable only if all 8 registered confirmatory
@@ -100,7 +107,6 @@ the analyst decisions that moved the headline are documented with the direction
 they moved it, and every number above is recomputable from released artifacts.
 \end{abstract}
 ```
-
 
 ---
 
@@ -158,12 +164,17 @@ where the harder GPQA needs 749.
 
 \paragraph{The evidence.}
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
-% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results.
+% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
+% results/identical_score_churn_rev2.csv (analysable_cells 1707,
+% zero_delta_cells 145, zero_delta_share 0.084944, churn_median 0.072000).
+% REV-2: "a median of 6.2%" was rev-1's churn_median 0.062176 and was corrected
+% to 7.2% on 2026-07-26, in step with the abstract and
+% \S\ref{sec:atlas:identical}. All three state the same quantity.
 Both rest on an atlas of 1{,}707 paired model-by-task cells mined from public
 per-item evaluation dumps spanning 3B to 405B parameters, in which churn runs
 five to six times the net delta, and 145 cells (8.5\%) post an exactly identical
 accuracy to their baseline while still disagreeing with it on individual items,
-at a median of 6.2\% of items. A preregistered controlled experiment then asks
+at a median of 7.2\% of items. A preregistered controlled experiment then asks
 whether the calibration \emph{seed} alone can reorder two compression methods.
 \minigridTODO{one-sentence status; H3 is undecided under the registered rule
 until all eight registered cells exist}
@@ -191,18 +202,22 @@ paper's largest numbers.
 once minted}
 ```
 
-
 ---
 
 ## FILE: `paper/sections/related_work.tex`
 
 ```latex
 % =====================================================================
-% Section: Related work and positioning -- SKELETON.
+% Section: Related work and positioning.
 % Rule for this section: cite honestly and preemptively. Every prior claim we
 % do NOT own is attributed in the same paragraph where our version appears.
-% Bibliography keys are placeholders; docs/related_work_checklist.md tracks the
-% sweep that must be completed (search dates, databases, screened counts).
+%
+% BIBLIOGRAPHY STATUS (2026-07-27): the placeholder file paper/refs.bib is
+% retired. Every key cited here resolves to a verified entry in
+% paper/references.bib, each carrying a comment naming the primary source it
+% was read from and the date it was read. The sweep's search record --
+% databases, dates, queries, screened counts -- is in
+% docs/related_work_checklist.md §"Sweep Record".
 % =====================================================================
 
 \section{Related work and positioning}
@@ -219,22 +234,130 @@ public record at scale rather than in a controlled study
 \emph{variance model} for equivalence certification
 (\S\ref{sec:certification}), and (iii) the audit that follows from it
 (\S\ref{sec:audit}).
-\TODO{complete the forward/backward citation sweep per
-docs/related\_work\_checklist.md and add any 2025--2026 work on prediction
-instability, behavioural consistency, or rank robustness}
+
+Concurrent work reaches the same premise independently.
+\citet{rababah2026illusion}, posted two days before our preregistration froze
+and unknown to us until the prior-art sweep of 2026-07-24, define
+\emph{correctness agreement}---the per-item rate at which base and quantized
+models are both correct on the same input. That statistic is the joint-correct
+cell of the same $2\times2$ table our accuracy-state churn is built from, and
+the two are interconvertible given the marginal accuracies: with $a$ both
+correct, $b$ base-only correct and $c$ quantized-only correct,
+$\mathrm{churn} = (b+c)/n = \mathrm{Acc}_{\mathrm{base}} +
+\mathrm{Acc}_{\mathrm{quant}} - 2\,\mathrm{CA}$. They study a quantization
+family disjoint from ours---\texttt{llama.cpp} GGUF legacy and $k$-quant rather
+than GPTQ and AWQ---and reach a conclusion consistent with ours. We read this as
+external corroboration of the premise, not competition on it, and we make no
+priority claim over it: no committed artifact in this repository predates its
+posting.
+% SOURCE for the independence and no-precedence statements:
+% docs/PRIOR_ART_CONCURRENT_2026-07-24.md, "Dated Amendments" (a)-(d),
+% reviewed and affirmed by the author 2026-07-24.
+What they do not supply, and what the rest of this paper is, is the machinery
+that turns the shared premise into a decision: equivalence testing at a declared
+margin, required-$n$, a preregistered test of whether the calibration seed
+reorders two methods, and an audit of published claims. Their paper reports no
+equivalence test, no power or sample-size computation, and no per-item release;
+it also reports a layer-level analysis---query and key projections more
+sensitive than value and output---that we do not attempt.
 
 \subsection{Calibration sensitivity in post-training quantization}
 
 \citet{williamsaletras2024} establish that the calibration \emph{data} affects
-quantized model quality. \textbf{Calibration-data effects are theirs.} Our
-registered question is orthogonal and finer-grained: holding the calibration
-corpus fixed, does the calibration \emph{sample seed} change the \emph{ranking}
-of two methods? The design pairs GPTQ seed $s$ and AWQ seed $s$ on byte-identical
-calibration samples, so a seed-level ranking difference is attributable to
-method-by-calibration interaction rather than to the two methods seeing different
-data (\S\ref{sec:minigrid}).
-\TODO{position against any work with controlled calibration seeds; the sweep has
-not yet found one}
+quantized model quality, finding substantial variation in downstream task
+performance across calibration sets. \textbf{Calibration-data effects are
+theirs.} Our registered question is orthogonal and finer-grained: holding the
+calibration corpus fixed, does the calibration \emph{sample seed} change the
+\emph{ranking} of two methods? The design pairs GPTQ seed $s$ and AWQ seed $s$ on
+byte-identical calibration samples, so a seed-level ranking difference is
+attributable to method-by-calibration interaction rather than to the two methods
+seeing different data (\S\ref{sec:minigrid}).
+
+The sweep found no prior work that varies a calibration \emph{seed} with the
+corpus held fixed and asks whether the resulting instability reorders two
+methods. The nearest antecedents vary the calibration set itself, and they
+disagree with each other about how much that matters---which is the subject of
+\S\ref{sec:related:reconcile}.
+
+\subsection{Reconciling with the diminishing-effect result}
+\label{sec:related:reconcile}
+
+The strongest available objection to this paper is
+\citet{paglieri2024outliers}, which argues that outliers and calibration sets
+have a \emph{diminishing} effect on the quantization of modern LLMs: where the
+older OPT models degrade badly and vary with the calibration set, Llama-2 7B,
+Llama-3 8B, Command-R 35B and Mistral 7B are robust, with Mistral 7B close to
+immune. If modern models are insensitive to the calibration set, why would the
+calibration seed reorder anything?
+
+We take the objection seriously, and our answer is that both results hold at
+once. Three differences make them compatible, and our own numbers show why.
+
+\paragraph{The intervention is different, and ours is strictly finer.} They vary
+the calibration \emph{data}: sets differing in quality, content and language---a
+RedPajama sample, calibration drawn from uniformly random ASCII punctuation and
+whitespace, task-specific sets from ARC-Challenge and PiQA, and multilingual
+sets from FLORES+. We hold the corpus fixed and vary only the sample seed, an
+intervention they do not make. A finding that swapping the corpus for random
+punctuation barely moves accuracy does not entail that redrawing the sample
+leaves the \emph{ordering} of two methods intact; the two questions are not
+nested in the direction the objection needs.
+
+\paragraph{The unit of analysis is different.} They study one method at a time,
+reporting GPTQ W4A16, AWQ W4A16, SmoothQuant W8A8 and a naive W8A8 baseline in
+separate result sections, and they report no head-to-head ranking between
+methods and no ranking flips. Our unit of analysis is the \emph{gap between} two
+methods at the same bit width---a quantity their design never measures.
+
+\paragraph{Individual robustness plus a small method gap implies ranking
+instability.} This is the reconciliation proper, and it is not a rhetorical
+move: it is what \S\ref{sec:minigrid} measures. Each method is individually
+stable in absolute accuracy, much as they report---and the seed-induced range is
+at least as large as the mean GPTQ--AWQ gap in 7 of our 8 confirmatory cells.
+% SOURCE: docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED), "Mechanical
+% application of the rule": range/gap holds in 7 of 8. Wording follows that
+% record's own "at least as large as"; do not tighten it to "smaller than".
+Those two facts together \emph{are} ranking instability. We are not
+contradicting their robustness finding; we are showing it has a consequence they
+did not test for. A field that reads ``calibration choice barely moves accuracy''
+as licence to compare two methods from one calibration run each has drawn the
+wrong inference from a correct result.
+
+\paragraph{The magnitude question, answered honestly.} Robustness claims are
+claims about size, so the reconciliation has to be quantitative. The figures
+that follow come from a \emph{post-hoc} resolution analysis, prompted by this
+very paper and labelled as such wherever it appears (\S\ref{sec:minigrid}); it
+is descriptive and modifies no verdict. On MMLU our seed-induced ranges run 5.5
+to 17.5 paired standard errors---a spread no robustness claim reaches, and one
+the benchmark resolves comfortably at $n = 14{,}042$.
+% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, step 5 table,
+% max_range/SE column, MMLU rows: 11.07, 17.45, 5.53, 11.19.
+On GSM8K at $n = 1{,}000$ the same ranges run roughly two standard errors, and
+we say so rather than averaging the two tasks together: that arm of the
+experiment does not resolve the effect it was built to measure
+(\S\ref{sec:minigrid:escalation}, \S\ref{sec:limitations}).
+% SOURCE: same table, GSM8K rows: 1.92, 2.35, 3.61, 2.45.
+
+\subsection{Losslessness, defined and achieved versus audited}
+
+\citet{helcig2026slq} occupy the phrase this paper is about. They formalise
+three notions of losslessness for quantized LLMs---task-lossless (zero-shot
+accuracy preserved within sampling variance), the stricter
+distribution-lossless (next-token distributions practically indistinguishable),
+and a $\gamma^2$ variance law relating symmetric to asymmetric
+quantization---propose the Expected Acceptance Rate as an interpretable fidelity
+metric, and ship SLQ, a method that reaches those targets at low bit widths.
+
+Their question and ours are different, and the difference is the whole of
+\S\ref{sec:certification}. \emph{They define losslessness and build a method to
+achieve it.} \emph{We audit whether existing published claims of losslessness
+have the evidence to support them, and compute how many items it would take to
+certify one.} Their paper contains no equivalence test at a declared margin, no
+power or required-$n$ computation, no McNemar test, and no audit of others'
+claims; ours contains no quantization method. The two are complements: a
+practitioner who adopts EAR as a fidelity target still needs to know how large
+an evaluation must be before the accuracy half of a losslessness claim means
+anything, and that number is what our certification tables supply.
 
 \subsection{Statistics for language-model evaluation}
 
@@ -254,8 +377,6 @@ empirical case that the distinction matters in practice. An anytime-valid
 sequential extension---confidence sequences that let a practitioner stop as soon
 as the model is certified---is registered and in progress; it reports no results
 here and is not claimed as a contribution of this paper.
-\TODO{verify arXiv 2602.10144 metadata against the primary source before
-submission; do not cite from memory}
 
 \subsection{Reporting-standards audits}
 
@@ -264,22 +385,31 @@ on reporting the compute and search behind reported numbers, and
 \citet{marie2021mtaudit} on the statistical practice of machine-translation
 evaluation. We follow both in framing and in tone: the finding is about what the
 field reports, not about whether individual authors are right, and the paper's
-deliverable is a standard plus the tooling to meet it.
+deliverable is a standard plus the tooling to meet it. The genre has also begun
+to adopt preregistration directly, which is the precedent for
+\S\ref{sec:prereg}: \citet{gringras2026frontierlag} run a preregistered
+bibliometric audit of which models the evaluation literature actually tests, and
+\citet{thomas2026prereg} propose preregistering an analysis against a model not
+yet released, so that the configuration cannot be tuned against the outcome.
 
 \subsection{Compression methods audited}
 
-\TODO{one paragraph situating the audited methods---GPTQ \citep{gptq2022},
-AWQ \citep{awq2023}, SmoothQuant \citep{smoothquant2022},
-LLM.int8() \citep{llmint82022}, SqueezeLLM \citep{squeezellm2023},
-Wanda \citep{wanda2023}, SparseGPT \citep{sparsegpt2023},
-SpinQuant \citep{spinquant2024}, QuIP\# \citep{quipsharp2024}---and noting the
-honest non-claimers (QuIP\#, SpinQuant, the Qwen quantized model cards, and the
-llama.cpp documentation), which are cited as positive examples of restraint in
-equivalence language.}
+The audited claims span the two dominant post-training families. Weight-only
+quantization is represented by GPTQ \citep{gptq2022}, AWQ \citep{awq2023} and
+SqueezeLLM \citep{squeezellm2023}; weight-and-activation quantization by
+LLM.int8() \citep{llmint82022} and SmoothQuant \citep{smoothquant2022};
+one-shot pruning by SparseGPT \citep{sparsegpt2023} and Wanda
+\citep{wanda2023}. We audit the equivalence \emph{language} these papers use
+and the evidence offered for it, not the methods themselves, and the audit's
+verdicts are about reporting practice rather than about whether a method works.
+Two of the most aggressive methods in the set are also the most restrained in
+what they assert: SpinQuant \citep{spinquant2024} and QuIP\#
+\citep{quipsharp2024} report their accuracy deltas without equivalence
+language, and are cited here as positive examples alongside the Qwen quantized
+model cards and the \texttt{llama.cpp} documentation.
 % SOURCE for the honest-non-claimer list:
 % docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §2, "Honest non-claimers" bullet.
 ```
-
 
 ---
 
@@ -515,7 +645,6 @@ apology for it.
 % The marker itself was CLOSED on 2026-07-26 by writing the delta narrative at
 % app:prereg:rev2delta from docs/ATLAS_REV2_CORRECTION_2026-07-21.md §8.
 ```
-
 
 ---
 
@@ -861,7 +990,6 @@ because that is the granularity of the frozen claim table
 (\S\ref{sec:prereg:choices}, interpretive choice~4).
 ```
 
-
 ---
 
 ## FILE: `paper/sections/certification.tex`
@@ -1095,7 +1223,6 @@ equivalent---meeting the count makes the test \emph{informative}, and the test
 still has to be run and to pass.
 ```
 
-
 ---
 
 ## FILE: `paper/sections/atlas.tex`
@@ -1290,10 +1417,26 @@ methods have made the difference smaller without making the evidence for
 \label{sec:atlas:identical}
 
 % SOURCE: docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
-% results/identical_score_churn.csv (statistic block, rows 2-9).
-% Population: the same 1,155 cells. Zero-delta is defined as
+% results/identical_score_churn_rev2.csv (statistic block, rows 2-9):
+% analysable_cells 1707, zero_delta_cells 145, zero_delta_share 0.084944,
+% churn_median 0.072000, churn_mean 0.088725, churn_max 0.343434,
+% zero_delta_nonzero_churn_cells 128, churn_median_nonzero_only 0.092215.
+% Population: the same 1,707 cells. Zero-delta is defined as
 % abs(net_accuracy_delta) < 1e-12, i.e. exact equality with no rounding
 % tolerance; a rounding-based definition would admit more cells and is not used.
+% REV-2 CORRECTION 2026-07-26. This comment previously cited the REV-1 file
+% results/identical_score_churn.csv and the 1,155-cell population while the
+% prose beneath it had already been updated to rev-2 -- the provenance comment
+% contradicted the text it governed. Two rev-1 restatements survived here and
+% were corrected in the same pass: the nonzero-churn subset median (0.0919 is
+% rev-1's churn_median_nonzero_only 0.091868; rev-2 is 0.092215 -> 0.0922), and
+% "more than 6% of individual items", which restated rev-1's churn_median
+% 0.062176 where rev-2 gives 0.072000 -> "more than 7%".
+% "ROUGHLY ONE IN TEN" RECONSIDERED AND TIGHTENED, not merely inherited: it was
+% near-exact for rev-1's 9.78% share and is a stretch for rev-2's 8.49%
+% (= 1 in 11.8), rounding away from the true value in the direction that
+% overstates the finding. Replaced with "about one in twelve" here and in
+% \S"What this section does and does not support". Do not restore "one in ten".
 The clearest single demonstration that aggregate accuracy is not a summary of
 behaviour is the subset of cells where the aggregate does not move at all.
 
@@ -1301,9 +1444,9 @@ Of the 1{,}707 analysable cells, \textbf{145 (8.49\%) post an exactly identical
 accuracy} to their baseline---not similar, identical, to machine precision.
 Among those 145 cells, the median accuracy-state churn is \textbf{0.0720}, the
 mean is 0.0887, and the maximum is 0.3434; \textbf{128 of the 145} have nonzero
-churn, with a median of 0.0919 among that subset. Roughly one in ten compressed
+churn, with a median of 0.0922 among that subset. About one in twelve compressed
 model evaluations in the public record reports a score identical to its
-baseline, and half of those still disagree with the baseline on more than 6\% of
+baseline, and half of those still disagree with the baseline on more than 7\% of
 individual items.
 
 \begin{table}[t]
@@ -1311,8 +1454,11 @@ individual items.
 \caption{The most extreme zero-delta cell in the atlas: identical accuracy,
 symmetric flips, $p = 1.0$.}
 \label{tab:identical-extreme}
-% SOURCE: results/identical_score_churn.csv, rank 1 row; reproduced in
+% SOURCE: results/identical_score_churn_rev2.csv, rank 1 row; reproduced in
 % docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Most extreme zero-delta cell".
+% The rank-1 row is byte-identical between rev-1 and rev-2 (pair_index 35,
+% high_school_geography_5, churn 0.343434); the citation was repointed to rev-2
+% on 2026-07-26 for consistency, not because the values moved.
 \begin{tabular}{ll}
 \toprule
 Field & Value \\
@@ -1379,7 +1525,7 @@ Supports: that per-item churn under compression is five to six times the net
 delta across the public record at every scale from 3B to 405B; that the majority
 of publicly recorded compression evaluations fall in a gray zone where neither
 equivalence nor degradation is established at their own sample sizes; that
-roughly one cell in ten posts an identical score while still disagreeing on
+about one cell in twelve posts an identical score while still disagreeing on
 items; and that S2's methods are measurably gentler than S1's while the
 evidential gap persists.
 
@@ -1387,7 +1533,6 @@ Does not support: any statement about quantization methods in general, about
 models or methods absent from the two sources, or about causal attribution of
 churn to any design choice. Nothing here is evidence for or against H3.
 ```
-
 
 ---
 
@@ -1512,7 +1657,6 @@ last of these is governed by a dated amendment that defines a WikiText-2
 been inspected when it was taken. None of these analyses can substitute for a
 confirmatory cell.
 ```
-
 
 ---
 
@@ -1649,7 +1793,6 @@ follows from it, and this paper states none:
 these four cells to warrant the confirmatory eight; it says nothing, in either
 direction, about what the eight-cell rule will return.
 ```
-
 
 ---
 
@@ -1797,6 +1940,16 @@ tasks, and of a kind compression papers do not report: the setting that almost
 never appears in a model card is precisely the one silently moving the number a
 ``near-lossless'' claim rests on.
 
+\paragraph{The same move, in another domain.} Holding the system fixed and
+varying the instrument is not specific to compression.
+\citet{bronder2026instrument} do it for language-model \emph{honesty}
+evaluation: with the player model held fixed, four instrument
+choices---outcome grammar, criterion disclosure, budget rendering and register
+presence---substantially changed what the evaluation would have reported, under
+decision rules recorded before results were read. That study and this one share
+a design and a conclusion on different objects, which is the reason to expect
+the effect wherever an evaluation is treated as a fixed instrument.
+
 \paragraph{Scope.}
 % SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md (all R values, range
 % 0.836--1.585); docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §2 (Llama
@@ -1817,7 +1970,6 @@ confirmatory analysis, and states no H3 outcome. It contextualises how a
 compression score should be read; it decides nothing about the compression
 methods themselves.
 ```
-
 
 ---
 
@@ -1869,7 +2021,6 @@ once they exist, keeping the pilot as the historical record of the same
 demonstration under worse conditions}
 ```
 
-
 ---
 
 ## FILE: `paper/sections/artifacts.tex`
@@ -1903,7 +2054,6 @@ maintenance statements.
 \TODO{HuggingFace dataset URL; Zenodo DOI; package URL; released version;
 lm-evaluation-harness integration status}
 ```
-
 
 ---
 
@@ -2000,7 +2150,6 @@ between the two revisions, are reported rather than absorbed
 (Appendix~\ref{app:prereg:rev2delta}).
 ```
 
-
 ---
 
 ## FILE: `paper/sections/conclusion.tex`
@@ -2055,7 +2204,6 @@ We propose five lines that a model card or method paper can adopt directly.
 written only after all registered cells exist; it must not state an H3 outcome
 until then}
 ```
-
 
 ---
 
@@ -2123,7 +2271,6 @@ and 962 at 3\,pp.}
 archived commit. Reviewers should be able to read the frozen rule text that
 \S\ref{sec:prereg} describes.}
 ```
-
 
 ---
 
@@ -2203,18 +2350,20 @@ seem worth doing, and it is reported here for that reason. It is
 pre-registration data contact, and it lies outside the frozen 59-pair manifest,
 since same-repository multi-precision runs are an amendment candidate that was
 never acted upon. The registered replacement is the identical-score statistic of
-\S\ref{sec:atlas:identical}, computed on the frozen atlas population: 113 of
-1{,}155 cells (9.78\%) at a median churn of 6.22\%. Where an anecdote and a
+\S\ref{sec:atlas:identical}, computed on the frozen atlas population: 145 of
+1{,}707 cells (8.49\%) at a median churn of 7.20\%. Where an anecdote and a
 registered statistic point the same way, the paper cites the statistic.
-% REV-1 SURVIVOR FLAGGED 2026-07-26, NOT CHANGED (outside the authorised scope
-% of this editing pass). The four figures in the preceding sentence are rev-1:
-% results/identical_score_churn.csv gives analysable_cells 1155, zero_delta_cells
-% 113, zero_delta_share 0.097835, churn_median 0.062176. The rev-2 file
-% results/identical_score_churn_rev2.csv gives 1707, 145, 0.084944 and 0.072000
-% respectively, which is what \S\ref{sec:atlas:identical} and the abstract's
-% "145 cells (8.5%)" already report. The abstract's companion figure "a median of
-% 6.2%" is the SAME rev-1 churn median and must move with this sentence, or the
-% two will disagree. Awaiting the author's ruling; see the edit report.
+% REV-1 SURVIVOR FLAGGED 2026-07-26, RESOLVED 2026-07-26 on the author's ruling.
+% All four figures in the preceding sentence were rev-1
+% (results/identical_score_churn.csv: analysable_cells 1155, zero_delta_cells
+% 113, zero_delta_share 0.097835, churn_median 0.062176) and are now rev-2
+% (results/identical_score_churn_rev2.csv: 1707, 145, 0.084944, 0.072000).
+% This passage cites the registered replacement statistic as CURRENT, not as
+% history, so it must track rev-2 -- unlike \S\ref{sec:atlas:coverage}'s citation
+% of the retracted 643, which is deliberate historical narration and stays.
+% The abstract's and introduction's companion figure "a median of 6.2%" was the
+% same rev-1 churn median and moved to 7.2% in the same commit; all three now
+% state churn_median 0.072000 at their respective precisions.
 
 \subsection{The interpretive choices that moved the headline}
 \label{app:prereg:choices}
@@ -2421,7 +2570,6 @@ worth stating plainly, and it is also worth stating that we did not know it
 would when the repair was authorised.
 ```
 
-
 ---
 
 ## FILE: `paper/sections/appendix_harness_detail.tex`
@@ -2579,7 +2727,6 @@ run once and reported as ``$C \equiv D$''.
 % as C == D").
 ```
 
-
 ---
 
 ## FILE: `paper/sections/appendix_artifacts_detail.tex`
@@ -2626,7 +2773,6 @@ versioned releases, and the policy for adding atlas pairs (a dated amendment to
 the atlas registration, not a silent extension).}
 ```
 
-
 ---
 
 ## Reader's index
@@ -2671,3 +2817,4 @@ Sections in reading order (numbered as the compiled paper numbers them; front ma
 | App. | Harness-sensitivity detail | `paper/sections/appendix_harness_detail.tex` |
 
 | App. | Artifact detail | `paper/sections/appendix_artifacts_detail.tex` |
+
