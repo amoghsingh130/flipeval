@@ -155,7 +155,10 @@ rule---is tuned after results are seen.
 
 % SOURCE: PREREGISTRATION.md §"H3 Decision Rule";
 % docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 3, 4.
-% NEVER state an H3 outcome in this file or any other.
+% THIS FILE STATES NO H3 OUTCOME. That is deliberate and survives the signed
+% verdict of 2026-07-26: §3's job is the protocol, §7's is the result. Updated
+% 2026-07-27 only to stop asserting the four-cell contingency as live -- all
+% eight cells completed, so that branch never fired.
 The registered decision rule is defined over eight confirmatory
 model-by-benchmark cells:
 $\{$Qwen2.5-1.5B, Qwen2.5-7B, Llama-3.2-3B, Llama-3.1-8B$\}
@@ -167,16 +170,27 @@ of the 8 and $\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}}
 < 0.5 \times \mathrm{gap}$ in at least 6 of the 8. Everything else is
 \emph{inconclusive}, reported without post-hoc promotion.
 
-The executed mini-grid covers \textbf{4 of those 8 cells}
+The mini-grid executed \textbf{4 of those 8 cells}
 ($\{$Qwen2.5-1.5B, Llama-3.2-3B$\} \times \{$MMLU, GSM8K$\}$), with the 7B/8B
 cells deferred behind a pre-committed, mechanical escalation rule. The mini-grid
-registration states the consequence in advance: if all eight cells complete, the
-frozen rule is applied exactly as registered; if they do not, \textbf{the paper
-reports the four completed cells descriptively and H3 is undecided under the
-registered rule}---never supported or disconfirmed on four cells---and no
-reduced-cell variant of the rule is constructed after results are seen.
-Section~\ref{sec:minigrid} reports accordingly.
-\minigridTODO{escalation-rule outcome and the dated escalation decision record}
+registration stated the consequence of each branch in advance: if all eight
+cells complete, the frozen rule is applied exactly as registered; if they do
+not, the paper reports the four completed cells descriptively and H3 is
+undecided under the registered rule---never supported or disconfirmed on four
+cells---and no reduced-cell variant of the rule is constructed after results are
+seen.
+
+The escalation screen fired on 2026-07-23, the 7B/8B cells were built, and
+\textbf{all eight cells completed}, so the second branch never applied and the
+frozen rule was applied once over the full set. Both decisions are dated, signed
+records
+(\texttt{docs/MINIGRID\_ESCALATION\_DECISION\_2026-07-23.md},
+\texttt{docs/H3\_EIGHT\_CELL\_DECISION\_2026-07-26.md}), and the screen's own
+authorship discipline is worth stating: it decides which cells to build and
+states no H3 outcome, so the confirmatory rule was never applied to a cell set
+selected after its result was known. The screen's per-cell outcomes are in
+\S\ref{sec:minigrid:escalation} and the verdict in
+\S\ref{sec:minigrid:verdict}; this section states neither.
 
 \subsection{The spot-check found a selection bias in our own pipeline}
 \label{sec:prereg-spotcheck}
