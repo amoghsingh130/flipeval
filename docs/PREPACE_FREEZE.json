@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-27T01:45:13.474071+00:00",
-  "source_commit": "32fc76f9326af2d1138bd6380ca32fc823d83d5b",
-  "source_tree": "be7ec4eb4384781d1dbf99d47daf5d1f4740f4ae",
+  "created_at": "2026-07-27T02:25:12.059576+00:00",
+  "source_commit": "92ece446cf20028c378a76a243e8e280b9d09edd",
+  "source_tree": "a448b229880c75ee087d3f7a666167b75cd8defc",
   "branch": "codex/pre-pace-implementation",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -48,7 +48,7 @@
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
-    "scripts/slurm/build_image.sbatch": "fec8bb47922663da0b284a97da6eccf16f4e8fc0189fd1195a573571646224f6",
+    "scripts/slurm/build_image.sbatch": "628272db01c755674c77be34d0728856f0dfe874425dd1baaa425d41dd5a6d61",
     "scripts/slurm/build_quantized.sbatch": "aad46a1a4a55c7f9d061270a49c78e3c0429f90802da9d3e294fde90b747dcfe",
     "scripts/slurm/env.sh": "8a677e794534055aece7f5294da43db66c79b240b2866b54c73327dcc934181f",
     "scripts/slurm/mirror_c4.sbatch": "ced7de1d241f9fd3e9a05e6a20028cf49bc7eb47410ce75a1fd77215c4f9dc17",
@@ -57,12 +57,12 @@
     "scripts/slurm/run_bridge.sbatch": "4e52f6b275e87d24500dbe663026dd429123fa324ad201f04064b0e343ac135b",
     "scripts/slurm/run_minigrid.sbatch": "282828ea9f96f736ac4fa5b2c8cbae136d4b48adb0a6c4e1e866ab33cea1acf2",
     "scripts/slurm/verify_bridge.sbatch": "cc8d8204c6bb3ce3c984768b5b5c3283b99f4d06fbbeb7232c3e9824f14c2f57",
-    "scripts/slurm/verify_minigrid.sbatch": "a2fd5addfaf0a8050a3b1d4afe680ea0785cc71e01c93fb1d78782b6419f8881",
+    "scripts/slurm/verify_minigrid.sbatch": "6e5e6c5892f4567e6c242c78a9d657c4927cae8e9a469c7aabbdc36eb4e95766",
     "scripts/slurm/verify_row_count.sbatch": "75ae8091fa3cc425788827ee96ecb1ef342062efc83488a63b8a3b009d0787e8",
     "scripts/slurm/write_receipt.sh": "a4988d4f710b03bbe4b90374688762febea87453d8f80fa1bb8203077dafa7e4",
     "scripts/verify_bridge.py": "19ee4914b29dfd9c34822a066d77b8376b96766e1a7a348e289e80443a40c39b",
     "scripts/verify_common.py": "1ff4763a68a82d3397a7c077d7236d815e68ef0f32c82286ef0ce1cdcfbd0531",
-    "scripts/verify_minigrid.py": "9d59eda4bda66f138fd3afd2942c0404bd97c3412d8acfe44a3d0735fae728d2",
+    "scripts/verify_minigrid.py": "62088dd7ff0198af73f249d4a7c193cedc59a50ac6bb41aac7073ad578296268",
     "scripts/wikitext2_article_probe.py": "17a917b80aaa246388015915af71acd8aa239f65a9c00452d9634626648528e0",
     "tests/fixtures/lm_eval_gsm8k.jsonl": "09ee35979b5ebce5b7964771791fc9d1f489102b9a0779493b2c3a45f4cfdf9e",
     "tests/fixtures/lm_eval_mmlu_baseline.json": "5bead2f7b68fcd2fee34afae9b004c165b534c971e734c7fb39482f01659b5f5",
@@ -82,10 +82,10 @@
     "tests/test_pilot_eval.py": "be2f6e8b348e2c0f8d920048e2912bfaebc5feac85ec6cbd4d85fd6d2482f100",
     "tests/test_run_minigrid_guards.py": "0fbd06a2207566aa4ffc68c34291cbb070be4aa79210031b18a9374c6bda3af2",
     "tests/test_verify_bridge.py": "6025c09d4bfeb8014c00163c1f229bd90c0a4c85eb1b0bd1b600786a41e458b8",
-    "tests/test_verify_minigrid.py": "2e4ec9f93386d2fe10248f165ee16f8b81efbfcc54dc706276fbfc398be8f81f"
+    "tests/test_verify_minigrid.py": "cef7526a96a335ce4cf1812c8913772f9e4fb7d6e7c023af1856e4803bdd0094"
   },
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "6ec394cd245c30d6b499570312efb6e6de596eb7294e810f6447e2c1bed78042"
+  "manifest_payload_sha256": "ce2d7c0db2245d626241213224f2930b23087ef5b11ec29a5521868d43ab8af3"
 }
