@@ -4,6 +4,10 @@ The bridge validator's counterpart at grid scale, per
 `docs/PACE_EXECUTION_PLAN_2026-07-15.md` Stage 6. It enforces, over the complete
 expected set and nothing less:
 
+  * the acceptance block is structurally complete -- every key in
+    REQUIRED_ACCEPTANCE_KEYS is present, checked up front and reported all at
+    once, so a config cannot be validated against a contract it only partly
+    supplies;
   * the config is the grid the operator asked for -- model tags and cell count
     are declared independently at invocation and must match the config, and
     each run dir must hold exactly the cells the config declares;
@@ -56,6 +60,71 @@ except ImportError:  # pragma: no cover - exercised by the SLURM script path
 # these literals.
 IMPLEMENTED_TASKS = {"mmlu", "gsm8k"}
 IMPLEMENTED_METHOD_FAMILIES = {"gptq", "awq"}
+
+# The acceptance contract every grid config must satisfy, declared once and
+# checked up front (incident 25, 2026-07-26).
+#
+# The defect this replaces: four of these were read with `.get()` and the fifth,
+# `calibration`, with a subscript. `configs/pace_escalation_h3.yaml` omitted the
+# subscripted one, so the escalation validator died with a bare
+# `KeyError: 'calibration'` at the first read, after the complete 44-cell grid
+# had been produced, archived and sealed. The reuse decision that preceded it
+# ("the validator is model-agnostic, so no fork") had checked the validator's
+# ITERATION surface -- which models it walks -- and never its CONTRACT surface --
+# which keys it demands. Diff the contract, not the code path.
+#
+# So: one constant, validated together, reporting EVERY missing key rather than
+# whichever one a subscript reaches first.
+REQUIRED_ACCEPTANCE_KEYS = (
+    "expected_jsonl_files",
+    "expected_item_counts",
+    "task_dataset_revisions",
+    "calibration",
+)
+
+# `baseline_accuracy_ranges` is the fifth key and is deliberately NOT in the
+# tuple above. It has a REGISTERED absent-state: a config may omit it while
+# declaring `baseline_accuracy_ranges_status: pending-...`, which is how the
+# escalation config legitimately sat between its eval fan-out and its four-gate
+# commit. Raising on its absence would delete that state. Its absence is still
+# fail-closed, as a named check that produces a validation error rather than a
+# passing run -- see `test_escalation_validator_fails_closed_on_the_pending_state`
+# and `test_minigrid_validator_fails_closed_without_derived_fp16_ranges`.
+#
+# The distinction is registered design, not the accidental split this incident
+# was about: every key here fails closed, and none can go missing quietly.
+GATED_ACCEPTANCE_KEY = "baseline_accuracy_ranges"
+
+
+class MissingAcceptanceKeys(ValueError):
+    """Raised when a grid config's acceptance block is structurally incomplete."""
+
+
+def acceptance_value(acceptance: dict[str, Any], key: str) -> Any:
+    """The single accessor for every acceptance key, required or gated.
+
+    Uniform by construction: `verify_acceptance_contract` has already proved the
+    required keys present, so no caller needs to know which class a key is in,
+    and no future key can quietly acquire a different access idiom.
+    """
+    return acceptance.get(key)
+
+
+def verify_acceptance_contract(acceptance: dict[str, Any], config_path: Path) -> None:
+    """Fail before any per-file work if the acceptance block is incomplete.
+
+    Reports every missing key at once. A validator that dies on the first one
+    tells the operator to add a key, run again, and discover the next.
+    """
+    missing = [key for key in REQUIRED_ACCEPTANCE_KEYS if acceptance.get(key) is None]
+    if missing:
+        raise MissingAcceptanceKeys(
+            f"{config_path}: minigrid_acceptance is missing "
+            f"{len(missing)} required key(s): {', '.join(missing)}. "
+            f"Every grid config must declare all of {list(REQUIRED_ACCEPTANCE_KEYS)} "
+            f"(plus {GATED_ACCEPTANCE_KEY}, or an explicit "
+            f"{GATED_ACCEPTANCE_KEY}_status: pending-... in its place)."
+        )
 
 
 def main() -> None:
@@ -122,8 +191,15 @@ def verify_minigrid(
 
     tasks = [str(task["name"]) for task in config.get("tasks", [])]
     task_by_name = {str(task["name"]): task for task in config.get("tasks", [])}
-    expected_counts = {str(k): int(v) for k, v in acceptance["expected_item_counts"].items()}
-    calibration = acceptance["calibration"]
+    # Structural completeness first: every required key, reported together, before
+    # any per-file work (incident 25).
+    verify_acceptance_contract(acceptance, config_path)
+
+    expected_counts = {
+        str(k): int(v)
+        for k, v in acceptance_value(acceptance, "expected_item_counts").items()
+    }
+    calibration = acceptance_value(acceptance, "calibration")
     paired_seeds = [int(seed) for seed in calibration["paired_seeds"]]
 
     errors: list[str] = []
@@ -246,7 +322,7 @@ def verify_minigrid(
     # before any quantized result exists. Their absence is a hard stop, not a
     # skipped check: a mini-grid validated without FP16 gates has no baseline
     # evidence that the eval path was intact.
-    ranges = acceptance.get("baseline_accuracy_ranges")
+    ranges = acceptance_value(acceptance, GATED_ACCEPTANCE_KEY)
     check(
         isinstance(ranges, dict) and bool(ranges),
         "config declares FP16 baseline_accuracy_ranges "
@@ -457,7 +533,7 @@ def verify_minigrid(
                 )
 
     # ---- declared benchmark revisions match the frozen manifest -------------
-    for task_name, revision in (acceptance.get("task_dataset_revisions") or {}).items():
+    for task_name, revision in acceptance_value(acceptance, "task_dataset_revisions").items():
         declared = (task_by_name.get(str(task_name)) or {}).get("dataset_revision")
         check(
             declared == revision,
@@ -487,14 +563,16 @@ def verify_minigrid(
         errors,
         checks,
     )
-    declared_total = acceptance.get("expected_jsonl_files")
-    if declared_total is not None:
-        check(
-            expected_files == int(declared_total),
-            f"config expands to the declared {declared_total} JSONLs",
-            errors,
-            checks,
-        )
+    # No `is not None` guard: the contract check above has already proved this
+    # key present, so the check is unconditional. The old guard made a declared
+    # cell count optional in practice while the docstring called it required.
+    declared_total = acceptance_value(acceptance, "expected_jsonl_files")
+    check(
+        expected_files == int(declared_total),
+        f"config expands to the declared {declared_total} JSONLs",
+        errors,
+        checks,
+    )
 
     return {
         "schema_version": 1,

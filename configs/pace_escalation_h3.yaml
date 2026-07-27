@@ -180,3 +180,48 @@ minigrid_acceptance:
     llama31-8b:
       mmlu: [0.492444, 0.592444]
       gsm8k: [0.729, 0.841]
+
+  # Calibration protocol the escalation builds must have followed. This block was
+  # MISSING until 2026-07-26; the validator reads it and died on KeyError before
+  # any check ran (incident 25). It is a TRANSCRIPTION of frozen registration,
+  # not a criterion authored after the cells existed:
+  #
+  #   dataset / dataset_config / dataset_revision
+  #                        <- configs/main_grid_manifest.yaml (FROZEN 2026-07-13)
+  #                           calibration_datasets.c4.{repo_id,config,revision}
+  #   sample_count         <- same file, calibration.sample_count
+  #   sequence_length      <- same file, calibration.sequence_length
+  #   paired_seeds         <- same file, calibration.seeds
+  #   bits                 <- docs/ESCALATION_STAGE_PLAN_2026-07-23.md sec 1,
+  #                           "at 4-bit, GPTQ and AWQ" (the frozen manifest
+  #                           permits [4, 3]; 3-bit dose-response is deferred)
+  #
+  # Corroborated independently by PREREGISTRATION.md (FROZEN 2026-07-11) line 34:
+  # 128 samples of exactly 2,048 tokens from allenai/c4 configuration en, seeds
+  # {0,1,2,3,4}, GPTQ seed s and AWQ seed s receiving identical ordered samples.
+  #
+  # Verified three ways before writing: the frozen registration, the mini-grid
+  # config's block, and these values agree on all seven keys. The mini-grid was
+  # the thing CHECKED, never the source -- its block had only ever been validated
+  # against mini-grid builds, which proves the builds match the config and not
+  # that the config matches the registration. It does.
+  #
+  # NO VALUE HERE WAS READ FROM ANY ESCALATION CHECKPOINT'S
+  # calibration_manifest.json. Those receipts are what this block TESTS; sourcing
+  # it from them would make the check assert that the receipts equal themselves.
+  #
+  # PRE-COMMITTED 2026-07-26, BEFORE THIS BLOCK WAS EVER EVALUATED (Amogh):
+  # IF THE CALIBRATION CHECK FAILS, THAT IS A FINDING ABOUT THE BUILDS, NOT A
+  # DEFECT IN THE CRITERION. The response is to report the deviation, not to
+  # loosen, scope down, or make optional any part of the block. A criterion
+  # transcribed from a document frozen fifteen days before the cells existed does
+  # not get relaxed because cells fail it. If it fires, we stop, and we work out
+  # what the builds actually did.
+  calibration:
+    dataset: allenai/c4
+    dataset_config: en
+    dataset_revision: 1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+    sample_count: 128
+    sequence_length: 2048
+    bits: 4
+    paired_seeds: [0, 1, 2, 3, 4]
