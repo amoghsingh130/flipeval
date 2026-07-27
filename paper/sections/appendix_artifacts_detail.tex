@@ -1,14 +1,17 @@
 % =====================================================================
 % Appendix: Artifact detail (datasheet, metadata, maintenance)
 % -- Relocated from sections/artifacts.tex on 2026-07-26 as part of the
-%    structural trim. NOTHING WAS DELETED IN THE MOVE: the datasheet,
-%    metadata/identifiers and maintenance TODOs appear here verbatim, with
-%    their % SOURCE comments.
+%    structural trim. NOTHING WAS DELETED IN THE MOVE.
+% -- Datasheet TODO resolved 2026-07-27 in the \citet{gebru2021datasheets}
+%    format. Every required item from the TODO appears below, marked (*).
 %
 % D&B hygiene. Required in full if NeurIPS Datasets & Benchmarks is the target
 % venue; for COLM/ACL the main text keeps one paragraph (sections/artifacts.tex)
 % and the detail lives here.
-% No URL, DOI, or version number may be written here until it exists.
+%
+% RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
+% exists. The version string v1.0.0 is pinned by the release checklist; the DOI
+% and dataset URL remain \TODO until Amogh has minted them.
 % =====================================================================
 
 \section{Artifact detail}
@@ -17,23 +20,81 @@
 \subsection{Datasheet}
 \label{app:artifacts:datasheet}
 
-\TODO{full datasheet in the \citet{gebru2021datasheets} format. Items already
-known and required to appear: S1's Open LLM Leaderboard v1 archive carries
-\emph{no declared license}, recorded as a limitation; S2 is Apache-2.0; the
-atlas contains no human-subject data and no personally identifying information;
-the population is the public record of compression evaluation and not a census
-of quantization (\S\ref{sec:atlas:caveats}).}
+Following \citet{gebru2021datasheets}.
+
+\paragraph{Motivation.} The artifacts exist to make the paper's own
+recommendation checkable against the paper. \S\ref{sec:audit} reports that no
+audited source releases per-item outputs; withholding ours would make the
+recommendation unfalsifiable. They were created by the author, with no external
+funding beyond a university compute allocation.
+
+\paragraph{Composition.} Three kinds of record. (i) \textbf{Per-item outputs}:
+88 cell JSONL files, one row per evaluation item, covering every model $\times$
+method $\times$ seed $\times$ task in the controlled experiment. (ii)
+\textbf{Derived per-cell statistics}: the atlas, at one row per pair-task cell,
+with flip and churn quantities, McNemar and TOST outcomes. (iii)
+\textbf{Provenance records}: registrations, signed decisions, configs, receipts,
+fingerprints and the incident log. \textbf{(*) The atlas contains no
+human-subject data and no personally identifying information}; its rows describe
+model behaviour on public benchmark items. \textbf{(*) The population is the
+public record of compression evaluation, not a census of quantization}
+(\S\ref{sec:atlas:caveats}): it is conditioned on what was published and
+leaderboard-indexed, so it describes the evidence the field circulates rather
+than how quantization behaves in general.
+
+\paragraph{Collection.} S1 cells were mined from public per-item evaluation
+dumps; S2 from vendor-published evaluations; the controlled cells were generated
+by us inside a pinned container, under protocols frozen before the runs
+(\S\ref{sec:prereg}). Pair enumeration was frozen in a manifest before any
+statistic was computed.
+
+\paragraph{Preprocessing.} A pair-task cell is admitted only when both sides
+carry a binary per-item correctness state and full-prompt hashes match across the
+pair. Exclusions are released as a table with a reason per row rather than
+summarised, so the admitted population is auditable and not merely asserted.
+
+\paragraph{Distribution and licensing.} Released under \textbf{CC-BY-4.0};
+the \texttt{flipeval} package under \textbf{Apache-2.0}.
+\textbf{(*) S1's Open LLM Leaderboard v1 archive carries no declared license},
+which is recorded as a limitation rather than worked around: we redistribute
+\emph{our derived per-cell statistics} and \textbf{not} the raw upstream
+per-item files. The frozen pair manifest records the upstream dataset
+identifiers and run timestamps per pair, so a third party can re-derive S1 from
+the original sources.
 % SOURCE for the S1 license limitation:
 % docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §2.
+\textbf{(*) S2 is Apache-2.0} upstream. Site-specific identifiers---absolute
+paths, charge account, usernames, cluster hostnames---were replaced with
+placeholders before publication; no accuracy, hash, count, seed, timestamp, job
+ID or decision value was altered, and the sealed archives were not rewritten, so
+their recorded checksums still verify.
+
+\paragraph{Revision history.} Both revisions are published and the delta is
+reported. Rev-1 carried a population defect found by an independent spot-check
+that reconciled all 262 compared fields---the arithmetic was right and the
+population was not (\S\ref{sec:prereg-spotcheck},
+Appendix~\ref{app:prereg:rev2delta}). Rev-2 is what the paper cites; rev-1 is
+retained rather than overwritten, because a corrected artifact whose correction
+remains visible is this paper's argument applied to itself.
 
 \subsection{Metadata and identifiers}
 \label{app:artifacts:metadata}
 
-\TODO{Croissant metadata record; Zenodo DOI; versioning scheme; citation block}
+Released at version \textbf{v1.0.0}, the string shared by the source tag, the
+archived release and the dataset revision. The archived DOI is canonical for
+citation; the dataset repository is a convenience mirror.
+\TODO{Zenodo DOI, dataset URL and Croissant record, once minted --- see the
+release checklist. Nothing in this appendix may state a URL or DOI before it
+exists.}
 
 \subsection{Maintenance}
 \label{app:artifacts:maintenance}
 
-\TODO{12-month maintenance statement: issue tracker, response commitment,
-versioned releases, and the policy for adding atlas pairs (a dated amendment to
-the atlas registration, not a silent extension).}
+Maintained by the author for \textbf{at least 12 months} from release, via the
+source repository's issue tracker, with a target first response of two weeks.
+Fixes ship as new tagged versions with a changelog; released versions are never
+edited in place, and a superseded revision stays published beside its
+replacement. \textbf{Adding atlas pairs requires a dated amendment to the atlas
+registration}, not a silent extension---the frozen pair manifest is what makes
+the population auditable, so growing it quietly would remove the property the
+artifact exists to demonstrate.
