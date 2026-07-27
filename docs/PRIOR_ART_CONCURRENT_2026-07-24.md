@@ -486,3 +486,24 @@ session. This is a factual record, stated flatly and without an independence
 
 **Reviewed and affirmed — Amogh Singh, 2026-07-24.** The facts as written are
 accurate to my knowledge.
+
+### Citation keys resolved (2026-07-27, executing session)
+
+The placeholder keys named at the end of the "Drafted related-work paragraph"
+section above were bound to verified entries during the 2026-07-27 bibliography
+pass. `paper/refs.bib` no longer exists; the file is `paper/references.bib`.
+
+| placeholder | resolved key | status in the paper |
+|---|---|---|
+| `TODO-illusion2026` (2607.08734) | `rababah2026illusion` | cited, §2.1 |
+| `TODO-beyondmean2026` (2604.27405) | — | verified, **not cited** (length) |
+| `TODO-displacement2026` (2606.19558) | — | verified, **not cited** (length) |
+| `TODO-calibdata2026` (OpenReview `pfw3saHzGU`) | — | **not cited**; its quotes are still `[to-verify]` and the rule above forbids them entering a submitted section |
+
+The drafted paragraph was not integrated verbatim. Its 2607.08734 content — the
+correctness-agreement definition, the churn identity, the disjoint-method
+observation, and the no-priority statement — is in `related_work.tex` §2.1; the
+three uncited papers are left out. Whether to restore them is an author
+decision, tracked under "Still open" in `docs/related_work_checklist.md`.
+
+Nothing in the sections above was edited.
