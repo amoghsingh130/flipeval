@@ -3,7 +3,7 @@
 %
 % PRIMARY SOURCES for every number in this section:
 %   docs/AUDIT_VERDICTS_2026-07-20.md   (authoritative, computed 2026-07-20)
-%   results/audit_verdicts.csv          (per-claim, machine-readable)
+%   results/audit_verdicts_rev2.csv          (per-claim, machine-readable)
 %   docs/audit_claim_table.csv          (frozen inputs, sha256 in the doc)
 %   docs/AUDIT_REGISTRATION_2026-07-15.md (frozen protocol, §§3-5)
 %
@@ -24,6 +24,22 @@
 % paper-side change is required. The stale line survives in the older results
 % doc; it is outside this paper's tree and is not edited here. No action is
 % outstanding for the paper.
+%
+% REV-2 POINTER CORRECTION, 2026-07-27. Every SOURCE comment in this tree that
+% cited results/audit_verdicts.csv now cites results/audit_verdicts_rev2.csv.
+% The TYPESET VALUES WERE ALREADY REV-2 AND DID NOT CHANGE; only the provenance
+% pointers were wrong, in the same way atlas.tex and certification.tex were
+% corrected on 2026-07-26. This was not cosmetic: rev-1 and rev-2 disagree on
+% the numbers this section prints -- Table~\ref{tab:audit-underpowered} gives
+% R06 81,780 and R07 139,134 (rev-2), where rev-1 has 77,282 and 131,482 -- so
+% the comments were instructing a future session to "correct" correct values
+% back to superseded ones. The same applies to the generation instruction in
+% sections/appendix_audit_table.tex, which is unrendered but is what that
+% appendix would be typeset from.
+% Rev-1 -> rev-2 moved imputed_discordance (R01, R05, R06, R07, R11),
+% v1_mdd_*, and v2_required_n_*; NO verdict column moved, so K = 4 and J = 5
+% are unaffected. One value to watch: R01's paired MDD/margin ratio crosses 1.0
+% (0.984 -> 1.003), which is the margin-sensitivity discussed below.
 % =====================================================================
 
 \section{An audit of published near-lossless claims}
@@ -79,7 +95,7 @@ Section~\ref{sec:certification} supplies the instrument.
 The most actionable finding requires no statistics at all.
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"V3 -- reproducibility";
-% results/audit_verdicts.csv column v3_per_item_outputs (0 "yes", 3 "partial",
+% results/audit_verdicts_rev2.csv column v3_per_item_outputs (0 "yes", 3 "partial",
 % 14 "no"). Supersedes RESULTS_2026-07-15_ATLAS_AUDIT.md line 54.
 \begin{quote}
 \textbf{0 of the 17 audited sources release the per-item outputs that a third
@@ -88,7 +104,7 @@ The tally is 0 \emph{yes}, 3 \emph{partial}, 14 \emph{no}.
 \end{quote}
 
 The three partial cases---%
-% SOURCE: results/audit_verdicts.csv rows R08, R15, R16 (v3_per_item_outputs =
+% SOURCE: results/audit_verdicts_rev2.csv rows R08, R15, R16 (v3_per_item_outputs =
 % "partial", with the per-row `notes` column giving the suite mismatch).
 R08, R15 and R16, all Red~Hat AI model cards---are the closest the record comes
 to reproducibility, and they illustrate why the count is nonetheless zero: they
@@ -161,7 +177,7 @@ and 3\,pp margins; a verdict that changes across the sweep is reported as
 \subsection{Results}
 \label{sec:audit:results}
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts.csv
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts_rev2.csv
 % columns verdict, indeterminate, indeterminate_kind.
 Of the 17 claims, 5 are \textbf{indeterminate}---their reporting does not
 support a verdict---leaving 12 determinate claims. Of those 12,
@@ -174,7 +190,7 @@ the claim itself asserts is negligible. Shortfall is
 $n_{\mathrm{req}} / n_{\mathrm{reported}}$.}
 \label{tab:audit-underpowered}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", first table;
-% results/audit_verdicts.csv columns claimed_margin_pp, n,
+% results/audit_verdicts_rev2.csv columns claimed_margin_pp, n,
 % v2_required_n_applicable, verdict.
 \begin{tabular}{llrrrr}
 \toprule
@@ -204,7 +220,7 @@ difference it pronounces negligible. The independent-binomial column is the same
 quantity computed without the paired-design benefit.}
 \label{tab:audit-mdd}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", second table;
-% results/audit_verdicts.csv columns v1_mdd_pp_paired, claimed_margin_pp,
+% results/audit_verdicts_rev2.csv columns v1_mdd_pp_paired, claimed_margin_pp,
 % v1_mdd_over_margin_paired, v1_mdd_over_margin_independent.
 % R04 and R14 are italicised because they are INDETERMINATE: numbers computable,
 % retained for transparency, carrying no verdict and excluded from K.
@@ -233,7 +249,7 @@ the released CSV for transparency, but they are excluded from $K$
 
 \paragraph{Two robustness notes.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
-% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts.csv columns
+% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts_rev2.csv columns
 % verdict_at_registered_2pp and margin_sensitive.
 % CARE -- THE TWO "1 of 12" FIGURES BELOW ARE DIFFERENT FACTS. First: one
 % determinate claim is underpowered under the uniform 2 pp yardstick. Second:
@@ -265,7 +281,7 @@ verdict across the sweep---that coincide on one claim.
 \label{sec:audit:indeterminate}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Indeterminate;
-% results/audit_verdicts.csv columns indeterminate, indeterminate_kind,
+% results/audit_verdicts_rev2.csv columns indeterminate, indeterminate_kind,
 % indeterminate_reason.
 $J = 5$ of the 17 claims are indeterminate, in two kinds.
 
@@ -298,7 +314,7 @@ placed beyond the reach of checking.
 \label{sec:audit:r04}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and
-% §Indeterminate bullet for R04; results/audit_verdicts.csv row R04 columns
+% §Indeterminate bullet for R04; results/audit_verdicts_rev2.csv row R04 columns
 % indeterminate_reason, notes, v2_required_n_paired_own_margin (50519 at
 % n = 1319 -> 38.3x).
 R04 is recorded because excluding it removed what would have been the largest
@@ -322,15 +338,15 @@ number.
 
 \subsection{What this section does and does not establish}
 
-Establishes, at the reported sample sizes and under the frozen protocol:
-(i) no audited source releases per-item outputs for the tasks its equivalence
-claim covers; (ii) four determinate claims assert margins finer than their
-evaluations could resolve, by $2.0$--$12.9\times$; (iii) five claims cannot be
-audited at all from what they report; (iv) both conclusions hold, and worsen,
-under the independent-binomial robustness bound.
-
-Does not establish: that any audited model is degraded; that any audited claim
-is false; that the claims' authors reached a wrong conclusion. It also does not
+% TRIMMED 2026-07-27 (phase 4, low-cost). The "Establishes" half restated
+% findings (i)-(iv) from \S\ref{sec:audit:v3} and \S\ref{sec:audit:results}
+% verbatim; deleted as redundancy. The "Does not establish" half is what a
+% reader must not overread and is kept whole, as is the granularity caveat.
+The four findings above hold at the reported sample sizes and under the frozen
+protocol, and they are claims about evidence rather than about models. This
+section \textbf{does not establish}: that any audited model is degraded; that
+any audited claim is false; that the claims' authors reached a wrong
+conclusion. It also does not
 establish anything about sources outside the three frozen frames, and it
 operates at claim-level rather than claim\,$\times$\,benchmark granularity,
 because that is the granularity of the frozen claim table

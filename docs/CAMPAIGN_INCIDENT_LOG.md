@@ -45,6 +45,15 @@ would have been caught later anyway", the entry says that.
 | 16 | 2026-07-22 | Llama-3.2-3B FP16 MMLU baseline below its registered gate | The registered mini-grid validator — **RESOLVED 2026-07-23** |
 | 17 | 2026-07-23 | Sensitivity condition REF would have run as a duplicate of A | Rebuild inspection after the preflight reconciliation |
 | 18 | 2026-07-23 | Qwen-7B AWQ build hit two distinct memory ceilings (40 GB device, then 64 GB host) | The escalation build canary, twice |
+| 19 | 2026-07-25 | Acceptance sweep assumed single-file weights; 7B/8B are 2-way sharded | The sweep, fail-closed (`ESCALATION_SWEEP_EXIT: 1`) |
+| 20 | 2026-07-25 | Validator would have validated the wrong grid, and exited green | Scan ordered after incident 19, before the gate run |
+| 21 | 2026-07-25 | `--requeue` accepted and inert under `PreemptMode=CANCEL`; eval array ran on the wrong queue | `scontrol`/`sacctmgr` verification after four cells vanished |
+| 22 | 2026-07-25 | Walltime copied from a faster configuration; unmeasured for the one it governed | `scontrol` walltime vs recovered tqdm rates |
+| 23 | 2026-07-25 | Qwen AWQ GSM8K 3.6× slower than GPTQ on identical hardware | Cumulative tqdm rates compared across siblings |
+| 24 | 2026-07-25 | A seal cannot cover a write path its author did not know existed (`os.replace`) | The `0444` seal firing on array `11485972` |
+| 25 | 2026-07-26 | "The validator is model-agnostic" was verified for the models, not for the contract | The validator, failing closed in 1 s |
+| 26 | 2026-07-26 | Archive convention covers only run directories; validator's output path was a default | Directory listing of `results/` before and after |
+| 27 | 2026-07-27 | A redaction log that records the mapping is not a redaction | Reading the scrub output before publication |
 
 ---
 
@@ -1701,6 +1710,100 @@ say `"passed": true` — so the only symptom was a filename whose contents belon
 to the other grid. It was caught because the clobbered file was listed at the
 start of this session and again after, not because any control fired.
 
+## 27. A redaction log that records the mapping is not a redaction (2026-07-27)
+
+**Status: RESOLVED 2026-07-27, before publication.** A near miss, logged because
+the mechanism generalises well past this artifact.
+
+### The mechanism
+
+**A redaction log that records the mapping is not a redaction.** It is the
+redaction and its undo, shipped in the same directory.
+
+The first scrub pass over the v1.0.0 release bundle did exactly what a careful
+operator would want: it replaced every site-specific identifier — absolute paths,
+the SLURM charge account, the submitting username, login and compute hostnames —
+across 46 files, and then **wrote down what it had replaced**, so the
+substitution would be auditable rather than asserted. The record it wrote was the
+full original → pseudonym map: nine compute hostnames, the account name, the
+username, and the absolute home, scratch and project roots, each beside the
+placeholder that had replaced it.
+
+That file de-anonymises every identifier the scrub removed, for every one of the
+209 files in the bundle, in one lookup. The scrub was complete and correct. The
+document certifying it was the disclosure.
+
+The temptation is not carelessness, which is what makes it worth an entry.
+Documenting a transformation is the *right* instinct and it is this project's
+default everywhere else — exclusions ship as a table with a reason per row,
+manifests list every file and its hash, the delta between atlas revisions is
+published rather than summarised. The rule that produces all of those is "state
+what you did precisely enough that a third party can check it." Applied to a
+redaction, that rule reconstructs the secret.
+
+### Fix
+
+`reproduction/REDACTIONS.json` now states the **rules and the touched-file list
+without the mapping**: each placeholder is defined by what *kind* of thing it
+stands for (`<ACCOUNT>`: "SLURM charge account"; `<node-NN>`: "a specific compute
+node"), never by the value it replaced. It records `distinct_nodes_pseudonymised:
+9` — the shape of the substitution, which is what a reader needs to judge it —
+and carries the explicit field `"reverse_mapping_published": false` so a later
+session cannot restore the map believing it to be a missing piece of
+documentation. The `not_redacted` field is stated positively for the same
+reason: job and array IDs, image and artifact hashes, dataset and model
+revisions, and all timestamps are unmodified, because they are load-bearing for
+verification and carry no site secret.
+
+### The judgement, and its cost
+
+Node pseudonyms are **stable and one-to-one**: the same pseudonym denotes the
+same physical node in every file. That is deliberate, and it is not free.
+
+It is required because incident 11's finding — `--exclude` accepted and silently
+discarded, so the node SLURM was asked to exclude differed from the node the job
+landed on — is an argument about *node identity*. Randomise the pseudonyms per
+file and that finding becomes an assertion the reader must take on trust, in a
+release whose entire premise is that assertions should be checkable. The same
+holds for incident 10's sick A100, which is visible only as one node's cells
+against its siblings'.
+
+The cost is that stable pseudonyms leak structure. A reader learns the campaign
+touched nine distinct nodes, which cells co-located, and the co-occurrence
+pattern across jobs. Against a published cluster topology and public queue
+history that is a non-zero re-identification surface, and pretending otherwise
+would be the same error in a quieter form.
+
+**We chose the argument over the structure, knowingly.** The leaked structure is
+low-severity — a node count and a co-location pattern on a university cluster are
+not secrets — while the property given up in the other direction is the paper's
+central claim about itself. Recorded here as a judgement with a price, not as a
+free lunch, so that anyone revisiting the redaction scheme is reversing a
+decision rather than fixing an oversight.
+
+### Family
+
+This belongs with **controls that pass for a reason other than the one their user
+believed** (the `0444` seal, 24; the validator's run-dir check, 20; the C1
+`manifest["config"]` check), but it is a variant worth distinguishing. In those
+three the control's *result* was correct and only the stated grounds for trusting
+it were false. Here the control was correct **and** correctly justified — the
+scrub really did replace every identifier, for the reason believed. What defeated
+it was the artifact written to *evidence* the control, published beside it. The
+generalisation: **when the thing being controlled is disclosure, the audit trail
+is inside the threat model.** Ask not only "did the control work" but "does the
+record of the control undo it."
+
+**Without the gate:** it would probably have been caught, by a control aimed at
+something else — the residual-identifier scan over all 209 bundle files searches
+for the original hostnames, account and paths, and the mapping contains every one
+of them verbatim, so it would have lit up. That is a genuine second line of
+defence and the entry should say so rather than dramatise. But it is thinner than
+it looks: the natural instinct is to *exclude* the redaction record from the
+redaction check as a known-benign file that is supposed to mention those strings,
+and had it been excluded on that reasoning, nothing else in the pipeline
+inspects it. It was in fact caught by reading the file before the scan ran.
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
@@ -1749,6 +1852,14 @@ The remedy is the same in all three: name the mechanism the control actually
 exercises, and confirm that mechanism is the one that matters. A control whose
 justification is wrong is not a control that happens to work — it is an
 untested control with a passing record attached.
+
+The release scrub (27) is the family's fourth member and its sharpest variant.
+There the control was correct *and* correctly justified, and what defeated it was
+the document written to evidence it: a redaction log recording the original →
+pseudonym map, published beside the files it had scrubbed. Extend the remedy
+accordingly — when the thing being controlled is disclosure, the audit trail is
+inside the threat model, so ask not only whether the control worked but whether
+the record of it undoes it.
 
 **Scale-inherited assumptions.** Code written against the 1.5 B/3 B mini-grid
 carries assumptions that are true at that scale and false at 7 B/8 B, and they

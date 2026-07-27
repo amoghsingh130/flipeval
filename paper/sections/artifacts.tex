@@ -1,27 +1,73 @@
 % =====================================================================
-% Section: Artifacts -- SKELETON.
+% Section: Artifacts.
 % TRIMMED 2026-07-26. The datasheet, metadata/identifiers and maintenance
 % subsections moved VERBATIM to sections/appendix_artifacts_detail.tex.
 % Nothing was deleted in the move.
-% No URL, DOI, or version number may be written here until it exists.
+%
+% REWRITTEN 2026-07-27. Was "Five artifacts are released", listing the atlas
+% first and omitting the per-item outputs entirely. The per-item outputs are
+% not a sixth list item: \S\ref{sec:audit} reports 0 of 17 sources release them
+% and \S\ref{sec:conclusion}'s fifth line asks the field to, so this section is
+% where the paper's own recommendation is either met or not. Named first, with
+% the relationship stated rather than implied.
+%
+% RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
+% exists.
 % =====================================================================
 
 \section{Artifacts}
 \label{sec:artifacts}
 
-Five artifacts are released. The \textbf{flip atlas} gives per-cell paired
+\textbf{Six artifacts are released, and the first is the one this paper's own
+audit found nobody publishes.}
+
+\paragraph{Per-item outputs.} \textbf{88 cell JSONL files}: one row per
+evaluation item, for every model $\times$ method $\times$ seed $\times$ task in
+the controlled experiment, carrying the per-item correctness state that the
+paired test consumes. Section~\ref{sec:audit:v3} reports that \textbf{0 of the
+17 audited sources release these} for the tasks their own equivalence claim
+covers, and the fifth line of the reporting standard in
+Section~\ref{sec:conclusion} asks the field to. Withholding ours would leave
+that recommendation untestable against the paper making it, so every controlled
+result reported here can be recomputed from item level upward by a reader who
+downloads the release.
+% SOURCE for 0 of 17: \S\ref{sec:audit:v3}; results/audit_verdicts_rev2.csv
+% column v3_per_item_outputs (0 yes, 3 partial, 14 no).
+
+They ship in \textbf{both forms, deliberately}. The extracted files are directly
+loadable; the \textbf{two sealed run archives}---the mini-grid and the escalation
+grid---carry the same bytes with a \textbf{per-file SHA-256 manifest} and an
+archive checksum recorded when the runs completed, so the loadable copy can be
+checked against the record made at run time rather than trusted. Shipping only
+the extracted copy would be usable but unverifiable; only the archive,
+verifiable but inconvenient. The paper argues for both properties at once, and
+concedes half its own case if it supplies one.
+
+\paragraph{The remaining four.} The \textbf{flip atlas} gives per-cell paired
 statistics for every enumerated pair-task cell, with the exclusion table and the
-frozen pair manifest (\textbf{CC-BY-4.0}). \textbf{\texttt{flipeval}} is the
-analysis package---flip rates, the churn family, exact McNemar, TOST at a
-declared margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum
-detectable difference, required-$n$, and the certification-table generator
-(\textbf{Apache-2.0}). The \textbf{audit artifacts} are the frozen claim table
-with source content hashes and the per-claim verdict CSV, with every robustness
-and transparency column. The \textbf{certification tables} ship twelve rows per
-margin at 1, 2 and 3\,pp. The \textbf{reproduction package} carries the
-registrations and their dated amendments, configs, the container image sha256,
-SLURM scripts, per-run manifests, and the source-state freeze fingerprints.
-Appendix~\ref{app:artifacts-detail} holds the datasheet, metadata and
-maintenance statements.
-\TODO{HuggingFace dataset URL; Zenodo DOI; package URL; released version;
-lm-evaluation-harness integration status}
+frozen 59-pair manifest. \textbf{\texttt{flipeval}} is the analysis
+package---flip rates, the churn family, exact McNemar, TOST at a declared
+margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum detectable
+difference, required-$n$, and the certification-table generator
+(\textbf{Apache-2.0}; everything else is \textbf{CC-BY-4.0}). The \textbf{audit
+artifacts} are the frozen 17-claim table with source content hashes and the
+per-claim verdict CSV, with every robustness and transparency column. The
+\textbf{certification tables} ship twelve rows per margin at 1, 2 and 3\,pp.
+
+\paragraph{Reproduction package.} Registrations and their dated amendments,
+signed decision records, configs, the container image SHA-256 and build recipe,
+SLURM scripts, per-run manifests, the source-state freeze fingerprints, and the
+campaign incident log. The incident log is included on purpose: a pipeline with
+27 recorded catches is better evidence that it was verified than one presenting
+a clean surface. Appendix~\ref{app:artifacts-detail} holds the datasheet,
+metadata and maintenance statements.
+
+% The version string v1.0.0 is pinned and stated in
+% Appendix~\ref{app:artifacts:metadata}; it is no longer a TODO here. The
+% remaining three are genuinely unresolved and must not be written until they
+% exist: the harness integration is an upstream comment awaiting a maintainer
+% reply, not a merged contribution, and must not be described as shipped.
+\TODO{Zenodo DOI (canonical) and dataset URL (secondary), once minted; the
+package repository URL, once the repository is public; and the
+lm-evaluation-harness integration status, once upstream replies --- see the
+release checklist. Nothing here may state an identifier before it exists.}
