@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-27T20:03:43Z from `paper/main.tex` at commit `2560919`.**
+**Generated 2026-07-27T22:41:47Z from `paper/main.tex` at commit `9bb521a`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -28,19 +28,23 @@ A reader's index is at the end.
 % recorded in the commit that introduced this revision.
 
 \begin{abstract}
-A difference of a fraction of a point in benchmark accuracy is the standard
-evidence that a compressed language model is equivalent to its original. We show
-this quantity is least informative precisely when two models are most alike: a
-net delta is what survives cancellation between opposing per-item changes, and
-cancellation is most complete in exactly the regime every equivalence claim
-occupies.
+% LENGTH TIGHTENING 2026-07-27 (phase 4). The abstract measured 2,043 characters
+% against arXiv's ~1,920-character abstract field. Prose was tightened per the
+% instruction; NO figure and NO sentence was cut, and the 145-cell sentence and
+% the per-item-outputs line are untouched. See the note at the end of the file
+% for the measured result.
+A fraction of a point of benchmark accuracy is the standard evidence that a
+compressed language model is equivalent to its original. We show it is least
+informative precisely when two models are most alike: a net delta is what
+survives cancellation between opposing per-item changes, and cancellation is
+most complete in the regime every equivalence claim occupies.
 
 % SOURCE: \S\ref{sec:atlas:netgross} (5.3x, ratio of medians on the 1,707-cell
 % rev-2 population); \S\ref{sec:minigrid:churnratio} Result 1 (median 12.7x);
 % \S\ref{sec:atlas:identical} (145 cells, 8.49% -> 8.5%; churn median 0.0720
 % -> 7.2%).
-Across an atlas of 1{,}707 paired model-by-task cells mined from public
-per-item evaluation dumps (3B to 405B parameters), per-item churn runs
+Across an atlas of 1{,}707 paired model-by-task cells from public
+per-item evaluation dumps (3B--405B), per-item churn runs
 $5.3\times$ the net accuracy delta; between two compression methods at one bit
 width, the median is $12.7\times$. At the limit, 145 cells (8.5\%) post an
 \emph{exactly identical} accuracy to their baseline while disagreeing on a median
@@ -50,8 +54,8 @@ of 7.2\% of items.
 % (4 of 12, 2.0x-12.9x); \S\ref{sec:audit:indeterminate} (5 of 17);
 % \S\ref{sec:audit} (0 of 17 release per-item outputs).
 In a preregistered audit of 17 equivalence claims from method papers, model
-cards and vendor documentation, \textbf{4 of the 12 whose reporting
-permits a verdict are underpowered for their own assertion}, by factors of
+cards and vendor docs, \textbf{4 of the 12 that permit a verdict are
+underpowered for their own assertion}, by
 $2.0\times$ to $12.9\times$; a further \textbf{5 of the 17} cannot be evaluated
 at all. \textbf{None of the 17 sources releases the per-item outputs a third
 party would need to run the paired comparison itself.} No claim is asserted
@@ -62,9 +66,9 @@ false; we audit evidential sufficiency, not truth.
 % LENGTH CUT 2026-07-27: the 4.2x pooled paired-advantage figure was dropped
 % here to reach the target length, per the drafting instruction's stated cut
 % order. It remains in \S\ref{sec:intro} and Table~\ref{tab:certification}.
-We supply the missing apparatus: equivalence testing at a declared margin, and
+We supply the apparatus: equivalence testing at a declared margin, and
 \emph{certification tables} giving the items an evaluation needs, computed from
-disagreement actually observed under compression rather than from
+disagreement observed under compression, not from
 independent-binomial variance. The requirement follows churn, not difficulty:
 MMLU needs about 2{,}164 items at a 2\,pp margin where the harder GPQA needs
 749.
@@ -77,14 +81,24 @@ MMLU needs about 2{,}164 items at a 2\,pp margin where the harder GPQA needs
 % evidence carries. The registered artifact is the decision rule and the
 % verdict, not this prose; the change and its cause are recorded in
 % docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md.
-A preregistered controlled experiment pairs GPTQ and AWQ on byte-identical
+A preregistered experiment pairs GPTQ and AWQ on byte-identical
 calibration samples across five seeds. Under the frozen eight-cell
 decision rule, H3 is supported: the calibration seed alone reorders the two
 methods in \textbf{5 of 8} confirmatory cells, so a single-calibration
 comparison is unreliable.
 
-Every protocol was frozen before the analysis it governs, and every number here
+Every protocol was frozen before the analysis it governs; every number
 is recomputable from released artifacts.
+% ARXIV ABSTRACT FIELD, MEASURED 2026-07-27: 1,912 characters / 306 words.
+% The 1,920 limit is confirmed from arXiv's own submission help
+% (https://info.arxiv.org/help/prep.html, read 2026-07-27): "abstracts longer
+% than 1920 characters will not be accepted". Measured after stripping markup
+% and expanding \times to " x ", which is CONSERVATIVE -- pasting "x" or the
+% multiplication sign gives a shorter string -- so 1,912 is an upper bound.
+%
+% THE MARGIN IS 8 CHARACTERS. Any future addition to this abstract must be
+% re-measured, not eyeballed. If it goes over, tighten prose: do NOT cut the
+% 145-cell sentence and do NOT touch the per-item-outputs line.
 \end{abstract}
 ```
 
@@ -124,17 +138,41 @@ informative precisely in the regime where that claim is made. Everything in this
 paper follows from taking that observation seriously and measuring it.
 
 \paragraph{The audit.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts.csv.
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline;
+% results/audit_verdicts_rev2.csv; \S\ref{sec:audit:results},
+% Table~\ref{tab:audit-underpowered}.
+%
+% QUANTITY CONFLATION, CORRECTED 2026-07-27 (phase 4 verification). This read
+% "the smallest difference their evaluation could resolve exceeds the difference
+% they pronounce negligible, by 2.0x to 12.9x" -- which describes the MDD ratio
+% (Table~\ref{tab:audit-mdd}, range 1.60x-4.05x) while quoting the SAMPLE-SIZE
+% shortfall n_req/n_reported (Table~\ref{tab:audit-underpowered}, range
+% 2.0x-12.9x). The numbers were right and attached to the wrong quantity,
+% inflating the stated MDD gap roughly threefold. The description now matches
+% the numbers. The abstract was already correct ("by factors of"), and its
+% SOURCE comment already cited tab:audit-underpowered.
 Of 17 equivalence claims enumerated from method papers, official quantized model
 cards, and inference-stack vendor documentation, 5 cannot be evaluated at all
 from what they report, and \textbf{4 of the remaining 12 are underpowered for
-their own assertion}: the smallest difference their evaluation could resolve
-exceeds the difference they pronounce negligible, by $2.0\times$ to
-$12.9\times$. \textbf{None of the 17 releases the per-item outputs} that a third
+their own assertion}: certifying the margin each of them pronounces negligible
+would take $2.0\times$ to $12.9\times$ the items the claim actually evaluated.
+\textbf{None of the 17 releases the per-item outputs} that a third
 party would need to run the paired comparison the claim asserts. No claim is
 described as false; the audited property is the evidential sufficiency of the
-reported evaluation. \TODO{one-sentence example of a claim + its shortfall,
-chosen for legibility, once the section is final}
+reported evaluation.
+
+% LEGIBILITY EXAMPLE (TODO closed 2026-07-27). Restates
+% \S\ref{sec:audit:results} at equal precision: 0.15 pp, 28,659 items, "roughly
+% 370,000" against the table's exact 369,856. Chosen because it is the widest
+% shortfall in the set (12.9x) and the arithmetic is legible without the table.
+The shape of the finding is easiest to see in one claim. A Red~Hat model card
+asserts parity within \textbf{0.15\,pp} on an evaluation of \textbf{28{,}659}
+items; at the per-item disagreement rate that comparable compressed models
+actually exhibit, certifying parity that tight would take roughly
+\textbf{370{,}000} items. The claim may well be true. The evaluation offered for
+it cannot resolve the difference it declares negligible, and that is a property
+of the evidence rather than of the model---which is the distinction this paper
+is built to make, and to make measurable.
 
 \paragraph{The fix.}
 Equivalence is a certification problem. We compute certification tables---how
@@ -222,7 +260,22 @@ the analyst decisions that moved the headline are reported together with the
 direction they moved it---including the two corrections that removed the
 paper's largest numbers.
 
-\TODO{paper-map paragraph and artifact URLs/DOI once minted}
+% PAPER MAP (TODO closed 2026-07-27). Deliberately short and \ref-driven: it
+% names what each section decides rather than restating findings, so it carries
+% no figures and cannot fall out of sync. Section order follows main.tex.
+\paragraph{Map.} Section~\ref{sec:related} positions the work and reconciles two
+antecedents that disagree about calibration sensitivity.
+Section~\ref{sec:prereg} states what was frozen, when, and which analyst
+decisions moved the headline. Section~\ref{sec:audit} is the audit;
+Section~\ref{sec:certification} builds the certification tables that say what
+the audited claims would have needed; Section~\ref{sec:atlas} is the atlas both
+rest on. Section~\ref{sec:minigrid} is the preregistered controlled experiment,
+Section~\ref{sec:sensitivity} the harness study, and
+Section~\ref{sec:discriminant} the discriminant check that the framework does
+not simply call everything noise. Section~\ref{sec:artifacts} lists what is
+released, Section~\ref{sec:limitations} what we do not claim.
+
+\TODO{artifact URLs and DOI, once minted --- see \S\ref{sec:artifacts}}
 ```
 
 ---
@@ -587,7 +640,7 @@ belongs in the main text.
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1,
 % including the "Methods-narrative note" paragraph; K values cross-checked
-% against results/audit_verdicts.csv columns verdict and
+% against results/audit_verdicts_rev2.csv columns verdict and
 % verdict_at_registered_2pp.
 The frozen §4 names the 2\,pp registered margin first, adds ``(and at the
 claim's own margin when it states one)'', and labels the verdict
@@ -727,7 +780,7 @@ apology for it.
 %
 % PRIMARY SOURCES for every number in this section:
 %   docs/AUDIT_VERDICTS_2026-07-20.md   (authoritative, computed 2026-07-20)
-%   results/audit_verdicts.csv          (per-claim, machine-readable)
+%   results/audit_verdicts_rev2.csv          (per-claim, machine-readable)
 %   docs/audit_claim_table.csv          (frozen inputs, sha256 in the doc)
 %   docs/AUDIT_REGISTRATION_2026-07-15.md (frozen protocol, §§3-5)
 %
@@ -748,6 +801,22 @@ apology for it.
 % paper-side change is required. The stale line survives in the older results
 % doc; it is outside this paper's tree and is not edited here. No action is
 % outstanding for the paper.
+%
+% REV-2 POINTER CORRECTION, 2026-07-27. Every SOURCE comment in this tree that
+% cited results/audit_verdicts.csv now cites results/audit_verdicts_rev2.csv.
+% The TYPESET VALUES WERE ALREADY REV-2 AND DID NOT CHANGE; only the provenance
+% pointers were wrong, in the same way atlas.tex and certification.tex were
+% corrected on 2026-07-26. This was not cosmetic: rev-1 and rev-2 disagree on
+% the numbers this section prints -- Table~\ref{tab:audit-underpowered} gives
+% R06 81,780 and R07 139,134 (rev-2), where rev-1 has 77,282 and 131,482 -- so
+% the comments were instructing a future session to "correct" correct values
+% back to superseded ones. The same applies to the generation instruction in
+% sections/appendix_audit_table.tex, which is unrendered but is what that
+% appendix would be typeset from.
+% Rev-1 -> rev-2 moved imputed_discordance (R01, R05, R06, R07, R11),
+% v1_mdd_*, and v2_required_n_*; NO verdict column moved, so K = 4 and J = 5
+% are unaffected. One value to watch: R01's paired MDD/margin ratio crosses 1.0
+% (0.984 -> 1.003), which is the margin-sensitivity discussed below.
 % =====================================================================
 
 \section{An audit of published near-lossless claims}
@@ -803,7 +872,7 @@ Section~\ref{sec:certification} supplies the instrument.
 The most actionable finding requires no statistics at all.
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"V3 -- reproducibility";
-% results/audit_verdicts.csv column v3_per_item_outputs (0 "yes", 3 "partial",
+% results/audit_verdicts_rev2.csv column v3_per_item_outputs (0 "yes", 3 "partial",
 % 14 "no"). Supersedes RESULTS_2026-07-15_ATLAS_AUDIT.md line 54.
 \begin{quote}
 \textbf{0 of the 17 audited sources release the per-item outputs that a third
@@ -812,7 +881,7 @@ The tally is 0 \emph{yes}, 3 \emph{partial}, 14 \emph{no}.
 \end{quote}
 
 The three partial cases---%
-% SOURCE: results/audit_verdicts.csv rows R08, R15, R16 (v3_per_item_outputs =
+% SOURCE: results/audit_verdicts_rev2.csv rows R08, R15, R16 (v3_per_item_outputs =
 % "partial", with the per-row `notes` column giving the suite mismatch).
 R08, R15 and R16, all Red~Hat AI model cards---are the closest the record comes
 to reproducibility, and they illustrate why the count is nonetheless zero: they
@@ -885,7 +954,7 @@ and 3\,pp margins; a verdict that changes across the sweep is reported as
 \subsection{Results}
 \label{sec:audit:results}
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts.csv
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts_rev2.csv
 % columns verdict, indeterminate, indeterminate_kind.
 Of the 17 claims, 5 are \textbf{indeterminate}---their reporting does not
 support a verdict---leaving 12 determinate claims. Of those 12,
@@ -898,7 +967,7 @@ the claim itself asserts is negligible. Shortfall is
 $n_{\mathrm{req}} / n_{\mathrm{reported}}$.}
 \label{tab:audit-underpowered}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", first table;
-% results/audit_verdicts.csv columns claimed_margin_pp, n,
+% results/audit_verdicts_rev2.csv columns claimed_margin_pp, n,
 % v2_required_n_applicable, verdict.
 \begin{tabular}{llrrrr}
 \toprule
@@ -928,7 +997,7 @@ difference it pronounces negligible. The independent-binomial column is the same
 quantity computed without the paired-design benefit.}
 \label{tab:audit-mdd}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", second table;
-% results/audit_verdicts.csv columns v1_mdd_pp_paired, claimed_margin_pp,
+% results/audit_verdicts_rev2.csv columns v1_mdd_pp_paired, claimed_margin_pp,
 % v1_mdd_over_margin_paired, v1_mdd_over_margin_independent.
 % R04 and R14 are italicised because they are INDETERMINATE: numbers computable,
 % retained for transparency, carrying no verdict and excluded from K.
@@ -957,7 +1026,7 @@ the released CSV for transparency, but they are excluded from $K$
 
 \paragraph{Two robustness notes.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
-% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts.csv columns
+% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts_rev2.csv columns
 % verdict_at_registered_2pp and margin_sensitive.
 % CARE -- THE TWO "1 of 12" FIGURES BELOW ARE DIFFERENT FACTS. First: one
 % determinate claim is underpowered under the uniform 2 pp yardstick. Second:
@@ -989,7 +1058,7 @@ verdict across the sweep---that coincide on one claim.
 \label{sec:audit:indeterminate}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Indeterminate;
-% results/audit_verdicts.csv columns indeterminate, indeterminate_kind,
+% results/audit_verdicts_rev2.csv columns indeterminate, indeterminate_kind,
 % indeterminate_reason.
 $J = 5$ of the 17 claims are indeterminate, in two kinds.
 
@@ -1022,7 +1091,7 @@ placed beyond the reach of checking.
 \label{sec:audit:r04}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and
-% §Indeterminate bullet for R04; results/audit_verdicts.csv row R04 columns
+% §Indeterminate bullet for R04; results/audit_verdicts_rev2.csv row R04 columns
 % indeterminate_reason, notes, v2_required_n_paired_own_margin (50519 at
 % n = 1319 -> 38.3x).
 R04 is recorded because excluding it removed what would have been the largest
@@ -1046,15 +1115,15 @@ number.
 
 \subsection{What this section does and does not establish}
 
-Establishes, at the reported sample sizes and under the frozen protocol:
-(i) no audited source releases per-item outputs for the tasks its equivalence
-claim covers; (ii) four determinate claims assert margins finer than their
-evaluations could resolve, by $2.0$--$12.9\times$; (iii) five claims cannot be
-audited at all from what they report; (iv) both conclusions hold, and worsen,
-under the independent-binomial robustness bound.
-
-Does not establish: that any audited model is degraded; that any audited claim
-is false; that the claims' authors reached a wrong conclusion. It also does not
+% TRIMMED 2026-07-27 (phase 4, low-cost). The "Establishes" half restated
+% findings (i)-(iv) from \S\ref{sec:audit:v3} and \S\ref{sec:audit:results}
+% verbatim; deleted as redundancy. The "Does not establish" half is what a
+% reader must not overread and is kept whole, as is the granularity caveat.
+The four findings above hold at the reported sample sizes and under the frozen
+protocol, and they are claims about evidence rather than about models. This
+section \textbf{does not establish}: that any audited model is degraded; that
+any audited claim is false; that the claims' authors reached a wrong
+conclusion. It also does not
 establish anything about sources outside the three frozen frames, and it
 operates at claim-level rather than claim\,$\times$\,benchmark granularity,
 because that is the granularity of the frozen claim table
@@ -1281,17 +1350,15 @@ the other is the error this section exists to prevent.
 
 \subsection{What this section does and does not support}
 
-Supports: an empirically grounded, family-specific answer to ``how many items do
-I need to certify parity within $\pm m$?''; a quantified $2.3$--$14.7\times$
-($4.2\times$ pooled) reduction in required evaluation from using the paired
-design correctly; and the demonstration that the requirement tracks churn rather
-than difficulty.
-
-Does not support: extrapolation to benchmark families absent from the atlas;
-extrapolation to compression methods absent from the atlas population
-(\S\ref{sec:atlas:caveats}); any claim that a model meeting these counts is
-equivalent---meeting the count makes the test \emph{informative}, and the test
-still has to be run and to pass.
+% TRIMMED 2026-07-27 (phase 4, low-cost). The "Supports" half restated the
+% section's own three findings; deleted as redundancy. The "Does not support"
+% half is kept whole -- the last clause in particular, which is the distinction
+% the whole section exists to draw.
+This section \textbf{does not support}: extrapolation to benchmark families
+absent from the atlas; extrapolation to compression methods absent from the
+atlas population (\S\ref{sec:atlas:caveats}); or any claim that a model meeting
+these counts is equivalent---meeting the count makes the test \emph{informative},
+and the test still has to be run and to pass.
 ```
 
 ---
@@ -1617,17 +1684,19 @@ inheritance that is itself part of the finding.
 
 \subsection{What this section does and does not support}
 
-Supports: that per-item churn under compression is five to six times the net
-delta across the public record at every scale from 3B to 405B; that the majority
-of publicly recorded compression evaluations fall in a gray zone where neither
-equivalence nor degradation is established at their own sample sizes; that
-about one cell in twelve posts an identical score while still disagreeing on
-items; and that S2's methods are measurably gentler than S1's while the
-evidential gap persists.
-
-Does not support: any statement about quantization methods in general, about
-models or methods absent from the two sources, or about causal attribution of
-churn to any design choice. Nothing here is evidence for or against H3.
+% TRIMMED 2026-07-27 (phase 4, low-cost). The "Supports" half restated the four
+% findings above verbatim and is deleted as redundancy; the "Does not support"
+% half is load-bearing and is kept whole. Same treatment applied to the closers
+% in audit.tex and certification.tex.
+% A REV-1 SURVIVOR died with the deleted half: it read "five to six times",
+% rev-1's ratio, where rev-2 gives 5.31 (S1) / 5.33 (S2). The 2026-07-27 A1
+% sweep corrected \S\ref{sec:atlas:netgross}, the introduction and the
+% conclusion and missed this closer. Fifth such survivor found in drafted prose.
+The four findings above are claimed at the population each was measured on and
+no wider. In particular this section \textbf{does not support} any statement
+about quantization methods in general, about models or methods absent from the
+two sources, or about causal attribution of churn to any design choice. Nothing
+here is evidence for or against H3.
 ```
 
 ---
@@ -2502,32 +2571,78 @@ demonstration under worse conditions}
 
 ```latex
 % =====================================================================
-% Section: Artifacts -- SKELETON.
+% Section: Artifacts.
 % TRIMMED 2026-07-26. The datasheet, metadata/identifiers and maintenance
 % subsections moved VERBATIM to sections/appendix_artifacts_detail.tex.
 % Nothing was deleted in the move.
-% No URL, DOI, or version number may be written here until it exists.
+%
+% REWRITTEN 2026-07-27. Was "Five artifacts are released", listing the atlas
+% first and omitting the per-item outputs entirely. The per-item outputs are
+% not a sixth list item: \S\ref{sec:audit} reports 0 of 17 sources release them
+% and \S\ref{sec:conclusion}'s fifth line asks the field to, so this section is
+% where the paper's own recommendation is either met or not. Named first, with
+% the relationship stated rather than implied.
+%
+% RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
+% exists.
 % =====================================================================
 
 \section{Artifacts}
 \label{sec:artifacts}
 
-Five artifacts are released. The \textbf{flip atlas} gives per-cell paired
+\textbf{Six artifacts are released, and the first is the one this paper's own
+audit found nobody publishes.}
+
+\paragraph{Per-item outputs.} \textbf{88 cell JSONL files}: one row per
+evaluation item, for every model $\times$ method $\times$ seed $\times$ task in
+the controlled experiment, carrying the per-item correctness state that the
+paired test consumes. Section~\ref{sec:audit:v3} reports that \textbf{0 of the
+17 audited sources release these} for the tasks their own equivalence claim
+covers, and the fifth line of the reporting standard in
+Section~\ref{sec:conclusion} asks the field to. Withholding ours would leave
+that recommendation untestable against the paper making it, so every controlled
+result reported here can be recomputed from item level upward by a reader who
+downloads the release.
+% SOURCE for 0 of 17: \S\ref{sec:audit:v3}; results/audit_verdicts_rev2.csv
+% column v3_per_item_outputs (0 yes, 3 partial, 14 no).
+
+They ship in \textbf{both forms, deliberately}. The extracted files are directly
+loadable; the \textbf{two sealed run archives}---the mini-grid and the escalation
+grid---carry the same bytes with a \textbf{per-file SHA-256 manifest} and an
+archive checksum recorded when the runs completed, so the loadable copy can be
+checked against the record made at run time rather than trusted. Shipping only
+the extracted copy would be usable but unverifiable; only the archive,
+verifiable but inconvenient. The paper argues for both properties at once, and
+concedes half its own case if it supplies one.
+
+\paragraph{The remaining four.} The \textbf{flip atlas} gives per-cell paired
 statistics for every enumerated pair-task cell, with the exclusion table and the
-frozen pair manifest (\textbf{CC-BY-4.0}). \textbf{\texttt{flipeval}} is the
-analysis package---flip rates, the churn family, exact McNemar, TOST at a
-declared margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum
-detectable difference, required-$n$, and the certification-table generator
-(\textbf{Apache-2.0}). The \textbf{audit artifacts} are the frozen claim table
-with source content hashes and the per-claim verdict CSV, with every robustness
-and transparency column. The \textbf{certification tables} ship twelve rows per
-margin at 1, 2 and 3\,pp. The \textbf{reproduction package} carries the
-registrations and their dated amendments, configs, the container image sha256,
-SLURM scripts, per-run manifests, and the source-state freeze fingerprints.
-Appendix~\ref{app:artifacts-detail} holds the datasheet, metadata and
-maintenance statements.
-\TODO{HuggingFace dataset URL; Zenodo DOI; package URL; released version;
-lm-evaluation-harness integration status}
+frozen 59-pair manifest. \textbf{\texttt{flipeval}} is the analysis
+package---flip rates, the churn family, exact McNemar, TOST at a declared
+margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum detectable
+difference, required-$n$, and the certification-table generator
+(\textbf{Apache-2.0}; everything else is \textbf{CC-BY-4.0}). The \textbf{audit
+artifacts} are the frozen 17-claim table with source content hashes and the
+per-claim verdict CSV, with every robustness and transparency column. The
+\textbf{certification tables} ship twelve rows per margin at 1, 2 and 3\,pp.
+
+\paragraph{Reproduction package.} Registrations and their dated amendments,
+signed decision records, configs, the container image SHA-256 and build recipe,
+SLURM scripts, per-run manifests, the source-state freeze fingerprints, and the
+campaign incident log. The incident log is included on purpose: a pipeline with
+27 recorded catches is better evidence that it was verified than one presenting
+a clean surface. Appendix~\ref{app:artifacts-detail} holds the datasheet,
+metadata and maintenance statements.
+
+% The version string v1.0.0 is pinned and stated in
+% Appendix~\ref{app:artifacts:metadata}; it is no longer a TODO here. The
+% remaining three are genuinely unresolved and must not be written until they
+% exist: the harness integration is an upstream comment awaiting a maintainer
+% reply, not a merged contribution, and must not be described as shipped.
+\TODO{Zenodo DOI (canonical) and dataset URL (secondary), once minted; the
+package repository URL, once the repository is public; and the
+lm-evaluation-harness integration status, once upstream replies --- see the
+release checklist. Nothing here may state an identifier before it exists.}
 ```
 
 ---
@@ -2701,9 +2816,13 @@ We propose five lines that a model card or method paper can adopt directly.
   non-significant difference test. Failing to detect a difference is not
   equivalence.
   \item \textbf{Report churn next to net delta.} They are different quantities;
-  in the public record churn runs $5.3\times$ the net delta, and roughly one
-  evaluation cell in ten posts an identical score while still disagreeing on
+  in the public record churn runs $5.3\times$ the net delta, and about one
+  evaluation cell in twelve posts an identical score while still disagreeing on
   items.
+  % "ONE IN TEN" CORRECTED 2026-07-27. \S\ref{sec:atlas:identical} retired that
+  % phrasing on 2026-07-26: it was near-exact for rev-1's 9.78% share and
+  % overstates rev-2's 8.49% (= 1 in 11.8). The atlas comment says explicitly
+  % "do not restore one in ten"; this restatement in the conclusion was missed.
   % REV-1 SURVIVOR, CORRECTED 2026-07-27: read "five to six times", which was
   % the rev-1 ratio. Rev-2 gives 5.31 (S1) and 5.33 (S2). See
   % \S\ref{sec:atlas:netgross}.
@@ -2749,7 +2868,7 @@ declared margin that make a similarity claim checkable at all.
 ```latex
 % =====================================================================
 % Appendix: the full audit table -- SKELETON.
-% The appendix table is generated from results/audit_verdicts.csv; do not
+% The appendix table is generated from results/audit_verdicts_rev2.csv; do not
 % hand-transcribe it. Column semantics below are copied from that file's header
 % and from docs/AUDIT_VERDICTS_2026-07-20.md.
 % =====================================================================
@@ -2758,7 +2877,7 @@ declared margin that make a similarity claim checkable at all.
 \label{app:audit-table}
 
 \TODO{typeset the full 17-row table directly from
-\texttt{results/audit\_verdicts.csv} (one row per claim, landscape, small
+\texttt{results/audit\_verdicts\_rev2.csv} (one row per claim, landscape, small
 font). Do not retype values.}
 
 The released CSV carries, per claim: identity and frame; method family, bit
@@ -2915,7 +3034,7 @@ with the alternative. Four matter for how the results should be read.
 $K = 1 \to 5 \to 4$ correction.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1,
 % including the "Methods-narrative note" paragraph; K values cross-checked
-% against results/audit_verdicts.csv columns verdict and
+% against results/audit_verdicts_rev2.csv columns verdict and
 % verdict_at_registered_2pp.
 The frozen §4 names the 2\,pp registered margin first, adds ``(and at the
 claim's own margin when it states one)'', and then labels the verdict
@@ -2946,7 +3065,7 @@ the released CSV, so a reader who prefers the uniform yardstick can have it.
 
 \paragraph{Choice 2: what counts as the claim's own margin.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #2;
-% results/audit_verdicts.csv columns claimed_margin_pp, margin_basis, and the
+% results/audit_verdicts_rev2.csv columns claimed_margin_pp, margin_basis, and the
 % R01 note in column `notes`.
 Most claims cover several benchmarks with different deltas. We define the
 claimed margin as \textbf{the largest $|\Delta|$ the source asserts is
@@ -2970,7 +3089,7 @@ $2$--$13\times$ is the armoured version of the finding.}
 \paragraph{Choice 3: R04 is indeterminate rather than scored on a substituted
 benchmark.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and the
-% R04 bullet in §Indeterminate; results/audit_verdicts.csv row R04.
+% R04 bullet in §Indeterminate; results/audit_verdicts_rev2.csv row R04.
 Discussed in full at \S\ref{sec:audit:r04}. It is recorded here as a ruling
 because it is the second correction that cost the paper a number: it removed
 what the first pass had reported as the audit's largest shortfall ($38.3\times$)
@@ -3272,14 +3391,17 @@ run once and reported as ``$C \equiv D$''.
 % =====================================================================
 % Appendix: Artifact detail (datasheet, metadata, maintenance)
 % -- Relocated from sections/artifacts.tex on 2026-07-26 as part of the
-%    structural trim. NOTHING WAS DELETED IN THE MOVE: the datasheet,
-%    metadata/identifiers and maintenance TODOs appear here verbatim, with
-%    their % SOURCE comments.
+%    structural trim. NOTHING WAS DELETED IN THE MOVE.
+% -- Datasheet TODO resolved 2026-07-27 in the \citet{gebru2021datasheets}
+%    format. Every required item from the TODO appears below, marked (*).
 %
 % D&B hygiene. Required in full if NeurIPS Datasets & Benchmarks is the target
 % venue; for COLM/ACL the main text keeps one paragraph (sections/artifacts.tex)
 % and the detail lives here.
-% No URL, DOI, or version number may be written here until it exists.
+%
+% RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
+% exists. The version string v1.0.0 is pinned by the release checklist; the DOI
+% and dataset URL remain \TODO until Amogh has minted them.
 % =====================================================================
 
 \section{Artifact detail}
@@ -3288,26 +3410,84 @@ run once and reported as ``$C \equiv D$''.
 \subsection{Datasheet}
 \label{app:artifacts:datasheet}
 
-\TODO{full datasheet in the \citet{gebru2021datasheets} format. Items already
-known and required to appear: S1's Open LLM Leaderboard v1 archive carries
-\emph{no declared license}, recorded as a limitation; S2 is Apache-2.0; the
-atlas contains no human-subject data and no personally identifying information;
-the population is the public record of compression evaluation and not a census
-of quantization (\S\ref{sec:atlas:caveats}).}
+Following \citet{gebru2021datasheets}.
+
+\paragraph{Motivation.} The artifacts exist to make the paper's own
+recommendation checkable against the paper. \S\ref{sec:audit} reports that no
+audited source releases per-item outputs; withholding ours would make the
+recommendation unfalsifiable. They were created by the author, with no external
+funding beyond a university compute allocation.
+
+\paragraph{Composition.} Three kinds of record. (i) \textbf{Per-item outputs}:
+88 cell JSONL files, one row per evaluation item, covering every model $\times$
+method $\times$ seed $\times$ task in the controlled experiment. (ii)
+\textbf{Derived per-cell statistics}: the atlas, at one row per pair-task cell,
+with flip and churn quantities, McNemar and TOST outcomes. (iii)
+\textbf{Provenance records}: registrations, signed decisions, configs, receipts,
+fingerprints and the incident log. \textbf{(*) The atlas contains no
+human-subject data and no personally identifying information}; its rows describe
+model behaviour on public benchmark items. \textbf{(*) The population is the
+public record of compression evaluation, not a census of quantization}
+(\S\ref{sec:atlas:caveats}): it is conditioned on what was published and
+leaderboard-indexed, so it describes the evidence the field circulates rather
+than how quantization behaves in general.
+
+\paragraph{Collection.} S1 cells were mined from public per-item evaluation
+dumps; S2 from vendor-published evaluations; the controlled cells were generated
+by us inside a pinned container, under protocols frozen before the runs
+(\S\ref{sec:prereg}). Pair enumeration was frozen in a manifest before any
+statistic was computed.
+
+\paragraph{Preprocessing.} A pair-task cell is admitted only when both sides
+carry a binary per-item correctness state and full-prompt hashes match across the
+pair. Exclusions are released as a table with a reason per row rather than
+summarised, so the admitted population is auditable and not merely asserted.
+
+\paragraph{Distribution and licensing.} Released under \textbf{CC-BY-4.0};
+the \texttt{flipeval} package under \textbf{Apache-2.0}.
+\textbf{(*) S1's Open LLM Leaderboard v1 archive carries no declared license},
+which is recorded as a limitation rather than worked around: we redistribute
+\emph{our derived per-cell statistics} and \textbf{not} the raw upstream
+per-item files. The frozen pair manifest records the upstream dataset
+identifiers and run timestamps per pair, so a third party can re-derive S1 from
+the original sources.
 % SOURCE for the S1 license limitation:
 % docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §2.
+\textbf{(*) S2 is Apache-2.0} upstream. Site-specific identifiers---absolute
+paths, charge account, usernames, cluster hostnames---were replaced with
+placeholders before publication; no accuracy, hash, count, seed, timestamp, job
+ID or decision value was altered, and the sealed archives were not rewritten, so
+their recorded checksums still verify.
+
+\paragraph{Revision history.} Both revisions are published and the delta is
+reported. Rev-1 carried a population defect found by an independent spot-check
+that reconciled all 262 compared fields---the arithmetic was right and the
+population was not (\S\ref{sec:prereg-spotcheck},
+Appendix~\ref{app:prereg:rev2delta}). Rev-2 is what the paper cites; rev-1 is
+retained rather than overwritten, because a corrected artifact whose correction
+remains visible is this paper's argument applied to itself.
 
 \subsection{Metadata and identifiers}
 \label{app:artifacts:metadata}
 
-\TODO{Croissant metadata record; Zenodo DOI; versioning scheme; citation block}
+Released at version \textbf{v1.0.0}, the string shared by the source tag, the
+archived release and the dataset revision. The archived DOI is canonical for
+citation; the dataset repository is a convenience mirror.
+\TODO{Zenodo DOI, dataset URL and Croissant record, once minted --- see the
+release checklist. Nothing in this appendix may state a URL or DOI before it
+exists.}
 
 \subsection{Maintenance}
 \label{app:artifacts:maintenance}
 
-\TODO{12-month maintenance statement: issue tracker, response commitment,
-versioned releases, and the policy for adding atlas pairs (a dated amendment to
-the atlas registration, not a silent extension).}
+Maintained by the author for \textbf{at least 12 months} from release, via the
+source repository's issue tracker, with a target first response of two weeks.
+Fixes ship as new tagged versions with a changelog; released versions are never
+edited in place, and a superseded revision stays published beside its
+replacement. \textbf{Adding atlas pairs requires a dated amendment to the atlas
+registration}, not a silent extension---the frozen pair manifest is what makes
+the population auditable, so growing it quietly would remove the property the
+artifact exists to demonstrate.
 ```
 
 ---
