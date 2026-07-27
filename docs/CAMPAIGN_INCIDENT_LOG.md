@@ -1399,6 +1399,110 @@ data lost. The expensive part was that the ten escalation cells cancelled under
 incident 22 went un-rerun for the time it took to find this, and that the finding
 required suspecting a mode bit that had already been set correctly.
 
+## 25. "The validator is model-agnostic" was verified for the models and not for the contract (2026-07-26)
+
+**Status: OPEN — stop-condition fired, awaiting Amogh.** The escalation eval is
+complete and its validator has not run. Job `11509869` **FAILED, ExitCode 1:0,
+after 1 second**, before a single acceptance check executed:
+
+```
+File "/workspace/scripts/verify_minigrid.py", line 126, in verify_minigrid
+    calibration = acceptance["calibration"]
+KeyError: 'calibration'
+```
+
+`configs/pace_escalation_h3.yaml` declares a `minigrid_acceptance` block with
+four keys — `expected_jsonl_files`, `expected_item_counts`,
+`task_dataset_revisions`, `baseline_accuracy_ranges`. The mini-grid config
+declares a fifth, `calibration` (`configs/pace_minigrid_h3.yaml:215-222`), and
+the validator reads it with a **subscript** where it reads the other four with
+`.get()`. Four of five acceptance keys are optional; the fifth is mandatory, and
+it is the one the escalation config omits.
+
+### The design confirmation that missed it
+
+The reuse decision is on record: the validator is "config-driven +
+model-agnostic … SAME validator works over an escalation config — no fork
+(pending a scan for any model-specific hardcode)". That scan was run, and it
+answered the question it was asked. **Model-agnosticism was the wrong property to
+check.** `verify_minigrid.py` is genuinely indifferent to which models a config
+declares — it iterates `models` and `run_name` — and it is simultaneously
+*strict* about which acceptance keys the config supplies. The escalation config
+was then written against the validator's *iteration* surface and not against its
+*contract* surface, and nothing compared the two key sets. A diff of
+`minigrid_acceptance` between the two configs would have shown this in one line,
+at any point in the three days since `15dde30`.
+
+This is the accepted-but-inert family inverted once more. Incident 24's version:
+a control that passes for a reason other than the one its user believed. This
+one: a control *scan* that passes because it examined the axis along which the
+two grids agree, while the axis along which they differ went unexamined.
+
+### Why it surfaced only now, and why that is the good case
+
+The validator could not have been run earlier — it is deliberately not chained
+`afterok` on the eval array, because the four FP16 gates must commit between
+eval and validation, and until they did the config failed closed by design
+(`test_escalation_validator_fails_closed_on_the_pending_state`). So the first
+possible invocation was the first actual one. The failure is **fail-closed and
+loud**: a `KeyError` at line 126, before any per-file work, exit 1, no summary
+written. It could not have produced a green validation over an incomplete
+contract, which is the outcome that would have mattered.
+
+### What the missing block would have to say, and why that is still not mine to write
+
+The values are not a judgement call and not unknown. Every escalation checkpoint
+carries a build-time `calibration_manifest.json` recording `bits=4`,
+`sample_count=128`, `sequence_length=2048`, and
+`dataset={repo_id: allenai/c4, config: en, revision: 1588ec454efa…}`, with 128
+document indices and 128 token hashes — byte-identical to the mini-grid protocol,
+written when each checkpoint was built and therefore predating this failure by
+days. The block that would satisfy the validator is a restatement of those
+receipts and of `pace_minigrid_h3.yaml:215-222`.
+
+It is nonetheless **not written here**, for the same reason the four FP16 gates
+were committed all-or-nothing rather than filled in as they were derived: an
+acceptance criterion added to a config *after* the cells it accepts already exist
+is a criterion whose author knew what it would be applied to. That the values are
+attested elsewhere is an argument Amogh can weigh; it is not an argument an agent
+should act on unilaterally, and the standing order lists validator failure as a
+hard stop. The cells are archived and sealed, so nothing degrades while this
+waits.
+
+### State at the stop
+
+- **All 44 escalation cells exist**, at exactly {14042, 1000} records. Array
+  `11494460`, all ten reruns COMPLETED `0:0`.
+- **Archived** — `results/escalation_run_20260726.tar.gz` + `.sha256` +
+  per-file manifest, commit `63176e9`, ARCHIVE_ROUNDTRIP PASS (48 files,
+  159.5 MB → 13.1 MB).
+- **Sealed** — both run directories `dr-xr-xr-x`, nothing writable inside, and
+  the seal *proven at the mechanism* rather than read off the mode bits, per
+  incident 24: `os.replace` into each directory refused with `PermissionError`
+  errno 13, `open("w")` on a cell likewise. Probe targeted a non-existent
+  filename so it could not clobber a cell; no residue.
+- **Cell hash-match `11509865`: PASS, exit 0**, 2m12s. 22/22 Llama-8B cells
+  hash-matched against reconstruction (14042 and 1000), cross-variant agreement
+  at 1 distinct `prompt_hash` per item on both tasks, date invariant
+  `Today Date: 26 Jul 2024` intact. Template/tokenizer drift between build time
+  and eval time is ruled out.
+- **Validator `11509869`: FAILED**, as above. It ran only because it was chained
+  `afterok:11509865`, and the chain worked — the dependency was observed
+  `PENDING Reason=Dependency ... (unfulfilled)` before release.
+
+**No accuracy was read from any confirmatory cell at any point.** The hash-match
+reads `item_id` and `prompt_hash` only; the validator died before its FP16 gate.
+
+**Without the gate:** nothing silent. The validator fails closed on a missing
+mandatory key, so the alternative to catching it here was catching it on whatever
+day someone next ran the validator. The real cost is ordering — the escalation
+result set is complete, archived, sealed and hash-matched, and cannot be
+certified until a five-line acceptance block is ruled on. The lesson is narrower
+than incident 24's and worth stating on its own: **when a component is reused
+across grids, diff the contract, not the code path.** "It is model-agnostic"
+answers a question about the code; "it accepts what this config supplies" is a
+question about the pair, and only the second one predicts whether the run works.
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
