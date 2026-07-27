@@ -46,3 +46,5 @@ Cont-Labelerr-auditing/
 # anywhere. Small JSON, so version history beats a tarball.
 !results/minigrid_validation_summary.json
 !results/escalation_validation_summary.json
+!results/h3_eight_cell/
+!results/h3_eight_cell/*.json
