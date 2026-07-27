@@ -10,11 +10,16 @@ version.
 The staged bundle is at:
 
 ```
-<scratchpad>/release/flipeval-artifacts-v1.0.0/
+<PROJECT>/asingh3206/release/flipeval-artifacts-v1.0.0/
 ```
 
 209 files, 331 MB, `SHA256SUMS` at its root. It is scrubbed and verified; see
 §"What was already checked" at the end.
+
+It lives on the **project** filesystem, not scratch (60-day purge) and not the
+repository (it is a 331 MB derived export). Re-verify any time with
+`sha256sum -c SHA256SUMS` from the bundle root — it passed 208/208 after being
+copied into place.
 
 ---
 
@@ -57,7 +62,7 @@ One repo, public, **not gated**.
 ```bash
 huggingface-cli login
 huggingface-cli repo create flipeval-artifacts --type dataset      # under AmoghSingh123
-cd <scratchpad>/release/flipeval-artifacts-v1.0.0
+cd <PROJECT>/asingh3206/release/flipeval-artifacts-v1.0.0
 git init && git lfs install
 git lfs track "*.tar.gz" "*.jsonl"
 git remote add origin https://huggingface.co/datasets/AmoghSingh123/flipeval-artifacts
