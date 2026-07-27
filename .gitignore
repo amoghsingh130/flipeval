@@ -48,3 +48,5 @@ Cont-Labelerr-auditing/
 !results/escalation_validation_summary.json
 !results/h3_eight_cell/
 !results/h3_eight_cell/*.json
+!results/minigrid_supporting/
+!results/minigrid_supporting/*.json
