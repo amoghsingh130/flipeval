@@ -1,19 +1,24 @@
 # FlipEval paper outline — "Certifying Compressed Language Models: An Audit and a Statistical Toolkit"
 
-Status: drafting skeleton, 2026-07-21. Solo author: Amogh Singh, Georgia Tech.
+Status: drafting, updated 2026-07-27. Solo author: Amogh Singh, Georgia Tech.
 Venue order: COLM 2027 (~March), ACL 2027, NeurIPS D&B 2027 (~May).
 
 **Rules this outline enforces.**
 
 1. Every number in the paper is traceable to a committed file; each LaTeX
    number carries a `% SOURCE:` comment naming that file.
-2. Every H3 quantity is a `\minigridTODO{}` slot. The mini-grid executes
-   **4 of the 8** registered confirmatory cells
-   (`docs/MINIGRID_REGISTRATION_2026-07-15.md` §1); the frozen decision rule of
-   `PREREGISTRATION.md` §"H3 Decision Rule" applies **only when all eight cells
-   exist** (`MINIGRID_REGISTRATION` §4). The paper therefore reports the four
-   completed cells descriptively and reports H3 as undecided under the
-   registered rule. **No section of this paper may state an H3 outcome.**
+2. ~~Every H3 quantity is a `\minigridTODO{}` slot.~~ **SUPERSEDED 2026-07-26.**
+   The escalation screen fired, all **8 of 8** registered confirmatory cells
+   completed, and the frozen decision rule of `PREREGISTRATION.md`
+   §"H3 Decision Rule" was applied once over the full set. The verdict is
+   **SUPPORTED**, recorded and signed in
+   `docs/H3_EIGHT_CELL_DECISION_2026-07-26.md` (commit `05c86f2`).
+
+   The rule that replaces the old one: **no section of this paper may state an
+   H3 outcome the signed record does not contain.** §7 reports the verdict, §3
+   reports the protocol and deliberately still states no outcome, and no
+   reduced-cell variant of the rule exists anywhere. The `\minigridTODO` macro
+   remains defined in `main.tex` but no slot survives; do not reintroduce one.
 3. The audit is constructive: no claim is described as false. The audited
    property is the evidential sufficiency of the reported evaluation.
 4. **The summary-restatement invariant** (adopted 2026-07-26). `abstract.tex`
@@ -52,8 +57,10 @@ Venue order: COLM 2027 (~March), ACL 2027, NeurIPS D&B 2027 (~May).
 | 4 Audit of published near-lossless claims | `sections/audit.tex` | **complete draft** |
 | 5 Certification tables | `sections/certification.tex` | **complete draft** |
 | 6 The public-record flip atlas | `sections/atlas.tex` | **complete draft** |
-| 7 Anytime-valid sequential certification | `sections/sequential.tex` | skeleton; needs a dated registration doc before it runs |
-| 8 Controlled seed-paired experiment (H3) | `sections/minigrid.tex` | skeleton; every slot `TODO-pending-minigrid` |
+| ~~7 Anytime-valid sequential certification~~ | ~~`sections/sequential.tex`~~ | **REMOVED 2026-07-26** — a results-free `\section` with no registration document. Reduced to one sentence in the conclusion. Restore only when a dated registration exists under `docs/` **and** the component has run. Its removal is why every section below shifted down by one. |
+| 7 Controlled seed-paired experiment (H3) | `sections/minigrid.tex` | **complete**; verdict + 5 tables + Result 1, filled 2026-07-27 |
+| ↳ (subsection) The mechanical escalation screen | `sections/minigrid_escalation.tex` | **complete** |
+| 8 Harness-defaults sensitivity study | `sections/harness_sensitivity.tex` | **complete draft** (was missing from this map) |
 | 9 Discriminant validity | `sections/discriminant.tex` | skeleton, pilot numbers wired |
 | 10 Artifacts, datasheet, licensing | `sections/artifacts.tex` | skeleton (D&B hygiene) |
 | 11 Limitations | `sections/limitations.tex` | skeleton |
@@ -140,7 +147,7 @@ worked MMLU example; the twelve-row table; scope caveats.
 2,055 enumerated / 1,254 analysed / 1,155 probe-excluded analysis population;
 S1 vs S2 gray-zone contrast; identical-score churn; population caveats.
 
-## 7. Anytime-valid sequential certification
+## 7. (removed — was anytime-valid sequential certification)
 
 - Motivation: fixed-$n$ tables tell you how much to buy; confidence sequences
   let you stop early when the evidence arrives sooner.
@@ -153,7 +160,7 @@ S1 vs S2 gray-zone contrast; identical-score churn; population caveats.
   `docs/` (drafted by the paper writer, frozen by the human) *before* it runs.
   Nothing from this section may be reported until that doc exists.
 
-## 8. Controlled seed-paired experiment (H3) — every slot TODO-pending-minigrid
+## 8. → NOW §7. Controlled seed-paired experiment (H3) — COMPLETE
 
 - Design recap: `{Qwen2.5-1.5B-Instruct, Llama-3.2-3B-Instruct} x {MMLU, GSM8K}`,
   4-bit, GPTQ and AWQ, seeds {0,1,2,3,4}, byte-identical paired C4 calibration

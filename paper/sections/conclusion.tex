@@ -32,9 +32,12 @@ We propose five lines that a model card or method paper can adopt directly.
   non-significant difference test. Failing to detect a difference is not
   equivalence.
   \item \textbf{Report churn next to net delta.} They are different quantities;
-  in the public record churn runs five to six times the net delta, and roughly
-  one evaluation cell in ten posts an identical score while still disagreeing on
+  in the public record churn runs $5.3\times$ the net delta, and roughly one
+  evaluation cell in ten posts an identical score while still disagreeing on
   items.
+  % REV-1 SURVIVOR, CORRECTED 2026-07-27: read "five to six times", which was
+  % the rev-1 ratio. Rev-2 gives 5.31 (S1) and 5.33 (S2). See
+  % \S\ref{sec:atlas:netgross}.
   \item \textbf{Cite the sample size you met.} Table~\ref{tab:certification}
   gives the count your benchmark family requires at your margin; say which
   column you are in and what you actually ran.
@@ -43,6 +46,28 @@ We propose five lines that a model card or method paper can adopt directly.
   tasks its own claim covers.
 \end{enumerate}
 
-\TODO{closing paragraph on the H3 experiment's contribution to the standard,
-written only after all registered cells exist; it must not state an H3 outcome
-until then}
+% CLOSED 2026-07-27. The \TODO's precondition -- all eight registered cells
+% exist -- was met on 2026-07-26, and the verdict is signed
+% (docs/H3_EIGHT_CELL_DECISION_2026-07-26.md), so the closing paragraph is
+% written and may state the outcome. It states nothing the signed record does
+% not contain.
+% SOURCE: \S\ref{sec:minigrid:verdict} (5 of 8); \S\ref{sec:minigrid:churnratio}
+% Result 1 (5.3x observational, 12.7x controlled).
+The controlled experiment says where this standard actually bites, and it is not
+where the five lines above suggest. Every one of them is written as though the
+comparison at issue were a compressed model against its original. H3 compares
+two \emph{compressed} models---GPTQ against AWQ at the same bit width, the
+choice a practitioner makes after deciding to compress at all---and finds the
+evidence problem strictly worse there: churn at $12.7\times$ the net delta
+against the atlas's $5.3\times$, and the winner reversing on nothing but the
+calibration seed in 5 of 8 registered cells. The reason is the same mechanism in
+its sharpest form. Two compressed models are more alike than either is to the
+original, so cancellation is more complete and the aggregate hides more.
+
+That generalises the standard past its own framing. Nothing in the five lines is
+about quantization. They are about comparing two models similar enough that
+somebody thought the comparison worth making---compressed against original,
+method against method, checkpoint against checkpoint, version against version.
+Aggregate accuracy is least informative exactly where it is most used, and the
+remedy is not a better summary statistic but the per-item evidence and the
+declared margin that make a similarity claim checkable at all.

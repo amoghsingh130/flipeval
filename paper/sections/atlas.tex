@@ -111,29 +111,45 @@ hand-built sanity pairs ($n$ as low as 10, discordance up to 0.9) that would
 distort any quartile. The 1{,}807 figure of \S\ref{sec:atlas:coverage} is
 pipeline accounting and is never used as an analysis denominator.
 
-\subsection{Net delta understates behavioural change by a factor of five to six}
+\subsection{Net delta understates behavioural change by a factor of 5.3}
 \label{sec:atlas:netgross}
 
-% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, "Reading" bullet.
-% PROVENANCE STRENGTHENED 2026-07-27 (no number changed). The cited bullet sits
-% under that document's REV-1 strata table (S1 = 846 cells), and the document
-% states its counts are superseded by rev-2. Re-derived here against the rev-2
-% table below (Table~\ref{tab:atlas-strata}, the 1,707-cell population) as the
-% ratio of medians: S1 0.138/0.026 = 5.31, S2 0.048/0.009 = 5.33. The
-% "five to six" reading therefore holds at rev-2 and on the analysis population,
-% though at rev-2 both strata sit near the low end (the 5.78 that produced the
-% "six" was rev-1's S1). Needed because \S\ref{sec:minigrid:churnratio} and the
-% abstract now both lean on this ratio.
-Across the atlas, per-item accuracy-state churn runs roughly
-\textbf{five to six times the net accuracy delta}, and that ratio holds at every
-scale represented, from 3B to 405B parameters. The net delta a model card reports
-is the residue left after harmful and beneficial flips cancel; the churn is the
-quantity that describes how much of the model's behaviour actually changed.
-They are different quantities and both should be reported. The consequence for
-inference is direct: churn is the variance term in
-Equations~\eqref{eq:sds}--\eqref{eq:nreq}, so a compressed model whose net delta
-looks reassuringly small can still be sitting on the noisiest possible evidence
-base for the claim that it is unchanged.
+% SOURCE: Table~\ref{tab:atlas-strata} (results/atlas_cells_summary_rev2.csv,
+% the 1,707-cell analysis population), as the ratio of the two medians:
+%   S1 0.138 / 0.026 = 5.3077 ; S2 0.048 / 0.009 = 5.3333.
+% REV-1 SURVIVOR, CORRECTED 2026-07-27. This read "roughly five to six times"
+% and cited docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1's "Reading" bullet. That
+% bullet sits under the REV-1 strata table (S1 = 846 cells), which the same
+% document states is superseded by rev-2; the "six" end was rev-1's S1 ratio of
+% 0.133/0.023 = 5.78. At rev-2 both strata land at 5.3. This is the FOURTH
+% rev-1 figure to survive into drafted prose, after the 1.7x GSM8K paired
+% advantage, the 643 float-scored cells, and the "four thin families" -- all the
+% same cause, prose written against rev-1 tables that rev-2 replaced.
+Across the atlas, per-item accuracy-state churn runs \textbf{5.3 times the net
+accuracy delta}, and that ratio holds at every scale represented, from 3B to
+405B parameters. The net delta a model card reports is the residue left after
+harmful and beneficial flips cancel; the churn is the quantity that describes how
+much of the model's behaviour actually changed. They are different quantities and
+both should be reported. The consequence for inference is direct: churn is the
+variance term in Equations~\eqref{eq:sds}--\eqref{eq:nreq}, so a compressed model
+whose net delta looks reassuringly small can still be sitting on the noisiest
+possible evidence base for the claim that it is unchanged.
+
+% SOURCE: Table~\ref{tab:atlas-strata}. Median churn 0.138 -> 0.048 is a factor
+% of 2.875; median |net delta| 0.026 -> 0.009 is a factor of 2.889; the two move
+% together, which is why the ratio is preserved to two significant figures.
+\paragraph{The ratio is preserved across a generational change in method.}
+The two strata differ by nearly a factor of three in how much behaviour they
+disturb---median churn falls from $0.138$ in S1 to $0.048$ in S2---and by almost
+exactly the same factor in the net delta they report, $0.026$ to $0.009$. The
+understatement ratio therefore barely moves: \textbf{5.31 in S1 and 5.33 in S2}.
+Two generations of compression method, one of them three times gentler than the
+other, hide the disturbance they do cause by the same multiple. This is the
+sharpest available form of the argument the rest of this section makes: better
+methods have made the difference smaller \emph{without making the evidence for
+equivalence any more sufficient}, because the quantity that determines how much
+evidence is required scales down in lockstep with the quantity being claimed
+small.
 
 \subsection{The gray zone, and how it differs between the two strata}
 \label{sec:atlas:grayzone}
