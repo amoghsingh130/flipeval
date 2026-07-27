@@ -29,17 +29,41 @@ informative precisely in the regime where that claim is made. Everything in this
 paper follows from taking that observation seriously and measuring it.
 
 \paragraph{The audit.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts.csv.
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline;
+% results/audit_verdicts_rev2.csv; \S\ref{sec:audit:results},
+% Table~\ref{tab:audit-underpowered}.
+%
+% QUANTITY CONFLATION, CORRECTED 2026-07-27 (phase 4 verification). This read
+% "the smallest difference their evaluation could resolve exceeds the difference
+% they pronounce negligible, by 2.0x to 12.9x" -- which describes the MDD ratio
+% (Table~\ref{tab:audit-mdd}, range 1.60x-4.05x) while quoting the SAMPLE-SIZE
+% shortfall n_req/n_reported (Table~\ref{tab:audit-underpowered}, range
+% 2.0x-12.9x). The numbers were right and attached to the wrong quantity,
+% inflating the stated MDD gap roughly threefold. The description now matches
+% the numbers. The abstract was already correct ("by factors of"), and its
+% SOURCE comment already cited tab:audit-underpowered.
 Of 17 equivalence claims enumerated from method papers, official quantized model
 cards, and inference-stack vendor documentation, 5 cannot be evaluated at all
 from what they report, and \textbf{4 of the remaining 12 are underpowered for
-their own assertion}: the smallest difference their evaluation could resolve
-exceeds the difference they pronounce negligible, by $2.0\times$ to
-$12.9\times$. \textbf{None of the 17 releases the per-item outputs} that a third
+their own assertion}: certifying the margin each of them pronounces negligible
+would take $2.0\times$ to $12.9\times$ the items the claim actually evaluated.
+\textbf{None of the 17 releases the per-item outputs} that a third
 party would need to run the paired comparison the claim asserts. No claim is
 described as false; the audited property is the evidential sufficiency of the
-reported evaluation. \TODO{one-sentence example of a claim + its shortfall,
-chosen for legibility, once the section is final}
+reported evaluation.
+
+% LEGIBILITY EXAMPLE (TODO closed 2026-07-27). Restates
+% \S\ref{sec:audit:results} at equal precision: 0.15 pp, 28,659 items, "roughly
+% 370,000" against the table's exact 369,856. Chosen because it is the widest
+% shortfall in the set (12.9x) and the arithmetic is legible without the table.
+The shape of the finding is easiest to see in one claim. A Red~Hat model card
+asserts parity within \textbf{0.15\,pp} on an evaluation of \textbf{28{,}659}
+items; at the per-item disagreement rate that comparable compressed models
+actually exhibit, certifying parity that tight would take roughly
+\textbf{370{,}000} items. The claim may well be true. The evaluation offered for
+it cannot resolve the difference it declares negligible, and that is a property
+of the evidence rather than of the model---which is the distinction this paper
+is built to make, and to make measurable.
 
 \paragraph{The fix.}
 Equivalence is a certification problem. We compute certification tables---how
@@ -127,4 +151,19 @@ the analyst decisions that moved the headline are reported together with the
 direction they moved it---including the two corrections that removed the
 paper's largest numbers.
 
-\TODO{paper-map paragraph and artifact URLs/DOI once minted}
+% PAPER MAP (TODO closed 2026-07-27). Deliberately short and \ref-driven: it
+% names what each section decides rather than restating findings, so it carries
+% no figures and cannot fall out of sync. Section order follows main.tex.
+\paragraph{Map.} Section~\ref{sec:related} positions the work and reconciles two
+antecedents that disagree about calibration sensitivity.
+Section~\ref{sec:prereg} states what was frozen, when, and which analyst
+decisions moved the headline. Section~\ref{sec:audit} is the audit;
+Section~\ref{sec:certification} builds the certification tables that say what
+the audited claims would have needed; Section~\ref{sec:atlas} is the atlas both
+rest on. Section~\ref{sec:minigrid} is the preregistered controlled experiment,
+Section~\ref{sec:sensitivity} the harness study, and
+Section~\ref{sec:discriminant} the discriminant check that the framework does
+not simply call everything noise. Section~\ref{sec:artifacts} lists what is
+released, Section~\ref{sec:limitations} what we do not claim.
+
+\TODO{artifact URLs and DOI, once minted --- see \S\ref{sec:artifacts}}
