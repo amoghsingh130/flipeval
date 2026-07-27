@@ -21,6 +21,14 @@
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 \usepackage{natbib}
+\usepackage{amsthm}
+
+% Numbered empirical results. Added 2026-07-27 so that the churn-ratio finding
+% of \S\ref{sec:minigrid} is a citable numbered result rather than a table
+% caption. Reserve this environment for measured findings; it is not for
+% definitions, and never for anything the frozen decision rules return.
+\theoremstyle{definition}
+\newtheorem{result}{Result}
 
 % Marker macro for slots that await the mini-grid. Every H3 quantity in this
 % paper must be wrapped in \minigridTODO until all registered cells exist.

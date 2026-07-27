@@ -115,6 +115,15 @@ pipeline accounting and is never used as an analysis denominator.
 \label{sec:atlas:netgross}
 
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, "Reading" bullet.
+% PROVENANCE STRENGTHENED 2026-07-27 (no number changed). The cited bullet sits
+% under that document's REV-1 strata table (S1 = 846 cells), and the document
+% states its counts are superseded by rev-2. Re-derived here against the rev-2
+% table below (Table~\ref{tab:atlas-strata}, the 1,707-cell population) as the
+% ratio of medians: S1 0.138/0.026 = 5.31, S2 0.048/0.009 = 5.33. The
+% "five to six" reading therefore holds at rev-2 and on the analysis population,
+% though at rev-2 both strata sit near the low end (the 5.78 that produced the
+% "six" was rev-1's S1). Needed because \S\ref{sec:minigrid:churnratio} and the
+% abstract now both lean on this ratio.
 Across the atlas, per-item accuracy-state churn runs roughly
 \textbf{five to six times the net accuracy delta}, and that ratio holds at every
 scale represented, from 3B to 405B parameters. The net delta a model card reports
