@@ -161,7 +161,7 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 195 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 199 passed, 0 skipped
 ```
 
 **Whichever session adds tests updates this expected count in the same commit.**

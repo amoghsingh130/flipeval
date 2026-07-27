@@ -1401,9 +1401,13 @@ required suspecting a mode bit that had already been set correctly.
 
 ## 25. "The validator is model-agnostic" was verified for the models and not for the contract (2026-07-26)
 
-**Status: OPEN — stop-condition fired, awaiting Amogh.** The escalation eval is
-complete and its validator has not run. Job `11509869` **FAILED, ExitCode 1:0,
-after 1 second**, before a single acceptance check executed:
+**Status: RESOLVED 2026-07-26 under Amogh's ruling of the same day** — see
+"Ruling and resolution" at the end of this entry. The account below is the state
+at the stop, kept as written.
+
+The escalation eval was complete and its validator had not run. Job `11509869`
+**FAILED, ExitCode 1:0, after 1 second**, before a single acceptance check
+executed:
 
 ```
 File "/workspace/scripts/verify_minigrid.py", line 126, in verify_minigrid
@@ -1502,6 +1506,109 @@ than incident 24's and worth stating on its own: **when a component is reused
 across grids, diff the contract, not the code path.** "It is model-agnostic"
 answers a question about the code; "it accepts what this config supplies" is a
 question about the pair, and only the second one predicts whether the run works.
+
+### Ruling and resolution (Amogh, 2026-07-26)
+
+Approved, with the direction of authority reversed: **derive the block from the
+frozen registration, then verify the mini-grid config against what was derived**
+— never copy the mini-grid config forward. The reason is precise. That config's
+calibration block had only ever been validated against mini-grid *builds*, which
+proves the builds match the config and says nothing about whether the config
+matches the registration. Copying it forward would propagate any drift into the
+escalation grid and would mean the already-published mini-grid had been accepted
+against a criterion that never matched its own registration.
+
+**Three-way comparison — ALL SEVEN KEYS AGREE.** Derived mechanically from
+`configs/main_grid_manifest.yaml` (FROZEN 2026-07-13), which is machine-readable
+and pins six of the seven directly, plus
+`docs/ESCALATION_STAGE_PLAN_2026-07-23.md` § 1 ("at 4-bit, GPTQ and AWQ") for
+`bits`, the frozen manifest permitting `[4, 3]` with 3-bit deferred:
+
+| key | frozen source | derived | mini-grid config |
+|---|---|---|---|
+| `dataset` | manifest `calibration_datasets.c4.repo_id` | `allenai/c4` | matches |
+| `dataset_config` | manifest `calibration_datasets.c4.config` | `en` | matches |
+| `dataset_revision` | manifest `calibration_datasets.c4.revision` | `1588ec454efa1a09f29cd18ddd04fe05fc8653a2` | matches |
+| `sample_count` | manifest `calibration.sample_count` | `128` | matches |
+| `sequence_length` | manifest `calibration.sequence_length` | `2048` | matches |
+| `bits` | escalation plan § 1 | `4` | matches |
+| `paired_seeds` | manifest `calibration.seeds` | `[0, 1, 2, 3, 4]` | matches |
+
+Independently corroborated by `PREREGISTRATION.md` (FROZEN 2026-07-11) line 34:
+128 samples of exactly 2,048 tokens from `allenai/c4` configuration `en`, seeds
+`{0,1,2,3,4}`, GPTQ seed `s` and AWQ seed `s` receiving identical ordered
+samples. **The mini-grid config matches its registration exactly** — worth having
+on the record, because it retroactively strengthens the provenance of a result
+set that has already been published.
+
+**The signed plan enumerates NO acceptance criteria — a third possibility.** The
+ruling anticipated two cases: the plan lists five keys (the config contradicted
+its own plan) or four (the omission propagated from the plan). Neither holds.
+`docs/ESCALATION_STAGE_PLAN_2026-07-23.md` describes the validator's *role* — a
+line in the job inventory (§ 2) and step 6 of the sequence, both saying
+"fail-closed over the complete new-cell set" — and never enumerates the
+acceptance contract at all. So the omission did not propagate from the plan and
+did not contradict it: **the config was authored with no signed enumeration to
+check against.** That is a gap in the plan template as much as in the config, and
+it is the true fact this entry asserts.
+
+**Disclosure.** Before the ruling, while establishing that the values were not in
+doubt, this session **did read** `outputs/quantized/qwen25-7b-awq4-seed0/calibration_manifest.json`
+and saw `bits=4`, `sample_count=128`, `sequence_length=2048`, C4 `en`
+@`1588ec454efa…`, 128 document indices and 128 token hashes. So the block was
+written by an author who already knew what the check would find. It does not
+invalidate the transcription — every written value traces to a frozen document,
+and the diff is the falsifiable evidence of that — but this project discloses
+"I knew what the answer would be" rather than omitting it, per the mini-grid's
+own precedent.
+
+**PRE-COMMITTED BEFORE THE BLOCK WAS EVER EVALUATED, in the ruling's words:**
+
+> IF THE CALIBRATION CHECK FAILS, THAT IS A FINDING ABOUT THE BUILDS, NOT A
+> DEFECT IN THE CRITERION. The response is to report the deviation, not to
+> loosen, scope down, or make optional any part of the block. A criterion
+> transcribed from a document frozen fifteen days before the cells existed does
+> not get relaxed because cells fail it. If it fires, we stop, and we work out
+> what the builds actually did.
+
+**Hardening — a declared required set, not pairwise equality.**
+`verify_minigrid.py` now declares `REQUIRED_ACCEPTANCE_KEYS` as an explicit
+constant, validates the acceptance block against it **up front**, and raises
+`MissingAcceptanceKeys` naming **every** missing key rather than whichever one a
+subscript reaches first. All five keys are read through one accessor,
+`acceptance_value`; the `.get()`/subscript split that caused this is gone, and
+`expected_jsonl_files` lost an `is not None` guard that had made a "required"
+count optional in practice.
+
+*One documented departure from the literal instruction.*
+`baseline_accuracy_ranges` is **not** in the required tuple. It has a registered
+absent-state — a config may omit it while declaring
+`baseline_accuracy_ranges_status: pending-…`, which is exactly how the escalation
+config legitimately sat between its eval fan-out and its four-gate commit, and is
+covered by `test_escalation_validator_fails_closed_on_the_pending_state`. Putting
+it in the raising set would have deleted that state. It is instead named as
+`GATED_ACCEPTANCE_KEY` and still fails closed as a check. Both classes fail
+closed; the asymmetry is now declared with its reason, which is what separates it
+from the accidental split this incident was about.
+
+Four new tests (in-image suite **195 → 199**, job `11510834`,
+`199 passed, 2 warnings`, `IN_IMAGE_PYTEST_EXIT: 0`): the required set asserted
+over **every** config under `configs/` that declares an acceptance block — found
+by inspection, so a third grid config is covered the day it is committed, where a
+pairwise comparison between two named files would silently stop covering anything
+— plus the pairwise contract-diff kept as the secondary check, the incident-25
+regression itself, and an assertion that missing keys are reported together. The
+pairwise test deliberately uses no `pytest.skip`: an in-image skip is a gate
+failure here, so it degrades to a vacuous pass instead of a false alarm.
+
+**A passing check on the wrong property is now the fourth instance this month**
+of a control that verified something adjacent to its purpose — after the `0444`
+seal (24), the validator's run-dir check (20), and the C1 pre-submission check
+for array `11494460` (24). The other three were controls whose *justification*
+was wrong; this one is a *scan* that examined the axis along which the two grids
+agree while the axis along which they differ went unexamined. Same family, one
+step earlier in the process: it is possible to verify the wrong property before
+there is any control to justify.
 
 ## Cross-cutting patterns
 

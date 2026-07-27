@@ -5,7 +5,12 @@ from pathlib import Path
 import pytest
 import yaml
 
-from scripts.verify_minigrid import verify_minigrid
+from scripts.verify_minigrid import (
+    GATED_ACCEPTANCE_KEY,
+    REQUIRED_ACCEPTANCE_KEYS,
+    MissingAcceptanceKeys,
+    verify_minigrid,
+)
 
 
 MODELS = [
@@ -483,3 +488,100 @@ def test_minigrid_validator_cli_requires_the_grid_declaration():
     assert result.returncode != 0
     assert "--expect-model-tags" in result.stderr
     assert "--expect-cells" in result.stderr
+
+
+# --------------------------------------------------------------------------
+# The acceptance CONTRACT (incident 25, 2026-07-26).
+#
+# The escalation config omitted `calibration`, the one acceptance key the
+# validator read with a subscript rather than `.get()`. The complete 44-cell
+# grid was produced, archived and sealed before anything noticed, and the
+# validator then died with a bare KeyError before a single check ran.
+#
+# The preceding reuse decision -- "the validator is model-agnostic, so no fork"
+# -- was true and irrelevant: it checked which MODELS the validator walks, not
+# which KEYS it demands. These tests check the contract, not the code path.
+# --------------------------------------------------------------------------
+
+def _grid_configs():
+    """Every config that declares an acceptance block, found by inspection.
+
+    Deliberately not a hardcoded pair: a third grid config is covered the day it
+    is committed, which is exactly what a pairwise comparison between two named
+    files stops doing the moment a third exists.
+    """
+    root = Path(__file__).resolve().parents[1] / "configs"
+    found = {}
+    for path in sorted(root.glob("*.yaml")):
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if isinstance(raw, dict) and isinstance(raw.get("minigrid_acceptance"), dict):
+            found[path.name] = raw["minigrid_acceptance"]
+    return found
+
+
+def test_every_grid_config_declares_the_required_acceptance_keys():
+    """The incident-25 regression, stated over all grid configs at once."""
+    configs = _grid_configs()
+    assert configs, "no grid config declares minigrid_acceptance; the sweep found nothing"
+    for name, acceptance in configs.items():
+        missing = [k for k in REQUIRED_ACCEPTANCE_KEYS if acceptance.get(k) is None]
+        assert not missing, f"{name} is missing required acceptance key(s): {missing}"
+        # The gated key must be present OR explicitly declared pending -- never
+        # simply absent, which is the state that reads as "nobody decided".
+        gated = acceptance.get(GATED_ACCEPTANCE_KEY)
+        status = str(acceptance.get(f"{GATED_ACCEPTANCE_KEY}_status", ""))
+        assert gated is not None or status.startswith("pending"), (
+            f"{name}: {GATED_ACCEPTANCE_KEY} is absent with no pending status"
+        )
+
+
+def test_grid_configs_declare_the_same_acceptance_contract():
+    """Secondary, pairwise: the grid configs must not drift apart key-wise.
+
+    Weaker than the required-set check above and kept behind it, because it goes
+    vacuous with a single config and says nothing about whether the shared key
+    set is the RIGHT one. It catches the narrower thing the required set cannot:
+    a key one config declares and another silently drops.
+    """
+    configs = _grid_configs()
+    # No pytest.skip: an in-image skip is a gate FAILURE in this project (it
+    # means a pinned dependency did not import), so this degrades to a vacuous
+    # pass rather than becoming a false alarm if a config is ever removed.
+    key_sets = {name: set(acceptance) for name, acceptance in configs.items()}
+    reference_name, reference = next(iter(key_sets.items()))
+    for name, keys in key_sets.items():
+        assert keys == reference, (
+            f"{name} and {reference_name} declare different acceptance keys: "
+            f"only in {name}={sorted(keys - reference)}, "
+            f"only in {reference_name}={sorted(reference - keys)}"
+        )
+
+
+def test_validator_rejects_a_config_without_calibration(tmp_path):
+    """Incident 25 exactly: the key whose absence killed job 11509869."""
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    del raw["minigrid_acceptance"]["calibration"]
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    with pytest.raises(MissingAcceptanceKeys, match="calibration"):
+        verify_minigrid(config, results, project)
+
+
+def test_missing_acceptance_keys_are_reported_together(tmp_path):
+    """Every missing key at once, not whichever a subscript reaches first.
+
+    A validator that dies on the first missing key teaches the operator to add
+    one, rerun, and discover the next -- which is how a contract gap becomes a
+    sequence of failed jobs instead of one message.
+    """
+    project, config, results = _write_fixture(tmp_path)
+    raw = yaml.safe_load(config.read_text())
+    del raw["minigrid_acceptance"]["calibration"]
+    del raw["minigrid_acceptance"]["task_dataset_revisions"]
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    with pytest.raises(MissingAcceptanceKeys) as excinfo:
+        verify_minigrid(config, results, project)
+    message = str(excinfo.value)
+    assert "calibration" in message
+    assert "task_dataset_revisions" in message
+    assert "2 required key(s)" in message
