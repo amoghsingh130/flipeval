@@ -76,8 +76,23 @@ and re-seal the moment each one lands. A blanket `chmod a-w` over a directory
 holding 0-byte stubs makes the rerun fail at `open()` in precisely the way
 11485972 did.
 
-Applied to the mini-grid on 2026-07-25. **Apply to the escalation cells the
-moment their validator passes.**
+Applied to the mini-grid on 2026-07-25, and to the escalation cells on
+2026-07-26 (`results/escalation_run_20260726.tar.gz`, both run dirs sealed).
+
+**The set is not only the run directories — extended 2026-07-26 (incident 26).**
+The tarballs above cover run *directories*, so loose artifacts at the results
+root were never archived at all: `minigrid_validation_summary.json` had no copy
+anywhere, and an unrelated job overwrote it. A completed validation summary is
+part of the confirmatory record and gets preserved with it. Small text artifacts
+are allowlisted into git directly rather than tarballed — version history is the
+protection that was missing, and 50 KB of JSON does not need compression.
+
+**Seal what you inferred, verify what you restored.** Size equality is
+corroboration, not content verification: a restored artifact is confirmed by
+cross-checking values that a *signed* record cites independently (for the
+mini-grid summary: job `11375247`, 409 checks, `passed: true`, 44 cells, per
+`docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md`), never against the log it was
+recovered from alone.
 
 ## No job script is ever given a default grid
 
@@ -161,7 +176,7 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 199 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 201 passed, 0 skipped
 ```
 
 **Whichever session adds tests updates this expected count in the same commit.**

@@ -1610,13 +1610,42 @@ agree while the axis along which they differ went unexamined. Same family, one
 step earlier in the process: it is possible to verify the wrong property before
 there is any control to justify.
 
-## 26. The validator has a default output path, and it is named after one grid (2026-07-26)
+## 26. The archive convention covers directories, and the validator's output path is a default (2026-07-26)
 
-**Caught and recovered, same session.** Immediately after the escalation
-validator passed (job `11511179`), `results/minigrid_validation_summary.json`
-was found holding the **escalation** summary: 415 checks over `qwen25-7b` /
-`llama31-8b`, mtime 21:46. The mini-grid's own summary — 409 checks over
-`qwen25-1p5b` / `llama32-3b`, written 2026-07-22 21:35 — had been overwritten.
+**Status: RESOLVED 2026-07-26.** Two findings, in the order that matters.
+
+### The finding: the archive convention has a hole, and both validation summaries were in it
+
+The standing preservation convention protects a completed confirmatory set by
+archiving it and sealing it. Both operations take **run directories**:
+`minigrid_run_20260722.tar.gz` holds the two mini-grid run dirs and nothing else,
+`escalation_run_20260726.tar.gz` the two escalation ones. **Loose artifacts at
+the results root were therefore never archived at all** — not by oversight in a
+particular run, but because the convention has no clause that reaches them.
+
+`results/minigrid_validation_summary.json` is one of those artifacts. It is the
+fail-closed validation of the mini-grid over its complete 44-cell set, it is
+cited by `docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md`, and it existed in
+exactly one place on disk, gitignored, with no archive and no history. The same
+was true of the escalation summary the moment it was written.
+
+That is the finding. The clobber below is how it surfaced; it is not the reason
+the gap mattered. Any `rm`, any scratch purge, any mis-specified `--output` would
+have destroyed a record backing a signed decision, and nothing would have noticed.
+
+**Convention extended (CLAUDE.md / AGENTS.md):** a completed validation summary
+is part of the confirmatory record and is preserved with it. Both summaries are
+now allowlisted into git directly rather than tarballed — 50 KB of JSON does not
+need compression, and version history is precisely the protection that was
+missing.
+
+### How it surfaced: a default output path named after one grid
+
+Immediately after the escalation validator passed (job `11511179`),
+`results/minigrid_validation_summary.json` was found holding the **escalation**
+summary: 415 checks over `qwen25-7b` / `llama31-8b`, mtime 21:46. The mini-grid's
+own summary — 409 checks over `qwen25-1p5b` / `llama32-3b`, written 2026-07-22
+21:35 — had been overwritten.
 
 **Mechanism.** `verify_minigrid.py` defaults `--output` to
 `RESULTS_ROOT/minigrid_validation_summary.json`, and `verify_minigrid.sbatch`
@@ -1643,21 +1672,28 @@ The escalation summary was preserved first, under
 `results/escalation_validation_summary.json`. Both now exist; neither validation
 has to be re-run.
 
-**Not fixed here.** The fix is one required variable —
-`MINIGRID_OUTPUT`, no default, passed through as `--output` — and it is a new
-control rather than a recovery, so it is surfaced rather than taken: the
-authorized sequence for this session ended at reporting the validator's outcome,
-and the H3 go is pending. Until it lands, **a validator rerun will clobber
-whichever summary it is not producing**, recoverably from the job log.
+**Restore verified against a signed record, not against its own source.** Size
+equality is corroboration and nothing more — it would hold for any file the same
+serializer produced. The restored summary was therefore cross-checked against the
+four quantities `docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md` cites
+independently of the log it was recovered from: job `11375247`, **409 checks**,
+`passed: true`, **44 cells**. All four match, and the models in it are
+`qwen25-1p5b` / `llama32-3b`. The restore is confirmed against the signed record.
 
-**What made this survivable was an accident, again.** The summary is recoverable
-only because the validator happens to `print` it before writing it. Had it
-written silently, a completed validation record would have been destroyed with no
-copy anywhere — `results/*` is gitignored and the archive convention covers run
-*directories*, not the loose artifacts at the results root. **The archive
-convention has a gap: `minigrid_validation_summary.json` was never in
-`minigrid_run_20260722.tar.gz`**, because that tarball covers the two run dirs
-and nothing else.
+**Cause fixed (authorized 2026-07-26).** `--output` is now **required** in
+`verify_minigrid.py` — the default is deleted, not overridden — and
+`MINIGRID_OUTPUT` is required in `verify_minigrid.sbatch` via `${VAR:?}`, in the
+same shape as the runner's grid variables, echoed in the job's own declaration
+line alongside config, results, models and cells. Two tests: the CLI must refuse
+to run without `--output`, and a static guard pins both the `${VAR:?}` form and
+the absence of the old default string, since a behavioural test cannot catch a
+default reintroduced beside a guard. In-image suite **199 → 201**.
+
+**What made this survivable was an accident.** The summary is recoverable only
+because the validator happens to `print` it before writing it. Had it written
+silently, a completed validation record backing a signed decision would have been
+destroyed with no copy anywhere — which is the archive gap above, arriving as a
+near miss rather than as a loss.
 
 **Without the gate:** it would have gone unnoticed indefinitely. Nothing checks
 that file's mtime or content, no test covers the output path, and both summaries

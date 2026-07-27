@@ -41,3 +41,8 @@ Cont-Labelerr-auditing/
 !results/escalation_run_20260726.tar.gz
 !results/escalation_run_20260726.tar.gz.sha256
 !results/escalation_run_20260726.manifest.json
+# Loose artifacts at the results ROOT (incident 26): the run-directory tarballs
+# above never covered these, so a completed validation record had no copy
+# anywhere. Small JSON, so version history beats a tarball.
+!results/minigrid_validation_summary.json
+!results/escalation_validation_summary.json

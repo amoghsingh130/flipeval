@@ -585,3 +585,53 @@ def test_missing_acceptance_keys_are_reported_together(tmp_path):
     assert "calibration" in message
     assert "task_dataset_revisions" in message
     assert "2 required key(s)" in message
+
+
+# --------------------------------------------------------------------------
+# The OUTPUT path is a grid declaration too (incident 26, 2026-07-26).
+#
+# `--output` defaulted to RESULTS_ROOT/minigrid_validation_summary.json -- one
+# grid's name, under a results root both grids share -- so the escalation
+# validator overwrote the mini-grid's completed summary while declaring its
+# config, results root, model tags and cell count correctly. None of those
+# controls governs where output lands. The standing rule ("no job script is ever
+# given a default grid, reader or writer") had been applied to this pair's
+# reader; it also writes.
+# --------------------------------------------------------------------------
+
+def test_validator_cli_requires_an_explicit_output_path():
+    """Omitting --output must abort, not silently pick one grid's filename."""
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [
+            sys.executable, "scripts/verify_minigrid.py",
+            "--config", "x", "--results-root", "y",
+            "--expect-model-tags", "a", "--expect-cells", "1",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=Path(__file__).resolve().parents[1],
+    )
+    assert result.returncode != 0
+    assert "--output" in result.stderr
+
+
+def test_the_validator_sbatch_declares_no_default_output_path():
+    """Static guard, in the shape used for the runner's grid vars.
+
+    A behavioural test cannot catch a default reintroduced next to a guard, so
+    the source text is pinned too.
+    """
+    sbatch = (
+        Path(__file__).resolve().parents[1] / "scripts" / "slurm" / "verify_minigrid.sbatch"
+    ).read_text(encoding="utf-8")
+    assert '"${MINIGRID_OUTPUT:?' in sbatch, "MINIGRID_OUTPUT must be required via ${VAR:?}"
+    assert "${MINIGRID_OUTPUT:-" not in sbatch, "MINIGRID_OUTPUT must have no fallback"
+    assert "--output" in sbatch, "the sbatch must pass MINIGRID_OUTPUT through"
+    # The old default must not reappear anywhere in the writer path.
+    source = (
+        Path(__file__).resolve().parents[1] / "scripts" / "verify_minigrid.py"
+    ).read_text(encoding="utf-8")
+    assert 'results_root / "minigrid_validation_summary.json"' not in source

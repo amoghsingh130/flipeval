@@ -132,7 +132,23 @@ def main() -> None:
     parser.add_argument("--config", required=True)
     parser.add_argument("--results-root", required=True, help="Directory holding each model's run dir.")
     parser.add_argument("--project-root", default=".")
-    parser.add_argument("--output", help="Defaults to RESULTS_ROOT/minigrid_validation_summary.json")
+    # REQUIRED, no default (incident 26, 2026-07-26). This used to default to
+    # RESULTS_ROOT/minigrid_validation_summary.json -- a filename naming ONE grid,
+    # under a results root BOTH grids share. The escalation validator therefore
+    # overwrote the mini-grid's completed validation summary while being correct
+    # in every other respect: config, results root, model tags and cell count all
+    # declared and all verified. None of those controls says where output lands.
+    #
+    # This is the standing rule -- no job script is ever given a default grid,
+    # reader or writer -- applied to the one place it had not been. The validator
+    # was hardened as the pair's reader; it also writes.
+    parser.add_argument(
+        "--output",
+        required=True,
+        help="Path for the validation summary. Required: a default here names one "
+        "grid while both grids share a results root, which silently overwrites "
+        "the other grid's completed summary (incident 26).",
+    )
     # The grid the OPERATOR believes they are validating, declared independently
     # of the config so the two can be made to disagree. Required, because the
     # dangerous invocation is not a missing config -- it is a *valid* config for
@@ -154,7 +170,7 @@ def main() -> None:
     args = parser.parse_args()
 
     results_root = Path(args.results_root)
-    output = Path(args.output) if args.output else results_root / "minigrid_validation_summary.json"
+    output = Path(args.output)
     summary = verify_minigrid(
         Path(args.config),
         results_root,
