@@ -239,3 +239,16 @@ strictly like-for-like and are used here only to locate the observed values.
 
 **No paper edits were made in this pass.** No `\minigridTODO` is filled; that is
 a separate job once these numbers have been read.
+
+## Downstream wording adjustment (2026-07-27)
+
+The abstract's pre-drafted H3 variant (A) ended *"…so a single-calibration
+comparison of compression methods is **not reproducible**."* On selecting that
+variant, **"not reproducible" was changed to "unreliable"**, because it
+over-claims against the bootstrap result in this document: three cells combine a
+winner flip with a rank-flip rate below 0.05, so individual seeds disagree while
+the five-seed mean survives resampling — which is unreliability of a single run,
+not irreproducibility. The registered artifacts are the decision rule and the
+verdict, not the drafted abstract prose, so no amendment to a frozen file is
+implicated; the change is recorded here because the reason for it is a result in
+this document. Nothing about the verdict, the rule, or any number changed.

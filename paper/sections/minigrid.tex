@@ -358,10 +358,10 @@ Llama-3.1-8B & GSM8K & $+0.013200$ & 0.083800 & 0.097000 & 0.180800 & 0.096400 &
 \begin{result}\label{res:churnratio}
 The ratio of per-item churn to aggregate net delta is larger in the
 controlled method-against-method contrast than in the observational
-quantized-against-FP16 contrast. Across the atlas, churn runs roughly
-\textbf{five to six times} net delta (\S\ref{sec:atlas:netgross}). Across the
-eight controlled cells, comparing GPTQ with AWQ at the same bit width, it runs
-\textbf{3 to 30 times}, with a median of about \textbf{13}.
+quantized-against-FP16 contrast. Across the atlas, churn runs
+\textbf{$5.3\times$} net delta (\S\ref{sec:atlas:netgross}). Across the eight
+controlled cells, comparing GPTQ with AWQ at the same bit width, it runs
+\textbf{$3.0\times$ to $30.5\times$}, with a median of \textbf{$12.7\times$}.
 \end{result}
 
 The extreme cell makes the size of the discrepancy concrete. On
@@ -383,6 +383,8 @@ contrast at 8---and nothing here licenses reading the ratio as a monotone
 function of aggregate closeness. What the two points support is the direction of
 the effect and the fact that the regime in which equivalence claims are actually
 made is the less favourable of the two.
+% Atlas 5.3 from \S\ref{sec:atlas:netgross} (rev-2 ratio of medians); controlled
+% 3.04 / 12.71 / 30.45 are arithmetic on Table~\ref{tab:h3-flips}.
 
 \subsection{Resolution: which arm of the experiment carries the result}
 \label{sec:minigrid:resolution}

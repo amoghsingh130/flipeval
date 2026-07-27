@@ -1,10 +1,12 @@
 % Atlas figures below are REV-2 (2026-07-21), resolved after the targeted
 % second spot-check passed 14/14 cells, 126/126 fields. Keep in sync with
-% sections/{atlas,certification,audit}.tex.
+% sections/{atlas,certification,audit,minigrid}.tex.
 % =====================================================================
-% Section: Introduction -- SKELETON with drafted opening.
-% Numbers here must mirror sections/audit.tex, certification.tex, atlas.tex
-% exactly; if one changes, change both. SOURCE comments repeated for safety.
+% Section: Introduction.
+% Numbers here must mirror sections/audit.tex, certification.tex, atlas.tex and
+% minigrid.tex exactly; if one changes, change both. SOURCE comments repeated
+% for safety. This file is DERIVATIVE -- it contains no primary figures
+% (paper/OUTLINE.md rule 4, the summary-restatement invariant).
 % =====================================================================
 
 \section{Introduction}
@@ -17,8 +19,14 @@ is an equivalence claim. Equivalence claims have a statistical form---a declared
 margin, a test, and a sample size sufficient to reject the composite null that
 the difference exceeds the margin---and the sentence almost never has it.
 
-This paper does two things. It measures how large the gap is, in a preregistered
-audit of the claims themselves; and it supplies the apparatus that closes it.
+The problem is worse than a missing test, because the evidence being offered is
+weakest exactly where it is being offered. A net accuracy delta is the residue
+left after per-item changes in opposite directions cancel. The more alike two
+models are, the more completely those changes cancel, and the smaller the
+residue becomes relative to the behavioural change underneath it. So the
+quantity the field uses to establish that two models are the same is least
+informative precisely in the regime where that claim is made. Everything in this
+paper follows from taking that observation seriously and measuring it.
 
 \paragraph{The audit.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts.csv.
@@ -48,33 +56,69 @@ which defeats the natural intuition: MMLU needs about 2{,}164 items at 2\,pp
 where the harder GPQA needs 749.
 
 \paragraph{The evidence.}
-% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1;
+% SOURCE: \S\ref{sec:atlas:netgross} (5.3x on the rev-2 1,707-cell population);
 % docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
 % results/identical_score_churn_rev2.csv (analysable_cells 1707,
 % zero_delta_cells 145, zero_delta_share 0.084944, churn_median 0.072000).
 % REV-2: "a median of 6.2%" was rev-1's churn_median 0.062176 and was corrected
 % to 7.2% on 2026-07-26, in step with the abstract and
 % \S\ref{sec:atlas:identical}. All three state the same quantity.
+% REV-1 SURVIVOR, CORRECTED 2026-07-27: "five to six times" was rev-1's ratio;
+% the rev-2 value is 5.3x in both strata. Fourth such survivor found.
 Both rest on an atlas of 1{,}707 paired model-by-task cells mined from public
 per-item evaluation dumps spanning 3B to 405B parameters, in which churn runs
-five to six times the net delta, and 145 cells (8.5\%) post an exactly identical
+$5.3\times$ the net delta, and 145 cells (8.5\%) post an exactly identical
 accuracy to their baseline while still disagreeing with it on individual items,
-at a median of 7.2\% of items. A preregistered controlled experiment then asks
-whether the calibration \emph{seed} alone can reorder two compression methods.
-\minigridTODO{one-sentence status; H3 is undecided under the registered rule
-until all eight registered cells exist}
+at a median of 7.2\% of items. The ratio is remarkably stable across a
+generational change in method: the two strata differ by nearly a factor of three
+in how much behaviour they disturb, and understate that disturbance by the same
+multiple---better methods have made the difference smaller without making the
+evidence for equivalence any more sufficient (\S\ref{sec:atlas:netgross}).
+
+\paragraph{The controlled experiment.}
+% SOURCE: \S\ref{sec:minigrid:verdict};
+% docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED, 05c86f2);
+% \S\ref{sec:minigrid:churnratio} Result 1 (median 12.7x).
+The same logic predicts something sharper, and a preregistered experiment tests
+it. If cancellation grows with similarity, then the least informative comparison
+of all is not compressed against original but \emph{compressed against
+compressed}---two methods at the same bit width, which are far closer to each
+other than either is to its baseline. Pairing GPTQ and AWQ on byte-identical
+calibration samples across five calibration seeds, over eight registered
+model-by-benchmark cells, we find churn running a median of $12.7\times$ the net
+delta, more than double the atlas ratio; and under the frozen eight-cell decision
+rule \textbf{H3 is supported}---the calibration seed alone reorders the two
+methods in \textbf{5 of 8} cells. Which of two compression methods wins can be
+decided by a random draw of calibration data, at a gap the field would report as
+equivalence.
+
+\paragraph{The instrument is not fixed either.}
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §§1, 7;
+% docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md §4.2 (0.232 -> 0.566 on unchanged
+% generations); \S\ref{sec:sensitivity} for the registered ratio R.
+All of the above assumes the evaluation itself holds still. A small preregistered
+exploratory study says it does not: on a single fixed FP16 model, changing the
+answer-extraction filter moved reported GSM8K accuracy from $0.232$ to $0.566$
+with \emph{not one token of model output changed}. That is a scoring decision,
+not a modelling one, and it is larger than every compression effect in this
+paper. It is one model and licenses no confirmatory reading
+(\S\ref{sec:sensitivity}), but a reader can check it in an afternoon on the
+pinned harness version, and it bounds how much any unstated configuration choice
+can be worth.
 
 \paragraph{What is new, and what is not.}
 Per-item flips as a diagnostic for compressed models are due to
 \citet{dutta2024flips}, and calibration-\emph{data} effects on quantization
 quality are due to \citet{williamsaletras2024}; we claim neither. Our
-contributions are (i) the preregistered audit and its verdict artifact,
-(ii) empirical certification tables and the paired-design correction they
-quantify, (iii) the atlas of the public record, and
-(iv) the seed-level pairing design and its ranking-instability analysis. Relative
-to the closest existing tool \citep{llmaccuracystats2026}, which performs
-one-sided McNemar \emph{detection}, our delta is the shift from detection to
-certification: a declared margin, TOST, and required-$n$ tables.
+contributions are (i) the preregistered audit of published equivalence claims
+and its verdict artifact; (ii) empirical certification tables and the
+paired-design correction they quantify; (iii) the atlas of the public record,
+and the measured cancellation ratio in both the observational and controlled
+regimes; and (iv) a preregistered seed-paired experiment showing that the
+calibration seed alone reorders two compression methods in 5 of 8 registered
+cells. Relative to the closest existing work \citep{llmaccuracystats2026}, which
+performs one-sided McNemar \emph{detection}, our delta is the shift from
+detection to certification: a declared margin, TOST, and required-$n$ tables.
 
 \paragraph{Preregistration.}
 All protocols were frozen before the analyses they govern
@@ -83,5 +127,4 @@ the analyst decisions that moved the headline are reported together with the
 direction they moved it---including the two corrections that removed the
 paper's largest numbers.
 
-\TODO{contributions bullet list, paper-map paragraph, and artifact URLs/DOI
-once minted}
+\TODO{paper-map paragraph and artifact URLs/DOI once minted}

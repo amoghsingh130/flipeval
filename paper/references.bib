@@ -372,3 +372,37 @@
   doi     = {10.1145/3458723},
   note    = {arXiv:1803.09010}
 }
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2604.27405 (v1, 30 Apr 2026;
+% cs.CL, cs.AI). Comments: "7 pages, 4 figures, 2 tables. Pre-registered study.
+% Code and data available". Single author. Methodological reading (RCI adapted
+% from Jacobson & Truax; 2,000 MMLU-Pro items; model-VERSION pairs, never
+% quantized-vs-FP16; their "churn" is reliably-changed-by-RCI, a different
+% denominator from ours) is in docs/PRIOR_ART_CONCURRENT_2026-07-24.md §3,
+% verified against the raw arXiv HTML. No venue beyond arXiv.
+@misc{cacioli2026beyondmean,
+  title        = {Beyond the Mean: Within-Model Reliable Change Detection for {LLM} Evaluation},
+  author       = {Cacioli, Jon-Paul},
+  year         = {2026},
+  eprint       = {2604.27405},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.CL},
+  note         = {arXiv:2604.27405. Preregistration: osf.io/3dnsa}
+}
+
+% Verified 2026-07-27 against https://arxiv.org/abs/2606.19558 (v1, 17 Jun 2026;
+% cs.LG, cs.CL). No comments/journal-ref field. Methodological reading (the
+% "silent zone" collapse of KLD/PPL ranking signal near baseline; leapfrog/drop
+% split of the flips metric of \citet{dutta2024flips}; 28 GGUF quantizations of
+% Qwen3.6-35B-A3B and 41 of Devstral-Small-2-24B against a BF16 reference;
+% bootstrap CIs only, no TOST/McNemar/required-n) is in
+% docs/PRIOR_ART_CONCURRENT_2026-07-24.md §4, verified against the raw arXiv HTML.
+@misc{nikolic2026displacement,
+  title        = {Displacement Is Not Direction: Evaluating Fidelity Metrics for Quantized {LLM} Deployment},
+  author       = {Nikoli{\'c}, Milo{\v{s}} and Zadeh, Ali Hadi and Torres Sanchez, Enrique and Moshovos, Andreas},
+  year         = {2026},
+  eprint       = {2606.19558},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.LG},
+  note         = {arXiv:2606.19558}
+}
