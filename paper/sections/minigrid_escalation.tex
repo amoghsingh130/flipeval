@@ -104,15 +104,16 @@ authorizing construction and evaluation of the deferred 7B/8B seed cells
 % 11375247, 409/409, passed:true; first inspection authorized 2026-07-23) and
 % "Provenance" (gates re-derived under Amendment 3,
 % docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md, committed bd565bd).
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 12). Both facts kept -- the seal
+% held until the validator passed, and the gates were settled before any
+% inspection -- with the document path dropped to the commit hash.
 The four cells stayed sealed---no accuracy read by anyone---until the registered
 validator passed over the complete 44-JSONL expected set (job \texttt{11375247},
 409/409 checks), which is the first mini-grid accuracy inspection the
-registration permits and the same-day escalation record it requires. The FP16
-gate failure that preceded the run, and its correction, were resolved \emph{before}
-any inspection: the gates behind these cells were re-derived under Amendment~3
-(\texttt{docs/MINIGRID\_FP16\_GATE\_DERIVATION\_2026-07-21.md}, committed
-\texttt{bd565bd}), so the screen fired on a grid whose reference gates were
-already settled rather than tuned to its result.
+registration permits. The FP16 gate failure that preceded the run was resolved
+\emph{before} any inspection, the gates being re-derived under Amendment~3
+(committed \texttt{bd565bd}), so the screen fired on a grid whose reference
+gates were already settled rather than tuned to its result.
 
 \paragraph{This screen is not the H3 verdict.}
 % SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md, "Decision" paragraph

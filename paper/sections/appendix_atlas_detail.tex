@@ -1,0 +1,59 @@
+% =====================================================================
+% Appendix: Atlas construction detail.
+% CREATED 2026-07-27 (phase 4 trim, candidate 4). Content moved from
+% sections/atlas.tex §§"Construction" and "Coverage, and what the exclusions
+% reveal". NOTHING WAS DELETED IN THE MOVE.
+%
+% What deliberately did NOT move, and must not: the prompt-hash identity
+% control (it is the operative admission rule and is cited from §5), the
+% empty-join observation (it is a finding, not mechanics), and the paragraph
+% recording that rev-1 overstated the exclusions (self-correction the paper is
+% partly about).
+% =====================================================================
+
+\section{Atlas construction detail}
+\label{app:atlas-detail}
+
+\subsection{The two sources}
+\label{app:atlas:sources}
+
+% SOURCE: docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 3.4.
+\textbf{S1} is the Open LLM Leaderboard v1 archive---community quantizations
+(GPTQ, AWQ, GGUF, 8-bit and 4-bit bitsandbytes) of 2023-era base models, paired
+with their base model's details dataset whenever one exists. \textbf{S2} is the
+Neural Magic / Red~Hat per-item dumps for quantized Llama-3.1, covering W4A16,
+W8A8-INT8 and W8A8-FP8 at 8B, 70B and 405B.
+
+The registration exists to prevent source- or pair-selection after seeing
+results, and it labels these analyses descriptive: they estimate flip and churn
+magnitudes in the wild and feed the certification tables, they test no registered
+hypothesis, and they cannot substitute for any H3 cell.
+
+\subsection{Item pairing}
+\label{app:atlas:pairing}
+
+Item pairing is mechanical: items join on the source's own item key, duplicated
+keys are dropped entirely on both sides, and an item enters the paired analysis
+only if its full-prompt hash is identical across the pair. A pair-task cell is
+excluded if fewer than 99\% of joinable items pass that identity check. Differing
+harness commits do not exclude a cell---prompt-hash identity is the operative
+control---but are recorded per cell and disclosed.
+
+\subsection{Exclusion breakdown}
+\label{app:atlas:exclusions}
+
+% SOURCE: results/atlas_cells_summary_rev2.csv, reason column;
+% results/atlas_exclusions.csv.
+% POPULATION NOTE: these figures (and only these) use the 1,807 count, which is
+% the analysed set BEFORE the 99 disclosed probe cells and the float-scored
+% remainder are removed to reach the 1,707 analysis population of §5.3.
+The enumeration yields \textbf{2{,}055} pair-task cells, of which
+\textbf{1{,}807 are analysed} (S1 = 1{,}459, S2 = 348) and \textbf{248} are
+excluded or skipped. The exclusions break down as \textbf{179} cells (72.2\%)
+for which no results file exists for that task in any recorded run,
+\textbf{36} (14.5\%) whose join intersection is empty, and \textbf{33}
+(13.3\%) whose task carries no binary correctness metric in the data at all
+(genuinely float-scored tasks, which the flip model does not describe).
+
+The full exclusion table ships with the release, one row per excluded cell with
+its reason, so the admitted population is auditable rather than asserted.

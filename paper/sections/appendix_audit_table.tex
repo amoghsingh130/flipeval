@@ -29,6 +29,61 @@ counted in $K$; they are retained so that a reader can see exactly what the
 analysis could and could not evaluate. R04's GSM8K computation is the largest
 such quantity and is discussed in \S\ref{sec:audit:r04}.
 
+\section{Audit method detail}
+\label{app:audit-method}
+
+% RELOCATED 2026-07-27 (phase 4 trim, candidates 1 and 3). Moved VERBATIM in
+% content from sections/audit.tex; nothing was deleted in the move. The body
+% keeps both findings and points here for the mechanism.
+
+\subsection{Discordance imputation}
+\label{app:audit:imputation}
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
+The discordance rate $p_d$ is not reported by any audited source, so it is
+imputed from the atlas (\S\ref{sec:atlas}) by matching the nearest (method
+family, bit width, benchmark) cell, most-specific tier first, taking the
+\emph{median} over the first non-empty tier because per-cell discordance is
+right-skewed. One claim matched at tier~1 (family + bits + benchmark), 11 at
+tier~2 (family + bits), 2 at tier~3 (bits + benchmark), 1 at tier~4 (bits), and
+2 fell through to the global tier. A tier whose target field is \texttt{None}
+cannot match, so a pruning claim with no bit width descends automatically rather
+than being forced into a wrong cell. Both disclosed feasibility-probe pairs (99
+atlas cells) are excluded from the imputation pool, per the atlas registration.
+
+\subsection{The two robustness readings, and why they stay separate}
+\label{app:audit:robustness}
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
+% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts_rev2.csv
+% columns verdict_at_registered_2pp and margin_sensitive.
+% CARE -- THE TWO "1 of 12" FIGURES ARE DIFFERENT FACTS. First: one determinate
+% claim is underpowered under the uniform 2 pp yardstick. Second: one
+% determinate claim's verdict is unstable across the 1 pp -> 3 pp sweep. They
+% happen to concern the same claim (R01) and MUST NEVER be merged into a single
+% sentence or read as one finding. The body states both separately and points
+% here; this appendix carries the reasoning.
+
+Both readings ship in the released CSV (\texttt{verdict},
+\texttt{verdict\_at\_registered\_2pp}). The factor-of-four difference between
+judging each claim against its own stated margin and judging all of them against
+the uniform registered 2\,pp margin is \emph{interpretive, not statistical}, and
+the reasoning that selects the primary reading is at
+\S\ref{sec:prereg:choices}: the frozen label is ``underpowered for its
+\emph{own} assertion'', and judging a 0.15\,pp parity claim against a 2\,pp
+yardstick audits a claim nobody made.
+
+Margin sensitivity is a separate property, and it qualifies a headline verdict,
+so it is counted over the claims that have one. R01's verdict flips between
+underpowered and adequately powered across the 1\,pp\,$\to$\,3\,pp sweep, making
+that verdict an artefact of margin choice rather than a robust finding; it is
+reported as such rather than counted as evidence in either direction. R04 and
+R14 also flip across the sweep and retain the \texttt{margin\_sensitive} column
+in the released CSV, but neither carries a verdict to qualify.
+
+These are two distinct properties---a verdict under an alternative yardstick,
+and instability of a verdict across the sweep---that coincide on one claim.
+
 \section{Certification tables at 1\,pp and 3\,pp}
 \label{app:certification-margins}
 
@@ -50,6 +105,34 @@ and 962 at 3\,pp.}
 % The stale value sat inside this TODO rather than in typeset body text, so it
 % was never a rendered claim -- but it is the instruction this appendix would
 % have been typeset from.
+
+\subsection{Scope caveats carried from the main text}
+\label{app:cert:caveats-detail}
+
+% RELOCATED 2026-07-27 (phase 4 trim, candidate 6) from
+% sections/certification.tex §"Scope and caveats", caveats 2, 3 and 4, moved
+% VERBATIM in content. Caveats 1 and 5 remain in the body.
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats";
+% results/certification_tables_rev2.csv column n_atlas_cells.
+
+\paragraph{Cell counts behind each family.} Rev-2 moved
+\texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to 24, \texttt{hellaswag}
+to 23 and \texttt{winogrande} to 23, taking those out of the thin category;
+\texttt{mmlu} (1{,}311), \texttt{bbh} (192) and \texttt{math} (56) are well
+supported. Only \texttt{mmlu\_pro} (5) and \texttt{ifeval} (8) remain thin, as
+the main text states.
+
+\paragraph{Family aggregation mixes two sources of variation.} The atlas
+collapses MMLU's 57 per-subject cells and BBH/MATH/MuSR/GPQA's per-subtask cells
+into families, so a family's spread combines subject-level with model-level
+variation. This widens the p25--p75 band relative to what a single practitioner
+evaluating a single model would see, and therefore makes the quartile columns
+\emph{conservative} rather than optimistic.
+
+\paragraph{Feasibility-probe pairs are excluded.} Both disclosed
+feasibility-probe pairs (99 cells) are excluded per the atlas registration §6,
+as tiny hand-built sanity pairs---$n$ as low as 10, discordance up to
+0.9---that would distort every quartile.
 
 \section{Preregistration documents}
 \label{app:registrations}
