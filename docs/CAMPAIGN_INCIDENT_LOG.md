@@ -54,6 +54,7 @@ would have been caught later anyway", the entry says that.
 | 25 | 2026-07-26 | "The validator is model-agnostic" was verified for the models, not for the contract | The validator, failing closed in 1 s |
 | 26 | 2026-07-26 | Archive convention covers only run directories; validator's output path was a default | Directory listing of `results/` before and after |
 | 27 | 2026-07-27 | A redaction log that records the mapping is not a redaction | Reading the scrub output before publication |
+| 28 | 2026-07-28 | The repo was public for 8 days while every document said private | `gh repo view` during an unrelated branch rename |
 
 ---
 
@@ -1804,9 +1805,103 @@ redaction check as a known-benign file that is supposed to mention those strings
 and had it been excluded on that reasoning, nothing else in the pipeline
 inspects it. It was in fact caught by reading the file before the scan ran.
 
+## 28. A state you have not observed is not a fact, however many of your own documents assert it (2026-07-28)
+
+**Status: RESOLVED 2026-07-28.** The longest-lived defect in this log, and the
+cheapest one to have caught.
+
+### The mechanism
+
+**A state you have not observed is not a fact, however many of your own
+documents assert it.**
+
+The repository was public from **2026-07-20**. Every document in this project
+said it was private. `docs/RELEASE_CHECKLIST_v1.0.0.md` opened with "The
+repository is currently private and its history contains material that should
+not go public as-is". The repo-history decision record was written as a choice
+about a *future* publication. Session reports closed with "stopped at the human
+gate, nothing published, repo still private". A memory note recorded "private
+origin". An entire eight-step release plan was built whose central feature was a
+**hard human gate protecting against an event that had already occurred**.
+
+The check was one command, available at any point in those eight days:
+
+```bash
+gh repo view --json isPrivate    # {"isPrivate":false}
+```
+
+### What it cost
+
+The deletion commit `e4cae49` removed the three personal documents from HEAD on
+2026-07-27, but it was never pushed — it sat local with 86 other commits, the
+last push having been 2026-07-21. So for eight days the documents were readable
+**at the public tip**, not merely in history: enrollment status, expected
+graduation, employment background, a 2028/2029 inconsistency, and an
+`@gatech.edu` address.
+
+Actual reach was near zero — no README promotion, no paper posted, nothing
+linking to the repo — and the email appears as the git committer identity on all
+183 commits regardless. It is a genuine miss and a small one. The point of the
+entry is the mechanism, not the magnitude.
+
+### Why it was invisible: internal consistency is not verification
+
+Every downstream document agreed with every other, because **they all inherited
+the same unchecked claim from a single upstream source**. Agreement among
+derived documents is evidence about copying, not about the world. The more
+places a false premise is restated, the more confirmed it looks and the less
+likely anyone is to test it — the restatements *are* the reason nobody checked.
+
+### Fix
+
+The claim is corrected at its source (`RELEASE_CHECKLIST_v1.0.0.md` now opens
+with the correction), the deletion is pushed, and the premise is now stated with
+its observation: `visibility: PUBLIC`, observed via `gh repo view`, 2026-07-28.
+
+### Family: this is *not* a control that failed
+
+It belongs beside **incident 27**, not in the accepted-but-inert family above.
+Those were **controls that did not do what was believed** — a seal that missed
+`os.replace`, an `--exclude` silently discarded, a validator branching on
+`None`. Each was a mechanism that ran and misled.
+
+Here **nothing ran**. There was no control to fail. A premise was asserted,
+never tested, and inherited. Incident 27's lesson was *when the thing being
+controlled is disclosure, the audit trail is inside the threat model*; this is
+the same discipline applied one layer earlier — **before asking whether a
+control works, ask whether the state it assumes is real.**
+
+The project already had the rule and applied it in only one domain. The standing
+convention says *a scheduler control is not in effect until independently
+observed*, established across incidents 11 and 21. **Repository visibility is
+exactly the same kind of claim**, and neither the operator nor any agent session
+thought to generalise it beyond SLURM. The rule is hereby domain-independent:
+**observe the state; do not inherit the claim.** It applies to visibility,
+permissions, branch defaults, remote configuration, account scopes, and anything
+else whose truth lives in a system you do not control.
+
+**Without the gate:** it would have been caught at the moment of publication —
+`gh repo edit --visibility public` on an already-public repo would have been a
+no-op or an error, and the discrepancy would have surfaced then. That is the
+honest counterfactual, and it is not reassuring: it means the premise would have
+held right up to the step designed to act on it, and the eight days would have
+elapsed exactly as they did. Nothing earlier in the plan tested it, by
+construction, because the plan treated it as given.
+
 ## Cross-cutting patterns
 
 Recorded because they recur, not as a summary.
+
+**Premises nobody observed.** Logically prior to every family below, and added
+after incident 28. A control that fails is at least a mechanism that ran; an
+unobserved premise never runs at all, and its restatements across documents look
+like corroboration. The standing rule *"a scheduler control is not in effect
+until independently observed"* was held for two years in the SLURM domain only,
+while `isPrivate` — the same kind of claim, one command away — propagated
+unchecked through a checklist, a signed decision record, session reports and an
+eight-step release plan. **The rule is domain-independent: observe the state, do
+not inherit the claim.** Applies to visibility, permissions, branch defaults,
+remotes, and account scopes as much as to `--exclude` and `--requeue`.
 
 **Controls that report success while doing nothing.** Three of these are now
 *scheduler* controls specifically: `--exclude` accepted and discarded (11),
