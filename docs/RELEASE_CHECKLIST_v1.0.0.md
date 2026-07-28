@@ -102,9 +102,55 @@ release.
 
 ---
 
-## ⛔ Open decision — the repository's history
+## ✅ DECIDED 2026-07-27 — option (b): delete from HEAD, publish with history intact
 
-**This needs your call, and it blocks step 1 only.**
+**Amogh read `paceship-application.md`, `handoffv1.md` and
+`compression-eval-proposal-v2.md` on 2026-07-27 and chose option (b).** The
+three documents are deleted from HEAD; the history is published unrewritten.
+The account below is kept as the record of what was decided against.
+
+### Reasoning
+
+**1. The commit history is load-bearing evidence for \S3.** Three hashes are
+cited as proof that preregistration preceded analysis, and all three are
+verified as of this decision:
+
+| Commit | Date | What it froze |
+|---|---|---|
+| `b74fd58` | 2026-07-15 19:00 | The three registration documents (mini-grid, atlas mining, audit) |
+| `f06348f` | 2026-07-15 19:18 | The 59-pair atlas manifest, **before any flip analysis** |
+| `715a7ce` | 2026-07-15 22:35 | The reconciled 17-claim audit table, **before the verdict stage** |
+
+These are what make *"the protocol was frozen before the analysis it governs"* a
+checkable fact rather than an assertion. **This paper faults 17 sources for
+precisely that distinction** — asserting a property whose evidence a third party
+cannot inspect. Publishing the audit while destroying our own audit trail would
+reproduce the failure the paper is about.
+
+**2. A rewrite would invalidate the hashes it needs to preserve — all of them.**
+`git filter-repo` rewrites every commit downstream of the first one it touches.
+Verified 2026-07-27: **all three documents enter at `a8092df`, which is commit
+\#1 of 178 — the root commit.** So the rewrite is not merely "early enough to
+land before the registration commits" (they sit at \#9, \#12 and \#17). It would
+rewrite **every commit in the repository**, invalidating every hash this project
+has ever cited, in the paper and in every signed decision record. There is no
+version of the rewrite that preserves the evidence.
+
+**3. Accepted residual exposure, stated rather than minimised.** The three
+documents remain reachable in history, carrying enrollment status, expected
+graduation, employment background, and **a graduation-year inconsistency between
+two of them (2028 vs 2029)**. Name, `@gatech.edu` address and GitHub handle were
+already public by necessity: the author's email is the git committer identity on
+all 178 commits, so no rewrite short of rewriting authorship would remove them.
+There are **no credentials** anywhere in history (606 blobs scanned, zero hits),
+so nothing requires revocation. What remains is personal information of low
+severity, knowingly accepted in exchange for an auditable freeze timeline.
+
+---
+
+## The decision that was made against (kept for the record)
+
+**Superseded 2026-07-27 by the decision above.**
 
 The tagged GitHub release publishes the repository, and a public repo exposes its
 **full history**, not just the tagged tree. Deleting a file now does not remove

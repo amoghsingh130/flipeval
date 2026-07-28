@@ -1,7 +1,21 @@
 # Phase 4 trim — ranked candidate list (2026-07-27)
 
-**Status: B1 deliverable. Low-cost cuts are applied; everything at MEDIUM or
-above is listed and NOT applied, per B6.**
+> ## ✅ EXECUTED 2026-07-27. Target revised 11,000–12,000 → **~13,000**.
+>
+> **Amogh's decision, same day.** The 12 non-risky candidates were applied and
+> the two MED-HIGH ones (13, 14) were **skipped**: 234 words is not worth a cut
+> the analysis flagged against itself.
+>
+> **Why the target moved.** TMLR has no page limit, so this was always a
+> readability cut rather than a compliance one. Reaching 11,000–12,000 required
+> opening the do-not-cut list — the passages that demonstrate the paper's
+> honesty — and trading those for roughly four pages is the wrong trade. **A
+> later pass should not reopen this hunting the missing 770.** The decision is
+> recorded here so it is not silently reversed.
+>
+> **Outcome: body 14,451 → 13,992 (−459).** See "What actually happened" at the
+> end, which reports the shortfall against my own estimates rather than
+> restating them.
 
 ## Measurement, and why it disagrees with 15,044
 
@@ -163,3 +177,110 @@ post-hoc analysis of registered cells, that needs a dated registration before
 it runs — not a paper edit. The alternatives are to leave §9 on the pilot and
 delete the TODO as superseded, or to register the analysis. Both are decisions,
 not edits.
+
+---
+
+# What actually happened (2026-07-27, after execution)
+
+## The estimates were optimistic by roughly 2.7×
+
+| | estimated | actual |
+|---|---:|---:|
+| Candidates 1–12 | −1,425 | **−521** |
+| `discriminant.tex` rewrite | (expected to shorten) | **+67** |
+| Abstract tightening | — | −5 |
+| **Net** | **−1,425** | **−459** |
+| **Body** | 13,026 | **13,992** |
+
+**Why the gap, stated plainly rather than explained away.** The per-candidate
+estimates were made from heading-level word counts. On reading each passage in
+full, cutting to the estimate would in most cases have removed content, not
+redundancy — so the cuts landed shorter than promised. Specifically:
+
+- **Candidate 3** (audit robustness notes, est. −202, actual ≈ −110). The
+  estimate assumed the whole paragraph relocates. It cannot: the paragraph
+  carries **two distinct findings** whose own source comment forbids merging
+  them. Both stayed in the body; only the reasoning moved.
+- **Candidate 6** (certification caveats, est. −150, actual ≈ −85) and
+  **candidate 4** (atlas construction, est. −200, actual ≈ −160) both had to
+  leave a pointer sentence behind, which eats a third of the saving.
+- **Candidate 5** (harness body, est. −160, actual ≈ −60). The section had
+  already been trimmed on 2026-07-26; the remaining duplication was smaller than
+  the heading count suggested.
+
+**Lesson for any future trim: estimate from the passage, not from the heading.**
+A heading-level count cannot distinguish restatement from content, and
+restatement is the only thing that is actually free to cut.
+
+## `discriminant.tex` grew, and that was the right outcome
+
+The brief expected the rewrite to shorten the section and to count against the
+trim. It did the opposite: **277 → 344 words (+67)**. The content the rewrite was
+asked to lead with — the MMLU and GSM8K resolution figures, and the
+within-benchmark contrast on the fourth GSM8K cell — is new material that the
+old single-paragraph version did not contain. Compressing the Kaggle pilot to
+its two-sentence core recovered part of the cost but not all of it. The section
+is better and longer; the expectation that it would shrink was simply wrong, and
+is recorded as wrong rather than met on paper by cutting something else.
+
+## Where the remaining ~992 words would have to come from
+
+Reaching ~13,000 exactly would need one of:
+
+- The two MED-HIGH candidates (−260), explicitly skipped.
+- `minigrid.tex` (2,208 w, the largest section, untouched — its only candidate
+  was the risky bootstrap one).
+- `related_work.tex` (1,713 w) beyond the two candidates already applied.
+- The do-not-cut list.
+
+**None was taken.** 13,992 is the honest landing point of the authorized set.
+
+---
+
+# The cross-reference invariant, amended (2026-07-27)
+
+**The version specified before this pass is insufficient, and there is a defect
+that proves it.**
+
+The introduction asserted *"the smallest difference their evaluation could
+resolve exceeds the difference they pronounce negligible, by 2.0× to 12.9×."*
+Both numbers are real, both appear in §4, and a value-only check passes. But
+2.0×–12.9× is the **sample-size shortfall** ($n_{req}/n_{reported}$,
+`tab:audit-underpowered`), while the sentence describes the **MDD ratio**
+(`tab:audit-mdd`), whose range is **1.60×–4.05×**. The figure was correct about
+the wrong thing, and overstated the gap it named roughly threefold.
+
+### The amended rule
+
+> **EVERY SUMMARY FIGURE IS CHECKED AS A PAIR — the value AND the quantity it is
+> asserted to measure — against its source section. Value-only matching passes
+> on figures that are correct about the wrong thing.**
+
+### It cannot be automated
+
+A token or multiset check compares values. The defect above is a mismatch
+between a value and the *English description* attached to it, which means
+deciding what a sentence claims. **Reading is what found it**, on a pass whose
+stated purpose was cutting words, not checking numbers. The automated checks all
+passed, before and after.
+
+### Six figure-level defects have now survived multiple passes
+
+Each was caught by a **different** method, which is the point:
+
+| # | Defect | Caught by |
+|---|---|---|
+| 1 | 1.7× GSM8K paired advantage (rev-1) | Reconciling prose against the rev-2 CSV |
+| 2 | 643 float-scored cells (rev-1) | Independent spot-check of the pipeline |
+| 3 | Four thin families (rev-1) | Re-reading the caveat against `n_atlas_cells` |
+| 4 | "five to six times" in §5.4, intro, conclusion | Targeted A1 sweep for the ratio |
+| 5 | "five to six times" surviving in §5's closer | Reading the closer while trimming it |
+| 6 | "one cell in ten" surviving in the conclusion | Grepping the retired phrasing across the tree |
+| 7 | MDD ratio described, shortfall quoted | Reading the sentence's claim, not its numbers |
+
+**That is evidence no single check covers the class, not evidence of
+carelessness.** Each new method found what the previous ones structurally could
+not see: a sweep for a value cannot find a value attached to the wrong quantity;
+a check of one section cannot find a stale restatement in another; an automated
+diff cannot read a sentence. The working assumption should be that a seventh
+defect exists and will need a method not yet used.

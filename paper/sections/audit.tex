@@ -61,21 +61,24 @@ any verdict was computed.\footnote{%
 % 715a7ce, sha256 842b9756...5af7b15).
 Registration frozen at commit \texttt{b74fd58}; claim table frozen at commit
 \texttt{715a7ce} with its sha256 recorded in the verdicts document.}
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 8). The trigger vocabulary is
+% enumerated in full in docs/AUDIT_REGISTRATION_2026-07-15.md §3 and in the
+% released claim table; the body keeps the criterion, the exhaustiveness
+% guarantee and the 7/7/3 split, which are the load-bearing parts.
 Sources were enumerated exhaustively within three fixed frames: method papers
-(F1), official quantized model cards (F2), and inference-stack vendor
-blogs and documentation (F3). A source enters the pool if it asserts, in prose
-or a table caption, that a compressed model's benchmark quality is
-equivalent-or-negligibly-different from its uncompressed baseline, using a fixed
-trigger vocabulary (``near-lossless'', ``negligible'', ``no (significant)
-degradation'', ``matches'', ``preserves accuracy'', ``$X\%$ recovery'' with
-$X \geq 98$, or an explicit $\leq 1$\,pp delta framed as parity). Every claim
+(F1), official quantized model cards (F2), and inference-stack vendor blogs and
+documentation (F3). A source enters the pool if it asserts, in prose or a table
+caption, that a compressed model's benchmark quality is
+equivalent-or-negligibly-different from its uncompressed baseline, under a fixed
+trigger vocabulary registered in advance (``near-lossless'', ``negligible'',
+``$X\%$ recovery'' with $X \geq 98$, and four further triggers, among them an
+explicit $\leq 1$\,pp delta framed as parity). Every claim
 meeting the criterion is audited; there is no discretionary sub-selection.
 % SOURCE: docs/audit_claim_table.csv column `frame`: F1=7, F2=7, F3=3.
 The frozen table contains 17 claims: 7 method papers, 7 official model cards or
-official blogs, and 3 inference-stack vendor documents. Each claim's fields were
-extracted twice by mutually blind extraction passes, with source content hashes
-recorded, and discrepancies reconciled before the verdict stage
-(\S\ref{sec:prereg}).
+blogs, and 3 vendor documents. Each claim's fields were extracted twice by
+mutually blind passes, with source content hashes recorded, and discrepancies
+reconciled before the verdict stage (\S\ref{sec:prereg}).
 
 We state the limit of the exercise before its results.
 % SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4 closing paragraph.
@@ -156,18 +159,15 @@ cosmetic; see \S\ref{sec:prereg:choices}, interpretive choice~5.
 \texttt{per\_item\_outputs\_released} column and cross-checked against the
 extraction reconciliation memo.
 
+% RELOCATED 2026-07-27 (phase 4 trim, candidate 1). The tier-by-tier match
+% counts and the None-descent rule moved VERBATIM to
+% Appendix~\ref{app:audit:imputation}. Nothing was deleted.
 \paragraph{Discordance imputation.} $p_d$ is not reported by any source, so it
 is imputed from the atlas (\S\ref{sec:atlas}) by matching the nearest
 (method family, bit width, benchmark) cell, most-specific tier first, taking the
 \emph{median} over the first non-empty tier because per-cell discordance is
-right-skewed.
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
-One claim matched at tier~1 (family + bits + benchmark), 11 at tier~2
-(family + bits), 2 at tier~3 (bits + benchmark), 1 at tier~4 (bits), and 2 fell
-through to the global tier. A tier whose target field is \texttt{None} cannot
-match, so a pruning claim with no bit width descends automatically rather than
-being forced into a wrong cell. Both disclosed feasibility-probe pairs (99
-atlas cells) are excluded from the imputation pool, per the atlas registration.
+right-skewed. Appendix~\ref{app:audit:imputation} gives the tier-by-tier match
+counts and the rule by which an unmatchable field descends.
 
 \paragraph{Robustness.} Every quantity is recomputed under the
 independent-binomial bound $\mathrm{sd} = \sqrt{2p(1-p)}$ and swept over 1\,pp
@@ -258,24 +258,20 @@ the released CSV for transparency, but they are excluded from $K$
 % single sentence or read as one finding. This paragraph merges the two former
 % paragraphs (2026-07-26) but deliberately keeps the two facts in separate
 % sentences with the coincidence stated explicitly.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 3). BOTH FINDINGS STAY HERE, in
+% separate sentences, because the comment above forbids merging them. What moved
+% to Appendix~\ref{app:audit:robustness} is the REASONING: why the own-margin
+% reading is primary, and why R04/R14 keep the margin_sensitive column without
+% being counted. Nothing was deleted.
 First, judging every claim against the uniform registered 2\,pp margin rather
-than the margin it states for itself gives \textbf{1 of 12 underpowered}; both
-readings are reported and both ship in the released CSV (\texttt{verdict},
-\texttt{verdict\_at\_registered\_2pp}). The factor-of-four difference between
-them is interpretive, not statistical, and the reasoning that selects the
-primary reading is at \S\ref{sec:prereg:choices}: the frozen label is
-``underpowered for its \emph{own} assertion'', and judging a 0.15\,pp parity
-claim against a 2\,pp yardstick audits a claim nobody made. Second, and
-separately, exactly \textbf{1 of the 12 determinate claims is margin-sensitive}:
-R01, whose verdict flips between underpowered and adequately powered across the
-1\,pp\,$\to$\,3\,pp sweep, making that verdict an artefact of margin choice
-rather than a robust finding; it is reported as such rather than counted as
-evidence in either direction. Margin sensitivity qualifies a headline verdict,
-so it is counted over the claims that have one---R04 and R14 also flip across
-the sweep and retain the \texttt{margin\_sensitive} column in the released CSV,
-but neither carries a verdict to qualify. These are two distinct
-properties---a verdict under an alternative yardstick, and instability of a
-verdict across the sweep---that coincide on one claim.
+than the margin it states for itself gives \textbf{1 of 12 underpowered}. Second,
+and separately, exactly \textbf{1 of the 12 determinate claims is
+margin-sensitive}: R01's verdict flips across the 1\,pp\,$\to$\,3\,pp sweep,
+making it an artefact of margin choice rather than a robust finding. These are
+two distinct properties---a verdict under an alternative yardstick, and
+instability of a verdict across the sweep---that happen to coincide on one
+claim, and they must not be read as one finding.
+Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 
 \subsection{Indeterminate claims: a finding, not a gap}
 \label{sec:audit:indeterminate}

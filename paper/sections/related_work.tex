@@ -26,18 +26,21 @@ public record at scale rather than in a controlled study
 (\S\ref{sec:certification}), and (iii) the audit that follows from it
 (\S\ref{sec:audit}).
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 7). The churn<->CA algebraic
+% identity and the layer-level detail were dropped; the interconvertibility is
+% asserted, which is what the positioning needs.
+% THE NO-PRIORITY-CLAIM SENTENCE AND ITS SOURCE COMMENT ARE UNTOUCHED AND MUST
+% STAY VERBATIM -- it is a dated, author-affirmed statement about precedence.
 Concurrent work reaches the same premise independently.
 \citet{rababah2026illusion}, posted two days before our preregistration froze
 and unknown to us until the prior-art sweep of 2026-07-24, define
 \emph{correctness agreement}---the per-item rate at which base and quantized
 models are both correct on the same input. That statistic is the joint-correct
 cell of the same $2\times2$ table our accuracy-state churn is built from, and
-the two are interconvertible given the marginal accuracies: with $a$ both
-correct, $b$ base-only correct and $c$ quantized-only correct,
-$\mathrm{churn} = (b+c)/n = \mathrm{Acc}_{\mathrm{base}} +
-\mathrm{Acc}_{\mathrm{quant}} - 2\,\mathrm{CA}$. They study a quantization
-family disjoint from ours---\texttt{llama.cpp} GGUF legacy and $k$-quant rather
-than GPTQ and AWQ---and reach a conclusion consistent with ours. We read this as
+the two are interconvertible given the marginal accuracies. They study a
+quantization family disjoint from ours---\texttt{llama.cpp} GGUF legacy and
+$k$-quant rather than GPTQ and AWQ---and reach a conclusion consistent with
+ours. We read this as
 external corroboration of the premise, not competition on it, and we make no
 priority claim over it: no committed artifact in this repository predates its
 posting.
@@ -47,10 +50,7 @@ posting.
 What they do not supply, and what the rest of this paper is, is the machinery
 that turns the shared premise into a decision: equivalence testing at a declared
 margin, required-$n$, a preregistered test of whether the calibration seed
-reorders two methods, and an audit of published claims. Their paper reports no
-equivalence test, no power or sample-size computation, and no per-item release;
-it also reports a layer-level analysis---query and key projections more
-sensitive than value and output---that we do not attempt.
+reorders two methods, and an audit of published claims.
 
 Two further concurrent studies measure per-item change on adjacent objects.
 % SOURCE: docs/PRIOR_ART_CONCURRENT_2026-07-24.md §§3-4, both verified against
@@ -59,7 +59,7 @@ Two further concurrent studies measure per-item change on adjacent objects.
 per-item comparisons between model \emph{versions} rather than precisions, and
 likewise recommends reporting a churn rate beside the mean;
 \citet{nikolic2026displacement} extend the flips metric into a leapfrog/drop
-decomposition over dozens of community-published quantized checkpoints, and find
+decomposition over community-published quantized checkpoints, and find
 that KL-divergence proxies lose their ranking signal in precisely the
 near-baseline region our certification tables adjudicate.
 
@@ -164,24 +164,26 @@ that settling it would not have answered the question either way.
 
 \subsection{Losslessness, defined and achieved versus audited}
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 2). The enumeration of the three
+% losslessness notions and the gamma^2 variance law was dropped; the positioning
+% -- which is what this subsection is for -- is kept whole, including the
+% complementarity statement.
 \citet{helcig2026slq} occupy the phrase this paper is about. They formalise
-three notions of losslessness for quantized LLMs---task-lossless (zero-shot
-accuracy preserved within sampling variance), the stricter
-distribution-lossless (next-token distributions practically indistinguishable),
-and a $\gamma^2$ variance law relating symmetric to asymmetric
-quantization---propose the Expected Acceptance Rate as an interpretable fidelity
-metric, and ship SLQ, a method that reaches those targets at low bit widths.
+notions of losslessness for quantized LLMs (task-lossless and the stricter
+distribution-lossless), propose the Expected Acceptance Rate as an interpretable
+fidelity metric, and ship SLQ, a method that reaches those targets at low bit
+widths.
 
 Their question and ours are different, and the difference is the whole of
 \S\ref{sec:certification}. \emph{They define losslessness and build a method to
 achieve it.} \emph{We audit whether existing published claims of losslessness
 have the evidence to support them, and compute how many items it would take to
 certify one.} Their paper contains no equivalence test at a declared margin, no
-power or required-$n$ computation, no McNemar test, and no audit of others'
-claims; ours contains no quantization method. The two are complements: a
-practitioner who adopts EAR as a fidelity target still needs to know how large
-an evaluation must be before the accuracy half of a losslessness claim means
-anything, and that number is what our certification tables supply.
+power or required-$n$ computation, and no audit of others' claims; ours contains
+no quantization method. A practitioner who adopts EAR as a fidelity target still
+needs to know how large an evaluation must be before the accuracy half of a
+losslessness claim means anything, and that number is what our certification
+tables supply.
 
 \subsection{Statistics for language-model evaluation}
 

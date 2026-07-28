@@ -187,26 +187,24 @@ certification tables are empirical rather than analytic.
 % content, in order: (1) <4-cell families omitted, (2) the two thin rows,
 % (3) family aggregation mixes two variation sources, (4) the 99 probe cells,
 % (5) certification n != detection n.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 6). Caveats 2 (thin rows), 3
+% (family aggregation) and 4 (probe-pair exclusion) moved VERBATIM to
+% Appendix~\ref{app:cert:caveats-detail}. Caveats 1 and 5 stay in the body:
+% caveat 1 is the omission rule that defines which rows exist at all, and
+% caveat 5 is the certification-vs-detection distinction this whole section
+% exists to draw. Nothing was deleted.
 These caveats travel with the table, and any reuse of it should carry them.
 Families with fewer than four analysable cells are omitted, because a quartile
 over three points is not an empirical distribution; this drops nothing from the
 registered set, and all surviving families appear in
 Table~\ref{tab:certification}. Of those that survive, two rest on thin evidence
 and are indicative only---\texttt{mmlu\_pro} (5 cells) and \texttt{ifeval}
-(8)---while rev-2 moved \texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to
-24, \texttt{hellaswag} to 23 and \texttt{winogrande} to 23, taking those out of
-the thin category, and \texttt{mmlu} (1{,}311), \texttt{bbh} (192) and
-\texttt{math} (56) are well supported; a reader should treat the thin rows as a
-starting hypothesis to be replaced by their own measured churn, not as a
-reference constant. Family aggregation mixes two sources of variation, since the
-atlas collapses MMLU's 57 per-subject cells and BBH/MATH/MuSR/GPQA's per-subtask
-cells into families, so a family's spread combines subject-level with
-model-level variation---which widens the p25--p75 band relative to what a single
-practitioner evaluating a single model would see, and therefore makes the
-quartile columns \emph{conservative} rather than optimistic. Both disclosed
-feasibility-probe pairs (99 cells) are excluded per the atlas registration §6, as
-tiny hand-built sanity pairs---$n$ as low as 10, discordance up to 0.9---that
-would distort every quartile. Finally, these are certification sample sizes, not
+(8)---and should be treated as a starting hypothesis to be replaced by the
+reader's own measured churn, not as a reference constant.
+Appendix~\ref{app:cert:caveats-detail} covers the remaining two: that family
+aggregation makes the quartile columns \emph{conservative} rather than
+optimistic, and that both disclosed feasibility-probe pairs are excluded.
+Finally, these are certification sample sizes, not
 detection sample sizes: they certify equivalence within $\pm m$, the $n$ required
 to \emph{detect} a difference at the same margin is larger, and reporting one as
 the other is the error this section exists to prevent.

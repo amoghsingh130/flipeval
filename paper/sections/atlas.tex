@@ -36,6 +36,11 @@
 \subsection{Construction}
 \label{sec:atlas:construction}
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 4). The S1/S2 source descriptions,
+% the descriptive-scope statement and the item-pairing mechanics moved VERBATIM
+% to Appendix~\ref{app:atlas-detail}. Nothing was deleted. The prompt-hash
+% identity rule is RESTATED here rather than only relocated, because §5 cites it
+% as the admission control.
 The atlas mines paired per-item records from public evaluation dumps at zero GPU
 cost. Its protocol was registered and frozen on 2026-07-15, before any flip
 statistic was computed beyond two feasibility probes that the registration
@@ -44,38 +49,34 @@ manifest, with dataset URLs, run timestamps, and task lists, before any flip
 statistic was computed.
 % SOURCE: docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 3.4; manifest freeze
 % commit f06348f per docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3.
-The registration exists to prevent source- or pair-selection after seeing
-results, and it labels these analyses descriptive: they estimate flip and churn
+These analyses are descriptive by registration: they estimate flip and churn
 magnitudes in the wild and feed the certification tables, they test no registered
 hypothesis, and they cannot substitute for any H3 cell.
 
-Two sources are in scope.
-\textbf{S1} is the Open LLM Leaderboard v1 archive---community quantizations
-(GPTQ, AWQ, GGUF, 8-bit and 4-bit bitsandbytes) of 2023-era base models, paired
-with their base model's details dataset whenever one exists.
-\textbf{S2} is the Neural Magic / Red~Hat per-item dumps for quantized
-Llama-3.1, covering W4A16, W8A8-INT8 and W8A8-FP8 at 8B, 70B and 405B.
-Item pairing is mechanical: items join on the source's own item key, duplicated
-keys are dropped entirely on both sides, and an item enters the paired analysis
-only if its full-prompt hash is identical across the pair. A pair-task cell is
-excluded if fewer than 99\% of joinable items pass that identity check. Differing
-harness commits do not exclude a cell---prompt-hash identity is the operative
-control---but are recorded per cell and disclosed.
+Two sources are in scope: \textbf{S1}, the Open LLM Leaderboard v1 archive of
+community quantizations of 2023-era base models, and \textbf{S2}, the Neural
+Magic / Red~Hat per-item dumps for quantized Llama-3.1 at 8B, 70B and 405B
+(Appendix~\ref{app:atlas:sources}). \textbf{An item enters the paired analysis
+only if its full-prompt hash is identical across the pair}, and a cell is
+excluded if fewer than 99\% of joinable items pass that check---prompt-hash
+identity, not harness version, is the operative control
+(Appendix~\ref{app:atlas:pairing}).
 
 \subsection{Coverage, and what the exclusions reveal}
 \label{sec:atlas:coverage}
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 4). The three-way exclusion
+% breakdown with its percentages moved VERBATIM to
+% Appendix~\ref{app:atlas:exclusions}. The headline counts stay here because the
+% empty-join finding below depends on them.
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, first bullet;
-% results/atlas_exclusions.csv.
+% results/atlas_cells_summary_rev2.csv, reason column.
 % POPULATION: this subsection (and only this subsection) uses the 1,807 figure.
-% SOURCE: results/atlas_cells_summary_rev2.csv, reason column.
 The enumeration yields \textbf{2{,}055} pair-task cells, of which
-\textbf{1{,}807 are analysed} (S1 = 1{,}459, S2 = 348) and \textbf{248} are
-excluded or skipped. The exclusions break down as \textbf{179} cells (72.2\%)
-for which no results file exists for that task in any recorded run,
-\textbf{36} (14.5\%) whose join intersection is empty, and \textbf{33}
-(13.3\%) whose task carries no binary correctness metric in the data at all
-(genuinely float-scored tasks, which the flip model does not describe).
+\textbf{1{,}807 are analysed} and \textbf{248} are excluded or skipped, most
+often because no results file exists for that task in any recorded run
+(Appendix~\ref{app:atlas:exclusions} breaks the exclusions down by reason).
+One of those reasons is a finding in itself.
 
 Empty join intersections are a reporting-standards observation in their own
 right. An empty intersection means the two sides of the pair were evaluated on
@@ -196,17 +197,20 @@ move---17.2\% certifiable, 6.1\% detectably different---and
 % exact figures replace the bound in both places.
 
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 9). The closing three sentences
+% restated §\ref{sec:atlas:netgross}'s generational-change paragraph almost
+% verbatim ("better methods have made the difference smaller without making the
+% evidence any more sufficient"). Stated once there, referred to here.
 The S1$\to$S2 contrast is a genuine improvement in compression method and
 evaluation practice, and should be read as one. Median churn falls from 0.138 to
 0.048 and median absolute net delta from 0.026 to 0.009; a modern vendor
 quantization of an 8B--405B instruction-tuned model perturbs per-item behaviour
 roughly a third as much as a 2023 community quantization of a 7B base model, and
 its evaluations are correspondingly more often certifiable. What does \emph{not}
-improve is the evidential situation: the modal cell in both strata is one where
-the evaluation cannot answer the question the release note answers. Better
-methods have made the difference smaller without making the evidence for
-``no difference'' sufficient, because certifying a smaller margin requires
-\emph{more} items, not fewer (\S\ref{sec:cert:table}).
+improve is the evidential situation: the modal cell in \emph{both} strata is one
+where the evaluation cannot answer the question the release note answers, for
+the reason \S\ref{sec:atlas:netgross} gives---certifying a smaller margin
+requires \emph{more} items, not fewer.
 
 \subsection{Identical scores, different answers}
 \label{sec:atlas:identical}
