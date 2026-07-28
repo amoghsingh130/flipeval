@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-27T22:41:47Z from `paper/main.tex` at commit `9bb521a`.**
+**Generated 2026-07-28T01:22:43Z from `paper/main.tex` at commit `d3a7a89`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -34,7 +34,7 @@ A reader's index is at the end.
 % the per-item-outputs line are untouched. See the note at the end of the file
 % for the measured result.
 A fraction of a point of benchmark accuracy is the standard evidence that a
-compressed language model is equivalent to its original. We show it is least
+compressed model is equivalent to its original. We show it is least
 informative precisely when two models are most alike: a net delta is what
 survives cancellation between opposing per-item changes, and cancellation is
 most complete in the regime every equivalence claim occupies.
@@ -70,8 +70,7 @@ We supply the apparatus: equivalence testing at a declared margin, and
 \emph{certification tables} giving the items an evaluation needs, computed from
 disagreement observed under compression, not from
 independent-binomial variance. The requirement follows churn, not difficulty:
-MMLU needs about 2{,}164 items at a 2\,pp margin where the harder GPQA needs
-749.
+MMLU needs about 2{,}164 items at 2\,pp where the harder GPQA needs 749.
 
 % SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
 % (SIGNED). This is drafted variant (A) with ONE word changed: it read "not
@@ -87,8 +86,8 @@ decision rule, H3 is supported: the calibration seed alone reorders the two
 methods in \textbf{5 of 8} confirmatory cells, so a single-calibration
 comparison is unreliable.
 
-Every protocol was frozen before the analysis it governs; every number
-is recomputable from released artifacts.
+Every protocol was frozen before its analysis; every number is recomputable
+from released artifacts.
 % ARXIV ABSTRACT FIELD, MEASURED 2026-07-27: 1,912 characters / 306 words.
 % The 1,920 limit is confirmed from arXiv's own submission help
 % (https://info.arxiv.org/help/prep.html, read 2026-07-27): "abstracts longer
@@ -311,18 +310,21 @@ public record at scale rather than in a controlled study
 (\S\ref{sec:certification}), and (iii) the audit that follows from it
 (\S\ref{sec:audit}).
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 7). The churn<->CA algebraic
+% identity and the layer-level detail were dropped; the interconvertibility is
+% asserted, which is what the positioning needs.
+% THE NO-PRIORITY-CLAIM SENTENCE AND ITS SOURCE COMMENT ARE UNTOUCHED AND MUST
+% STAY VERBATIM -- it is a dated, author-affirmed statement about precedence.
 Concurrent work reaches the same premise independently.
 \citet{rababah2026illusion}, posted two days before our preregistration froze
 and unknown to us until the prior-art sweep of 2026-07-24, define
 \emph{correctness agreement}---the per-item rate at which base and quantized
 models are both correct on the same input. That statistic is the joint-correct
 cell of the same $2\times2$ table our accuracy-state churn is built from, and
-the two are interconvertible given the marginal accuracies: with $a$ both
-correct, $b$ base-only correct and $c$ quantized-only correct,
-$\mathrm{churn} = (b+c)/n = \mathrm{Acc}_{\mathrm{base}} +
-\mathrm{Acc}_{\mathrm{quant}} - 2\,\mathrm{CA}$. They study a quantization
-family disjoint from ours---\texttt{llama.cpp} GGUF legacy and $k$-quant rather
-than GPTQ and AWQ---and reach a conclusion consistent with ours. We read this as
+the two are interconvertible given the marginal accuracies. They study a
+quantization family disjoint from ours---\texttt{llama.cpp} GGUF legacy and
+$k$-quant rather than GPTQ and AWQ---and reach a conclusion consistent with
+ours. We read this as
 external corroboration of the premise, not competition on it, and we make no
 priority claim over it: no committed artifact in this repository predates its
 posting.
@@ -332,10 +334,7 @@ posting.
 What they do not supply, and what the rest of this paper is, is the machinery
 that turns the shared premise into a decision: equivalence testing at a declared
 margin, required-$n$, a preregistered test of whether the calibration seed
-reorders two methods, and an audit of published claims. Their paper reports no
-equivalence test, no power or sample-size computation, and no per-item release;
-it also reports a layer-level analysis---query and key projections more
-sensitive than value and output---that we do not attempt.
+reorders two methods, and an audit of published claims.
 
 Two further concurrent studies measure per-item change on adjacent objects.
 % SOURCE: docs/PRIOR_ART_CONCURRENT_2026-07-24.md §§3-4, both verified against
@@ -344,7 +343,7 @@ Two further concurrent studies measure per-item change on adjacent objects.
 per-item comparisons between model \emph{versions} rather than precisions, and
 likewise recommends reporting a churn rate beside the mean;
 \citet{nikolic2026displacement} extend the flips metric into a leapfrog/drop
-decomposition over dozens of community-published quantized checkpoints, and find
+decomposition over community-published quantized checkpoints, and find
 that KL-divergence proxies lose their ranking signal in precisely the
 near-baseline region our certification tables adjudicate.
 
@@ -449,24 +448,26 @@ that settling it would not have answered the question either way.
 
 \subsection{Losslessness, defined and achieved versus audited}
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 2). The enumeration of the three
+% losslessness notions and the gamma^2 variance law was dropped; the positioning
+% -- which is what this subsection is for -- is kept whole, including the
+% complementarity statement.
 \citet{helcig2026slq} occupy the phrase this paper is about. They formalise
-three notions of losslessness for quantized LLMs---task-lossless (zero-shot
-accuracy preserved within sampling variance), the stricter
-distribution-lossless (next-token distributions practically indistinguishable),
-and a $\gamma^2$ variance law relating symmetric to asymmetric
-quantization---propose the Expected Acceptance Rate as an interpretable fidelity
-metric, and ship SLQ, a method that reaches those targets at low bit widths.
+notions of losslessness for quantized LLMs (task-lossless and the stricter
+distribution-lossless), propose the Expected Acceptance Rate as an interpretable
+fidelity metric, and ship SLQ, a method that reaches those targets at low bit
+widths.
 
 Their question and ours are different, and the difference is the whole of
 \S\ref{sec:certification}. \emph{They define losslessness and build a method to
 achieve it.} \emph{We audit whether existing published claims of losslessness
 have the evidence to support them, and compute how many items it would take to
 certify one.} Their paper contains no equivalence test at a declared margin, no
-power or required-$n$ computation, no McNemar test, and no audit of others'
-claims; ours contains no quantization method. The two are complements: a
-practitioner who adopts EAR as a fidelity target still needs to know how large
-an evaluation must be before the accuracy half of a losslessness claim means
-anything, and that number is what our certification tables supply.
+power or required-$n$ computation, and no audit of others' claims; ours contains
+no quantization method. A practitioner who adopts EAR as a fidelity target still
+needs to know how large an evaluation must be before the accuracy half of a
+losslessness claim means anything, and that number is what our certification
+tables supply.
 
 \subsection{Statistics for language-model evaluation}
 
@@ -614,6 +615,10 @@ whatever that rule returns.
 % Full text, including the retired anecdote, at app:prereg:contact. Do not
 % restate the anecdote here -- see the disclosure boundary at the top of this
 % file.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 10). All three disclosures are
+% still named here -- omitting any of them would defeat the purpose of the
+% subsection -- with the per-item justification moved to the appendix, which
+% already carries them at 327 words.
 Preregistration is a claim about ordering, so the places where our order was
 imperfect are disclosed by the registrations themselves rather than discovered
 by a reader. Three exist, all recorded in the frozen documents: five audit
@@ -622,10 +627,10 @@ no power computation run on any of them; two atlas feasibility probes whose
 results were known before the mining registration was drafted, flagged and
 excluded from every headline aggregate at the level of the whole pair (99 cells,
 not two tasks); and one pre-registration motivating observation, retired from
-every quantitative use both because it is pre-registration contact and because
-it lies outside the frozen 59-pair manifest, its registered replacement being
-the identical-score statistic of \S\ref{sec:atlas:identical}.
-Appendix~\ref{app:prereg:contact} gives all three in full.
+every quantitative use, its registered replacement being the identical-score
+statistic of \S\ref{sec:atlas:identical}.
+Appendix~\ref{app:prereg:contact} gives all three in full, with the reasoning
+for each.
 
 \subsection{The interpretive choices that moved the headline}
 \label{sec:prereg:choices}
@@ -838,21 +843,24 @@ any verdict was computed.\footnote{%
 % 715a7ce, sha256 842b9756...5af7b15).
 Registration frozen at commit \texttt{b74fd58}; claim table frozen at commit
 \texttt{715a7ce} with its sha256 recorded in the verdicts document.}
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 8). The trigger vocabulary is
+% enumerated in full in docs/AUDIT_REGISTRATION_2026-07-15.md §3 and in the
+% released claim table; the body keeps the criterion, the exhaustiveness
+% guarantee and the 7/7/3 split, which are the load-bearing parts.
 Sources were enumerated exhaustively within three fixed frames: method papers
-(F1), official quantized model cards (F2), and inference-stack vendor
-blogs and documentation (F3). A source enters the pool if it asserts, in prose
-or a table caption, that a compressed model's benchmark quality is
-equivalent-or-negligibly-different from its uncompressed baseline, using a fixed
-trigger vocabulary (``near-lossless'', ``negligible'', ``no (significant)
-degradation'', ``matches'', ``preserves accuracy'', ``$X\%$ recovery'' with
-$X \geq 98$, or an explicit $\leq 1$\,pp delta framed as parity). Every claim
+(F1), official quantized model cards (F2), and inference-stack vendor blogs and
+documentation (F3). A source enters the pool if it asserts, in prose or a table
+caption, that a compressed model's benchmark quality is
+equivalent-or-negligibly-different from its uncompressed baseline, under a fixed
+trigger vocabulary registered in advance (``near-lossless'', ``negligible'',
+``$X\%$ recovery'' with $X \geq 98$, and four further triggers, among them an
+explicit $\leq 1$\,pp delta framed as parity). Every claim
 meeting the criterion is audited; there is no discretionary sub-selection.
 % SOURCE: docs/audit_claim_table.csv column `frame`: F1=7, F2=7, F3=3.
 The frozen table contains 17 claims: 7 method papers, 7 official model cards or
-official blogs, and 3 inference-stack vendor documents. Each claim's fields were
-extracted twice by mutually blind extraction passes, with source content hashes
-recorded, and discrepancies reconciled before the verdict stage
-(\S\ref{sec:prereg}).
+blogs, and 3 vendor documents. Each claim's fields were extracted twice by
+mutually blind passes, with source content hashes recorded, and discrepancies
+reconciled before the verdict stage (\S\ref{sec:prereg}).
 
 We state the limit of the exercise before its results.
 % SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4 closing paragraph.
@@ -933,18 +941,15 @@ cosmetic; see \S\ref{sec:prereg:choices}, interpretive choice~5.
 \texttt{per\_item\_outputs\_released} column and cross-checked against the
 extraction reconciliation memo.
 
+% RELOCATED 2026-07-27 (phase 4 trim, candidate 1). The tier-by-tier match
+% counts and the None-descent rule moved VERBATIM to
+% Appendix~\ref{app:audit:imputation}. Nothing was deleted.
 \paragraph{Discordance imputation.} $p_d$ is not reported by any source, so it
 is imputed from the atlas (\S\ref{sec:atlas}) by matching the nearest
 (method family, bit width, benchmark) cell, most-specific tier first, taking the
 \emph{median} over the first non-empty tier because per-cell discordance is
-right-skewed.
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
-One claim matched at tier~1 (family + bits + benchmark), 11 at tier~2
-(family + bits), 2 at tier~3 (bits + benchmark), 1 at tier~4 (bits), and 2 fell
-through to the global tier. A tier whose target field is \texttt{None} cannot
-match, so a pruning claim with no bit width descends automatically rather than
-being forced into a wrong cell. Both disclosed feasibility-probe pairs (99
-atlas cells) are excluded from the imputation pool, per the atlas registration.
+right-skewed. Appendix~\ref{app:audit:imputation} gives the tier-by-tier match
+counts and the rule by which an unmatchable field descends.
 
 \paragraph{Robustness.} Every quantity is recomputed under the
 independent-binomial bound $\mathrm{sd} = \sqrt{2p(1-p)}$ and swept over 1\,pp
@@ -1035,24 +1040,20 @@ the released CSV for transparency, but they are excluded from $K$
 % single sentence or read as one finding. This paragraph merges the two former
 % paragraphs (2026-07-26) but deliberately keeps the two facts in separate
 % sentences with the coincidence stated explicitly.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 3). BOTH FINDINGS STAY HERE, in
+% separate sentences, because the comment above forbids merging them. What moved
+% to Appendix~\ref{app:audit:robustness} is the REASONING: why the own-margin
+% reading is primary, and why R04/R14 keep the margin_sensitive column without
+% being counted. Nothing was deleted.
 First, judging every claim against the uniform registered 2\,pp margin rather
-than the margin it states for itself gives \textbf{1 of 12 underpowered}; both
-readings are reported and both ship in the released CSV (\texttt{verdict},
-\texttt{verdict\_at\_registered\_2pp}). The factor-of-four difference between
-them is interpretive, not statistical, and the reasoning that selects the
-primary reading is at \S\ref{sec:prereg:choices}: the frozen label is
-``underpowered for its \emph{own} assertion'', and judging a 0.15\,pp parity
-claim against a 2\,pp yardstick audits a claim nobody made. Second, and
-separately, exactly \textbf{1 of the 12 determinate claims is margin-sensitive}:
-R01, whose verdict flips between underpowered and adequately powered across the
-1\,pp\,$\to$\,3\,pp sweep, making that verdict an artefact of margin choice
-rather than a robust finding; it is reported as such rather than counted as
-evidence in either direction. Margin sensitivity qualifies a headline verdict,
-so it is counted over the claims that have one---R04 and R14 also flip across
-the sweep and retain the \texttt{margin\_sensitive} column in the released CSV,
-but neither carries a verdict to qualify. These are two distinct
-properties---a verdict under an alternative yardstick, and instability of a
-verdict across the sweep---that coincide on one claim.
+than the margin it states for itself gives \textbf{1 of 12 underpowered}. Second,
+and separately, exactly \textbf{1 of the 12 determinate claims is
+margin-sensitive}: R01's verdict flips across the 1\,pp\,$\to$\,3\,pp sweep,
+making it an artefact of margin choice rather than a robust finding. These are
+two distinct properties---a verdict under an alternative yardstick, and
+instability of a verdict across the sweep---that happen to coincide on one
+claim, and they must not be read as one finding.
+Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 
 \subsection{Indeterminate claims: a finding, not a gap}
 \label{sec:audit:indeterminate}
@@ -1324,26 +1325,24 @@ certification tables are empirical rather than analytic.
 % content, in order: (1) <4-cell families omitted, (2) the two thin rows,
 % (3) family aggregation mixes two variation sources, (4) the 99 probe cells,
 % (5) certification n != detection n.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 6). Caveats 2 (thin rows), 3
+% (family aggregation) and 4 (probe-pair exclusion) moved VERBATIM to
+% Appendix~\ref{app:cert:caveats-detail}. Caveats 1 and 5 stay in the body:
+% caveat 1 is the omission rule that defines which rows exist at all, and
+% caveat 5 is the certification-vs-detection distinction this whole section
+% exists to draw. Nothing was deleted.
 These caveats travel with the table, and any reuse of it should carry them.
 Families with fewer than four analysable cells are omitted, because a quartile
 over three points is not an empirical distribution; this drops nothing from the
 registered set, and all surviving families appear in
 Table~\ref{tab:certification}. Of those that survive, two rest on thin evidence
 and are indicative only---\texttt{mmlu\_pro} (5 cells) and \texttt{ifeval}
-(8)---while rev-2 moved \texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to
-24, \texttt{hellaswag} to 23 and \texttt{winogrande} to 23, taking those out of
-the thin category, and \texttt{mmlu} (1{,}311), \texttt{bbh} (192) and
-\texttt{math} (56) are well supported; a reader should treat the thin rows as a
-starting hypothesis to be replaced by their own measured churn, not as a
-reference constant. Family aggregation mixes two sources of variation, since the
-atlas collapses MMLU's 57 per-subject cells and BBH/MATH/MuSR/GPQA's per-subtask
-cells into families, so a family's spread combines subject-level with
-model-level variation---which widens the p25--p75 band relative to what a single
-practitioner evaluating a single model would see, and therefore makes the
-quartile columns \emph{conservative} rather than optimistic. Both disclosed
-feasibility-probe pairs (99 cells) are excluded per the atlas registration §6, as
-tiny hand-built sanity pairs---$n$ as low as 10, discordance up to 0.9---that
-would distort every quartile. Finally, these are certification sample sizes, not
+(8)---and should be treated as a starting hypothesis to be replaced by the
+reader's own measured churn, not as a reference constant.
+Appendix~\ref{app:cert:caveats-detail} covers the remaining two: that family
+aggregation makes the quartile columns \emph{conservative} rather than
+optimistic, and that both disclosed feasibility-probe pairs are excluded.
+Finally, these are certification sample sizes, not
 detection sample sizes: they certify equivalence within $\pm m$, the $n$ required
 to \emph{detect} a difference at the same margin is larger, and reporting one as
 the other is the error this section exists to prevent.
@@ -1404,6 +1403,11 @@ and the test still has to be run and to pass.
 \subsection{Construction}
 \label{sec:atlas:construction}
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 4). The S1/S2 source descriptions,
+% the descriptive-scope statement and the item-pairing mechanics moved VERBATIM
+% to Appendix~\ref{app:atlas-detail}. Nothing was deleted. The prompt-hash
+% identity rule is RESTATED here rather than only relocated, because §5 cites it
+% as the admission control.
 The atlas mines paired per-item records from public evaluation dumps at zero GPU
 cost. Its protocol was registered and frozen on 2026-07-15, before any flip
 statistic was computed beyond two feasibility probes that the registration
@@ -1412,38 +1416,34 @@ manifest, with dataset URLs, run timestamps, and task lists, before any flip
 statistic was computed.
 % SOURCE: docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 3.4; manifest freeze
 % commit f06348f per docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3.
-The registration exists to prevent source- or pair-selection after seeing
-results, and it labels these analyses descriptive: they estimate flip and churn
+These analyses are descriptive by registration: they estimate flip and churn
 magnitudes in the wild and feed the certification tables, they test no registered
 hypothesis, and they cannot substitute for any H3 cell.
 
-Two sources are in scope.
-\textbf{S1} is the Open LLM Leaderboard v1 archive---community quantizations
-(GPTQ, AWQ, GGUF, 8-bit and 4-bit bitsandbytes) of 2023-era base models, paired
-with their base model's details dataset whenever one exists.
-\textbf{S2} is the Neural Magic / Red~Hat per-item dumps for quantized
-Llama-3.1, covering W4A16, W8A8-INT8 and W8A8-FP8 at 8B, 70B and 405B.
-Item pairing is mechanical: items join on the source's own item key, duplicated
-keys are dropped entirely on both sides, and an item enters the paired analysis
-only if its full-prompt hash is identical across the pair. A pair-task cell is
-excluded if fewer than 99\% of joinable items pass that identity check. Differing
-harness commits do not exclude a cell---prompt-hash identity is the operative
-control---but are recorded per cell and disclosed.
+Two sources are in scope: \textbf{S1}, the Open LLM Leaderboard v1 archive of
+community quantizations of 2023-era base models, and \textbf{S2}, the Neural
+Magic / Red~Hat per-item dumps for quantized Llama-3.1 at 8B, 70B and 405B
+(Appendix~\ref{app:atlas:sources}). \textbf{An item enters the paired analysis
+only if its full-prompt hash is identical across the pair}, and a cell is
+excluded if fewer than 99\% of joinable items pass that check---prompt-hash
+identity, not harness version, is the operative control
+(Appendix~\ref{app:atlas:pairing}).
 
 \subsection{Coverage, and what the exclusions reveal}
 \label{sec:atlas:coverage}
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 4). The three-way exclusion
+% breakdown with its percentages moved VERBATIM to
+% Appendix~\ref{app:atlas:exclusions}. The headline counts stay here because the
+% empty-join finding below depends on them.
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1, first bullet;
-% results/atlas_exclusions.csv.
+% results/atlas_cells_summary_rev2.csv, reason column.
 % POPULATION: this subsection (and only this subsection) uses the 1,807 figure.
-% SOURCE: results/atlas_cells_summary_rev2.csv, reason column.
 The enumeration yields \textbf{2{,}055} pair-task cells, of which
-\textbf{1{,}807 are analysed} (S1 = 1{,}459, S2 = 348) and \textbf{248} are
-excluded or skipped. The exclusions break down as \textbf{179} cells (72.2\%)
-for which no results file exists for that task in any recorded run,
-\textbf{36} (14.5\%) whose join intersection is empty, and \textbf{33}
-(13.3\%) whose task carries no binary correctness metric in the data at all
-(genuinely float-scored tasks, which the flip model does not describe).
+\textbf{1{,}807 are analysed} and \textbf{248} are excluded or skipped, most
+often because no results file exists for that task in any recorded run
+(Appendix~\ref{app:atlas:exclusions} breaks the exclusions down by reason).
+One of those reasons is a finding in itself.
 
 Empty join intersections are a reporting-standards observation in their own
 right. An empty intersection means the two sides of the pair were evaluated on
@@ -1564,17 +1564,20 @@ move---17.2\% certifiable, 6.1\% detectably different---and
 % exact figures replace the bound in both places.
 
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 9). The closing three sentences
+% restated §\ref{sec:atlas:netgross}'s generational-change paragraph almost
+% verbatim ("better methods have made the difference smaller without making the
+% evidence any more sufficient"). Stated once there, referred to here.
 The S1$\to$S2 contrast is a genuine improvement in compression method and
 evaluation practice, and should be read as one. Median churn falls from 0.138 to
 0.048 and median absolute net delta from 0.026 to 0.009; a modern vendor
 quantization of an 8B--405B instruction-tuned model perturbs per-item behaviour
 roughly a third as much as a 2023 community quantization of a 7B base model, and
 its evaluations are correspondingly more often certifiable. What does \emph{not}
-improve is the evidential situation: the modal cell in both strata is one where
-the evaluation cannot answer the question the release note answers. Better
-methods have made the difference smaller without making the evidence for
-``no difference'' sufficient, because certifying a smaller margin requires
-\emph{more} items, not fewer (\S\ref{sec:cert:table}).
+improve is the evidential situation: the modal cell in \emph{both} strata is one
+where the evaluation cannot answer the question the release note answers, for
+the reason \S\ref{sec:atlas:netgross} gives---certifying a smaller margin
+requires \emph{more} items, not fewer.
 
 \subsection{Identical scores, different answers}
 \label{sec:atlas:identical}
@@ -2305,15 +2308,16 @@ authorizing construction and evaluation of the deferred 7B/8B seed cells
 % 11375247, 409/409, passed:true; first inspection authorized 2026-07-23) and
 % "Provenance" (gates re-derived under Amendment 3,
 % docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md, committed bd565bd).
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 12). Both facts kept -- the seal
+% held until the validator passed, and the gates were settled before any
+% inspection -- with the document path dropped to the commit hash.
 The four cells stayed sealed---no accuracy read by anyone---until the registered
 validator passed over the complete 44-JSONL expected set (job \texttt{11375247},
 409/409 checks), which is the first mini-grid accuracy inspection the
-registration permits and the same-day escalation record it requires. The FP16
-gate failure that preceded the run, and its correction, were resolved \emph{before}
-any inspection: the gates behind these cells were re-derived under Amendment~3
-(\texttt{docs/MINIGRID\_FP16\_GATE\_DERIVATION\_2026-07-21.md}, committed
-\texttt{bd565bd}), so the screen fired on a grid whose reference gates were
-already settled rather than tuned to its result.
+registration permits. The FP16 gate failure that preceded the run was resolved
+\emph{before} any inspection, the gates being re-derived under Amendment~3
+(committed \texttt{bd565bd}), so the screen fired on a grid whose reference
+gates were already settled rather than tuned to its result.
 
 \paragraph{This screen is not the H3 verdict.}
 % SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md, "Decision" paragraph
@@ -2391,13 +2395,15 @@ GSM8K accuracy $0.232 \to 0.566$ with not one token of model output changed
 % "C_cond and Qbar always reported beside it", undefined-if-zero rule);
 % docs/HARNESS_SENSITIVITY_QBAR_2026-07-23.md (Qbar(mmlu)=0.199000,
 % Qbar(gsm8k)=0.287000); results/harness_sensitivity/qbar_qwen25-1p5b.json.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 5). The full construction of R and
+% its two-phase Qbar deferral are already stated in
+% Appendix~\ref{app:sensitivity:design}; the body keeps the definition, both
+% denominator values and the reporting rule, which is what the tables need.
 The headline statistic, fixed before any run, is
-$R_{\mathrm{cond}} = C_{\mathrm{cond}}/\bar{Q}$: the numerator is
-correctness-state churn between the reference configuration and a condition on
-the fixed FP16 model---the atlas churn definition (\S\ref{sec:atlas})---and the
-denominator is the mean correctness-state churn of the ten Qwen2.5-1.5B
-quantized variants against that model's FP16 cell on the same items, per task,
-giving $\bar{Q}(\text{MMLU}) = \mathbf{0.199}$ and
+$R_{\mathrm{cond}} = C_{\mathrm{cond}}/\bar{Q}$: churn between the reference
+configuration and a condition on the fixed FP16 model, over the mean churn of
+the ten Qwen2.5-1.5B quantized variants against that model's FP16 cell on the
+same items---$\bar{Q}(\text{MMLU}) = \mathbf{0.199}$,
 $\bar{Q}(\text{GSM8K}) = \mathbf{0.287}$. So $R$ asks directly how a
 configuration change compares with swapping in a quantized model. The
 registration forbids printing the ratio without both inputs, and both appear in
@@ -2431,15 +2437,16 @@ D & stock defaults (chat off, 5-shot) & 0.495 & $-0.080$ & \textbf{0.300} & 38 /
 \end{tabular}
 \end{table}
 
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 5). The per-condition R values are
+% in the table one line above; restating all four in prose was redundant.
 Table~\ref{tab:sensitivity-gsm8k} reads directly against the denominator. Three
-of the four GSM8K conditions---C, D, and B---have $R \geq 1$: turning the chat
-template off (C, $R=1.115$), accepting every stock default at once (D,
-$R=1.045$), and switching the extraction filter (B, $R=1.585$) each move a fixed
-model's per-item correctness by \emph{as much as or more than} swapping GPTQ for
-one of ten quantized variants moves it. Only condition~A, the multiturn
-exemplar placement, stays below the quantization scale ($R=0.836$). The net
-accuracy deltas ($-0.06$ to $-0.455$) understate the movement in every case,
-because they net directional churn that the
+of the four GSM8K conditions---turning the chat template off, accepting every
+stock default at once, and switching the extraction filter---have $R \geq 1$:
+each moves a fixed model's per-item correctness by \emph{as much as or more
+than} swapping in one of ten quantized variants moves it. Only condition~A, the
+multiturn exemplar placement, stays below the quantization scale ($R=0.836$).
+The net accuracy deltas understate the movement in every case, because they net
+directional churn that the
 $\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column keeps separate.
 % SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K table (R values
 % 0.836/1.585/1.115/1.045; net deltas -0.060/-0.455/-0.100/-0.080).
@@ -2521,48 +2528,72 @@ methods themselves.
 
 ```latex
 % =====================================================================
-% Section: Discriminant validity -- SKELETON with pilot numbers wired.
-% COMPRESSED IN PLACE 2026-07-26 to a single paragraph plus the TODO. No
-% relocation. Everything the brief required survives: both pilot results, both
-% p-values, the churn figures, the required-n figures, the point that the
-% smaller evaluation is the one that detected nothing, and the pilot's caveats
-% folded into the same paragraph.
+% Section: Discriminant validity.
 %
-% SOURCE for every number: results/PILOT_RESULTS.md (archive
-% pilot_outputs_20260711T000427Z.tar.gz, sha256 a72ff2fd...898a72ecb8), first
-% table (rows MMLU/GPTQ public, GSM8K/GPTQ public, GSM8K/AWQ public) and second
-% table (required-n columns). The pilot is exploratory evidence from an unpinned
-% Kaggle environment without chat templates, and it cannot test H3.
+% REWRITTEN 2026-07-27 (Amogh's ruling of the same day). Now leads with the
+% resolution figures from \S\ref{sec:minigrid:resolution}; the Kaggle pilot is
+% reduced to historical corroboration with its caveats intact.
+%
+% THE \TODO IS DELETED AS SUPERSEDED, NOT SILENTLY DROPPED. It read "replace or
+% supplement with controlled cells from §7 once they exist". Those cells now
+% exist. A REGISTERED ANALYSIS OVER THE CONFIRMATORY CELLS WAS CONSIDERED AND
+% DECLINED: it would be a new computation on confirmatory data, requiring a
+% dated registration before it ran, and it is unnecessary because the resolution
+% figures ALREADY REPORTED in §7 carry the discriminant claim on their own.
+% Interpreting an already-reported quantity is not a new analysis. NOTHING IS
+% COMPUTED HERE -- every number below is read from
+% Table~\ref{tab:h3-resolution}, Table~\ref{tab:h3-eightcell}, or the pilot.
+%
+% SOURCE, §7 figures: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md step 5
+% table (gap/SE and max_range/SE per cell) and
+% docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (gap column).
+%   MMLU  gap/SE:  3.36, 8.45, 2.21, 4.80          -> "2.2 to 8.5"
+%   MMLU  range/SE: 11.07, 17.45, 5.53, 11.19      -> "5.5 to 17.5"
+%   GSM8K gap/SE:  5.65, 1.23, 0.44, 0.98          -> three at or below 1.25
+%   qwen25-1p5b/gsm8k gap = 0.096800 = 9.68 pp at 5.65 SE
+% These are POST-HOC and are labelled as such wherever they appear (§7).
+%
+% SOURCE, pilot: results/PILOT_RESULTS.md (archive
+% pilot_outputs_20260711T000427Z.tar.gz, sha256 a72ff2fd...898a72ecb8).
 % =====================================================================
 
 \section{Discriminant validity: the framework does not call everything noise}
 \label{sec:discriminant}
 
-A certification-first framework invites one objection: a method demanding
-thousands of items before declaring anything will declare nothing. The same
-analysis applied to two comparisons answers it. In the project's
-public-checkpoint pilot, MMLU with a public GPTQ checkpoint at $n = 400$ showed
-a net delta of $-4.25$\,pp, flip rates of $0.095$ harmful and $0.0525$
-beneficial, and exact McNemar $p = 0.036$: a detectable degradation. On GSM8K at
-$n = 200$, net deltas were $+2.0$\,pp (GPTQ, $p = 0.672$) and $+1.0$\,pp (AWQ,
-$p = 0.880$), with accuracy-state churn of $0.250$ and $0.220$ and total answer
-churn of $0.630$ and $0.620$---noise-indistinguishable differences sitting on
-very large behavioural change, and detecting them at 80\% power would have
-needed 4{,}923 and 17{,}347 items against the 200 evaluated. The framework thus
-separates real damage from cancellation noise with one analysis and no post-hoc
-thresholds, and not in the convenient direction: \emph{the smaller evaluation is
-the one that detected nothing}, which is what an underpowered evaluation should
-do. The GSM8K rows are also a compact instance of the net-versus-gross gap
-\S\ref{sec:atlas} measures at scale. The pilot's own caveats bound all of it:
-raw-text prompts with no chat template, so absolute accuracies sit far below a
-standard instruct evaluation; an unpinned Kaggle image modified in place; two
-public checkpoints with fixed or undocumented calibration, so it cannot test H3;
-and wide intervals at $n = 400$ and $200$. It is exploratory evidence for
-discriminant behaviour and nothing else.
+A certification-first framework invites one objection: a method that demands
+thousands of items before declaring anything will declare nothing. The eight
+confirmatory cells answer it, using only what
+\S\ref{sec:minigrid:resolution} already reports.
 
-\TODO{replace or supplement with controlled cells from \S\ref{sec:minigrid}
-once they exist, keeping the pilot as the historical record of the same
-demonstration under worse conditions}
+On \textbf{MMLU} at $n = 14{,}042$, the GPTQ--AWQ gaps run \textbf{2.2 to 8.5
+paired standard errors} and the seed-induced ranges \textbf{5.5 to 17.5}: the
+benchmark resolves both the effect and the instability around it. On
+\textbf{GSM8K} at $n = 1{,}000$, \textbf{three of the four gaps sit at or below
+1.25 paired SE}---that arm cannot resolve what it was built to measure, which
+\S\ref{sec:minigrid:resolution} and \S\ref{sec:limitations} state rather than
+average away.
+
+The sharper point is the fourth GSM8K cell. Qwen2.5-1.5B posts a GPTQ--AWQ gap
+of \textbf{9.68\,pp}, which lands at \textbf{5.65 paired SE}---resolved, on the
+same benchmark, at the same $n = 1{,}000$, under the same test, where its three
+siblings are not. \emph{Same items, same instrument, opposite verdicts, separated
+by effect size rather than by any threshold somebody chose.} The machinery
+declines to adjudicate where the evidence is thin and adjudicates where it is
+not, \emph{within} one benchmark at one sample size. A framework that returned
+``insufficient evidence'' everywhere could not produce that pattern, and neither
+could one tuned to a convenient cut-off.
+
+The project's earlier public-checkpoint pilot shows the same behaviour under
+worse conditions, and adds the case the eight cells lack---a positive detection:
+MMLU with a public GPTQ checkpoint at $n = 400$ gave $-4.25$\,pp at exact
+McNemar $p = 0.036$, while GSM8K at $n = 200$ gave $p = 0.672$ and $p = 0.880$
+on churn of $0.250$ and $0.220$, two correct declinations where detection would
+have needed 4{,}923 and 17{,}347 items. \emph{The smaller evaluation is the one
+that detected nothing.} Its caveats bound it entirely---raw-text prompts with no
+chat template, an unpinned Kaggle image modified in place, two public
+checkpoints with fixed or undocumented calibration so it cannot test H3, and
+wide intervals at $n = 400$ and $200$---and it is exploratory evidence for
+discriminant behaviour and nothing else.
 ```
 
 ---
@@ -2766,14 +2797,17 @@ audited claim unscoreable (\S\ref{sec:audit:r04}).
 % marker named is met. The independent-check requirement did real work -- it is
 % what produced the rev-1 -> rev-2 correction -- so the paragraph is restated
 % rather than removed.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 11). The spot-check narrative is
+% told in full at \S\ref{sec:prereg-spotcheck}; this paragraph keeps only what a
+% limitations section owes -- the provisional status is lifted, and on what
+% evidence. Both reconciliation counts are retained.
 The atlas pipeline had two bugs found and fixed during its run, and its numbers
 were held provisional pending an independent spot-check. That check has since
-been completed twice: a first pass over ten stratified cells reconciled all 262
-compared fields and surfaced the population defect that produced rev-2
-(\S\ref{sec:prereg-spotcheck}), and a targeted second pass over the recovered
-cells reconciled 14 of 14 cells and 126 of 126 fields. The figures reported here
-are rev-2 and are no longer provisional. The correction itself, and the delta
-between the two revisions, are reported rather than absorbed
+been completed twice---262 compared fields reconciled on the first pass, which
+surfaced the population defect that produced rev-2, and 14 of 14 cells with 126
+of 126 fields on the targeted second (\S\ref{sec:prereg-spotcheck}). The figures
+reported here are rev-2 and are no longer provisional; the delta between the two
+revisions is reported rather than absorbed
 (Appendix~\ref{app:prereg:rev2delta}).
 ```
 
@@ -2897,6 +2931,61 @@ counted in $K$; they are retained so that a reader can see exactly what the
 analysis could and could not evaluate. R04's GSM8K computation is the largest
 such quantity and is discussed in \S\ref{sec:audit:r04}.
 
+\section{Audit method detail}
+\label{app:audit-method}
+
+% RELOCATED 2026-07-27 (phase 4 trim, candidates 1 and 3). Moved VERBATIM in
+% content from sections/audit.tex; nothing was deleted in the move. The body
+% keeps both findings and points here for the mechanism.
+
+\subsection{Discordance imputation}
+\label{app:audit:imputation}
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
+The discordance rate $p_d$ is not reported by any audited source, so it is
+imputed from the atlas (\S\ref{sec:atlas}) by matching the nearest (method
+family, bit width, benchmark) cell, most-specific tier first, taking the
+\emph{median} over the first non-empty tier because per-cell discordance is
+right-skewed. One claim matched at tier~1 (family + bits + benchmark), 11 at
+tier~2 (family + bits), 2 at tier~3 (bits + benchmark), 1 at tier~4 (bits), and
+2 fell through to the global tier. A tier whose target field is \texttt{None}
+cannot match, so a pruning claim with no bit width descends automatically rather
+than being forced into a wrong cell. Both disclosed feasibility-probe pairs (99
+atlas cells) are excluded from the imputation pool, per the atlas registration.
+
+\subsection{The two robustness readings, and why they stay separate}
+\label{app:audit:robustness}
+
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
+% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts_rev2.csv
+% columns verdict_at_registered_2pp and margin_sensitive.
+% CARE -- THE TWO "1 of 12" FIGURES ARE DIFFERENT FACTS. First: one determinate
+% claim is underpowered under the uniform 2 pp yardstick. Second: one
+% determinate claim's verdict is unstable across the 1 pp -> 3 pp sweep. They
+% happen to concern the same claim (R01) and MUST NEVER be merged into a single
+% sentence or read as one finding. The body states both separately and points
+% here; this appendix carries the reasoning.
+
+Both readings ship in the released CSV (\texttt{verdict},
+\texttt{verdict\_at\_registered\_2pp}). The factor-of-four difference between
+judging each claim against its own stated margin and judging all of them against
+the uniform registered 2\,pp margin is \emph{interpretive, not statistical}, and
+the reasoning that selects the primary reading is at
+\S\ref{sec:prereg:choices}: the frozen label is ``underpowered for its
+\emph{own} assertion'', and judging a 0.15\,pp parity claim against a 2\,pp
+yardstick audits a claim nobody made.
+
+Margin sensitivity is a separate property, and it qualifies a headline verdict,
+so it is counted over the claims that have one. R01's verdict flips between
+underpowered and adequately powered across the 1\,pp\,$\to$\,3\,pp sweep, making
+that verdict an artefact of margin choice rather than a robust finding; it is
+reported as such rather than counted as evidence in either direction. R04 and
+R14 also flip across the sweep and retain the \texttt{margin\_sensitive} column
+in the released CSV, but neither carries a verdict to qualify.
+
+These are two distinct properties---a verdict under an alternative yardstick,
+and instability of a verdict across the sweep---that coincide on one claim.
+
 \section{Certification tables at 1\,pp and 3\,pp}
 \label{app:certification-margins}
 
@@ -2918,6 +3007,34 @@ and 962 at 3\,pp.}
 % The stale value sat inside this TODO rather than in typeset body text, so it
 % was never a rendered claim -- but it is the instruction this appendix would
 % have been typeset from.
+
+\subsection{Scope caveats carried from the main text}
+\label{app:cert:caveats-detail}
+
+% RELOCATED 2026-07-27 (phase 4 trim, candidate 6) from
+% sections/certification.tex §"Scope and caveats", caveats 2, 3 and 4, moved
+% VERBATIM in content. Caveats 1 and 5 remain in the body.
+% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats";
+% results/certification_tables_rev2.csv column n_atlas_cells.
+
+\paragraph{Cell counts behind each family.} Rev-2 moved
+\texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to 24, \texttt{hellaswag}
+to 23 and \texttt{winogrande} to 23, taking those out of the thin category;
+\texttt{mmlu} (1{,}311), \texttt{bbh} (192) and \texttt{math} (56) are well
+supported. Only \texttt{mmlu\_pro} (5) and \texttt{ifeval} (8) remain thin, as
+the main text states.
+
+\paragraph{Family aggregation mixes two sources of variation.} The atlas
+collapses MMLU's 57 per-subject cells and BBH/MATH/MuSR/GPQA's per-subtask cells
+into families, so a family's spread combines subject-level with model-level
+variation. This widens the p25--p75 band relative to what a single practitioner
+evaluating a single model would see, and therefore makes the quartile columns
+\emph{conservative} rather than optimistic.
+
+\paragraph{Feasibility-probe pairs are excluded.} Both disclosed
+feasibility-probe pairs (99 cells) are excluded per the atlas registration §6,
+as tiny hand-built sanity pairs---$n$ as low as 10, discordance up to
+0.9---that would distort every quartile.
 
 \section{Preregistration documents}
 \label{app:registrations}
@@ -3228,6 +3345,72 @@ would when the repair was authorised.
 
 ---
 
+## FILE: `paper/sections/appendix_atlas_detail.tex`
+
+```latex
+% =====================================================================
+% Appendix: Atlas construction detail.
+% CREATED 2026-07-27 (phase 4 trim, candidate 4). Content moved from
+% sections/atlas.tex §§"Construction" and "Coverage, and what the exclusions
+% reveal". NOTHING WAS DELETED IN THE MOVE.
+%
+% What deliberately did NOT move, and must not: the prompt-hash identity
+% control (it is the operative admission rule and is cited from §5), the
+% empty-join observation (it is a finding, not mechanics), and the paragraph
+% recording that rev-1 overstated the exclusions (self-correction the paper is
+% partly about).
+% =====================================================================
+
+\section{Atlas construction detail}
+\label{app:atlas-detail}
+
+\subsection{The two sources}
+\label{app:atlas:sources}
+
+% SOURCE: docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 3.4.
+\textbf{S1} is the Open LLM Leaderboard v1 archive---community quantizations
+(GPTQ, AWQ, GGUF, 8-bit and 4-bit bitsandbytes) of 2023-era base models, paired
+with their base model's details dataset whenever one exists. \textbf{S2} is the
+Neural Magic / Red~Hat per-item dumps for quantized Llama-3.1, covering W4A16,
+W8A8-INT8 and W8A8-FP8 at 8B, 70B and 405B.
+
+The registration exists to prevent source- or pair-selection after seeing
+results, and it labels these analyses descriptive: they estimate flip and churn
+magnitudes in the wild and feed the certification tables, they test no registered
+hypothesis, and they cannot substitute for any H3 cell.
+
+\subsection{Item pairing}
+\label{app:atlas:pairing}
+
+Item pairing is mechanical: items join on the source's own item key, duplicated
+keys are dropped entirely on both sides, and an item enters the paired analysis
+only if its full-prompt hash is identical across the pair. A pair-task cell is
+excluded if fewer than 99\% of joinable items pass that identity check. Differing
+harness commits do not exclude a cell---prompt-hash identity is the operative
+control---but are recorded per cell and disclosed.
+
+\subsection{Exclusion breakdown}
+\label{app:atlas:exclusions}
+
+% SOURCE: results/atlas_cells_summary_rev2.csv, reason column;
+% results/atlas_exclusions.csv.
+% POPULATION NOTE: these figures (and only these) use the 1,807 count, which is
+% the analysed set BEFORE the 99 disclosed probe cells and the float-scored
+% remainder are removed to reach the 1,707 analysis population of §5.3.
+The enumeration yields \textbf{2{,}055} pair-task cells, of which
+\textbf{1{,}807 are analysed} (S1 = 1{,}459, S2 = 348) and \textbf{248} are
+excluded or skipped. The exclusions break down as \textbf{179} cells (72.2\%)
+for which no results file exists for that task in any recorded run,
+\textbf{36} (14.5\%) whose join intersection is empty, and \textbf{33}
+(13.3\%) whose task carries no binary correctness metric in the data at all
+(genuinely float-scored tasks, which the flip model does not describe).
+
+The full exclusion table ships with the release, one row per excluded cell with
+its reason, so the admitted population is auditable rather than asserted.
+```
+
+---
+
 ## FILE: `paper/sections/appendix_harness_detail.tex`
 
 ```latex
@@ -3530,6 +3713,8 @@ Sections in reading order (numbered as the compiled paper numbers them; front ma
 | App. | Full audit table | `paper/sections/appendix_audit_table.tex` |
 
 | App. | Preregistration detail | `paper/sections/appendix_prereg_detail.tex` |
+
+| App. | Atlas construction detail | `paper/sections/appendix_atlas_detail.tex` |
 
 | App. | Harness-sensitivity detail | `paper/sections/appendix_harness_detail.tex` |
 
