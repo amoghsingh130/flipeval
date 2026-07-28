@@ -5,10 +5,10 @@
 Audience: a coding agent working in the local `compression-eval` repository. No GPU access is assumed except where a task explicitly says "Kaggle validation" (the human runs those cells; you prepare them).
 
 Read first, in order:
-1. `handoffv1.md` — research plan, hypotheses (H1/H2/H3), metric definitions, pass criteria.
+1. `handoffv1.md` (planning document, removed before public release) — research plan, hypotheses (H1/H2/H3), metric definitions, pass criteria. Its research content was carried into `PREREGISTRATION.md` before the freeze.
 2. `KAGGLE_CHAT_HANDOFF_2026-07-10.md` — Kaggle setup, auto-gptq failure, public-checkpoint pivot.
 3. `KAGGLE_RUN_COMPLETION_HANDOFF_2026-07-10.md` — GPTQ loader recovery, run completion, known limitations.
-4. `paper-proposal-v3-dnb.md` — current paper positioning (NeurIPS D&B artifact paper).
+4. `paper-proposal-v3.md` — current paper positioning (NeurIPS D&B artifact paper). (This document originally called it `paper-proposal-v3-dnb.md`; that filename was never used on disk, and the references have been corrected to the real one.)
 
 ## Context you need
 
@@ -83,7 +83,7 @@ Also update `scripts/build_quantized.py` before main-grid checkpoint constructio
 
 ## Task 5: Pre-registration document
 
-Write `PREREGISTRATION.md` from the plan in `paper-proposal-v3-dnb.md` and `handoffv1.md`:
+Write `PREREGISTRATION.md` from the plan in `paper-proposal-v3.md` and `handoffv1.md` (planning document, removed before public release):
 - H1/H2/H3 stated exactly as in handoffv1 section "Claims".
 - Full grid: models (Qwen2.5-1.5B/7B-Instruct, Llama-3.2-1B-or-3B, Llama-3.1-8B-Instruct), methods (RTN, GPTQ, AWQ, SparseGPT-or-Wanda 2:4), bits (4, 3), 5 calibration seeds, 2 calibration datasets (C4, WikiText-2) on one model, benchmarks (MMLU, ARC-Challenge, HellaSwag subset, GSM8K >= 1000 items), chat template ON.
 - Primary metrics and exact decision rules for H3 confirm/disconfirm (e.g., "H3 supported if across 5 seeds the GPTQ-vs-AWQ winner flips on >= 1 benchmark for >= 2 of 4 models, or if seed-induced accuracy range exceeds the GPTQ-vs-AWQ mean gap").
@@ -100,7 +100,7 @@ Acceptance: `apptainer build` (or docker build) succeeds; CPU smoke test passes 
 
 ## Task 7: Literature-sweep support (assist only)
 
-Produce `docs/related_work_checklist.md`: a structured checklist of queries and venues (arXiv cs.CL/cs.LG 2025-2026: "flip rate" quantization, "calibration set" sensitivity GPTQ/AWQ, benchmark statistical power LLM, McNemar LLM evaluation) and a table skeleton with columns [paper, what it shows, overlap with H1/H2/H3, our differentiation]. Pre-fill the Dutta et al. "Accuracy is Not All You Need" row from `compression-eval-proposal-v2.md`. The human does the actual reading and judgment calls.
+Produce `docs/related_work_checklist.md`: a structured checklist of queries and venues (arXiv cs.CL/cs.LG 2025-2026: "flip rate" quantization, "calibration set" sensitivity GPTQ/AWQ, benchmark statistical power LLM, McNemar LLM evaluation) and a table skeleton with columns [paper, what it shows, overlap with H1/H2/H3, our differentiation]. Pre-fill the Dutta et al. "Accuracy is Not All You Need" row from `compression-eval-proposal-v2.md` (planning document, removed before public release); it is superseded by `paper-proposal-v3.md`. The human does the actual reading and judgment calls.
 
 ## Order and dependencies
 
