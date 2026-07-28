@@ -1,5 +1,34 @@
 # Artifact Release Checklist — v1.0.0
 
+> ## ⚠️ CORRECTION, 2026-07-28 — the repository was ALREADY PUBLIC
+>
+> **Step 1 below ("make the repository public") describes an event that had
+> already happened.** `gh repo view` returns `visibility: PUBLIC`, and the repo
+> has been public since **2026-07-20**. Every document in this chain — this
+> checklist, the decision record, the session reports — asserted it was private.
+> None of them checked. See **incident 28**.
+>
+> **Consequence, stated plainly.** The three personal documents were readable at
+> the public tip from 2026-07-20 until **2026-07-28**, because the deletion
+> commit `e4cae49` sat unpushed along with 86 others. They are now off the tip
+> (pushed `272136b..201424f`) and remain in history, which is the accepted
+> option-(b) position. Pushing did not retract the eight days; it moved the
+> documents from *findable at HEAD* to *recoverable by someone already digging*.
+>
+> **Branch rename, same day.** `codex/pre-pace-implementation` → `main`.
+> `main` did not previously exist locally or remotely, so nothing was forced and
+> nothing was lost; the old branch was deleted with `git branch -d` (which would
+> have refused had anything been unmerged). GitHub's default branch is now
+> `main`. The three cited freeze hashes `b74fd58`, `f06348f` and `715a7ce` all
+> still resolve — a rename moves no commits.
+>
+> `docs/PREPACE_FREEZE.json` still records `"branch": "codex/pre-pace-implementation"`
+> and is **deliberately not regenerated**: it is a dated record of the source
+> state at freeze time, its `created_at` and `source_commit` are historical, and
+> regenerating it to fix a cosmetic field would overwrite that record. It still
+> verifies `passed: true` — the branch field is metadata, not part of the
+> fingerprint.
+
 **For Amogh. Every step below needs credentials I do not have.** Preparation,
 scrubbing and verification are done; what remains is authentication and upload.
 
@@ -31,12 +60,12 @@ releases created *after* the toggle is switched on. Everything else is ordinary.
 | # | Step | Notes |
 |---|---|---|
 | 1 | **Make the repository public** | Settings → General → Danger Zone → Change visibility. Confirm `LICENSE` is Apache-2.0 first. |
-| 2 | **⚠️ ENABLE THE ZENODO–GITHUB TOGGLE FOR THIS REPO** | <https://zenodo.org> → sign in with GitHub → Settings → GitHub → switch **ON** for `AmoghSingh123/flipeval`. **This must happen before step 4.** |
+| 2 | **⚠️ ENABLE THE ZENODO–GITHUB TOGGLE FOR THIS REPO** | <https://zenodo.org> → sign in with GitHub → Settings → GitHub → switch **ON** for **`amoghsingh130/flipeval`** (GitHub handle). **This must happen before step 4.** |
 | 3 | **Tag** | `git tag v1.0.0 && git push origin v1.0.0` |
 | 4 | **Create a GitHub RELEASE from that tag** | `gh release create v1.0.0 --title "FlipEval v1.0.0" --notes "Companion code release for 'Certifying Compressed Language Models'."` **A tag alone mints nothing** — Zenodo triggers on the *release* event. |
 | 5 | **Record BOTH DOIs** | Zenodo issues a **concept DOI** (resolves to latest) and a **v1.0.0 version DOI**. Write both down. **The paper cites the version DOI** — it describes a frozen state. |
 | 6 | **`huggingface-cli login`** | |
-| 7 | **Upload the bundle** | `huggingface-cli upload AmoghSingh123/flipeval-artifacts <bundle_path> --repo-type=dataset` |
+| 7 | **Upload the bundle** | `huggingface-cli upload AmoghSingh123/flipeval-artifacts <bundle_path> --repo-type=dataset` — **`AmoghSingh123` is the HuggingFace handle**, not the GitHub one |
 | 8 | **Confirm the HF repo is public and not gated** | Settings → check visibility, and that no gating/access request is enabled. |
 
 **If step 4 happened before step 2:** Zenodo never saw the release. **Delete the
