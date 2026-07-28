@@ -23,82 +23,38 @@ copied into place.
 
 ---
 
-## Order of operations — the DOI must exist before the paper cites it
+## Order of operations — EXECUTE IN THIS ORDER
 
-### 1. GitHub release of `flipeval`, Apache-2.0, tag `v1.0.0`
+**Step 2 must precede step 4.** That is the whole trap: Zenodo only sees GitHub
+releases created *after* the toggle is switched on. Everything else is ordinary.
 
-**⚠️ Decide this first — see "Open decision" below.** The repository is currently
-private and its history contains material that should not go public as-is.
+| # | Step | Notes |
+|---|---|---|
+| 1 | **Make the repository public** | Settings → General → Danger Zone → Change visibility. Confirm `LICENSE` is Apache-2.0 first. |
+| 2 | **⚠️ ENABLE THE ZENODO–GITHUB TOGGLE FOR THIS REPO** | <https://zenodo.org> → sign in with GitHub → Settings → GitHub → switch **ON** for `AmoghSingh123/flipeval`. **This must happen before step 4.** |
+| 3 | **Tag** | `git tag v1.0.0 && git push origin v1.0.0` |
+| 4 | **Create a GitHub RELEASE from that tag** | `gh release create v1.0.0 --title "FlipEval v1.0.0" --notes "Companion code release for 'Certifying Compressed Language Models'."` **A tag alone mints nothing** — Zenodo triggers on the *release* event. |
+| 5 | **Record BOTH DOIs** | Zenodo issues a **concept DOI** (resolves to latest) and a **v1.0.0 version DOI**. Write both down. **The paper cites the version DOI** — it describes a frozen state. |
+| 6 | **`huggingface-cli login`** | |
+| 7 | **Upload the bundle** | `huggingface-cli upload AmoghSingh123/flipeval-artifacts <bundle_path> --repo-type=dataset` |
+| 8 | **Confirm the HF repo is public and not gated** | Settings → check visibility, and that no gating/access request is enabled. |
 
-```bash
-# after the repo-history decision is made and any exclusions are applied
-git tag -a v1.0.0 -m "FlipEval v1.0.0 — paper release"
-git push origin v1.0.0
-gh release create v1.0.0 --title "FlipEval v1.0.0" \
-  --notes "Companion code release for 'Certifying Compressed Language Models'. Artifacts: <DOI>"
+**If step 4 happened before step 2:** Zenodo never saw the release. **Delete the
+GitHub Release and recreate it** — the tag can stay, and recreating the release
+re-fires the webhook.
+
+The bundle path is:
+
+```
+<PROJECT>/asingh3206/release/flipeval-artifacts-v1.0.0
 ```
 
-Confirm `LICENSE` is Apache-2.0 at the tagged commit before tagging.
+### After the identifiers exist
 
-### 2. Zenodo DOI, auto-minted from the GitHub release
-
-**This is the least-effort path and the one to use.** Zenodo watches the repo and
-mints a DOI automatically when a release is published — no manual upload.
-
-1. Sign in to <https://zenodo.org> with GitHub.
-2. Settings → GitHub → flip the toggle **ON** for `AmoghSingh123/flipeval`.
-3. **The toggle must be on _before_ step 1's release is published.** Zenodo only
-   sees releases created after the switch. If the release already exists, delete
-   and re-publish it, or fall back to a manual Zenodo upload.
-4. Zenodo issues two DOIs: a **concept DOI** (all versions) and a
-   **version DOI** (v1.0.0 specifically). **Cite the version DOI in the paper.**
-5. Edit the Zenodo record: license CC-BY-4.0 for data, author ORCID, and the
-   title used in the dataset card.
-
-### 3. HuggingFace dataset repo
-
-One repo, public, **not gated**.
-
-```bash
-huggingface-cli login
-huggingface-cli repo create flipeval-artifacts --type dataset      # under AmoghSingh123
-cd <PROJECT>/asingh3206/release/flipeval-artifacts-v1.0.0
-git init && git lfs install
-git lfs track "*.tar.gz" "*.jsonl"
-git remote add origin https://huggingface.co/datasets/AmoghSingh123/flipeval-artifacts
-git add -A && git commit -m "FlipEval artifacts v1.0.0"
-git push -u origin main
-git tag v1.0.0 && git push origin v1.0.0
-```
-
-`git lfs track` matters — `per_item_outputs/` is 304 MB and individual JSONLs
-exceed HF's non-LFS limit.
-
-Then, in the repo README (already written, at the bundle root), replace
-`TODO-ZENODO-DOI` with the version DOI from step 2.
-
-**Post-upload check:** the dataset viewer renders `per_item_outputs/`, and
-
-```bash
-sha256sum -c SHA256SUMS
-```
-
-passes on a fresh clone.
-
-### 4. Fill the identifiers into the paper
-
-Two files, both currently carrying `\TODO`:
-
-- `paper/sections/artifacts.tex` — the release paragraph
-- `paper/sections/appendix_artifacts_detail.tex` — §"Metadata and identifiers"
-
-**§11 cites the DOI as canonical. The HuggingFace URL appears as a secondary
-convenience link, clearly marked as such.**
-
-### 5. arXiv
-
-Only after 1–4. Nothing reaches arXiv with a placeholder where §11 promises a
-release.
+Fill the **version DOI** as canonical into `paper/sections/artifacts.tex` and
+`paper/sections/appendix_artifacts_detail.tex`, with the HuggingFace URL as a
+clearly-marked secondary convenience link. Then arXiv — nothing reaches arXiv
+with a placeholder where §11 promises a release.
 
 ---
 
@@ -219,3 +175,89 @@ If you prefer (a) or (c), say so and I will prepare the curated tree.
   our derived per-cell statistics, with the re-derivation path documented.
 - **Redaction record:** `reproduction/REDACTIONS.json` states the rules without
   publishing the reverse mapping.
+
+---
+
+# Pre-flight, run 2026-07-27 (Part 2.1)
+
+## Bundle — all green
+
+| Check | Result |
+|---|---|
+| `SHA256SUMS` at the release path | **208/208 OK, 0 failed** (209 files, the 209th being `SHA256SUMS` itself) |
+| Both sealed archives vs their `.sha256` | **OK / OK** |
+| Extracted copy vs archive per-file manifests | **96/96, 0 mismatches** |
+| Dataset card | `README.md` **at bundle root**, YAML frontmatter is the first bytes, `license: cc-by-4.0` present |
+| Residual identifier scan, all 209 files | **CLEAN — no hits** |
+
+## Repository — what becomes public
+
+290 tracked files, ~37 MB, **no untracked files at all**. `paperdraft1.pdf` is
+gone and was never committed.
+
+**`results/` cell data is correctly excluded.** `.gitignore` line 9 is
+`results/*` with an explicit allowlist of ~40 exceptions. No loose `.jsonl` is
+tracked anywhere; the only tracked JSONLs are ten small synthetic fixtures under
+`packaging/tests/fixtures/`. The repo does carry the two **sealed run tarballs**
+(`minigrid_run_20260722.tar.gz`, `escalation_run_20260726.tar.gz`, ~25 MB
+combined), which is deliberate and required by the preservation convention —
+compressed archives, not the 304 MB of extracted JSONLs, which go to
+HuggingFace.
+
+## ⚠️ Two exposures the recorded decision does not cover
+
+The decision above accepts the residual exposure **of the three deleted
+documents**. These two are separate, and neither is removable by deleting files.
+
+### 1. Cluster identifiers are in 48 tracked files, not ~10
+
+An earlier draft of this checklist estimated "~10 tracked files". **That estimate
+was wrong.** Measured after the deletion commit:
+
+| Identifier | Tracked files |
+|---|---:|
+| `asingh3206` (username) | 48 |
+| absolute `/storage/...` paths | 44 |
+| `hcoda1` (home path element) | 38 |
+| `atl1-*` (compute node names) | 37 |
+| `paceship-compressedlm` (charge account) | 6 |
+| `login-phoenix` | 2 |
+
+Concentrated in `results/receipts/*.json` (44 build receipts),
+`scripts/slurm/*.sbatch`, and six operational docs. **The published bundle
+scrubbed all of these; the repository does not.** Severity is the same as
+already accepted — a charge account and cluster hostnames are not secrets and
+nothing here is exploitable — but the *volume* is an order of magnitude above
+what was previously recorded, so it is restated here for an explicit call rather
+than inherited silently.
+
+### 2. The committer identity carries the cluster hostname on 158 of 180 commits
+
+```
+72  asingh3206@login-phoenix-gnr-3.pace.gatech.edu
+64  asingh3206@login-phoenix-gnr-2.pace.gatech.edu
+22  amogh.singh130@gmail.com
+17  asingh3206@login-phoenix-gnr-4.pace.gatech.edu
+ 5  asingh3206@login-phoenix-gnr-1.pace.gatech.edu
+```
+
+The decision above notes the author email is the committer on every commit.
+**It is more specific than that:** 158 commits carry `username@login-node.pace.
+gatech.edu`, which pairs the username with a named login host and is displayed
+next to every commit in GitHub's UI. Removing it requires rewriting authorship
+on all 180 commits — the same rewrite ruled out above, for the same reason.
+
+**Neither of these blocks publication if accepted.** Both are recorded so the
+decision is made rather than defaulted into.
+
+## Cosmetic: five dangling references
+
+`CODING_AGENT_HANDOFF_2026-07-10.md`, `KAGGLE_CHAT_HANDOFF_2026-07-10.md`,
+`KAGGLE_RUN_COMPLETION_HANDOFF_2026-07-10.md`, `PILOT.md` and
+`paper-proposal-v3.md` still reference the deleted paths; one is a markdown link
+that will render as a 404. They are archival handoff documents. Not rewritten —
+noted so it is a choice.
+
+`paper-proposal-v3.md` was checked as a possible fourth personal document: it
+carries only the authorship line "Amogh Singh, Georgia Tech", which is
+publication metadata, not personal data.
