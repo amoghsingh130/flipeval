@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-28T01:22:43Z from `paper/main.tex` at commit `d3a7a89`.**
+**Generated 2026-07-28T06:01:08Z from `paper/main.tex` at commit `6b0a063`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -2661,7 +2661,7 @@ per-claim verdict CSV, with every robustness and transparency column. The
 signed decision records, configs, the container image SHA-256 and build recipe,
 SLURM scripts, per-run manifests, the source-state freeze fingerprints, and the
 campaign incident log. The incident log is included on purpose: a pipeline with
-27 recorded catches is better evidence that it was verified than one presenting
+28 recorded catches is better evidence that it was verified than one presenting
 a clean surface. Appendix~\ref{app:artifacts-detail} holds the datasheet,
 metadata and maintenance statements.
 
