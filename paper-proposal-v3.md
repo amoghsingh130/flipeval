@@ -2,7 +2,7 @@
 
 Target venue: NeurIPS Datasets & Benchmarks (primary), COLM (backup), workshop (floor).
 Author: Amogh Singh, Georgia Tech. Solo-authored.
-Status: pilot passed (Kaggle public-checkpoint run, 2026-07-10). This proposal supersedes compression-eval-proposal-v2.md.
+Status: pilot passed (Kaggle public-checkpoint run, 2026-07-10). This proposal supersedes `compression-eval-proposal-v2.md` (planning document, removed before public release).
 
 ---
 

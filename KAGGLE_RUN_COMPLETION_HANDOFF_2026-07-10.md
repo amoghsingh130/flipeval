@@ -6,7 +6,7 @@ Last updated: 2026-07-10 America/New_York (the packaged artifact is timestamped 
 
 This is a continuation handoff. Read these earlier documents first:
 
-- [`handoffv1.md`](handoffv1.md) for the research question, novelty constraints, hypotheses, statistical plan, pass/fail criteria, and broader compute strategy.
+- `handoffv1.md` (planning document, removed before public release) for the research question, novelty constraints, hypotheses, statistical plan, pass/fail criteria, and broader compute strategy. The hypotheses and statistical plan survive in `PREREGISTRATION.md`.
 - [`KAGGLE_CHAT_HANDOFF_2026-07-10.md`](KAGGLE_CHAT_HANDOFF_2026-07-10.md) for Kaggle setup, the failed local-quantization attempt, the pivot to public checkpoints, and the original public-checkpoint configuration.
 
 This document records what happened after the public-checkpoint evaluation began, how the GPTQ loader was recovered, what completed, what remains unverified, and the exact next actions.

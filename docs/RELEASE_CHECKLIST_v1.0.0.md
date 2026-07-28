@@ -95,12 +95,82 @@ version of the rewrite that preserves the evidence.
 **3. Accepted residual exposure, stated rather than minimised.** The three
 documents remain reachable in history, carrying enrollment status, expected
 graduation, employment background, and **a graduation-year inconsistency between
-two of them (2028 vs 2029)**. Name, `@gatech.edu` address and GitHub handle were
-already public by necessity: the author's email is the git committer identity on
-all 178 commits, so no rewrite short of rewriting authorship would remove them.
+two of them (2028 vs 2029)**.
+
 There are **no credentials** anywhere in history (606 blobs scanned, zero hits),
-so nothing requires revocation. What remains is personal information of low
-severity, knowingly accepted in exchange for an auditable freeze timeline.
+so nothing requires revocation. What remains is personal and site information of
+low severity, knowingly accepted in exchange for an auditable freeze timeline.
+
+---
+
+## Amendment, 2026-07-27 — two further exposures, measured and accepted
+
+**Added after the pre-flight. Neither was covered by the reasoning above, and
+neither is removable by deleting files.** Both are recorded here so that
+publishing is a decision rather than a default.
+
+### (i) Cluster identifiers are in 48 tracked files, not ~10
+
+The superseded option list below estimated "~10 tracked files". **That estimate
+was wrong by roughly a factor of five.** Measured across the tree after the
+deletion commit:
+
+| Identifier | Tracked files |
+|---|---:|
+| `asingh3206` (username) | 48 |
+| absolute `/storage/...` paths | 44 |
+| `hcoda1` (home-path element) | 38 |
+| `atl1-*` (compute node names) | 37 |
+| `paceship-compressedlm` (charge account) | 6 |
+| `login-phoenix` | 2 |
+
+Concentrated in `results/receipts/*.json` (44 build receipts),
+`scripts/slurm/*.sbatch`, and six operational documents under `docs/`.
+
+### (ii) 158 of 180 commits carry the cluster hostname in the committer identity
+
+```
+72  asingh3206@login-phoenix-gnr-3.pace.gatech.edu
+64  asingh3206@login-phoenix-gnr-2.pace.gatech.edu
+22  amogh.singh130@gmail.com
+17  asingh3206@login-phoenix-gnr-4.pace.gatech.edu
+ 5  asingh3206@login-phoenix-gnr-1.pace.gatech.edu
+```
+
+The original reasoning said the author's email is the committer on every commit.
+**It is more specific than that:** 158 commits pair the username with a *named
+login host*, and GitHub displays that address beside every commit in its UI.
+Removing it means rewriting authorship on all 180 commits — the same rewrite
+ruled out above, for the same reason.
+
+### Why the bundle is scrubbed and the repository is not
+
+This is the obvious question a reader will ask, and the answer is that they are
+**different artifacts with different jobs**, not an inconsistency.
+
+- **The published bundle is a dataset.** It is downloaded, mirrored, re-hosted
+  and cited by people with no connection to this project or this cluster. Site
+  identifiers in it are pure noise — they carry no scientific content, they
+  cannot be verified by anyone outside the institution, and every one of them
+  would propagate into every mirror. So the bundle is scrubbed to placeholders,
+  with `reproduction/REDACTIONS.json` stating the rules (and deliberately *not*
+  the mapping — see incident 27).
+- **The repository is an operational record.** Its value is that it shows what
+  was actually run: `sbatch` lines with the real account, receipts naming the
+  real nodes, paths matching the real filesystem. Scrubbing those would make the
+  reproduction package internally inconsistent with the incident log and the
+  signed decision records that cite them, and would turn a checkable operational
+  history into a sanitised narrative — which is the failure mode this paper is
+  about.
+- **The severity difference is real, not asserted.** A charge account, a home
+  path and a login hostname are not secrets, are not credentials, and grant
+  nothing to anyone who reads them. What they cost is a small amount of
+  institutional attribution that the author's name on the paper already
+  discloses.
+
+**Conclusion: accepted, both of them.** The scrub boundary is drawn where it is
+on purpose — the artifact that travels gets placeholders, the artifact that
+documents gets the truth.
 
 ---
 

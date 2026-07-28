@@ -4,7 +4,7 @@ Last updated: 2026-07-10. This handoff is for starting a new chat from the curre
 
 > Superseded for current actions by `KAGGLE.md` and `STATUS.md`. This file is retained as a historical record of the initial Kaggle setup and public-checkpoint pivot.
 
-For full research context, read `handoffv1.md` first. That file explains the paper idea, novelty collision with Dutta et al. "Accuracy is Not All You Need", the statistical plan, the pilot pass/fail criteria, venue strategy, and the broader compute plan. This file is narrower: it records exactly what happened while trying to run the pilot on Kaggle, what code exists, what worked, what failed, and what to do next.
+For full research context, read `handoffv1.md` (planning document, removed before public release) first. That file explains the paper idea, novelty collision with Dutta et al. "Accuracy is Not All You Need", the statistical plan, the pilot pass/fail criteria, venue strategy, and the broader compute plan. This file is narrower: it records exactly what happened while trying to run the pilot on Kaggle, what code exists, what worked, what failed, and what to do next.
 
 ---
 
@@ -26,8 +26,8 @@ This is the current pivot path: evaluate **public Qwen2.5 1.5B FP16/GPTQ/AWQ che
 
 Primary context files:
 
-- `handoffv1.md` — main project handoff; read this for the research plan.
-- `compression-eval-proposal-v2.md` — current collision-aware proposal.
+- `handoffv1.md` (planning document, removed before public release) — main project handoff; read this for the research plan. Its research content survives in `PREREGISTRATION.md`.
+- `compression-eval-proposal-v2.md` (planning document, removed before public release) — collision-aware proposal, superseded by `paper-proposal-v3.md`.
 - `PILOT.md` — local/ICE-style pilot instructions.
 - `KAGGLE.md` — Kaggle setup/runbook.
 - `KAGGLE_CHAT_HANDOFF_2026-07-10.md` — this file.
@@ -405,7 +405,7 @@ T4 x2 does not necessarily give 2x speedup. Current code loads/evaluates one mod
    - If public checkpoint run works and gives signal: save/package results, then later run controlled quantization seeds on ICE/PACE.
    - If public checkpoint run fails because public quantized loaders need old packages: add a bitsandbytes 4-bit fallback for Kaggle.
    - If Kaggle remains too brittle: move all quantization work to ICE/PACE and use Kaggle only for smoke/evaluation when possible.
-6. Update `handoffv1.md` and this file with the public-checkpoint results once available.
+6. Update `handoffv1.md` (planning document, removed before public release) and this file with the public-checkpoint results once available.
 
 ---
 

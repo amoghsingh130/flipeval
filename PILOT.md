@@ -1,6 +1,6 @@
 # Pilot Code
 
-This is a runnable pilot scaffold for the proposal in `handoffv1.md`. It is intentionally per-item first: every model/method/task run writes JSONL records, then the analysis script computes the paper-facing metrics from those records.
+This is a runnable pilot scaffold for the proposal in `handoffv1.md` (planning document, removed before public release). It is intentionally per-item first: every model/method/task run writes JSONL records, then the analysis script computes the paper-facing metrics from those records.
 
 ## Critique of the Handoff Plan
 
