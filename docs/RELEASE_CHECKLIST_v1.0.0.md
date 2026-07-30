@@ -78,6 +78,48 @@ The bundle path is:
 <PROJECT>/asingh3206/release/flipeval-artifacts-v1.0.0
 ```
 
+## ✅ MINTED 2026-07-30 — the identifiers now exist
+
+Steps 1–5 are complete. Zenodo minted on the release event, so the step-2 ordering
+trap was avoided.
+
+| Identifier | Value | Use |
+|---|---|---|
+| **Version DOI** | **`10.5281/zenodo.21708923`** | **Canonical. What the paper cites** — it resolves to the frozen v1.0.0 state. |
+| Concept DOI | `10.5281/zenodo.21708922` | Resolves to whichever version is latest. Cite when you mean the artifact series, never for a specific claim. |
+
+Zenodo record title: `amoghsingh130/flipeval: FlipEval v1.0.0`, version `v1.0.0`.
+
+**Which is which was resolved from Zenodo's own record, not by inference.**
+`https://zenodo.org/api/records/21708923` reports `doi` =
+`10.5281/zenodo.21708923` and `conceptdoi` = `10.5281/zenodo.21708922`. The two
+differ by one in the final digit, which makes them easy to transpose and
+impossible to tell apart by eye — always re-read them from the API rather than
+from a paste.
+
+### Release state as executed
+
+- **Tag `v1.0.0` → `987377a`**, not the `28c4c89` originally tagged. The tag was
+  moved before the release was created, because at `28c4c89` the tagged tree's
+  `docs/PREPACE_FREEZE.json` still pointed at pre-rewrite commit `92ece44`,
+  which the 2026-07-29 identity rewrite made a non-ancestor of `main` — so the
+  archived snapshot would have shipped a source-state freeze that **failed its
+  own `--verify` gate**, the gate §3 relies on. It verifies `passed: true` at
+  `987377a`. Zenodo archives the *tag's* tarball, not the branch tip, so this
+  had to be fixed before step 4 and would have been unfixable after minting.
+- Release published (not draft — Zenodo ignores drafts), not prerelease:
+  <https://github.com/amoghsingh130/flipeval/releases/tag/v1.0.0>
+
+### Bundle correction, 2026-07-30, before upload
+
+The staged bundle's `README.md` cited the code repository as
+`https://github.com/AmoghSingh123/flipeval` — the **HuggingFace** handle in a
+**GitHub** URL, which 404s. Corrected to `amoghsingh130`. The same pass filled
+the BibTeX `doi` field (was `TODO-ZENODO-DOI`) with the version DOI and added a
+note distinguishing the two DOIs. `SHA256SUMS` was updated for `README.md` and
+re-verified **208/208 OK**. The two handles have now crossed twice — see
+incident 28.
+
 ### After the identifiers exist
 
 Fill the **version DOI** as canonical into `paper/sections/artifacts.tex` and
