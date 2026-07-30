@@ -64,8 +64,8 @@ releases created *after* the toggle is switched on. Everything else is ordinary.
 | 3 | **Tag** | `git tag v1.0.0 && git push origin v1.0.0` |
 | 4 | **Create a GitHub RELEASE from that tag** | `gh release create v1.0.0 --title "FlipEval v1.0.0" --notes "Companion code release for 'Certifying Compressed Language Models'."` **A tag alone mints nothing** — Zenodo triggers on the *release* event. |
 | 5 | **Record BOTH DOIs** | Zenodo issues a **concept DOI** (resolves to latest) and a **v1.0.0 version DOI**. Write both down. **The paper cites the version DOI** — it describes a frozen state. |
-| 6 | **`huggingface-cli login`** | |
-| 7 | **Upload the bundle** | `huggingface-cli upload AmoghSingh123/flipeval-artifacts <bundle_path> --repo-type=dataset` — **`AmoghSingh123` is the HuggingFace handle**, not the GitHub one |
+| 6 | **`hf auth login --force`** | **NOT `huggingface-cli`** — `huggingface_hub` 1.x renamed the entry point to `hf`, and the old name is gone, not merely absent. `--force` is required: a plain `hf auth login` short-circuits on any stored token and never prompts. |
+| 7 | **Upload the bundle** | `hf upload AmoghSingh123/flipeval-artifacts <bundle_path> . --repo-type=dataset` — **`AmoghSingh123` is the HuggingFace handle**, not the GitHub one |
 | 8 | **Confirm the HF repo is public and not gated** | Settings → check visibility, and that no gating/access request is enabled. |
 
 **If step 4 happened before step 2:** Zenodo never saw the release. **Delete the
@@ -119,6 +119,42 @@ the BibTeX `doi` field (was `TODO-ZENODO-DOI`) with the version DOI and added a
 note distinguishing the two DOIs. `SHA256SUMS` was updated for `README.md` and
 re-verified **208/208 OK**. The two handles have now crossed twice — see
 incident 28.
+
+### ✅ STEPS 6-8 DONE 2026-07-30 — dataset published
+
+<https://huggingface.co/datasets/AmoghSingh123/flipeval-artifacts>, commit
+`c197d65416c2458bd4161fe741fcc44252e57114`.
+
+**209/209 files landed, path sets verified identical** against the local bundle —
+0 missing, 0 extra. Per directory: `per_item_outputs` 97 (of which **88 cell
+JSONLs**), `reproduction` 85, `h3` 12, `archives` 6, `atlas` 4, `audit` 2,
+`certification` 1, root 2. The Hub adds `.gitattributes`, hence 210 remote.
+
+Confirmed **from an unauthenticated client**, not the authoring session:
+`private: False`, `gated: False`, `license: cc-by-4.0` registered in the repo
+metadata *and* as the hub tag `license:cc-by-4.0`. The dataset viewer resolves
+`configs: per_item_outputs -> per_item_outputs/**/*.jsonl` (splits `failed: []`,
+100 rows load). `is-valid` lags the visibility flip by a few minutes and can
+report `viewer: false` while rows demonstrably load — trust `/first-rows`, not
+the flag.
+
+**Uploaded private, then flipped public.** Private→public is a toggle;
+public→private after indexing undoes nothing. Note the viewer cannot be checked
+while private on a non-PRO account, so that verification necessarily follows the
+flip.
+
+**The token trap — check the scope BEFORE uploading, not by watching for a 403.**
+The stored `Phoenix Cluster` token was fine-grained `['repo.content.read']`. A
+330 MB upload would have failed partway. `HfApi().whoami()` reports
+`auth.accessToken.role` and any fine-grained permission list; read it first. The
+upload used a **separate write token, revoked afterwards** — `Phoenix Cluster` is
+the *jobs'* credential for gated weights, and widening it would leave every SLURM
+job running with account-wide write.
+
+Also: the interactive `hf auth login` prompt needs a real TTY. Under a
+non-interactive harness `getpass` aborts rather than echoing the token. Run it in
+a normal terminal, or edit `~/.cache/huggingface/token` directly — never pass
+`--token` on a command line, which records the secret in shell history.
 
 ### After the identifiers exist
 
