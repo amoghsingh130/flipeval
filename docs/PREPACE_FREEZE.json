@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-27T02:25:12.059576+00:00",
-  "source_commit": "92ece446cf20028c378a76a243e8e280b9d09edd",
-  "source_tree": "a448b229880c75ee087d3f7a666167b75cd8defc",
-  "branch": "codex/pre-pace-implementation",
+  "created_at": "2026-07-30T00:43:20.590748+00:00",
+  "source_commit": "28c4c89beb6c51cb8bdecf6629c84a5d422630ba",
+  "source_tree": "e57e3058fdc429e142844d58737f920c8607d553",
+  "branch": "main",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
     "PREREGISTRATION.md": "9d7b1a5a691d1b703f7588910a327e748d060c6238c672cc5e2e9702cf8d5115",
@@ -87,5 +87,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "ce2d7c0db2245d626241213224f2930b23087ef5b11ec29a5521868d43ab8af3"
+  "manifest_payload_sha256": "8cde9592be41c6f8a1daa0e5732c0852ee63ed8041e82b7d7541e3b6905b02e8"
 }
