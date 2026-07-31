@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-31T01:59:15Z from `paper/main.tex` at commit `ba861f4`.**
+**Generated 2026-07-31T02:34:48Z from `paper/main.tex` at commit `c69ddcf`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -1245,7 +1245,7 @@ mmlu\_pro     &   5 & 0.048 / 0.053 / 0.059 & 739 / \textbf{827} / 913      & 7{
 hellaswag     &  23 & 0.031 / 0.045 / 0.099 & 477 / \textbf{695} / 1{,}538 & 4{,}905 & $7.1\times$ \\
 arc\_challenge&  17 & 0.072 / 0.079 / 0.099 & 1{,}112 / \textbf{1{,}218} / 1{,}536 & 7{,}363 & $6.0\times$ \\
 ifeval        &   8 & 0.048 / 0.052 / 0.072 & 736 / \textbf{800} / 1{,}108 & 4{,}211 & $5.3\times$ \\
-mmlu          & 1311 & 0.093 / 0.140 / 0.259 & 1{,}432 / \textbf{2{,}164} / 4{,}005 & 7{,}727 & $3.6\times$ \\
+mmlu          & 1{,}311 & 0.093 / 0.140 / 0.259 & 1{,}432 / \textbf{2{,}164} / 4{,}005 & 7{,}727 & $3.6\times$ \\
 winogrande    &  23 & 0.067 / 0.092 / 0.221 & 1{,}031 / \textbf{1{,}416} / 3{,}422 & 5{,}600 & $4.0\times$ \\
 math          &  56 & 0.107 / 0.141 / 0.169 & 1{,}661 / \textbf{2{,}186} / 2{,}610 & 5{,}222 & $2.4\times$ \\
 gsm8k         &  24 & 0.040 / 0.077 / 0.198 & 619 / \textbf{1{,}184} / 3{,}068 & 2{,}671 & $2.3\times$ \\
@@ -2938,9 +2938,107 @@ declared margin that make a similarity claim checkable at all.
 \section{Full audit table}
 \label{app:audit-table}
 
-\TODO{typeset the full 17-row table directly from
-\texttt{results/audit\_verdicts\_rev2.csv} (one row per claim, landscape, small
-font). Do not retype values.}
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{The 17 audited claims: identity and frame. \textbf{F1} is a research-paper claim, \textbf{F2} a vendor model card or official documentation page, \textbf{F3} a vendor blog post. Source URLs, version dates and the exact quoted sentence per claim are in the frozen claim table \texttt{docs/audit\_claim\_table.csv}, which is part of the released artifact.}
+\label{tab:audit-identity}
+% GENERATED from docs/audit_claim_table.csv (FROZEN, read-only). Source
+% names are taken from there and NOT from audit_verdicts_rev2.csv, which
+% truncates source_name at 80 characters.
+\begin{tabular}{@{}llp{10.2cm}@{}}
+\toprule
+Claim & Frame & Source \\
+\midrule
+R01 & F1 & GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers (Frantar, Ashkboos, Hoefler, Alistarh) \\
+R02 & F1 & LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale (Dettmers, Lewis, Belkada, Zettlemoyer) \\
+R03 & F1 & SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models (Xiao, Lin, Seznec, Wu, Demouth, Han) \\
+R04 & F1 & AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration (Lin, Tang, Tang, Yang, Chen, Wang, Xiao, Dang, Gan, Han) \\
+R05 & F1 & SqueezeLLM: Dense-and-Sparse Quantization (Kim, Hooper, Gholami, Dong, Li, Shen, Mahoney, Keutzer) \\
+R06 & F1 & A Simple and Effective Pruning Approach for Large Language Models [Wanda] (Sun, Liu, Bair, Kolter) \\
+R07 & F1 & SparseGPT: Massive Language Models Can Be Accurately Pruned in One-Shot (Frantar, Alistarh) \\
+R08 & F2 & RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w4a16 model card (Neural Magic / Red Hat AI) \\
+R09 & F2 & RedHatAI/Meta-Llama-3.1-8B-Instruct-FP8 model card (Neural Magic / Red Hat AI) \\
+R10 & F2 & RedHatAI/Qwen2.5-7B-Instruct-quantized.w4a16 model card (Neural Magic / Red Hat AI) \\
+R11 & F2 & Meta AI blog: ``Introducing quantized Llama models with increased speed and a reduced memory footprint'' \\
+R12 & F3 & NVIDIA TensorRT-LLM official blog: ``Speed up inference with SOTA quantization techniques in TRT-LLM'' \\
+R13 & F3 & vLLM official docs: ``FP8 W8A8'' (LLM Compressor quantization guide) \\
+R14 & F3 & vLLM Blog: ``The State of FP8 KV-Cache and Attention Quantization in vLLM'' (Kübler, Kurtić, Wilkinson, Bonanni, Goin, Marques, Budhathoki) \\
+R15 & F2 & RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w8a8 (model card) \\
+R16 & F2 & RedHatAI/Meta-Llama-3.1-70B-Instruct-quantized.w4a16 (model card) \\
+R17 & F2 & RedHatAI/Meta-Llama-3-8B-Instruct-quantized.w8a16 (model card) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Per-claim characterisation and headline verdict. $n$ is the reported or imputed item count and $\bar{m}$ the claimed margin in percentage points, each with a basis recorded in the released CSV. $p_d$ is the discordance imputed from the atlas, and \emph{tier} the match tier it came from (1 = family+bits+benchmark, 2 = family+bits, 3 = bits+benchmark, 4 = bits). \emph{V3} is whether the source releases per-item outputs. Verdicts are abbreviated: \emph{adequate} = adequately powered at its applicable margin; \emph{underpowered} = underpowered for its own assertion.}
+\label{tab:audit-characterisation}
+% GENERATED from results/audit_verdicts_rev2.csv. Values read, not retyped.
+\begin{tabular}{@{}llllrrrlll@{}}
+\toprule
+Claim & Family & Bits & Benchmark & $n$ & $\bar{m}$ & $p_d$ & Tier & V3 & Verdict \\
+\midrule
+R01 & gptq & 4 & piqa & 1{,}838 & 2.35 & 0.130 & 2 & no & adequate \\
+R02 & w8a8\_int8 & 8 & (mixed/unmatched) & --- & --- & 0.056 & 2 & no & indet.\ (reporting) \\
+R03 & w8a8\_int8 & 8 & (mixed/unmatched) & 18{,}300 & 0.80 & 0.056 & 2 & no & adequate \\
+R04 & awq & 4 & gsm8k & 1{,}319 & 0.30 & 0.074 & 1 & no & indet.\ (metric) \\
+R05 & squeezellm & 4 & mmlu & 14{,}042 & 3.10 & 0.146 & 3 & no & adequate \\
+R06 & pruning & --- & (mixed/unmatched) & 18{,}904 & 0.30 & 0.119 & 4 & no & underpowered \\
+R07 & pruning & --- & (mixed/unmatched) & 12{,}410 & 0.23 & 0.119 & 4 & no & underpowered \\
+R08 & w4a16 & 4 & mmlu & 42{,}701 & 1.40 & 0.048 & 2 & partial & adequate \\
+R09 & w8a8\_fp8 & 8 & mmlu & 42{,}701 & 0.84 & 0.048 & 2 & no & adequate \\
+R10 & w4a16 & 4 & mmlu & 28{,}659 & 1.05 & 0.048 & 2 & no & adequate \\
+R11 & spinquant & 4 & (mixed/unmatched) & --- & --- & 0.133 & 4 & no & indet.\ (reporting) \\
+R12 & w8a8\_fp8 & 8 & mmlu & 14{,}042 & 0.87 & 0.048 & 2 & no & adequate \\
+R13 & w8a8\_fp8 & 8 & gsm8k & 250 & --- & 0.048 & 2 & no & indet.\ (reporting) \\
+R14 & w8a8\_fp8 & 8 & (mixed/unmatched) & 728 & 0.70 & 0.048 & 2 & no & indet.\ (reporting) \\
+R15 & w8a8\_int8 & 8 & mmlu & 42{,}701 & 0.20 & 0.056 & 2 & partial & underpowered \\
+R16 & w4a16 & 4 & mmlu & 42{,}701 & 0.52 & 0.048 & 2 & partial & adequate \\
+R17 & w8a16 & 8 & mmlu & 28{,}659 & 0.15 & 0.135 & 3 & no & underpowered \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Power quantities per claim. MDD is the minimum detectable difference in percentage points, under the paired and the independent-binomial variance models. Required $n$ is the item count needed at 95\% confidence and 80\% power under the paired model, at 1, 2 and 3\,pp and at the claim's own applicable margin $m^{*}$. \emph{Sens.} flags a claim whose verdict is not stable across the 1\,pp\,$\to$\,3\,pp sweep. \textbf{Numbers on indeterminate rows are not verdicts and are not counted in $K$}; they are retained so a reader can see what the analysis could and could not evaluate.}
+\label{tab:audit-power}
+% GENERATED from results/audit_verdicts_rev2.csv. Values read, not retyped.
+\begin{tabular}{@{}lrrrrrrrl@{}}
+\toprule
+Claim & MDD (paired) & MDD (indep.) & $n$@1\,pp & $n$@2\,pp & $n$@3\,pp & $m^{*}$ & $n$@$m^{*}$ & Sens. \\
+\midrule
+R01 & 2.36 & 3.62 & 8{,}038 & 2{,}010 & 894 & 2.35 & 1{,}456 & yes \\
+R02 & --- & --- & 3{,}463 & 866 & 385 & 2.00 & --- & --- \\
+R03 & 0.49 & 1.38 & 3{,}463 & 866 & 385 & 0.80 & 5{,}410 & no \\
+R04 & 2.09 & 3.77 & 4{,}547 & 1{,}137 & 506 & 0.30 & 50{,}519 & yes \\
+R05 & 0.90 & 1.63 & 9{,}019 & 2{,}255 & 1{,}003 & 3.10 & 939 & no \\
+R06 & 0.70 & 1.36 & 7{,}361 & 1{,}841 & 818 & 0.30 & 81{,}780 & no \\
+R07 & 0.87 & 1.63 & 7{,}361 & 1{,}841 & 818 & 0.23 & 139{,}134 & no \\
+R08 & 0.30 & 0.84 & 2{,}968 & 742 & 330 & 1.40 & 1{,}515 & no \\
+R09 & 0.30 & 0.84 & 2{,}968 & 742 & 330 & 0.84 & 4{,}206 & no \\
+R10 & 0.36 & 1.04 & 2{,}968 & 742 & 330 & 1.05 & 2{,}692 & no \\
+R11 & --- & --- & 8{,}204 & 2{,}051 & 912 & 2.00 & --- & --- \\
+R12 & 0.52 & 1.53 & 2{,}968 & 742 & 330 & 0.87 & 3{,}921 & no \\
+R13 & 3.88 & --- & 2{,}968 & 742 & 330 & 2.00 & --- & no \\
+R14 & 2.27 & --- & 2{,}968 & 742 & 330 & 0.70 & 6{,}057 & yes \\
+R15 & 0.32 & 0.84 & 3{,}463 & 866 & 385 & 0.20 & 86{,}556 & no \\
+R16 & 0.30 & 0.69 & 2{,}968 & 742 & 330 & 0.52 & 10{,}975 & no \\
+R17 & 0.61 & 1.09 & 8{,}322 & 2{,}081 & 925 & 0.15 & 369{,}856 & no \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:audit-identity} gives the claim-to-source mapping the
+\texttt{R}\emph{nn} identifiers used throughout the paper refer to;
+Table~\ref{tab:audit-characterisation} the per-claim characterisation and
+headline verdict; Table~\ref{tab:audit-power} the power quantities. They are
+split by content rather than presented as one sheet because the released CSV has
+45 columns, more than a page can carry legibly.
 
 The released CSV carries, per claim: identity and frame; method family, bit
 width and benchmark; the reported or imputed $n$ with its \texttt{n\_basis};
@@ -2975,10 +3073,21 @@ imputed from the atlas (\S\ref{sec:atlas}) by matching the nearest (method
 family, bit width, benchmark) cell, most-specific tier first, taking the
 \emph{median} over the first non-empty tier because per-cell discordance is
 right-skewed. One claim matched at tier~1 (family + bits + benchmark), 11 at
-tier~2 (family + bits), 2 at tier~3 (bits + benchmark), 1 at tier~4 (bits), and
-2 fell through to the global tier. A tier whose target field is \texttt{None}
-cannot match, so a pruning claim with no bit width descends automatically rather
-than being forced into a wrong cell. Both disclosed feasibility-probe pairs (99
+tier~2 (family + bits), 2 at tier~3 (bits + benchmark), and 3 at tier~4 (bits);
+\textbf{no claim reached the global tier}. A tier whose target field is
+\texttt{None} cannot match, so a pruning claim with no bit width descends
+automatically rather than being forced into a wrong cell---in rev-2 the two
+pruning claims descend to tier~4 and match there, over 183 cells.
+% CORRECTED 2026-07-30 -- SEVENTH rev-1 survivor. This sentence read "1 at
+% tier~4 (bits), and 2 fell through to the global tier", which is the REV-1
+% distribution (results/audit_verdicts.csv: bits 1, global 2). Rev-2 is
+% {family+bits+benchmark 1, family+bits 11, bits+benchmark 2, bits 3, global 0}.
+% Cause: rev-1's parser had dropped the bit-width-less pruning cells, so R06/R07
+% had nothing to match at tier 4 and fell to global over 1,155 cells; rev-2
+% matches them at tier 4 over 183. Counts read from
+% results/audit_verdicts_rev2.csv column discordance_match_tier.
+% NOTE: docs/AUDIT_VERDICTS_2026-07-20.md predates rev-2 (2026-07-21) and still
+% carries the rev-1 reading on this point -- do not "restore" from it. Both disclosed feasibility-probe pairs (99
 atlas cells) are excluded from the imputation pool, per the atlas registration.
 
 \subsection{The two robustness readings, and why they stay separate}
@@ -3017,11 +3126,69 @@ and instability of a verdict across the sweep---that coincide on one claim.
 \section{Certification tables at 1\,pp and 3\,pp}
 \label{app:certification-margins}
 
-\TODO{typeset the 1\,pp and 3\,pp margins from
-\texttt{results/certification\_tables\_rev2.csv}; the 2\,pp margin is
-Table~\ref{tab:certification} in the main text. Note the quadratic margin
-scaling: MMLU's median requirement is 8{,}656 items at 1\,pp, 2{,}164 at 2\,pp,
-and 962 at 3\,pp.}
+The 2\,pp margin is Table~\ref{tab:certification} in the main text; the
+1\,pp margin is Table~\ref{tab:certification-1pp} and the 3\,pp margin
+Table~\ref{tab:certification-3pp}. Note the quadratic margin scaling: MMLU's median
+requirement is 8{,}656 items at 1\,pp, 2{,}164 at 2\,pp, and 962 at 3\,pp---a
+factor of nine across a three-fold change in margin.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Items required to certify equivalence within $\pm 1$\,pp at 95\% confidence and 80\% power, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
+\label{tab:certification-1pp}
+% GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 1.0.
+% Values are read from the CSV, never retyped. Row order matches
+% Table~\ref{tab:certification} so the margins compare row-by-row.
+\begin{tabular}{lrccrr}
+\toprule
+Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
+\midrule
+musr & 24 & 0.015 / 0.034 / 0.044 & 928 / \textbf{2{,}076} / 2{,}721 & 30{,}468 & $14.7\times$ \\
+gpqa & 24 & 0.035 / 0.048 / 0.067 & 2{,}180 / \textbf{2{,}993} / 4{,}138 & 28{,}931 & $9.7\times$ \\
+bbh & 192 & 0.024 / 0.044 / 0.060 & 1{,}484 / \textbf{2{,}721} / 3{,}710 & 25{,}967 & $9.5\times$ \\
+mmlu\_pro & 5 & 0.048 / 0.053 / 0.059 & 2{,}955 / \textbf{3{,}305} / 3{,}649 & 30{,}778 & $9.3\times$ \\
+hellaswag & 23 & 0.031 / 0.045 / 0.099 & 1{,}905 / \textbf{2{,}777} / 6{,}151 & 19{,}618 & $7.1\times$ \\
+arc\_challenge & 17 & 0.072 / 0.079 / 0.099 & 4{,}447 / \textbf{4{,}870} / 6{,}141 & 29{,}451 & $6.0\times$ \\
+ifeval & 8 & 0.048 / 0.052 / 0.072 & 2{,}943 / \textbf{3{,}200} / 4{,}429 & 16{,}842 & $5.3\times$ \\
+mmlu & 1{,}311 & 0.093 / 0.140 / 0.259 & 5{,}725 / \textbf{8{,}656} / 16{,}019 & 30{,}906 & $3.6\times$ \\
+winogrande & 23 & 0.067 / 0.092 / 0.221 & 4{,}124 / \textbf{5{,}661} / 13{,}688 & 22{,}397 & $4.0\times$ \\
+math & 56 & 0.107 / 0.141 / 0.169 & 6{,}642 / \textbf{8{,}741} / 10{,}439 & 20{,}888 & $2.4\times$ \\
+gsm8k & 24 & 0.040 / 0.077 / 0.198 & 2{,}473 / \textbf{4{,}735} / 12{,}270 & 10{,}684 & $2.3\times$ \\
+\midrule
+\textbf{ALL (pooled)} & \textbf{1{,}707} & 0.064 / 0.120 / 0.225 & 3{,}974 / \textbf{7{,}420} / 13{,}909 & 30{,}887 & $\mathbf{4.2\times}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Items required to certify equivalence within $\pm 3$\,pp at 95\% confidence and 80\% power, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
+\label{tab:certification-3pp}
+% GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 3.0.
+% Values are read from the CSV, never retyped. Row order matches
+% Table~\ref{tab:certification} so the margins compare row-by-row.
+\begin{tabular}{lrccrr}
+\toprule
+Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
+\midrule
+musr & 24 & 0.015 / 0.034 / 0.044 & 104 / \textbf{231} / 303 & 3{,}386 & $14.7\times$ \\
+gpqa & 24 & 0.035 / 0.048 / 0.067 & 243 / \textbf{333} / 460 & 3{,}215 & $9.7\times$ \\
+bbh & 192 & 0.024 / 0.044 / 0.060 & 165 / \textbf{303} / 413 & 2{,}886 & $9.5\times$ \\
+mmlu\_pro & 5 & 0.048 / 0.053 / 0.059 & 329 / \textbf{368} / 406 & 3{,}420 & $9.3\times$ \\
+hellaswag & 23 & 0.031 / 0.045 / 0.099 & 212 / \textbf{309} / 684 & 2{,}180 & $7.1\times$ \\
+arc\_challenge & 17 & 0.072 / 0.079 / 0.099 & 495 / \textbf{542} / 683 & 3{,}273 & $6.0\times$ \\
+ifeval & 8 & 0.048 / 0.052 / 0.072 & 327 / \textbf{356} / 493 & 1{,}872 & $5.3\times$ \\
+mmlu & 1{,}311 & 0.093 / 0.140 / 0.259 & 637 / \textbf{962} / 1{,}780 & 3{,}434 & $3.6\times$ \\
+winogrande & 23 & 0.067 / 0.092 / 0.221 & 459 / \textbf{629} / 1{,}521 & 2{,}489 & $4.0\times$ \\
+math & 56 & 0.107 / 0.141 / 0.169 & 738 / \textbf{972} / 1{,}160 & 2{,}321 & $2.4\times$ \\
+gsm8k & 24 & 0.040 / 0.077 / 0.198 & 275 / \textbf{527} / 1{,}364 & 1{,}188 & $2.2\times$ \\
+\midrule
+\textbf{ALL (pooled)} & \textbf{1{,}707} & 0.064 / 0.120 / 0.225 & 442 / \textbf{825} / 1{,}546 & 3{,}432 & $\mathbf{4.2\times}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 % SOURCE: results/certification_tables_rev2.csv, rows mmlu at margin_pp
 % 1.0/2.0/3.0, column required_n_median.
 %
