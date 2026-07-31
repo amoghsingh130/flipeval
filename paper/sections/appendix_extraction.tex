@@ -1,0 +1,177 @@
+% =====================================================================
+% Appendix: the automated extraction procedure, its reliability, and the
+% AI-use statement.  ADDED 2026-07-31.
+%
+% Motivated by advisor review: the paper described the claim extraction only as
+% "two mutually blind passes" and never said the passes were language-model
+% agent sessions. The only disclosure was inside the reproduced registration
+% (Amendment 1), which is not where a reader looks.
+%
+% RULE FOR THIS FILE: nothing here may be inferred. Every specification item is
+% either read from a committed artifact (cited inline) or explicitly listed as
+% NOT RECORDED. Do not fill a gap in the specification table with a plausible
+% value -- an invented model ID or temperature is worse than an admitted gap,
+% because it cannot be checked and it misrepresents the provenance the rest of
+% the paper is built on.
+% =====================================================================
+
+\section{Automated claim extraction: procedure, reliability, and AI use}
+\label{app:extraction}
+
+\subsection{Why this appendix exists}
+
+The claim table underlying \S\ref{sec:audit} was populated by language-model
+agent sessions rather than by human reading. That is a provenance fact a reader
+needs in order to weigh the audit, and it was previously stated only inside the
+reproduced audit registration (Amendment~1,
+\S\ref{app:reg:audit}). This appendix states it directly, specifies as much of
+the procedure as the record supports, and is explicit about the parts the
+record does not support.
+
+\subsection{The procedure as executed}
+
+% SOURCE: docs/AUDIT_RECONCILIATION_2026-07-15.md; commits 8a16722 (pass 1)
+% and 43ce229 (frozen table); docs/AUDIT_REGISTRATION_2026-07-15.md Amendment 1.
+\begin{enumerate}
+\item \textbf{Pass 1} enumerated the registered source frames and extracted the
+  registered fields for each qualifying claim, producing 13 rows
+  (\texttt{docs/audit\_claim\_table\_pass1.csv}, committed 2026-07-15 as an
+  explicitly unfrozen artifact). Some pass-1 fields were derived from a
+  summarised reading of the source rather than from the source text directly;
+  those rows are flagged in the reconciliation memo.
+\item \textbf{Pass 2} ran as a fresh session with the pass-1 file withheld,
+  instructed not to read it or recover it from version history, and given only
+  the frozen protocol and the source frames. It produced 23 rows---17 claims
+  plus 6 logged exclusions---and recorded a SHA-256 of each fetched source
+  (\texttt{docs/audit\_claim\_table\_pass2.csv}).
+\item \textbf{Human reconciliation} merged the two passes into
+  \texttt{docs/audit\_claim\_table.csv} (17 claims), resolving inclusion
+  disagreements against the registered trigger vocabulary, choosing the quote
+  anchored in that vocabulary, and re-reading the cited table wherever the
+  passes differed numerically. The merged table was frozen by commit
+  \texttt{43ce229} before any verdict, power or required-$n$ computation ran.
+  The adjudication is recorded claim-by-claim in
+  \texttt{docs/AUDIT\_RECONCILIATION\_2026-07-15.md}.
+\end{enumerate}
+
+This replaced the registration's original ``extracted twice on different days''
+independence mechanism. Amendment~1 records both the substitution and its
+rationale: temporal separation was a proxy for extractor independence calibrated
+to human memory, and a fresh session carries no memory of pass~1 at all. The
+amendment also records that it was made after pass-1 results were known but
+before any verdict computation, and that the \S3.1--3.2 inclusion and extraction
+rules were unchanged.
+
+\paragraph{What separate sessions do and do not buy.}
+They prevent direct leakage: pass~2 cannot copy pass~1 because it never saw it.
+They do \emph{not} deliver the property dual coding is normally used for. Two
+sessions of the same model share a prior, so a systematic misreading---a
+tendency to treat a reported delta as a declared bound, say, or to prefer the
+abstract's phrasing over a table footnote---will recur in both passes and will
+survive reconciliation looking like agreement. We therefore do not describe
+these passes as independent coders, and we do not report an inter-rater
+reliability coefficient, which would imply an independence the design does not
+have.
+
+\subsection{Specification: what is on record and what is not}
+
+% Every NOT RECORDED row below is a real gap in the 2026-07-15 provenance. They
+% are listed rather than omitted so a reader can see the exact boundary of what
+% is checkable.
+\begin{tabular}{@{}p{0.36\linewidth}p{0.58\linewidth}@{}}
+\toprule
+Item & Status \\
+\midrule
+Execution date & 2026-07-15, both passes (commit timestamps
+  \texttt{8a16722}, \texttt{43ce229}) \\
+Tool family & Command-line coding agent, operated under the repository's
+  committed agent guardrails (\texttt{AGENTS.md}, \texttt{CLAUDE.md}) \\
+Browsing / retrieval & Enabled; pass 2 fetched each source and recorded its
+  SHA-256 \\
+Input documents & The registered source frames; per-source SHA-256 in
+  \texttt{audit\_claim\_table\_pass2.csv} \\
+Output schema & The registered \S3.2 extraction fields; both raw pass files
+  are released \\
+Human adjudication & Documented per claim in
+  \texttt{docs/AUDIT\_RECONCILIATION\_2026-07-15.md} \\
+\midrule
+Exact model ID and version & \textbf{Not recorded} \\
+System and extraction prompts & \textbf{Not recorded; not released} \\
+Temperature, seed, reasoning setting & \textbf{Not recorded} \\
+Retry policy & \textbf{Not recorded} \\
+Whether prompts varied across sources & \textbf{Not recorded} \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\noindent
+The lower block is a genuine limitation and we state it as one rather than
+reconstructing plausible values after the fact. The consequence is specific:
+the extraction is \textbf{auditable but not re-executable}. A reader can check
+every extracted field against the released source hashes and the released raw
+pass files, and can re-do the extraction by any means they choose; they cannot
+reproduce \emph{our} extraction run. Prompt and model-identifier logging is a
+requirement we would register in advance if this study were run again, and it is
+part of the reporting standard \S\ref{sec:conclusion} proposes.
+
+\subsection{Agreement between the two passes}
+
+Eleven sources were extracted by both passes. Two were reached only by pass~1
+and twelve only by pass~2; the union was adjudicated by hand, and one source
+(QuIP\#) was included by pass~2 and excluded on adjudication because neither of
+its candidate phrases is in the registered trigger vocabulary.
+
+% SOURCE: computed over docs/audit_claim_table_pass1.csv and
+% docs/audit_claim_table_pass2.csv, joined on normalised source_url.
+On the eleven jointly extracted sources, the two categorical registered fields
+agree exactly:
+
+\begin{tabular}{@{}lr@{}}
+\toprule
+Field & Agreement \\
+\midrule
+\texttt{per\_item\_outputs\_released} (yes / no / partial) & 11 / 11 \\
+\texttt{statistical\_test\_or\_interval\_reported} (any / none) & 11 / 11 \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\noindent
+\textbf{The free-text numeric fields cannot be scored this way, and we do not
+report a number for them.} The two passes recorded different \emph{scope} by
+design rather than different values: pass~1 tended to record every task in the
+source's table, pass~2 the single anchor task attached to the quoted sentence.
+For GPTQ, for example, pass~1 recorded deltas for five OPT-175B tasks and
+pass~2 recorded the PIQA figure alone---the same underlying numbers at different
+granularity. A string-equality comparison scores that as a disagreement and
+would put ``exact agreement'' at 11\%, which would misdescribe the record. A
+value-level comparison is equally unreliable, because these fields are prose
+containing incidental numbers.
+
+What is on record is the reconciliation memo's finding, made at merge time by
+re-reading the cited table for every discrepancy: \emph{every} numeric
+disagreement between the passes was a difference of scope, not of value. We
+report that as the qualitative finding it is. A quantitative inter-pass
+agreement rate on numeric fields was not computed at extraction time and cannot
+be reconstructed now without imposing a scoring rule that did not exist then.
+
+\paragraph{Validation against human reading was not performed.}
+No random subset was independently extracted by a second human without sight of
+the agent output. That check would materially strengthen the audit and it is the
+first thing we would add.
+
+\subsection{AI-use statement}
+
+% Wording constraint: this must not claim human authorship of agent-produced
+% steps, and must not claim artifacts (prompts, model IDs) that are not released.
+Language-model tools were used in this work for two blinded structured
+extraction passes over the audited sources, and for copy-editing. The author
+designed the study, wrote the preregistrations and froze them before execution,
+wrote and verified the analysis code, adjudicated every extraction disagreement
+by re-reading the cited sources, checked the reported results against the
+released artifacts, and takes responsibility for the whole manuscript. The
+claim table produced by the extraction passes is released in both raw
+(per-pass) and reconciled form, together with per-source content hashes and the
+claim-by-claim adjudication record. Model identifiers, prompts and generation
+settings for the extraction sessions were not logged at the time and are
+therefore not released; see the specification table above.

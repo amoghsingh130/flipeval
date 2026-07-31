@@ -75,7 +75,7 @@ R17 & w8a16 & 8 & mmlu & 28{,}659 & 0.15 & 0.135 & 3 & no & underpowered \\
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Power quantities per claim. MDD is the minimum detectable difference in percentage points, under the paired and the independent-binomial variance models. Required $n$ is the item count needed at 95\% confidence and 80\% power under the paired model, at 1, 2 and 3\,pp and at the claim's own applicable margin $m^{*}$. \emph{Sens.} flags a claim whose verdict is not stable across the 1\,pp\,$\to$\,3\,pp sweep. \textbf{Numbers on indeterminate rows are not verdicts and are not counted in $K$}; they are retained so a reader can see what the analysis could and could not evaluate.}
+\caption{Power quantities per claim. MDD is the minimum detectable difference in percentage points, under the paired and the independent-binomial variance models. Required $n$ is the item count needed under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, under the paired model, at 1, 2 and 3\,pp and at the claim's own applicable margin $m^{*}$. \emph{Sens.} flags a claim whose verdict is not stable across the 1\,pp\,$\to$\,3\,pp sweep. \textbf{Numbers on indeterminate rows are not verdicts and are not counted in $K$}; they are retained so a reader can see what the analysis could and could not evaluate.}
 \label{tab:audit-power}
 % GENERATED from results/audit_verdicts_rev2.csv. Values read, not retyped.
 \begin{tabular}{@{}lrrrrrrrl@{}}
@@ -160,7 +160,7 @@ pruning claims descend to tier~4 and match there, over 183 cells.
 % carries the rev-1 reading on this point -- do not "restore" from it. Both disclosed feasibility-probe pairs (99
 atlas cells) are excluded from the imputation pool, per the atlas registration.
 
-\subsection{The two robustness readings, and why they stay separate}
+\subsection{The two robustness readings}
 \label{app:audit:robustness}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
@@ -205,7 +205,7 @@ factor of nine across a three-fold change in margin.
 \begin{table}[t]
 \centering
 \small
-\caption{Items required to certify equivalence within $\pm 1$\,pp at 95\% confidence and 80\% power, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
+\caption{Items required to certify equivalence within $\pm 1$\,pp under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
 \label{tab:certification-1pp}
 % GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 1.0.
 % Values are read from the CSV, never retyped. Row order matches
@@ -234,7 +234,7 @@ gsm8k & 24 & 0.040 / 0.077 / 0.198 & 2{,}473 / \textbf{4{,}735} / 12{,}270 & 10{
 \begin{table}[t]
 \centering
 \small
-\caption{Items required to certify equivalence within $\pm 3$\,pp at 95\% confidence and 80\% power, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
+\caption{Items required to certify equivalence within $\pm 3$\,pp under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
 \label{tab:certification-3pp}
 % GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 3.0.
 % Values are read from the CSV, never retyped. Row order matches

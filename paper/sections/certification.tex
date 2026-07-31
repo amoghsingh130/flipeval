@@ -49,7 +49,15 @@ section computes that requirement empirically.
 \label{sec:cert:method}
 
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
-For a discordance rate $p_d$ and margin $m$, at 95\% confidence and 80\% power,
+% CORRECTED 2026-07-31. This read "at 95% confidence and 80% power", which
+% contradicted the paragraph below it: z_{1-alpha} = 1.6449 is ONE-sided at
+% alpha = .05, and TOST at one-sided .05 corresponds to containment of a 90%
+% two-sided interval, not a 95% one. The formula and every computed value are
+% unchanged -- only the description of them was wrong. Four table captions
+% carried the same error and are corrected with it.
+For a discordance rate $p_d$ and margin $m$, under TOST at one-sided
+$\alpha=.05$ --- equivalent to requiring a 90\% two-sided confidence interval to
+fall inside $\pm m$ --- with 80\% power,
 \begin{align}
 \mathrm{sd}_{\mathrm{paired}}      &= \sqrt{p_d}, &
 \mathrm{sd}_{\mathrm{independent}} &= \sqrt{2p(1-p)}, \label{eq:sds}\\[2pt]
@@ -65,6 +73,23 @@ on churn. $z_{1-\alpha}$ is \textbf{one-sided}, since TOST rejects two one-sided
 nulls at level $\alpha$ each (\S\ref{sec:prereg:choices}, interpretive
 choice~5).
 
+% ADDED 2026-07-31. The design assumption was documented in the code
+% (scripts/audit_stats.py::required_n_for_tost, "assumed true difference zero")
+% but was never stated in the paper. Without it a reader may take these as the
+% n that would certify an already-observed delta, which they are not.
+\paragraph{These are design values at a true difference of zero.}
+Equation~\eqref{eq:nreq} is the standard TOST planning sample size under an
+assumed \emph{true} paired accuracy difference of zero. It answers ``how many
+items would this benchmark need for an equivalence test to have 80\% power,
+given how much models of this kind disagree item-by-item''. It does
+\emph{not} answer ``how many items would certify the delta this source
+observed''. Under a true difference $\delta$, the quantity TOST must resolve is
+the separation $m - |\delta|$ rather than $m$, so the requirement grows without
+bound as $|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in
+this paper is therefore a \textbf{lower bound} on what a non-zero true
+difference would demand, and the tables should be read as design tables, not as
+retrospective certification of any particular reported result.
+
 The discordance rates are not modelled; they are read off the atlas
 (\S\ref{sec:atlas}). For each benchmark family we take the 25th percentile,
 median, and 75th percentile of the per-cell accuracy-state churn observed across
@@ -78,8 +103,9 @@ compression behaviour. Quartiles are \texttt{numpy}'s linear-interpolation
 \begin{table}[t]
 \centering
 \small
-\caption{Items required to certify equivalence within $\pm 2$\,pp at 95\%
-confidence and 80\% power, by benchmark family, at the 25th/50th/75th
+\caption{Items required to certify equivalence within $\pm 2$\,pp under TOST at
+one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a
+true difference of zero, by benchmark family, at the 25th/50th/75th
 percentiles of the discordance rates the atlas observes for that family. The
 naive column is the same requirement computed by treating the two runs as
 independent samples. Eleven benchmark families plus the pooled row.}
@@ -128,7 +154,7 @@ the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing it to
 cost is quadratic; a claim of parity within 1\,pp is four times as expensive to
 certify as parity within 2\,pp.
 
-\subsection{Why the naive column belongs in the table}
+\subsection{The independent-binomial comparison}
 
 The independent-binomial column is not a straw man. It is what you get by
 treating the baseline and compressed evaluations as two unrelated samples and

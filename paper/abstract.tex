@@ -1,87 +1,61 @@
-% Atlas figures below are REV-2 (2026-07-21), resolved after the targeted
-% second spot-check passed 14/14 cells, 126/126 fields. Keep in sync with
+% Atlas figures below are REV-2 (2026-07-21). Keep in sync with
 % sections/{atlas,certification,audit,minigrid}.tex.
-%
-% H3 VARIANT SELECTION CLOSED 2026-07-27. All eight registered confirmatory
-% cells exist and the frozen support rule fired, so variant (A) was selected and
-% the dead (B)/(C) blocks and their selection instructions were deleted. The
-% verdict sentence below is variant (A) with one word changed -- see the note at
-% that paragraph.
 %
 % SUMMARY-RESTATEMENT INVARIANT (paper/OUTLINE.md rule 4): this file contains no
 % primary figures. Every number here appears in the section it summarises at
-% coarser or equal precision. Walked figure-by-figure on 2026-07-27; the walk is
-% recorded in the commit that introduced this revision.
+% coarser or equal precision.
+%
+% REWRITTEN 2026-07-31 (advisor review 3.7). Changes:
+%  - Target 200-250 words, in the order: problem and estimand; audit design and
+%    sample; atlas result; controlled-experiment result; qualified conclusion
+%    and artifact.
+%  - ALL boldface removed. Six bolded spans previously competed for emphasis.
+%  - The "every protocol was frozen" closing claim is dropped; the methods
+%    section establishes it, and asserting it in an abstract reads as a bid for
+%    credibility rather than a result.
+%  - Secondary figures dropped: the 2.0x-12.9x shortfall range, the 145-cell
+%    count with its 8.5%/7.2% pair, and the MMLU-2,164 / GPQA-749 comparison.
+%    All three remain in their result sections. The 5.3x, 12.7x, 4-of-12,
+%    5-of-17, 0-of-17 and 5-of-8 headlines are retained.
+%  - "The calibration seed alone reorders" -> what was observed (review 1.8).
+%  - Claims scoped to the registered frames (review 5).
+%
+% ARXIV ABSTRACT FIELD: the limit is 1,920 characters, confirmed from
+% https://info.arxiv.org/help/prep.html. MEASURE, never eyeball -- see the
+% measurement note at the end of this file.
 
 \begin{abstract}
-% LENGTH TIGHTENING 2026-07-27 (phase 4). The abstract measured 2,043 characters
-% against arXiv's ~1,920-character abstract field. Prose was tightened per the
-% instruction; NO figure and NO sentence was cut, and the 145-cell sentence and
-% the per-item-outputs line are untouched. See the note at the end of the file
-% for the measured result.
-A fraction of a point of benchmark accuracy is the standard evidence that a
-compressed model is equivalent to its original. We show it is least
+A fraction of a point of benchmark accuracy is the usual evidence that a
+compressed model is equivalent to its original. We show this quantity is least
 informative precisely when two models are most alike: a net delta is what
 survives cancellation between opposing per-item changes, and cancellation is
-most complete in the regime every equivalence claim occupies.
+most complete in the regime equivalence claims occupy.
 
-% SOURCE: \S\ref{sec:atlas:netgross} (5.3x, ratio of medians on the 1,707-cell
-% rev-2 population); \S\ref{sec:minigrid:churnratio} Result 1 (median 12.7x);
-% \S\ref{sec:atlas:identical} (145 cells, 8.49% -> 8.5%; churn median 0.0720
-% -> 7.2%).
-Across an atlas of 1{,}707 paired model-by-task cells from public
-per-item evaluation dumps (3B--405B), per-item churn runs
-$5.3\times$ the net accuracy delta; between two compression methods at one bit
-width, the median is $12.7\times$. At the limit, 145 cells (8.5\%) post an
-\emph{exactly identical} accuracy to their baseline while disagreeing on a median
-of 7.2\% of items.
+% SOURCE: \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
+In a preregistered audit of 17 equivalence claims drawn from three registered
+frames---method papers, official quantized model cards and inference-stack
+vendor documentation---5 cannot be evaluated from what they report, 4 of the
+remaining 12 are underpowered for the margin they assert, and none of the 17
+releases the per-item outputs a third party would need to run the paired
+comparison itself. We audit evidential sufficiency, not truth: no claim is
+asserted false.
 
-% SOURCE: \S\ref{sec:audit:results} and Table~\ref{tab:audit-underpowered}
-% (4 of 12, 2.0x-12.9x); \S\ref{sec:audit:indeterminate} (5 of 17);
-% \S\ref{sec:audit} (0 of 17 release per-item outputs).
-In a preregistered audit of 17 equivalence claims from method papers, model
-cards and vendor docs, \textbf{4 of the 12 that permit a verdict are
-underpowered for their own assertion}, by
-$2.0\times$ to $12.9\times$; a further \textbf{5 of the 17} cannot be evaluated
-at all. \textbf{None of the 17 sources releases the per-item outputs a third
-party would need to run the paired comparison itself.} No claim is asserted
-false; we audit evidential sufficiency, not truth.
-
-% SOURCE: \S\ref{sec:certification}, Table~\ref{tab:certification}
-% (mmlu median 2,164; gpqa median 749) and \S\ref{sec:cert:churn-not-difficulty}.
-% LENGTH CUT 2026-07-27: the 4.2x pooled paired-advantage figure was dropped
-% here to reach the target length, per the drafting instruction's stated cut
-% order. It remains in \S\ref{sec:intro} and Table~\ref{tab:certification}.
-We supply the apparatus: equivalence testing at a declared margin, and
-\emph{certification tables} giving the items an evaluation needs, computed from
-disagreement observed under compression, not from
-independent-binomial variance. The requirement follows churn, not difficulty:
-MMLU needs about 2{,}164 items at 2\,pp where the harder GPQA needs 749.
+% SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:minigrid:churnratio} Result 1.
+Across an atlas of 1{,}707 paired model-by-task cells mined from public
+per-item evaluation dumps (3B--405B), per-item churn runs $5.3\times$ the net
+accuracy delta; between two compression methods at one bit width the median is
+$12.7\times$. We supply the corresponding apparatus: equivalence testing at a
+declared margin, and certification tables giving the items an evaluation needs,
+computed from disagreement observed under compression rather than from
+independent-binomial variance.
 
 % SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
-% (SIGNED). This is drafted variant (A) with ONE word changed: it read "not
-% reproducible", which over-claims against the bootstrap result of
-% \S\ref{sec:minigrid:supporting} (three cells show individual seeds disagreeing
-% while the five-seed mean survives resampling). "Unreliable" is what the
-% evidence carries. The registered artifact is the decision rule and the
-% verdict, not this prose; the change and its cause are recorded in
-% docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md.
-A preregistered experiment pairs GPTQ and AWQ on byte-identical
-calibration samples across five seeds. Under the frozen eight-cell
-decision rule, H3 is supported: the calibration seed alone reorders the two
-methods in \textbf{5 of 8} confirmatory cells, so a single-calibration
-comparison is unreliable.
-
-Every protocol was frozen before its analysis; every number is recomputable
-from released artifacts.
-% ARXIV ABSTRACT FIELD, MEASURED 2026-07-27: 1,912 characters / 306 words.
-% The 1,920 limit is confirmed from arXiv's own submission help
-% (https://info.arxiv.org/help/prep.html, read 2026-07-27): "abstracts longer
-% than 1920 characters will not be accepted". Measured after stripping markup
-% and expanding \times to " x ", which is CONSERVATIVE -- pasting "x" or the
-% multiplication sign gives a shorter string -- so 1,912 is an upper bound.
-%
-% THE MARGIN IS 8 CHARACTERS. Any future addition to this abstract must be
-% re-measured, not eyeballed. If it goes over, tighten prose: do NOT cut the
-% 145-cell sentence and do NOT touch the per-item-outputs line.
+% (SIGNED). "Unreliable", not "not reproducible": three cells show individual
+% seeds disagreeing while the five-seed mean survives resampling.
+A preregistered experiment pairs GPTQ and AWQ on byte-identical calibration
+samples across five seeds. Under the frozen eight-cell decision rule H3 is
+supported: changing the calibration draw was sufficient to reverse the observed
+method ordering in 5 of 8 confirmatory cells, so a single-calibration
+comparison of compression methods is unreliable. All per-item outputs,
+protocols and analysis code are released.
 \end{abstract}

@@ -129,14 +129,20 @@ asserting parity within 0.15\,pp has made a 0.15\,pp claim, and judging it
 against a 2\,pp yardstick audits a claim nobody made---and the third ruling then
 yielded the reported $K = 4$.
 
-The order in which those numbers arrived is the point. \emph{The correction ran
-against the direction the analyst's first instinct had gone.} The first pass had
-already produced a defensible, publishable, conservative number; the frozen text
-required a larger one and governed. That is the evidence available, from inside
-a solo-authored project, that the rule text drove the analysis rather than the
-desired result---and had it run the other way, the same discipline would have
-required reporting the smaller number. Both readings ship in the released CSV
-(\S\ref{sec:audit:results}).
+% NEUTRALISED 2026-07-31 (advisor review 3.3). Replaced an argument about the
+% analyst's intentions with the sequence of values. The frozen text governing
+% over the first pass is visible in the numbers themselves.
+%
+% OPEN -- SUBSTANTIVE, NOT RHETORICAL. The claim-specific margins referred to
+% here are, for most claims, the largest delta the source REPORTED, not a margin
+% the source DECLARED (see docs/audit_claim_table.csv: no margin field exists in
+% the frozen extraction, and every margin_basis in the derived CSV cites an
+% observed delta). Whether K should rest on them is the subject of the pending
+% dated amendment. Do not restate the "0.15 pp assertion is a 0.15 pp claim"
+% reasoning that this paragraph previously carried.
+Applying claim-specific margins changed $K$ from 1 to 5; applying the
+preregistered metric-compatibility rule to R04 produced the reported $K = 4$.
+Both readings ship in the released CSV (\S\ref{sec:audit:results}).
 
 \subsection{Result-inspection discipline}
 \label{sec:prereg:discipline}
@@ -196,7 +202,7 @@ selected after its result was known. The screen's per-cell outcomes are in
 \S\ref{sec:minigrid:escalation} and the verdict in
 \S\ref{sec:minigrid:verdict}; this section states neither.
 
-\subsection{The spot-check found a selection bias in our own pipeline}
+\subsection{Atlas validation and population correction}
 \label{sec:prereg-spotcheck}
 % SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md; the spot-check report of
 % 2026-07-21 (10 cells, 262/262 fields); ruling R7. Full narrative, the two
@@ -219,20 +225,19 @@ recomputing our own numbers---the natural, and useless, self-check---would have
 confirmed all of them and shipped the selection bias intact. What caught it was
 reconstructing the measurement from the protocol text rather than the code.
 
-\textbf{Preregistration did the work it is supposed to do.} The frozen text
+Preregistration did the work it is supposed to do. The frozen text
 determined the direction of the repair: we executed a rule already binding and
 under-implemented, rather than choosing one that flattered a result. The
 correction was nevertheless made \emph{after} results had been inspected, and we
 disclose that rather than presenting it as a pre-specified step.
 
-\textbf{Both revisions are public.} We publish rev-1 and rev-2 and report the
+Both revisions are public. We publish rev-1 and rev-2 and report the
 delta (Appendix~\ref{app:prereg:rev2delta}) rather than replacing the record
 with its corrected version; the repair enlarged the analysable population by
 44\% and left the audit's headline verdicts unmoved. A field whose
 near-lossless claims cannot be rechecked because per-item outputs are never
-released---the finding of Section~\ref{sec:audit}---is a field whose corrections
-are invisible. Ours is not, and that is the point of the artifact rather than an
-apology for it.
+released---the finding of Section~\ref{sec:audit}---is one whose corrections
+cannot be seen. Both revisions of our atlas are released.
 % CORRECTION TO THE RECORD (2026-07-22). Commit 272136b ("Update the paper's
 % banner-marked figures to atlas rev-2") states: "Every \revtwoBanner and
 % \revtwoTODO marker is resolved; none remain outside main.tex's macro

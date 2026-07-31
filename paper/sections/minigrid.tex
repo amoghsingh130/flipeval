@@ -74,7 +74,7 @@ labels and item indices.
 % docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED).
 The eight cells were built in two stages, and the second stage was authorized by
 the first under a rule frozen before either ran. The mini-grid executed
-\textbf{4 of the 8} cells, $\{$Qwen2.5-1.5B-Instruct,
+4 of the 8 cells, $\{$Qwen2.5-1.5B-Instruct,
 Llama-3.2-3B-Instruct$\}\times\{$MMLU, GSM8K$\}$; the 7B/8B cells sat behind a
 mechanical, pre-committed escalation screen described in
 \S\ref{sec:minigrid:escalation}. That screen fired, the deferred cells were
@@ -102,7 +102,7 @@ seen.
 Applied once, mechanically, to all eight cells:
 \textbf{H3 is supported.} The winner reverses across seeds in \textbf{5 of the 8}
 cells against a threshold of 3, and the range/gap criterion holds in
-\textbf{7 of the 8} against a threshold of 4. The supported limb of the frozen
+7 of the 8 against a threshold of 4. The supported limb of the frozen
 rule is a disjunction, and \emph{both disjuncts are satisfied independently}:
 either one alone would have returned the same verdict.
 
@@ -112,8 +112,8 @@ $\max\mathrm{range} < 0.5\,\mathrm{gap}$ in at least 6 of 8, which holds in 1.
 The two limbs cannot both hold and do not, so the frozen text classifies the
 outcome with no interpretation required.
 
-No exact accuracy tie occurs anywhere in the confirmatory set: \textbf{0 of 8}
-cells contain one, over \textbf{0 of 40} (model, task, seed) triples. The
+No exact accuracy tie occurs anywhere in the confirmatory set: 0 of 8
+cells contain one, over 0 of 40 (model, task, seed) triples. The
 registered tie convention---a tie is neither a flip nor a non-flip, and can
 neither create nor erase a flip between two non-tied seeds---therefore has no
 effect on any cell's classification, and the denominator for both criteria
@@ -161,8 +161,8 @@ Qwen2.5-7B   & GSM8K & 0.005800 & 0.048000 & 0.035000 & \textbf{TRUE}  & \textbf
 Llama-3.1-8B & MMLU  & 0.017163 & 0.040023 & 0.025495 & \textbf{TRUE}  & \textbf{TRUE} \\
 Llama-3.1-8B & GSM8K & 0.013200 & 0.033000 & 0.026000 & \textbf{TRUE}  & \textbf{TRUE} \\
 \midrule
-\multicolumn{7}{l}{Winner flip in \textbf{5 of 8} (threshold $\geq 3$: met)\quad$\cdot$\quad Range/gap in \textbf{7 of 8} (threshold $\geq 4$: met)} \\
-\multicolumn{7}{l}{$\max\mathrm{range} < 0.5\,\mathrm{gap}$ in \textbf{1 of 8} (disconfirm threshold $\geq 6$: not met)\quad$\cdot$\quad exact ties: \textbf{0 of 40}} \\
+\multicolumn{7}{l}{Winner flip in 5 of 8 (threshold $\geq 3$: met)\quad$\cdot$\quad Range/gap in 7 of 8 (threshold $\geq 4$: met)} \\
+\multicolumn{7}{l}{$\max\mathrm{range} < 0.5\,\mathrm{gap}$ in 1 of 8 (disconfirm threshold $\geq 6$: not met)\quad$\cdot$\quad exact ties: 0 of 40} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -272,7 +272,7 @@ one we intend a practitioner to take away: \emph{a single calibration run can
 hand you the wrong winner}, and averaging over the registered five seeds is
 substantially more stable than any one of them.
 
-\textbf{The limitation on that reading, stated plainly.} With five seeds the
+The limitation on that reading, stated plainly. With five seeds the
 bootstrap resamples seed labels from a sample of five, so it has limited
 resolution on the seed-level distribution. What the low rates bound is the
 stability of \emph{this} observed mean under resampling; they do not establish
@@ -377,7 +377,7 @@ correspondingly better balanced, cancellation in the aggregate is more complete,
 and the surviving net delta therefore hides a proportionally larger amount of
 per-item movement.
 
-\textbf{We observe two regimes; we do not establish a curve.} These are two
+We observe two regimes; we do not establish a curve. These are two
 measured points---one observational contrast at 1{,}707 cells, one controlled
 contrast at 8---and nothing here licenses reading the ratio as a monotone
 function of aggregate closeness. What the two points support is the direction of
@@ -423,7 +423,7 @@ GSM8K ($n = 1{,}000$) & 1.92 -- 3.61  & 0.44 -- 5.65 \\
 \end{tabular}
 \end{table}
 
-\textbf{MMLU carries the result.} All four MMLU cells satisfy the range/gap
+MMLU carries the result. All four MMLU cells satisfy the range/gap
 criterion, their seed-induced ranges run $5.5$ to $17.5$ paired standard errors,
 and their seed-level SD exceeds item-level SE by $1.6$ to $5.9\times$
 (Table~\ref{tab:h3-variance}). The instability is far larger than the
@@ -444,7 +444,7 @@ is that the GSM8K cells carry materially less resolving power than the MMLU
 cells---a statement about where the evidence concentrates, not a reweighting of
 the rule.
 
-\subsection{The apparatus caught its own experiment}
+\subsection{Resolution of the confirmatory cells against the certification tables}
 \label{sec:minigrid:selfaudit}
 
 % SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, §"The paper's own
@@ -459,12 +459,14 @@ actually observed in them is $p_d = 0.1766$, $0.1808$, $0.2086$ and $0.2940$,
 at or above the table's p75, where the requirement is roughly three times the
 $n$ used.
 
-So the under-resolution was not a surprise: \textbf{this paper's own apparatus
-predicted its own experiment's shortfall, and predicted it conservatively.} We
-state that explicitly rather than let it be found. A tool that catches its
-author is worth more than one that never had to, and an audit standard whose
-first casualty is the audit's own controlled experiment is easier to trust than
-one that always exonerates.
+% NEUTRALISED 2026-07-31 (advisor review 3.3). The passage argued for its own
+% trustworthiness ("a tool that catches its author is worth more than one that
+% never had to"). The fact is stronger unadorned; the reader can draw the
+% inference.
+The certification table therefore predicted this shortfall in advance: the
+confirmatory cells ran below the item count the method requires at the observed
+discordance, and the same instrument applies to this experiment as to the
+audited claims.
 
 One caveat bounds the comparison. The certification table's discordance
 percentiles describe a quantized-against-FP16 contrast, while $p_d$ here is

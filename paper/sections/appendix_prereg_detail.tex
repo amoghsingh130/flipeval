@@ -116,16 +116,11 @@ within 0.15\,pp has made a 0.15\,pp claim, and judging it against a 2\,pp
 yardstick audits a claim nobody made. Ruling on choice~3 then moved one claim
 out of the determinate set, yielding the reported \textbf{$K = 4$}.
 
-We draw a specific methodological conclusion from this sequence, and it is not
-that the frozen text was perfect. It is that the correction ran \emph{against}
-the direction the analyst's first instinct had gone. The first pass had already
-produced a defensible, publishable, conservative number; the frozen text
-required a larger one, and the frozen text governed. That is the evidence
-available, from inside a solo-authored project, that the rule text drove the
-analysis rather than the desired result. Had the correction run the other
-way---first pass large, frozen text small---the same discipline would have
-required reporting the small number, and this paragraph would say so. Both
-readings are reported in the paper (\S\ref{sec:audit:results}) and shipped in
+% NEUTRALISED 2026-07-31 (advisor review 3.3). The sequence of values is the
+% evidence; an argument about the analyst's instincts is not.
+The first pass returned the smaller value and the frozen text required the
+larger one. Both readings are reported in the paper
+(\S\ref{sec:audit:results}) and shipped in
 the released CSV, so a reader who prefers the uniform yardstick can have it.
 
 \paragraph{Choice 2: what counts as the claim's own margin.}
@@ -147,9 +142,13 @@ variance model (the paired assumption is the generous one, and
 Table~\ref{tab:audit-mdd} shows the independent bound is uniformly worse); the
 largest asserted delta as the margin; a claim's own margin rather than a uniform
 one; and imputation by \emph{median} discordance from the most specific matching
-atlas tier rather than by any upper quantile. \textbf{An audit that resolves
-every ambiguity in the audited source's favour and still finds shortfalls of
-$2$--$13\times$ is the armoured version of the finding.}
+atlas tier rather than by any upper quantile. Under all four choices the
+observed shortfalls are $2$--$13\times$.
+% NEUTRALISED 2026-07-31 (advisor review 3.3): "the armoured version of the
+% finding" argued for the result's robustness instead of stating it.
+% OPEN: "the largest asserted delta as the margin" is the construction the
+% pending dated amendment concerns -- for most claims that delta was reported,
+% not asserted as a bound.
 
 \paragraph{Choice 3: R04 is indeterminate rather than scored on a substituted
 benchmark.}
@@ -190,7 +189,7 @@ rows are handled per input rather than discarded whole, so an indeterminate
 claim keeps the components its available inputs support, reported as
 supplementary and never verdict-bearing.
 
-\subsection{The spot-check found a selection bias in our own pipeline}
+\subsection{Atlas validation and population correction}
 \label{app:prereg-spotcheck}
 % SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md; the spot-check report of
 % 2026-07-21 (10 cells, 262/262 fields); ruling R7.
@@ -230,7 +229,7 @@ would have confirmed all of them and shipped the selection bias intact. What
 caught it was reconstructing the measurement from the protocol text rather than
 from the code.
 
-\textbf{Preregistration did the work it is supposed to do.} The registration
+Preregistration did the work it is supposed to do. The registration
 text was frozen before any statistic existed, and it fully determined the
 direction of the repair: we did not choose a rule that flattered a result, we
 executed a rule that was already binding and had been under-implemented. That
@@ -239,7 +238,7 @@ we can say so without asking to be trusted. The correction was nevertheless made
 \emph{after} results had been inspected, and we disclose that plainly rather
 than presenting the repair as a pre-specified step.
 
-\textbf{Both revisions are public.} We publish rev-1 and rev-2 and report the
+Both revisions are public. We publish rev-1 and rev-2 and report the
 delta between them, rather than replacing the record with its corrected version.
 A field in which near-lossless claims cannot be rechecked because per-item
 outputs are never released---the finding of Section~\ref{sec:audit}---is a field
@@ -273,7 +272,7 @@ slightly (0.1327 $\to$ 0.1375) and S1 median $|$net delta$|$ rises
 rises sharply from 17.5\% to 26.5\%---the recovered pairs are larger-$n$ cells,
 which resolve more differences. Every S2 field is identical across revisions.
 
-\textbf{The headline verdicts did not move.} $K = 4$ of 12 determinate claims
+The headline verdicts did not move. $K = 4$ of 12 determinate claims
 underpowered for their own assertion and $J = 5$ indeterminate, identical to
 rev-1 under the rev-2 discordance imputation, with the uniform-2\,pp secondary
 reading unchanged at 1 of 12. No new verdict computation was triggered. In the

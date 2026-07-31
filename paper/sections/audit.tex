@@ -76,9 +76,20 @@ explicit $\leq 1$\,pp delta framed as parity). Every claim
 meeting the criterion is audited; there is no discretionary sub-selection.
 % SOURCE: docs/audit_claim_table.csv column `frame`: F1=7, F2=7, F3=3.
 The frozen table contains 17 claims: 7 method papers, 7 official model cards or
-blogs, and 3 vendor documents. Each claim's fields were extracted twice by
-mutually blind passes, with source content hashes recorded, and discrepancies
-reconciled before the verdict stage (\S\ref{sec:prereg}).
+blogs, and 3 vendor documents.
+% ADDED 2026-07-31. The body previously said only "extracted twice by mutually
+% blind passes" and never said by WHAT. That the passes were language-model
+% agent sessions was disclosed only inside the reproduced registration
+% (Amendment 1) in the appendix, which is not where a reader looks for it.
+Each claim's fields were extracted by \textbf{two blinded automated extraction
+passes}---separate language-model agent sessions, the second given no access to
+the first pass's output---with source content hashes recorded, followed by
+\textbf{human reconciliation} of every disagreement before the verdict stage
+(\S\ref{sec:prereg}). Separate sessions prevent the second pass from copying the
+first; they do not make the two passes statistically independent, because both
+share a common model prior. Appendix~\ref{app:extraction} specifies the
+procedure, reports what agreement between the passes can and cannot be measured
+after the fact, and states what was not recorded at the time.
 
 We state the limit of the exercise before its results.
 % SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4 closing paragraph.
@@ -88,11 +99,11 @@ that any audited model is in fact degraded.} The audited property is the
 offered in support of an equivalence claim was large enough to have detected the
 difference the claim pronounces negligible. A claim can be perfectly correct and
 still be unsupported by the evaluation offered for it, and several of the claims
-below are very probably correct. What the field lacks is not honesty but a
-reporting standard; this section measures the gap that standard would close, and
+below are very probably correct. What is missing from the audited sources is a
+reporting standard. This section measures the gap such a standard would close;
 Section~\ref{sec:certification} supplies the instrument.
 
-\subsection{The reproducibility zero}
+\subsection{Availability of per-item outputs}
 \label{sec:audit:v3}
 
 The most actionable finding requires no statistics at all.
@@ -273,7 +284,7 @@ instability of a verdict across the sweep---that happen to coincide on one
 claim, and they must not be read as one finding.
 Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 
-\subsection{Indeterminate claims: a finding, not a gap}
+\subsection{Indeterminate claims}
 \label{sec:audit:indeterminate}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Indeterminate;
@@ -281,7 +292,7 @@ Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 % indeterminate_reason.
 $J = 5$ of the 17 claims are indeterminate, in two kinds.
 
-\textbf{Insufficient reporting (4).} A registered input is genuinely absent.
+Insufficient reporting (4). A registered input is genuinely absent.
 R02 (LLM.int8()) and R11 (Meta's quantized-Llama blog) state no sample size, no
 baseline, and no numeric delta---their headline equivalence evidence exists only
 as a chart image. R13 (vLLM FP8 documentation) states $n = 250$ but shows no
@@ -289,7 +300,7 @@ on-page baseline run at all. R14 (vLLM FP8 KV-cache blog) states a margin of
 0.7\,pp and permits $n$ to be imputed, but reports no baseline; its comparison
 lives in a figure.
 
-\textbf{Metric-incompatible (1).} R04 (AWQ) reports enough, but about a quantity
+Metric-incompatible (1). R04 (AWQ) reports enough, but about a quantity
 the registered model cannot score; see below.
 
 Every indeterminate claim retains whatever components its available inputs
@@ -306,7 +317,7 @@ pre-registered audit cannot evaluate them is precisely the reporting-standards
 problem this paper exists to address: the claim may well be true, but it has been
 placed beyond the reach of checking.
 
-\subsection{R04: an exclusion we argue against our own interest}
+\subsection{R04: metric incompatibility}
 \label{sec:audit:r04}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and

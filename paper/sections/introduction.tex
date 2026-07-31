@@ -12,125 +12,93 @@
 \section{Introduction}
 \label{sec:intro}
 
-A compressed language model is usually released with a sentence of the form
+% REWRITTEN 2026-07-31 (advisor review 3.1, 3.5, 3.6, 5, 1.8). Changes:
+%  - The eight \paragraph{} labels are gone. They made every paragraph read as
+%    an item in a generated executive summary.
+%  - Secondary numbers are cross-referenced rather than restated. Each headline
+%    keeps its three principal appearances (abstract, result section,
+%    conclusion); the introduction is not a fourth.
+%  - Field-wide language is scoped to the registered sampling frames.
+%  - "The calibration seed alone reorders" is replaced by what was observed.
+%  - The section-by-section map is one sentence naming three components.
+% This file remains DERIVATIVE: no primary figures originate here.
+
+Compressed language models are frequently released with a sentence of the form
 ``negligible degradation'' or ``$99.x\%$ recovery'', supported by a difference of
 a fraction of a point in aggregate accuracy on a fixed benchmark. That sentence
 is an equivalence claim. Equivalence claims have a statistical form---a declared
 margin, a test, and a sample size sufficient to reject the composite null that
-the difference exceeds the margin---and the sentence almost never has it.
+the difference exceeds the margin---and in the sources we audit it almost never
+has it.
 
-The problem is worse than a missing test, because the evidence being offered is
-weakest exactly where it is being offered. A net accuracy delta is the residue
-left after per-item changes in opposite directions cancel. The more alike two
-models are, the more completely those changes cancel, and the smaller the
-residue becomes relative to the behavioural change underneath it. So the
-quantity the field uses to establish that two models are the same is least
-informative precisely in the regime where that claim is made. Everything in this
-paper follows from taking that observation seriously and measuring it.
+The difficulty is not only a missing test. The evidence is weakest in the
+regime where it is offered. A net accuracy delta is the residue left
+after per-item changes in opposite directions cancel. The more alike two models
+are, the more completely those changes cancel, and the smaller the residue
+becomes relative to the behavioural change underneath it. The quantity used to
+establish that two models are the same is therefore least informative in the
+regime where that claim is made. This paper measures that gap and supplies an
+instrument for closing it.
 
-\paragraph{The audit.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline;
-% results/audit_verdicts_rev2.csv; \S\ref{sec:audit:results},
-% Table~\ref{tab:audit-underpowered}.
-%
-% QUANTITY CONFLATION, CORRECTED 2026-07-27 (phase 4 verification). This read
-% "the smallest difference their evaluation could resolve exceeds the difference
-% they pronounce negligible, by 2.0x to 12.9x" -- which describes the MDD ratio
-% (Table~\ref{tab:audit-mdd}, range 1.60x-4.05x) while quoting the SAMPLE-SIZE
-% shortfall n_req/n_reported (Table~\ref{tab:audit-underpowered}, range
-% 2.0x-12.9x). The numbers were right and attached to the wrong quantity,
-% inflating the stated MDD gap roughly threefold. The description now matches
-% the numbers. The abstract was already correct ("by factors of"), and its
-% SOURCE comment already cited tab:audit-underpowered.
-Of 17 equivalence claims enumerated from method papers, official quantized model
-cards, and inference-stack vendor documentation, 5 cannot be evaluated at all
-from what they report, and \textbf{4 of the remaining 12 are underpowered for
-their own assertion}: certifying the margin each of them pronounces negligible
-would take $2.0\times$ to $12.9\times$ the items the claim actually evaluated.
-\textbf{None of the 17 releases the per-item outputs} that a third
-party would need to run the paired comparison the claim asserts. No claim is
-described as false; the audited property is the evidential sufficiency of the
-reported evaluation.
+% results/audit_verdicts_rev2.csv; \S\ref{sec:audit:results}.
+% Numbers kept here: 17, 5 indeterminate, 4 of 12, 0 of 17. The shortfall range
+% (2.0x-12.9x), the worked R17 example and the MDD ratios now live only in
+% \S\ref{sec:audit:results}, which is where a reader can check them.
+We enumerate 17 equivalence claims from three registered sampling frames:
+method papers, official quantized model cards, and inference-stack vendor
+documentation. Five cannot be evaluated from what they report. Of the remaining
+12, four are underpowered for the margin they assert, in the sense that
+certifying that margin would require substantially more items than the claim
+evaluated, and none of the 17 releases the per-item outputs a third party would
+need to run the paired comparison the claim asserts
+(\S\ref{sec:audit:results}). No claim is described as false: the audited
+property is the evidential sufficiency of the reported evaluation, not the truth
+of the underlying equivalence.
 
-% LEGIBILITY EXAMPLE (TODO closed 2026-07-27). Restates
-% \S\ref{sec:audit:results} at equal precision: 0.15 pp, 28,659 items, "roughly
-% 370,000" against the table's exact 369,856. Chosen because it is the widest
-% shortfall in the set (12.9x) and the arithmetic is legible without the table.
-The shape of the finding is easiest to see in one claim. A Red~Hat model card
-asserts parity within \textbf{0.15\,pp} on an evaluation of \textbf{28{,}659}
-items; at the per-item disagreement rate that comparable compressed models
-actually exhibit, certifying parity that tight would take roughly
-\textbf{370{,}000} items. The claim may well be true. The evaluation offered for
-it cannot resolve the difference it declares negligible, and that is a property
-of the evidence rather than of the model---which is the distinction this paper
-is built to make, and to make measurable.
-
-\paragraph{The fix.}
-Equivalence is a certification problem. We compute certification tables---how
-many items an evaluation needs in order to certify a compressed model within
+Equivalence is a certification problem, so we compute certification
+tables---how many items an evaluation needs to certify a compressed model within
 $\pm m$ points of its baseline---from the per-item disagreement rates actually
-observed under compression rather than from independent-binomial variance.
-% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
-% (GSM8K 2.25--2.26, MuSR 14.66--14.68); docs/CERTIFICATION_TABLES_2026-07-20.md
-% §"Why the naive column". REV-2: GSM8K end was 1.7x under rev-1; corrected
-% 2026-07-26 to agree with Table~\ref{tab:certification} and §5.
-The correction is large: $2.3\times$ to $14.7\times$ fewer items by family,
-$4.2\times$ pooled. And the requirement is set by churn rather than difficulty,
-which defeats the natural intuition: MMLU needs about 2{,}164 items at 2\,pp
-where the harder GPQA needs 749.
+observed under compression rather than from independent-binomial variance. The
+paired correction is large, and the requirement is set by churn rather than by
+task difficulty, which defeats the natural intuition
+(\S\ref{sec:certification}).
 
-\paragraph{The evidence.}
-% SOURCE: \S\ref{sec:atlas:netgross} (5.3x on the rev-2 1,707-cell population);
-% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
-% results/identical_score_churn_rev2.csv (analysable_cells 1707,
-% zero_delta_cells 145, zero_delta_share 0.084944, churn_median 0.072000).
-% REV-2: "a median of 6.2%" was rev-1's churn_median 0.062176 and was corrected
-% to 7.2% on 2026-07-26, in step with the abstract and
-% \S\ref{sec:atlas:identical}. All three state the same quantity.
-% REV-1 SURVIVOR, CORRECTED 2026-07-27: "five to six times" was rev-1's ratio;
-% the rev-2 value is 5.3x in both strata. Fourth such survivor found.
+% SOURCE: \S\ref{sec:atlas:netgross}; results/identical_score_churn_rev2.csv.
 Both rest on an atlas of 1{,}707 paired model-by-task cells mined from public
 per-item evaluation dumps spanning 3B to 405B parameters, in which churn runs
-$5.3\times$ the net delta, and 145 cells (8.5\%) post an exactly identical
-accuracy to their baseline while still disagreeing with it on individual items,
-at a median of 7.2\% of items. The ratio is remarkably stable across a
-generational change in method: the two strata differ by nearly a factor of three
-in how much behaviour they disturb, and understate that disturbance by the same
-multiple---better methods have made the difference smaller without making the
-evidence for equivalence any more sufficient (\S\ref{sec:atlas:netgross}).
+$5.3\times$ the net delta. A substantial minority of cells post an accuracy
+identical to their baseline while still disagreeing with it on individual items
+(\S\ref{sec:atlas:identical}). The ratio is stable across a generational change
+in method: the two strata differ by nearly a factor of three in how much
+behaviour they disturb, and understate that disturbance by the same multiple.
 
-\paragraph{The controlled experiment.}
-% SOURCE: \S\ref{sec:minigrid:verdict};
-% docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED, 05c86f2);
-% \S\ref{sec:minigrid:churnratio} Result 1 (median 12.7x).
+% SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
+% (SIGNED, 05c86f2); \S\ref{sec:minigrid:churnratio} Result 1.
+% CAUSAL WORDING 2026-07-31: "the calibration seed alone reorders the two
+% methods" asserted sufficiency of a single factor. Replaced with the observed
+% statement. Residual randomness is documented in \S\ref{sec:minigrid}.
 The same logic predicts something sharper, and a preregistered experiment tests
-it. If cancellation grows with similarity, then the least informative comparison
-of all is not compressed against original but \emph{compressed against
-compressed}---two methods at the same bit width, which are far closer to each
-other than either is to its baseline. Pairing GPTQ and AWQ on byte-identical
-calibration samples across five calibration seeds, over eight registered
-model-by-benchmark cells, we find churn running a median of $12.7\times$ the net
-delta, more than double the atlas ratio; and under the frozen eight-cell decision
-rule \textbf{H3 is supported}---the calibration seed alone reorders the two
-methods in \textbf{5 of 8} cells. Which of two compression methods wins can be
-decided by a random draw of calibration data, at a gap the field would report as
-equivalence.
+it. If cancellation grows with similarity, the least informative comparison is
+not compressed against original but \emph{compressed against compressed}---two
+methods at the same bit width, far closer to each other than either is to its
+baseline. Pairing GPTQ and AWQ on byte-identical calibration samples across five
+calibration seeds, over eight registered model-by-benchmark cells, we observe
+churn running a median of $12.7\times$ the net delta, and under the frozen
+eight-cell decision rule H3 is supported: within the controlled pipeline,
+changing the calibration sample was sufficient to reverse the observed
+GPTQ--AWQ ranking in \textbf{5 of 8} registered cells, at gaps that would
+ordinarily be reported as equivalence (\S\ref{sec:minigrid:verdict}).
 
-\paragraph{The instrument is not fixed either.}
-% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §§1, 7;
-% docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md §4.2 (0.232 -> 0.566 on unchanged
-% generations); \S\ref{sec:sensitivity} for the registered ratio R.
-All of the above assumes the evaluation itself holds still. A small preregistered
-exploratory study says it does not: on a single fixed FP16 model, changing the
-answer-extraction filter moved reported GSM8K accuracy from $0.232$ to $0.566$
-with \emph{not one token of model output changed}. That is a scoring decision,
-not a modelling one, and it is larger than every compression effect in this
-paper. It is one model and licenses no confirmatory reading
-(\S\ref{sec:sensitivity}), but a reader can check it in an afternoon on the
-pinned harness version, and it bounds how much any unstated configuration choice
-can be worth.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §§1, 7.
+All of the above assumes the evaluation itself holds still. A small
+preregistered exploratory study indicates it does not: on a single fixed FP16
+model, changing the answer-extraction filter moved reported GSM8K accuracy from
+$0.232$ to $0.566$ with not one token of model output changed. That is a scoring
+decision rather than a modelling one, and it is larger than every compression
+effect reported here. It is one model on one task and licenses no confirmatory
+reading (\S\ref{sec:sensitivity}).
 
-\paragraph{What is new, and what is not.}
 Per-item flips as a diagnostic for compressed models are due to
 \citet{dutta2024flips}, and calibration-\emph{data} effects on quantization
 quality are due to \citet{williamsaletras2024}; we claim neither. Our
@@ -138,39 +106,25 @@ contributions are (i) the preregistered audit of published equivalence claims
 and its verdict artifact; (ii) empirical certification tables and the
 paired-design correction they quantify; (iii) the atlas of the public record,
 and the measured cancellation ratio in both the observational and controlled
-regimes; and (iv) a preregistered seed-paired experiment showing that the
-calibration seed alone reorders two compression methods in 5 of 8 registered
-cells. Relative to the closest existing work \citep{llmaccuracystats2026}, which
-performs one-sided McNemar \emph{detection}, our delta is the shift from
+regimes; and (iv) a preregistered seed-paired experiment in which the
+calibration draw reverses the method ordering in 5 of 8 registered cells.
+Relative to the closest existing work \citep{llmaccuracystats2026}, which
+performs one-sided McNemar \emph{detection}, our contribution is the shift from
 detection to certification: a declared margin, TOST, and required-$n$ tables.
 
-\paragraph{Preregistration.}
-All protocols were frozen before the analyses they govern
-(\S\ref{sec:prereg}), deviations are dated amendments rather than edits, and
-the analyst decisions that moved the headline are reported together with the
-direction they moved it---including the two corrections that removed the
-paper's largest numbers.
+All protocols were frozen before the analyses they govern (\S\ref{sec:prereg}),
+deviations are dated amendments rather than edits, and the analyst decisions
+that moved the headline are reported together with the direction they moved it.
 
-% PAPER MAP (TODO closed 2026-07-27). Deliberately short and \ref-driven: it
-% names what each section decides rather than restating findings, so it carries
-% no figures and cannot fall out of sync. Section order follows main.tex.
-\paragraph{Map.} Section~\ref{sec:related} positions the work and reconciles two
-antecedents that disagree about calibration sensitivity.
-Section~\ref{sec:prereg} states what was frozen, when, and which analyst
-decisions moved the headline. Section~\ref{sec:audit} is the audit;
-Section~\ref{sec:certification} builds the certification tables that say what
-the audited claims would have needed; Section~\ref{sec:atlas} is the atlas both
-rest on. Section~\ref{sec:minigrid} is the preregistered controlled experiment,
-Section~\ref{sec:sensitivity} the harness study, and
-Section~\ref{sec:discriminant} the discriminant check that the framework does
-not simply call everything noise. Section~\ref{sec:artifacts} lists what is
-released, Section~\ref{sec:limitations} what we do not claim.
+The paper has three components: an audit of published equivalence claims
+(\S\ref{sec:audit}), an atlas of the public evaluation record with the
+certification method it supports (\S\S\ref{sec:certification}--\ref{sec:atlas}),
+and a preregistered controlled experiment on calibration-seed sensitivity
+(\S\ref{sec:minigrid}). Supporting studies, artifacts and limitations follow in
+\S\S\ref{sec:sensitivity}--\ref{sec:limitations}.
 
-% RESOLVED 2026-07-30. Canonical DOI stated once here; the full identifier set
-% (concept DOI, source repo, dataset mirror) lives in \S\ref{sec:artifacts} and
-% App.~\ref{app:artifacts:metadata} rather than being restated three times.
+% RESOLVED 2026-07-30. Canonical DOI stated once here.
 Everything the paper reports---the per-item outputs behind every controlled
 result, the atlas, the audit table, the analysis package and the reproduction
-package---is archived at
-\versiondoi{} and
-itemised in Section~\ref{sec:artifacts}.
+package---is archived at \versiondoi{} and itemised in
+Section~\ref{sec:artifacts}.
