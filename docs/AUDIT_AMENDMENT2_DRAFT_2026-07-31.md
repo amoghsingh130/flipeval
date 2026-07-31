@@ -1,6 +1,13 @@
-# DRAFT — Audit Registration, Amendment 2 — UNSIGNED
+# Audit Registration, Amendment 2 — SIGNED AND IN FORCE
 
-**Status: DRAFT. Not in force. Not appended to any frozen file.**
+**Status: SIGNED by Amogh Singh, 2026-07-31, on the verbatim instruction "sign
+and append". Part 1 was appended byte-identically (7,881 chars) to
+`docs/AUDIT_REGISTRATION_2026-07-15.md` under "Dated Amendments"; the append was
+verified to have changed no line above it. THIS FILE IS NOW A RECORD OF THE
+DRAFTING, NOT THE OPERATIVE TEXT — the operative text is in the registration.**
+
+The recomputation it authorises has **not** been run. When it is, it runs
+**once**, per the *Analysis discipline* clause.
 
 Drafted by Claude Code, 2026-07-31, at Amogh's request, following the precedent
 of `docs/BRIDGE_DECISION_RECORD_2026-07-20.md` ("drafted by Claude Code; signed
@@ -71,9 +78,10 @@ one category:
 The determination is made against the frozen `exact_quote` for each claim and,
 where the quote alone is inconclusive, against the source at the version and
 content hash recorded in the frozen claim table. It is recorded per claim, with
-the quoted text supporting it, in a new column of the verdicts CSV. **No source
-is re-fetched and no claim is re-extracted**; §§3.1–3.2 and the frozen claim
-table are unchanged.
+the quoted text supporting it, in a new column of the verdicts CSV. **No claim is
+re-extracted and no source is re-fetched for extraction purposes**; the frozen
+claim table is unchanged. Sources were re-fetched for verification only, under
+the eligibility-and-provenance scope recorded below.
 
 Verdicts are then computed as follows:
 
