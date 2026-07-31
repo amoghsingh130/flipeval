@@ -237,6 +237,31 @@ class DiscordanceMatch:
     discordance: float
     tier: str
     n_cells: int
+    # Every matching cell's discordance, sorted. The point imputation above is
+    # this sequence's median; AUDIT_REGISTRATION Amendment 2 requires the
+    # surviving power result to be reported with its reversal point, which
+    # cannot be computed from the median alone.
+    values: tuple = ()
+
+
+def reversal_discordance(n: int, margin: float, alpha: float = ALPHA, power: float = POWER) -> float:
+    """The discordance at which a claim of size `n` stops being underpowered.
+
+    `required_n_for_tost` is ceil((z*sqrt(d)/margin)**2), which is monotone
+    increasing in d, so the verdict flips where that expression equals n:
+
+        d* = n * margin**2 / z**2
+
+    Below d* the claim is adequately powered at `margin`; above it, underpowered.
+    Integer ceilings make the realised boundary rough by at most one cell of d,
+    so callers report this as approximate.
+    """
+    if n <= 0:
+        raise ValueError(f"n must be positive, got {n}")
+    if margin <= 0:
+        raise ValueError(f"margin must be positive, got {margin}")
+    z = float(stats.norm.ppf(1 - alpha)) + float(stats.norm.ppf(power))
+    return n * margin ** 2 / z ** 2
 
 
 def nearest_cell_discordance(
@@ -266,7 +291,7 @@ def nearest_cell_discordance(
         matching = [c for c in cells if _tier_matches(tier, c, family, bits, benchmark)]
         if matching:
             values = sorted(c.discordance for c in matching)
-            return DiscordanceMatch(_median(values), tier, len(matching))
+            return DiscordanceMatch(_median(values), tier, len(matching), tuple(values))
     raise ValueError("no atlas cells available for imputation")
 
 

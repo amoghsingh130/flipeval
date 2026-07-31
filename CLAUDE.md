@@ -176,8 +176,13 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 201 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 207 passed, 0 skipped
 ```
+
+Run it with `scripts/slurm/run_tests.sbatch`, which executes the suite in the
+already-built image. Do **not** rebuild the image to run the gate: a rebuild
+re-resolves the pinned environment, so it tests a different environment cell
+than the change will run in.
 
 **Whichever session adds tests updates this expected count in the same commit.**
 More than one agent session commits to this worktree. A stale expectation is a

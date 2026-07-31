@@ -33,6 +33,7 @@ from scripts.audit_stats import (
     nearest_cell_discordance,
     paired_flip_sd,
     required_n_for_tost,
+    reversal_discordance,
     sha256_of,
 )
 
@@ -77,10 +78,64 @@ class ClaimProfile:
     determinate_components: tuple = field(default=())
 
 
-# Claimed margin convention: the LARGEST absolute delta the source asserts is
-# negligible, since that is the effect an equivalence claim must be able to
-# resolve. This is the reading most favourable to the source -- see the
-# interpretive-choices section of docs/AUDIT_VERDICTS_2026-07-20.md.
+# --------------------------------------------------------------------------
+# AUDIT_REGISTRATION Amendment 2 (2026-07-31, signed).
+#
+# The quantity previously called `claimed_margin_pp` is the largest absolute
+# delta the SOURCE REPORTED. Amendment 2 establishes that this is not a margin:
+# "A reported delta is an outcome of the evaluation; a margin is a threshold
+# against which an outcome is judged." It is therefore emitted under a name that
+# says what it is, and every quantity derived from it is non-verdict-bearing.
+# --------------------------------------------------------------------------
+
+# Excluded from the eligible population by Amendment 2's eligibility correction,
+# applying the inclusion rule already registered in §3.1. Evidence:
+# docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §4.
+INELIGIBLE = {
+    "R10": "quoted claim appears in neither prose nor a table caption (§3.1): the "
+           "recorded exact_quote appears nowhere in the source; 98.6% is a table cell",
+}
+
+# Amendment 2 category (1 formal / 2 informal / 3 unquantified), with the text
+# supporting it. Determined against the frozen exact_quote and, where the quote
+# alone was inconclusive, the archived source. NO source declares a prospective
+# tolerance, so category 1 is empty -- see the verification doc §6-7.
+#
+# Category is orthogonal to determinacy: category 3 is the amendment's
+# EVALUABILITY test ("without sufficient numerical information"), while R04 is
+# category 2 (its source reports a result and calls it negligible) and separately
+# indeterminate for metric-incompatibility.
+MARGIN_CATEGORY = {
+    "R01": (2, "negligible accuracy degradation relative to the uncompressed baseline"),
+    "R02": (3, "without any performance degradation"),
+    "R03": (2, "negligible loss in accuracy"),
+    "R04": (2, "providing 4x model size reduction with negligible performance loss"),
+    "R05": (2, "enables lossless compression to ultra-low precisions of up to 3-bit"),
+    "R06": (2, "able to match the zero-shot accuracies of their dense counterparts"),
+    "R07": (2, "inducing 50% sparsity results in practically no accuracy decrease"),
+    "R08": (2, "achieves 93.0% recovery for the Arena-Hard evaluation, 98.9% for OpenLLM v1"),
+    "R09": (2, "achieves an average score of 73.44 on the OpenLLM benchmark"),
+    "R10": (2, "(ineligible; recorded for transparency only)"),
+    "R11": (3, "achieves competitive accuracy to the BF16 model"),
+    "R12": (2, "maintaining model accuracy"),
+    "R13": (3, "minimal impact on accuracy"),
+    "R14": (3, "is nearly lossless here, with sub-point differences across the aggregate scores"),
+    "R15": (2, "100.3% for OpenLLM v1 (using Meta's prompting when available)"),
+    "R16": (2, "99.4% for OpenLLM v1 (using Meta's prompting when available)"),
+    "R17": (2, "achieves an average score of 68.69 ... whereas the unquantized model achieves 68.54"),
+}
+
+# Descriptive sub-classification of the evidence the source offers, from the
+# 2026-07-31 full-text review. Not a registered quantity and never
+# verdict-bearing; reported because "no source states a threshold, and ten state
+# no number at all" is the audit's substantive reporting finding.
+EVIDENCE_FORM = {
+    **{c: "generic_adjective" for c in
+       ("R01", "R02", "R03", "R04", "R05", "R06", "R07", "R11", "R12", "R13")},
+    **{c: "posthoc_delta" for c in
+       ("R08", "R09", "R10", "R14", "R15", "R16", "R17")},
+}
+
 CLAIM_PROFILES = [
     ClaimProfile("R01", "gptq", 4, "piqa", 1838,
                  "frozen row states 'imputed (PIQA validation set, standard n=1838)'",
@@ -223,8 +278,16 @@ def compute_rows(claim_table: Path, atlas: Path) -> list[dict]:
             "n": profile.n if profile.n is not None else "",
             "n_basis": profile.n_basis,
             "baseline_accuracy": profile.baseline_accuracy if profile.baseline_accuracy is not None else "",
-            "claimed_margin_pp": profile.claimed_margin_pp if profile.claimed_margin_pp is not None else "",
-            "margin_basis": profile.margin_basis,
+            "eligible": profile.claim_id not in INELIGIBLE,
+            "eligibility_basis": INELIGIBLE.get(profile.claim_id, "meets §3.1 inclusion"),
+            "margin_category": MARGIN_CATEGORY[profile.claim_id][0],
+            "margin_category_basis": MARGIN_CATEGORY[profile.claim_id][1],
+            "evidence_form": EVIDENCE_FORM[profile.claim_id],
+            # NOT a margin. The largest absolute delta the source REPORTED.
+            # Amendment 2: never to be described as the claim's own, stated,
+            # declared or asserted margin.
+            "source_reported_delta_pp": profile.claimed_margin_pp if profile.claimed_margin_pp is not None else "",
+            "reported_delta_basis": profile.margin_basis,
             "imputed_discordance": round(match.discordance, 6),
             "discordance_match_tier": match.tier,
             "discordance_n_cells": match.n_cells,
@@ -276,55 +339,91 @@ def compute_rows(claim_table: Path, atlas: Path) -> list[dict]:
                 row[f"v2_underpowered_paired_{margin_pp:g}pp"] = ""
                 row[f"v2_underpowered_independent_{margin_pp:g}pp"] = ""
 
-        # The claim's own margin, where it states one.
+        # SUPERSEDED READING, retained as a non-verdict-bearing sensitivity
+        # analysis per Amendment 2. This is what the audit reported through
+        # v1.0.0: each claim judged against the largest delta its own source
+        # reported. Amendment 2 withdraws it as a verdict because a reported
+        # delta is an outcome, not a declared threshold. Kept, not deleted, so
+        # the paper and the citable artifact can disagree without either being
+        # silently rewritten.
         if profile.claimed_margin_pp and profile.n:
-            need_own = required_n_for_tost(sd_paired, profile.claimed_margin_pp / 100.0)
-            row["v2_required_n_paired_own_margin"] = need_own
-            row["v2_underpowered_own_margin"] = profile.n < need_own
+            need_rep = required_n_for_tost(sd_paired, profile.claimed_margin_pp / 100.0)
+            row["sens_required_n_at_reported_delta"] = need_rep
+            row["sens_underpowered_at_reported_delta"] = profile.n < need_rep
         else:
-            row["v2_required_n_paired_own_margin"] = ""
-            row["v2_underpowered_own_margin"] = ""
-
-        # §4 evaluates V2 "at the applicable margin" and names the label
-        # "underpowered for its OWN assertion", so a claim that states a margin is
-        # judged against that margin; 2 pp is the fallback for claims that state
-        # none. The registered-margin-only reading is carried alongside because
-        # the parenthetical phrasing admits it -- see the interpretive-choices
-        # section of docs/AUDIT_VERDICTS_2026-07-20.md.
-        if profile.claimed_margin_pp:
-            row["applicable_margin_pp"] = profile.claimed_margin_pp
-            row["applicable_margin_basis"] = "claim's own stated margin"
-        else:
-            row["applicable_margin_pp"] = REGISTERED_MARGIN_PP
-            row["applicable_margin_basis"] = f"registered fallback ({REGISTERED_MARGIN_PP:g}pp); claim states no margin"
-        if profile.n:
-            applicable_need = required_n_for_tost(sd_paired, float(row["applicable_margin_pp"]) / 100.0)
-            row["v2_required_n_applicable"] = applicable_need
-            row["v2_underpowered_applicable"] = profile.n < applicable_need
-        else:
-            row["v2_required_n_applicable"] = ""
-            row["v2_underpowered_applicable"] = ""
+            row["sens_required_n_at_reported_delta"] = ""
+            row["sens_underpowered_at_reported_delta"] = ""
 
         # Margin sensitivity: does the 2pp verdict survive the 1pp/3pp sweep?
         sweep = [row[f"v2_underpowered_paired_{m:g}pp"] for m in MARGINS_PP]
         row["margin_sensitive"] = (len({v for v in sweep if v != ""}) > 1) if profile.n else ""
 
-        # Headline verdict, at the applicable margin.
+        # PRIMARY VERDICT -- Amendment 2: at the registered 2 pp margin, for
+        # every claim. §4 names 2 pp first; the own-margin clause is
+        # parenthetical and rested on a quantity no source declared.
+        underpowered_2pp = row[f"v2_underpowered_paired_{REGISTERED_MARGIN_PP:g}pp"]
         if profile.indeterminate:
             row["verdict"] = f"indeterminate - {profile.indeterminate_kind}"
-        elif row["v2_underpowered_applicable"]:
-            row["verdict"] = "underpowered for its own assertion"
+        elif underpowered_2pp:
+            row["verdict"] = f"below planning threshold at {REGISTERED_MARGIN_PP:g}pp"
         else:
-            row["verdict"] = "adequately powered at its applicable margin"
-        # Secondary reading: everything judged at the registered 2pp margin.
-        if profile.indeterminate:
-            row["verdict_at_registered_2pp"] = f"indeterminate - {profile.indeterminate_kind}"
-        elif row[f"v2_underpowered_paired_{REGISTERED_MARGIN_PP:g}pp"]:
-            row["verdict_at_registered_2pp"] = "underpowered for its own assertion"
+            row["verdict"] = f"above planning threshold at {REGISTERED_MARGIN_PP:g}pp"
+
+        # Discordance-imputation sensitivity. The verdict above rests on a POINT
+        # imputation (the median of the matched tier). Amendment 2 requires the
+        # surviving power result to be reported as a sensitivity-dependent
+        # planning flag, never without its reversal point, so the reversal point
+        # and the supporting distribution are emitted for every claim.
+        vals = match.values
+        row["discordance_p25"] = round(_quantile(vals, 0.25), 6) if vals else ""
+        row["discordance_p75"] = round(_quantile(vals, 0.75), 6) if vals else ""
+        if profile.n and not profile.indeterminate:
+            d_star = reversal_discordance(profile.n, REGISTERED_MARGIN_PP / 100.0)
+            below = sum(1 for v in vals if v < d_star)
+            # d* > 1 means no attainable discordance could put this claim below
+            # the threshold: n is large enough that the verdict cannot flip. The
+            # column is left blank rather than printing an impossible rate, and
+            # `robustness` carries the finding.
+            row["reversal_discordance"] = round(d_star, 6) if d_star < 1.0 else ""
+            row["tier_cells_below_reversal"] = below
+            row["frac_tier_cells_below_reversal"] = round(below / len(vals), 4) if vals else ""
+            at_p25 = profile.n < required_n_for_tost(paired_flip_sd(_quantile(vals, 0.25)),
+                                                     REGISTERED_MARGIN_PP / 100.0)
+            at_p75 = profile.n < required_n_for_tost(paired_flip_sd(_quantile(vals, 0.75)),
+                                                     REGISTERED_MARGIN_PP / 100.0)
+            row["underpowered_at_p25_discordance"] = at_p25
+            row["underpowered_at_p75_discordance"] = at_p75
+            if at_p25 and at_p75 and underpowered_2pp:
+                row["robustness"] = "robustly below threshold"
+            elif not at_p25 and not at_p75 and not underpowered_2pp:
+                row["robustness"] = "robustly above threshold"
+            else:
+                row["robustness"] = "imputation-sensitive"
         else:
-            row["verdict_at_registered_2pp"] = "adequately powered at 2pp"
+            row["reversal_discordance"] = ""
+            row["tier_cells_below_reversal"] = ""
+            row["frac_tier_cells_below_reversal"] = ""
+            row["underpowered_at_p25_discordance"] = ""
+            row["underpowered_at_p75_discordance"] = ""
+            row["robustness"] = "indeterminate" if profile.indeterminate else ""
         rows.append(row)
     return rows
+
+
+def _quantile(sorted_values, p: float) -> float:
+    """Linear-interpolation quantile over an already-sorted sequence.
+
+    Matches numpy's default so the reported quartiles agree with the atlas
+    summary statistics, without importing numpy into the verdict path.
+    """
+    if not sorted_values:
+        raise ValueError("quantile of empty sequence")
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    i = p * (len(sorted_values) - 1)
+    lo = int(i)
+    hi = min(lo + 1, len(sorted_values) - 1)
+    return sorted_values[lo] + (sorted_values[hi] - sorted_values[lo]) * (i - lo)
 
 
 def main() -> None:
@@ -344,31 +443,41 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
 
-    determinate = [r for r in rows if not r["indeterminate"]]
-    underpowered = [r for r in determinate if r["verdict"] == "underpowered for its own assertion"]
-    indeterminate = [r for r in rows if r["indeterminate"]]
-    # Margin sensitivity qualifies a verdict, so it is reported over the claims
-    # that HAVE a headline verdict. Indeterminate rows keep the column (their
-    # supplementary V2 can still flip across the sweep) but are not counted here.
+    # Amendment 2: every count is over the ELIGIBLE population. Ineligible rows
+    # stay in the CSV, flagged, so the exclusion is auditable rather than a gap.
+    eligible = [r for r in rows if r["eligible"]]
+    determinate = [r for r in eligible if not r["indeterminate"]]
+    indeterminate = [r for r in eligible if r["indeterminate"]]
+    below = [r for r in determinate if r["verdict"].startswith("below planning threshold")]
     sensitive = [r for r in determinate if r["margin_sensitive"] is True]
+    insufficient = [r for r in indeterminate if r["indeterminate_kind"] == "insufficient reporting"]
+    incompatible = [r for r in indeterminate if r["indeterminate_kind"] == "metric-incompatible"]
+    cat = {c: sum(1 for r in eligible if r["margin_category"] == c) for c in (1, 2, 3)}
+    generic = sum(1 for r in eligible if r["evidence_form"] == "generic_adjective")
 
     print(f"AUDIT_INPUT_SHA256 claim_table={sha256_of(claim_table)}")
     print(f"AUDIT_INPUT_SHA256 atlas={sha256_of(atlas)}")
     print(f"AUDIT_ALPHA={ALPHA} POWER={POWER} registered_margin_pp={REGISTERED_MARGIN_PP}")
-    at_2pp = [r for r in determinate if r["verdict_at_registered_2pp"] == "underpowered for its own assertion"]
-    insufficient = [r for r in indeterminate if r["indeterminate_kind"] == "insufficient reporting"]
-    incompatible = [r for r in indeterminate if r["indeterminate_kind"] == "metric-incompatible"]
-    print(f"AUDIT_HEADLINE K={len(underpowered)} of {len(determinate)} determinate claims "
-          f"underpowered for their own assertion; J={len(indeterminate)} indeterminate from "
-          f"insufficient or incompatible reporting ({len(insufficient)} insufficient, "
-          f"{len(incompatible)} metric-incompatible); {len(rows)} claims audited")
-    print(f"AUDIT_HEADLINE_AT_REGISTERED_2PP {len(at_2pp)} of {len(determinate)} determinate "
-          f"underpowered (+ {len(indeterminate)} indeterminate) -- secondary reading, uniform 2pp yardstick")
-    print(f"AUDIT_MARGIN_SENSITIVE {len(sensitive)} of {len(determinate)} determinate claims")
+    print(f"AUDIT_POPULATION {len(rows)} frozen candidates; {len(rows) - len(eligible)} ineligible "
+          f"({', '.join(sorted(INELIGIBLE))}); {len(eligible)} eligible")
+    print(f"AUDIT_MARGIN_CATEGORY formal={cat[1]} informal={cat[2]} unquantified={cat[3]} "
+          f"of {len(eligible)} eligible; {generic} state no number at all")
+    print(f"AUDIT_HEADLINE K={len(below)} of {len(determinate)} assessable claims below the "
+          f"planning threshold at {REGISTERED_MARGIN_PP:g}pp; J={len(indeterminate)} not assessable "
+          f"({len(insufficient)} insufficient reporting, {len(incompatible)} metric-incompatible)")
+    for r in below:
+        print(f"AUDIT_FLAG {r['claim_id']} n={r['n']} required={r[f'v2_required_n_paired_{REGISTERED_MARGIN_PP:g}pp']} "
+              f"imputed_d={r['imputed_discordance']} reversal_d={r['reversal_discordance']} "
+              f"tier_cells_below_reversal={r['tier_cells_below_reversal']}/{r['discordance_n_cells']} "
+              f"({r['frac_tier_cells_below_reversal']}) robustness={r['robustness']}")
+    rob = {k: sum(1 for r in determinate if r["robustness"] == k)
+           for k in ("robustly below threshold", "robustly above threshold", "imputation-sensitive")}
+    print(f"AUDIT_ROBUSTNESS {rob}")
+    print(f"AUDIT_MARGIN_SENSITIVE {len(sensitive)} of {len(determinate)} assessable claims")
     print(f"AUDIT_V3_REPRODUCIBLE "
-          f"{sum(1 for r in rows if r['v3_per_item_outputs'] == 'yes')} yes / "
-          f"{sum(1 for r in rows if r['v3_per_item_outputs'] == 'partial')} partial / "
-          f"{sum(1 for r in rows if r['v3_per_item_outputs'] == 'no')} no")
+          f"{sum(1 for r in eligible if r['v3_per_item_outputs'] == 'yes')} yes / "
+          f"{sum(1 for r in eligible if r['v3_per_item_outputs'] == 'partial')} partial / "
+          f"{sum(1 for r in eligible if r['v3_per_item_outputs'] == 'no')} no (of {len(eligible)} eligible)")
     print(f"AUDIT_OUTPUT {output}")
 
 

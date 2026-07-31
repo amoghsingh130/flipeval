@@ -243,16 +243,84 @@ def test_r04_is_indeterminate_for_metric_incompatibility_not_missing_inputs():
     assert rows["R04"]["determinate_components"] == "V1_paired V1_independent V2"
 
 
-def test_headline_counts_are_four_underpowered_of_twelve_determinate():
-    """K = 4 of 12 determinate, J = 5 indeterminate (ruling of 2026-07-20)."""
+def test_headline_counts_under_amendment_2():
+    """17 frozen candidates, R10 ineligible, 11 assessable of 16 eligible.
+
+    Supersedes the 2026-07-20 ruling's K = 4 of 12. Under Amendment 2 the primary
+    verdict is at the registered 2 pp margin for every claim, and R10 is excluded
+    by the §3.1 prose-or-caption rule. The K value here is not new information:
+    it is `verdict_at_registered_2pp` from the public v1.0.0 artifact, minus a
+    claim that was above threshold anyway.
+    """
     from scripts.audit_verdicts import compute_rows
 
     rows = compute_rows(Path("docs/audit_claim_table.csv"),
                         Path("results/atlas_cells_summary.csv"))
-    determinate = [r for r in rows if not r["indeterminate"]]
-    assert len(determinate) == 12
-    assert len(rows) - len(determinate) == 5
-    assert sum(r["verdict"] == "underpowered for its own assertion" for r in determinate) == 4
+    assert len(rows) == 17, "every frozen candidate stays in the CSV, flagged"
+    eligible = [r for r in rows if r["eligible"]]
+    assert len(eligible) == 16
+    determinate = [r for r in eligible if not r["indeterminate"]]
+    assert len(determinate) == 11
+    assert len(eligible) - len(determinate) == 5
+    below = [r for r in determinate if r["verdict"].startswith("below planning threshold")]
+    assert len(below) == 1 and below[0]["claim_id"] == "R01"
+
+
+def test_r10_is_ineligible_but_still_present_and_could_not_have_helped():
+    """The eligibility correction must be auditable and must not flatter the audit.
+
+    R10 stays in the CSV flagged rather than vanishing, and its removal cannot
+    reduce the flagged count -- it was above threshold at 2 pp and 'no' on V3.
+    """
+    from scripts.audit_verdicts import compute_rows
+
+    rows = {r["claim_id"]: r for r in compute_rows(
+        Path("docs/audit_claim_table.csv"), Path("results/atlas_cells_summary.csv"))}
+    assert rows["R10"]["eligible"] is False
+    assert "§3.1" in rows["R10"]["eligibility_basis"]
+    assert rows["R10"]["v2_underpowered_paired_2pp"] is False
+    assert rows["R10"]["v3_per_item_outputs"] == "no"
+
+
+def test_no_source_declares_a_prospective_margin():
+    """Category 1 is empty across the eligible population.
+
+    Established by full-text review of every archived source
+    (docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md). This is the audit's primary
+    reporting finding, so it is pinned rather than left to prose.
+    """
+    from scripts.audit_verdicts import compute_rows
+
+    eligible = [r for r in compute_rows(
+        Path("docs/audit_claim_table.csv"),
+        Path("results/atlas_cells_summary.csv")) if r["eligible"]]
+    assert sum(r["margin_category"] == 1 for r in eligible) == 0
+    assert sum(r["margin_category"] == 2 for r in eligible) == 12
+    assert sum(r["margin_category"] == 3 for r in eligible) == 4
+    assert sum(r["evidence_form"] == "generic_adjective" for r in eligible) == 10
+    for r in eligible:
+        assert r["margin_category_basis"], f"{r['claim_id']} has no supporting text"
+
+
+def test_reported_delta_is_never_emitted_as_a_margin():
+    """Amendment 2 forbids describing a result-derived quantity as a margin.
+
+    The column carrying the source's largest reported delta must not be named or
+    labelled as one, and the superseded own-margin verdict must be emitted only
+    under a `sens_` prefix marking it non-verdict-bearing.
+    """
+    from scripts.audit_verdicts import compute_rows
+
+    row = compute_rows(Path("docs/audit_claim_table.csv"),
+                       Path("results/atlas_cells_summary.csv"))[0]
+    assert "source_reported_delta_pp" in row and "claimed_margin_pp" not in row
+    assert "reported_delta_basis" in row and "margin_basis" not in row
+    assert "applicable_margin_pp" not in row, "the applicable-margin reading is withdrawn"
+    assert "sens_underpowered_at_reported_delta" in row
+    for key in row:
+        if key.startswith("sens_"):
+            continue
+        assert "own_margin" not in key, f"{key} still frames a reported delta as a margin"
 
 
 def test_every_determinate_profile_has_the_inputs_its_verdict_needs():
@@ -265,27 +333,60 @@ def test_every_determinate_profile_has_the_inputs_its_verdict_needs():
         assert profile.n_basis and profile.margin_basis, f"{profile.claim_id} missing a basis string"
 
 
-def test_applicable_margin_is_the_claims_own_margin_when_it_states_one():
-    """§4 judges V2 'at the applicable margin' and labels it 'for its OWN assertion'.
+def test_the_two_readings_are_nearly_disjoint_not_nested():
+    """Amendment 2 does not merely shrink the old result -- it swaps which claims are flagged.
 
-    A claim that states a margin is judged against that margin; 2pp is only the
-    fallback. This distinction moves the headline count, so it is pinned here.
+    R17's reported delta is 0.15 pp, unresolvable at n = 28,659, yet it clears
+    2 pp easily. R01's is 2.35 pp, coarser than 2 pp, so it clears its own
+    reported delta while failing the registered margin. Pinned because a reader
+    who assumes the new K is a subset of the old one is wrong.
     """
     from scripts.audit_verdicts import compute_rows
 
     rows = {r["claim_id"]: r for r in compute_rows(
         Path("docs/audit_claim_table.csv"), Path("results/atlas_cells_summary.csv"))}
 
-    # R17 states +0.15pp: far too fine to resolve at n=28,659, though it clears 2pp easily.
-    assert rows["R17"]["applicable_margin_pp"] == 0.15
-    assert rows["R17"]["v2_underpowered_applicable"] is True
+    assert rows["R17"]["source_reported_delta_pp"] == 0.15
+    assert rows["R17"]["sens_underpowered_at_reported_delta"] is True
     assert rows["R17"]["v2_underpowered_paired_2pp"] is False
 
-    # R01 states 2.35pp, coarser than 2pp: the two readings disagree the other way.
-    assert rows["R01"]["applicable_margin_pp"] == 2.35
-    assert rows["R01"]["v2_underpowered_applicable"] is False
+    assert rows["R01"]["source_reported_delta_pp"] == 2.35
+    assert rows["R01"]["sens_underpowered_at_reported_delta"] is False
     assert rows["R01"]["v2_underpowered_paired_2pp"] is True
 
-    # Claims stating no margin fall back to the registered 2pp.
-    assert rows["R13"]["applicable_margin_pp"] == 2.0
-    assert "registered fallback" in rows["R13"]["applicable_margin_basis"]
+
+def test_reversal_discordance_inverts_the_required_n_formula():
+    """d* is where required_n equals the claim's n, so the verdict flips across it."""
+    from scripts.audit_stats import paired_flip_sd, required_n_for_tost, reversal_discordance
+
+    for n in (500, 1838, 14042):
+        d_star = reversal_discordance(n, 0.02)
+        assert 0.0 < d_star < 1.0
+        assert n >= required_n_for_tost(paired_flip_sd(d_star * 0.98), 0.02)
+        assert n < required_n_for_tost(paired_flip_sd(d_star * 1.02), 0.02)
+
+
+def test_reversal_discordance_exceeds_one_when_no_flip_is_attainable():
+    """Above n ~= 15,456 at 2 pp, d* leaves [0,1]: the verdict cannot be flipped.
+
+    Discordance is a rate, so a d* above 1 is unattainable rather than merely
+    large. The verdict path must not feed it to paired_flip_sd, which rejects it.
+    """
+    from scripts.audit_stats import reversal_discordance
+
+    assert reversal_discordance(42701, 0.02) > 1.0
+    assert reversal_discordance(14042, 0.02) < 1.0
+
+
+def test_every_flagged_claim_reports_its_reversal_point():
+    """Amendment 2: the surviving power result is never reported without it."""
+    from scripts.audit_verdicts import compute_rows
+
+    rows = [r for r in compute_rows(Path("docs/audit_claim_table.csv"),
+                                    Path("results/atlas_cells_summary.csv")) if r["eligible"]]
+    flagged = [r for r in rows if r["verdict"].startswith("below planning threshold")]
+    assert flagged, "guard against this test passing vacuously"
+    for r in flagged:
+        assert r["reversal_discordance"] and r["frac_tier_cells_below_reversal"] != ""
+        assert r["robustness"] in ("robustly below threshold", "imputation-sensitive")
+        assert 0.0 < r["reversal_discordance"] < r["imputed_discordance"]
