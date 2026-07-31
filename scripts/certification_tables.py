@@ -73,8 +73,14 @@ def build_rows(atlas: Path) -> list[dict]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--atlas", default="results/atlas_cells_summary.csv")
-    parser.add_argument("--output", default="results/certification_tables.csv")
+    # NO DEFAULTS, for the reason recorded in audit_verdicts.py: both of these
+    # pointed at the REV-1 atlas and its rev-1 output name. The committed tables
+    # were generated from rev-2 explicitly, so the defaults were never exercised
+    # -- but a default that silently selects superseded input is a wrong answer
+    # waiting to be believed, and this script feeds the paper's tables.
+    parser.add_argument("--atlas", required=True,
+                        help="atlas cell summary (use the CURRENT revision)")
+    parser.add_argument("--output", required=True, help="output CSV path")
     args = parser.parse_args()
 
     atlas = Path(args.atlas)

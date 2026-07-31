@@ -429,8 +429,19 @@ def _quantile(sorted_values, p: float) -> float:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--claim-table", default="docs/audit_claim_table.csv")
-    parser.add_argument("--atlas", default="results/atlas_cells_summary.csv")
-    parser.add_argument("--output", default="results/audit_verdicts.csv")
+    # NO DEFAULT, deliberately. This defaulted to results/atlas_cells_summary.csv,
+    # which is the REV-1 atlas -- superseded by rev-2 on 2026-07-21 and cited only
+    # by the equally superseded 2026-07-20 verdict record. Run unchanged it would
+    # impute from 484 GPTQ 4-bit cells instead of 792 and exit 0, producing a
+    # complete, self-consistent, silently wrong result set. Same failure shape as
+    # the grid-default rule in CLAUDE.md: the danger is not a crash, it is a green
+    # run against the wrong inputs.
+    parser.add_argument("--atlas", required=True,
+                        help="atlas cell summary (use the CURRENT revision, e.g. "
+                             "results/atlas_cells_summary_rev2.csv)")
+    parser.add_argument("--output", required=True,
+                        help="output CSV path (no default: never overwrite a "
+                             "superseded verdict set in place)")
     args = parser.parse_args()
 
     claim_table, atlas = Path(args.claim_table), Path(args.atlas)

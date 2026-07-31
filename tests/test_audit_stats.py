@@ -28,6 +28,13 @@ from scripts.audit_verdicts import (
 )
 
 
+# The CURRENT atlas revision. rev-1 (results/atlas_cells_summary.csv) is
+# superseded and gives a different imputation -- 484 GPTQ 4-bit cells at median
+# 0.1252 against rev-2's 792 at 0.1300 -- so tests that assert over imputed
+# quantities must name the revision rather than inherit a default.
+ATLAS_REV2 = "results/atlas_cells_summary_rev2.csv"
+
+
 def _cell(family, bits, benchmark, discordance, n=1000, baseline=0.6):
     return AtlasCell(family, bits, benchmark, n, discordance, baseline, False)
 
@@ -237,7 +244,7 @@ def test_r04_is_indeterminate_for_metric_incompatibility_not_missing_inputs():
     assert profile.n and profile.baseline_accuracy is not None and profile.claimed_margin_pp
 
     rows = {r["claim_id"]: r for r in compute_rows(
-        Path("docs/audit_claim_table.csv"), Path("results/atlas_cells_summary.csv"))}
+        Path("docs/audit_claim_table.csv"), Path(ATLAS_REV2))}
     assert rows["R04"]["verdict"] == "indeterminate - metric-incompatible"
     assert rows["R04"]["v1_mdd_pp_paired"], "GSM8K transparency columns must survive"
     assert rows["R04"]["determinate_components"] == "V1_paired V1_independent V2"
@@ -255,7 +262,7 @@ def test_headline_counts_under_amendment_2():
     from scripts.audit_verdicts import compute_rows
 
     rows = compute_rows(Path("docs/audit_claim_table.csv"),
-                        Path("results/atlas_cells_summary.csv"))
+                        Path(ATLAS_REV2))
     assert len(rows) == 17, "every frozen candidate stays in the CSV, flagged"
     eligible = [r for r in rows if r["eligible"]]
     assert len(eligible) == 16
@@ -275,7 +282,7 @@ def test_r10_is_ineligible_but_still_present_and_could_not_have_helped():
     from scripts.audit_verdicts import compute_rows
 
     rows = {r["claim_id"]: r for r in compute_rows(
-        Path("docs/audit_claim_table.csv"), Path("results/atlas_cells_summary.csv"))}
+        Path("docs/audit_claim_table.csv"), Path(ATLAS_REV2))}
     assert rows["R10"]["eligible"] is False
     assert "§3.1" in rows["R10"]["eligibility_basis"]
     assert rows["R10"]["v2_underpowered_paired_2pp"] is False
@@ -293,7 +300,7 @@ def test_no_source_declares_a_prospective_margin():
 
     eligible = [r for r in compute_rows(
         Path("docs/audit_claim_table.csv"),
-        Path("results/atlas_cells_summary.csv")) if r["eligible"]]
+        Path(ATLAS_REV2)) if r["eligible"]]
     assert sum(r["margin_category"] == 1 for r in eligible) == 0
     assert sum(r["margin_category"] == 2 for r in eligible) == 12
     assert sum(r["margin_category"] == 3 for r in eligible) == 4
@@ -312,7 +319,7 @@ def test_reported_delta_is_never_emitted_as_a_margin():
     from scripts.audit_verdicts import compute_rows
 
     row = compute_rows(Path("docs/audit_claim_table.csv"),
-                       Path("results/atlas_cells_summary.csv"))[0]
+                       Path(ATLAS_REV2))[0]
     assert "source_reported_delta_pp" in row and "claimed_margin_pp" not in row
     assert "reported_delta_basis" in row and "margin_basis" not in row
     assert "applicable_margin_pp" not in row, "the applicable-margin reading is withdrawn"
@@ -344,7 +351,7 @@ def test_the_two_readings_are_nearly_disjoint_not_nested():
     from scripts.audit_verdicts import compute_rows
 
     rows = {r["claim_id"]: r for r in compute_rows(
-        Path("docs/audit_claim_table.csv"), Path("results/atlas_cells_summary.csv"))}
+        Path("docs/audit_claim_table.csv"), Path(ATLAS_REV2))}
 
     assert rows["R17"]["source_reported_delta_pp"] == 0.15
     assert rows["R17"]["sens_underpowered_at_reported_delta"] is True
@@ -383,7 +390,7 @@ def test_every_flagged_claim_reports_its_reversal_point():
     from scripts.audit_verdicts import compute_rows
 
     rows = [r for r in compute_rows(Path("docs/audit_claim_table.csv"),
-                                    Path("results/atlas_cells_summary.csv")) if r["eligible"]]
+                                    Path(ATLAS_REV2)) if r["eligible"]]
     flagged = [r for r in rows if r["verdict"].startswith("below planning threshold")]
     assert flagged, "guard against this test passing vacuously"
     for r in flagged:
