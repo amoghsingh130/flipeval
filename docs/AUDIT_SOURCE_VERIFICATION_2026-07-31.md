@@ -193,3 +193,44 @@ inter-coder reliability.
 4. Whether §3.2 should be extended to require **archiving** sources, not just
    hashing them. This gap cost nothing here only because 15 of 17 sources
    happened to be independently version-pinnable.
+
+## 9. Sensitivity of the surviving power flag (added 2026-07-31)
+
+Computed after §7, to test whether "K = 0 under plausible sensitivity" is a real
+possibility or a technicality. Reproduced in pure Python — the login node has no
+scipy, so `audit_stats` cannot be imported there. The reproduction returns 792
+cells with median 0.1300, matching the `discordance_n_cells` and
+`imputed_discordance` recorded for R01 in `results/audit_verdicts_rev2.csv`,
+which is what validates it.
+
+R01's imputation is the **median** over the 792 atlas cells matching at tier
+`family+bits` (GPTQ, 4-bit). That distribution, with the required *n* each value
+implies at the registered 2 pp margin:
+
+| | discordance | required n | R01, n = 1,838 |
+|---|---|---|---|
+| min | 0.0000 | — | — |
+| p10 | 0.0572 | 885 | adequate |
+| p25 | 0.0882 | 1,364 | **adequate — K = 0** |
+| **median (imputed)** | **0.1300** | **2,010** | underpowered — K = 1 |
+| p75 | 0.2800 | 4,328 | underpowered — K = 1 |
+| p90 | 0.5481 | 8,472 | underpowered |
+| max | 0.7402 | — | underpowered |
+
+Required *n* is proportional to discordance — `paired_flip_sd` returns
+`sqrt(d)` and `required_n_for_tost` squares it — so the classification reverses
+where required *n* falls to R01's reported 1,838: at **d ≈ 0.1189**
+(d = 0.1188 → 1,837, adequate; d = 0.1190 → 1,840, underpowered). Integer
+ceilings make the exact boundary slightly rough, so it is reported as
+approximate.
+
+**345 of the 792 supporting cells — 43.6% — lie below the reversal point.** The
+interquartile range is [0.088, 0.280], a factor of 3.2, with p10 = 0.057 and
+p90 = 0.548.
+
+The single surviving power flag is therefore close to a coin flip on which point
+statistic is drawn from a highly dispersed distribution. It must be reported as a
+**sensitivity-dependent planning flag, not a stable binary verdict**, and never
+without its reversal point and this fraction. This makes advisor item 1.5
+(imputation uncertainty) load-bearing rather than optional polish: it is now the
+item that determines whether the audit has a quantitative power finding at all.

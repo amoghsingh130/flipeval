@@ -9,9 +9,21 @@ by the human. This file is a draft for review only. **Nothing in it takes effect
 until Amogh signs it and the amendment text is appended to
 `docs/AUDIT_REGISTRATION_2026-07-15.md` under its "Dated Amendments" heading.**
 
-No recomputation has been run. No classification of the 17 claims under the
-proposed rule has been computed. The impact on `K` is deliberately unknown at
-drafting time.
+**Revised 2026-07-31, after the full-text source verification.** The original
+draft recorded that no classification had been computed and that the impact on
+`K` was deliberately unknown. **Both of those statements are now superseded and
+must not be restored.** At Amogh's direction the full-text verification of all 17
+sources was run before signature
+(`docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md`, commit `cc357db`), so the
+classification is known: 0 sources declare a prospective margin, 7 describe an
+observed delta, 10 use a generic adjective. `K` at the registered 2 pp margin was
+already public in the v1.0.0 artifact as the secondary reading.
+
+**The RULE in Part 1 is unchanged from commit `19d485c`**, which predates the
+verification. That is what the *Decision context* paragraph rests on, and it is
+checkable in git. Changing the rule now would forfeit it.
+
+Still true: no recomputation of the verdicts has been run.
 
 This file has two parts. **Part 1 is the amendment text**, written to be
 appended verbatim. **Part 2 is reviewer's notes** — the choices behind the
@@ -87,22 +99,61 @@ table, and whatever it returns is reported — including if the headline count
 falls, rises, or reaches zero. No variant of this rule is constructed after the
 recomputed values are seen.
 
-*Scope.* This amendment changes the applicable margin and nothing else.
-Unchanged and not reopened: §§3.1–3.2 inclusion and extraction; the frozen claim
-table; the §4 V1 detection-power formula; the §4 V3 reproducibility verdict; the
+*Eligibility correction (R10).* A full-text review of every source, run
+2026-07-31 and recorded in `docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md`,
+established that R10's recorded `exact_quote` — "average recovery percentage
+across all benchmarks is 98.6%" — appears nowhere in its source. The card
+contains no prose equivalence claim; `98.6%` is a table cell, and the extraction
+composed a sentence from tabular data and recorded it as a quotation. §3.1
+requires the assertion to appear "in prose or a table caption", and it appears in
+neither. **R10 is therefore excluded from the eligible population by applying the
+inclusion rule already registered in §3.1, not by any new criterion.** The
+eligible population becomes 16. The frozen claim table is not edited; the
+exclusion is recorded in the verdicts CSV with the verification finding beside
+it, and the original row remains in the immutable frozen file and in the
+published v1.0.0 artifact.
+
+This correction moves the eligible denominator. It changes neither the number of
+claims below the planning threshold nor the V3 per-item-outputs result: R10 was
+adequately powered at the registered 2 pp margin and recorded `no` on V3, so its
+removal cannot reduce the count of flagged claims. **The correction did not
+improve any count in the direction favourable to the audit's thesis.**
+
+*Scope.* This amendment changes the applicable margin, and reopens §§3.1–3.2
+**only** to correct eligibility and provenance — that is, to apply the existing
+inclusion rule to R10 and to record source provenance. No inclusion criterion is
+added, widened or narrowed, no claim is re-extracted, and no source is re-fetched
+for extraction purposes. Unchanged and not reopened: the frozen claim table
+itself; the §4 V1 detection-power formula; the §4 V3 reproducibility verdict; the
 indeterminacy rules and the claims currently indeterminate; the discordance
 imputation and its tier matching; the atlas; and every registration other than
 this one.
 
-*Decision context.* **Results were inspected before this decision.** The audit
-verdicts were computed on 2026-07-20, revised to rev-2 on 2026-07-21, reported
-in the paper, and released in the v1.0.0 artifact; the headline $K = 4$ of 12
-has been public since 2026-07-30. This amendment is made after all of that. It
-was prompted by external methodological review of the draft, not by inspection
-of the verdicts: the defect is visible in the registration text and the frozen
-claim table's schema without reference to any result, and the direction and
-magnitude of its effect on $K$ were not computed before this amendment was
-signed.
+*Reporting the surviving power result.* The claim below the planning threshold at
+the registered 2 pp margin is reported as a **sensitivity-dependent planning
+flag, not a stable binary verdict**, and never without its reversal point. The
+required $n$ is a planning quantity computed under an assumed true difference of
+zero and a point imputation of discordance; for the single flagged claim the
+classification reverses at approximately $d = 0.1189$ against an imputed
+$d = 0.13$, and 43.6% of the 792 atlas cells supplying that imputation fall below
+the reversal point. Any report of this flag states the imputed value, the
+reversal point, and that fraction.
+
+*Decision context.* **Results were inspected before this decision, and so was the
+full-text classification.** The audit verdicts were computed on 2026-07-20,
+revised to rev-2 on 2026-07-21, reported in the paper, and released in the v1.0.0
+artifact; the headline $K = 4$ of 12 has been public since 2026-07-30. The
+full-text verification of all 17 sources was run on 2026-07-31, **before this
+amendment was signed and at the decision owner's direction**, and its
+classification of every claim — including the finding that no source declares a
+margin — was known at signature. The rule in this amendment was not constructed
+against that classification: it was written and committed on 2026-07-31 at
+`19d485c`, before the verification ran, and that committed draft names R14 as its
+hard case and resolves it by the same priority test the verification later
+applied. The rule is unchanged from that commit. The eligibility correction was
+made by applying §3.1 as already registered, and is verdict-neutral in the sense
+recorded above. The original immutable version of every superseded value remains
+accessible in the frozen claim table and the published v1.0.0 artifact.
 
 ---
 
@@ -131,6 +182,27 @@ $K = 4$ of 12, and the 2 pp reading has been reported throughout as $K = 1$ of
 12. If you sign this, expect the audit's headline underpowering count to fall to
 roughly that, and the "$2.0\times$ to $12.9\times$" shortfall range to change or
 disappear.
+
+**Updated 2026-07-31 — the power result should not be the headline.** With the
+eligibility correction the count is 1 of 11 assessable claims, and it is not
+robust: it reverses at $d \approx 0.1189$ against an imputed $d = 0.13$, with
+43.6% of the 792 supporting atlas cells below that point (IQR $[0.088, 0.280]$,
+a threefold span). **The two readings are also nearly disjoint, not nested** —
+the four claims flagged under the old result-derived margins (R06, R07, R15,
+R17) are all adequately powered at 2 pp, and R01, which is flagged at 2 pp, was
+adequately powered under its own derived margin. Amogh's chosen ordering,
+2026-07-31, is to lead with the reporting findings and place the power flag
+beneath them:
+
+1. 0 of 16 reported an a priori numerical equivalence margin.
+2. 0 of 16 released per-item outputs for the tasks supporting the claim.
+3. 5 of 16 cannot be assessed under the registered binary paired-outcome framework.
+4. 1 of 11 assessable claims below the planning threshold under point imputation,
+   reversing to 0 under plausible sensitivity.
+
+The instability in (4) is evidence for the certification argument, not a defect
+to be minimised: it is precisely what a point imputation of a nuisance parameter
+does to a binary verdict.
 
 **Two of the audit's three headlines are untouched.** $J = 5$ indeterminate
 depends on absent inputs, not margins. **$V3 = 0$ of 17 releasing per-item
