@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-31T05:08:25Z from `paper/main.tex` at commit `6589d89`.**
+**Generated 2026-07-31T19:31:55Z from `paper/main.tex` at commit `d37aa1c`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -45,14 +45,23 @@ informative precisely when two models are most alike: a net delta is what
 survives cancellation between opposing per-item changes, and cancellation is
 most complete in the regime equivalence claims occupy.
 
-% SOURCE: \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
-In a preregistered audit of 17 equivalence claims drawn from three registered
-frames---method papers, official quantized model cards and inference-stack
-vendor documentation---5 cannot be evaluated from what they report, 4 of the
-remaining 12 are underpowered for the margin they assert, and none of the 17
-releases the per-item outputs a third party would need to run the paired
-comparison itself. We audit evidential sufficiency, not truth: no claim is
-asserted false.
+% SOURCE: \S\ref{sec:audit:taxonomy}; \S\ref{sec:audit:v3};
+% \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
+% REWRITTEN 2026-07-31 for rev-3 (AUDIT_REGISTRATION Amendment 2, signed).
+% Three defects in the superseded sentence: the count (4 of 12 -> 1 of 11), the
+% denominator (17 -> 16 eligible), and "the margin they assert" -- the exact
+% construction the amendment retires, since no source asserts one.
+% The threshold result is stated with its sensitivity in the same breath, and
+% scoped to the atlas-IQR interval; "robustly underpowered" is NOT claimed.
+In a preregistered audit of equivalence claims from three registered
+frames---method papers, official model cards and vendor documentation---16 of 17
+frozen candidates are eligible. None states a prospective numerical equivalence
+margin, and none releases per-item outputs for the tasks its claim rests on;
+ten state no number at all. Five report too little to assess numerically. Among
+the remaining 11, at a uniform 2-percentage-point margin, ten stay above the
+planning threshold across the interquartile range of the imputed disagreement
+rate, and one changes classification within it. We
+audit evidential sufficiency, not truth: no claim is asserted false.
 
 % SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:minigrid:churnratio} Result 1.
 Across an atlas of 1{,}707 paired model-by-task cells mined from public
@@ -797,8 +806,13 @@ trigger vocabulary registered in advance (``near-lossless'', ``negligible'',
 explicit $\leq 1$\,pp delta framed as parity). Every claim
 meeting the criterion is audited; there is no discretionary sub-selection.
 % SOURCE: docs/audit_claim_table.csv column `frame`: F1=7, F2=7, F3=3.
-The frozen table contains 17 claims: 7 method papers, 7 official model cards or
-blogs, and 3 vendor documents.
+% REV-3 2026-07-31: the frozen table still holds 17; one is ruled ineligible in
+% \S\ref{sec:audit:taxonomy} by the inclusion rule registered here. Both numbers
+% are load-bearing and must not be collapsed into one.
+The frozen table contains 17 candidate claims: 7 method papers, 7 official model
+cards or blogs, and 3 vendor documents. One is subsequently ruled ineligible
+against this same criterion (\S\ref{sec:audit:taxonomy}), leaving \textbf{16}
+eligible sources; every count in this section is over those 16.
 % ADDED 2026-07-31. The body previously said only "extracted twice by mutually
 % blind passes" and never said by WHAT. That the passes were language-model
 % agent sessions was disclosed only inside the reproduced registration
@@ -824,6 +838,92 @@ still be unsupported by the evaluation offered for it, and several of the claims
 below are very probably correct. What is missing from the audited sources is a
 reporting standard. This section measures the gap such a standard would close;
 Section~\ref{sec:certification} supplies the instrument.
+
+\subsection{What the sources declare}
+\label{sec:audit:taxonomy}
+
+% ADDED 2026-07-31, carrying AUDIT_REGISTRATION Amendment 2 (signed, commit
+% ab279b2) and docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md.
+% SOURCE: results/audit_verdicts_rev3.csv columns eligible, eligibility_basis,
+% margin_category, evidence_form. Job 11591245.
+%
+% DO NOT report the marginals of margin_category alone. "0 formal / 12 informal
+% / 4 unquantified" is arithmetically right and rhetorically wrong: 7 of the 12
+% category-2 claims contain NO NUMBER AT ALL, so calling them informal *margins*
+% reads as contradicting the 0-of-16 headline in the same paragraph. The
+% cross-tab is the honest presentation. The registered category names are kept
+% where the registered classification is named, and nowhere else.
+The audit's first result is about what the sources say, not about how large
+their evaluations were.
+
+% SOURCE: docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §4; Amendment 2
+% *Eligibility correction*. R10 was above the planning threshold at 2 pp and
+% recorded `no` on per-item outputs, so its removal cannot reduce any count
+% reported here.
+A full-text review of every source, conducted after the first verdicts were
+computed, found that one candidate's recorded quotation appears nowhere in its
+source: the sentence had been composed from a table cell. The registered
+inclusion rule requires the assertion to appear in prose or a table caption, and
+it appears in neither, so that claim (R10) is excluded from the eligible
+population by applying the rule as registered. The correction moves the eligible
+denominator from 17 to \textbf{16}. It changes neither the number of claims below
+the planning threshold nor the per-item-outputs result, and the excluded row
+remains in the released claim table and the certification appendix.
+
+Across the 16 eligible sources we distinguish two independent properties: what
+form the source's evidence takes, and whether the reported information suffices
+to assess it numerically at all.
+
+\begin{table}[t]
+\centering
+\caption{What the 16 eligible sources declare. Columns are the form of the
+evidence offered; rows are whether the source reports enough for a numerical
+assessment under the registered paired-outcome framework. \emph{Prospective
+numerical decision margin} means a tolerance stated independently of the
+observed result---a threshold that could have been written down before the
+evaluation ran. That column is empty.}
+\label{tab:audit-taxonomy}
+% SOURCE: results/audit_verdicts_rev3.csv, cross-tabulating margin_category
+% (2=assessable-informal, 3=unquantified) against evidence_form. Verified to
+% sum to 16 on both margins: 7+5=12, 3+1=4, 7+3=10, 5+1=6.
+\begin{tabular}{lccc}
+\toprule
+ & Prospective numerical & Retrospective numerical & Qualitative language \\
+ & decision margin & description of a result & only, no number \\
+\midrule
+Numerically assessable     & 0 & 5 & 7 \\
+Not numerically assessable & 0 & 1 & 3 \\
+\midrule
+\textbf{Total}             & \textbf{0} & \textbf{6} & \textbf{10} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% SOURCE: docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §§6-7. Keyword sweep over
+% complete text of all 17 archived sources including tables, captions, footnotes,
+% appendices and reference lists; model cards searched as raw Markdown.
+\textbf{No audited source declares a prospective numerical equivalence margin}
+(Table~\ref{tab:audit-taxonomy}). Ten of the sixteen make the claim in purely
+qualitative terms---``negligible'', ``matches'', ``practically no accuracy
+decrease''---with no number attached to the assertion at all. The remaining six
+cite a number, and in every case it is a measured outcome: a recovery percentage
+or an achieved benchmark score, computed after the evaluation rather than set
+before it. This is established over complete source text, not the quoted
+sentence: every source was archived and searched in full, including tables,
+captions, footnotes and appendices, for a registered vocabulary of tolerance
+language. The terms \emph{parity} and \emph{percentage point} do not occur
+anywhere in the corpus; every occurrence of \emph{margin} is a page-layout
+artefact, a stylesheet declaration, or the idiom ``by a large margin'' describing
+superiority rather than tolerance. One vendor document comes closest by
+explicitly declining to fix a threshold, observing that ``users might have
+different tolerances on accuracy impact''.
+
+The consequence for this section is structural. An equivalence claim with no
+declared margin cannot be evaluated against its own standard, because it has
+set none; it can only be evaluated against a standard supplied from outside.
+Everything below therefore uses the margin registered in advance
+(\S\ref{sec:audit:rules}), and no quantity derived from a source's own reported
+results is described anywhere in this paper as that source's margin.
 
 \subsection{Availability of per-item outputs}
 \label{sec:audit:v3}
