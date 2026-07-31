@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-31T03:55:35Z from `paper/main.tex` at commit `260c66b`.**
+**Generated 2026-07-31T05:08:25Z from `paper/main.tex` at commit `6589d89`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -12,92 +12,66 @@ A reader's index is at the end.
 ## FILE: `paper/abstract.tex`
 
 ```latex
-% Atlas figures below are REV-2 (2026-07-21), resolved after the targeted
-% second spot-check passed 14/14 cells, 126/126 fields. Keep in sync with
+% Atlas figures below are REV-2 (2026-07-21). Keep in sync with
 % sections/{atlas,certification,audit,minigrid}.tex.
-%
-% H3 VARIANT SELECTION CLOSED 2026-07-27. All eight registered confirmatory
-% cells exist and the frozen support rule fired, so variant (A) was selected and
-% the dead (B)/(C) blocks and their selection instructions were deleted. The
-% verdict sentence below is variant (A) with one word changed -- see the note at
-% that paragraph.
 %
 % SUMMARY-RESTATEMENT INVARIANT (paper/OUTLINE.md rule 4): this file contains no
 % primary figures. Every number here appears in the section it summarises at
-% coarser or equal precision. Walked figure-by-figure on 2026-07-27; the walk is
-% recorded in the commit that introduced this revision.
+% coarser or equal precision.
+%
+% REWRITTEN 2026-07-31 (advisor review 3.7). Changes:
+%  - Target 200-250 words, in the order: problem and estimand; audit design and
+%    sample; atlas result; controlled-experiment result; qualified conclusion
+%    and artifact.
+%  - ALL boldface removed. Six bolded spans previously competed for emphasis.
+%  - The "every protocol was frozen" closing claim is dropped; the methods
+%    section establishes it, and asserting it in an abstract reads as a bid for
+%    credibility rather than a result.
+%  - Secondary figures dropped: the 2.0x-12.9x shortfall range, the 145-cell
+%    count with its 8.5%/7.2% pair, and the MMLU-2,164 / GPQA-749 comparison.
+%    All three remain in their result sections. The 5.3x, 12.7x, 4-of-12,
+%    5-of-17, 0-of-17 and 5-of-8 headlines are retained.
+%  - "The calibration seed alone reorders" -> what was observed (review 1.8).
+%  - Claims scoped to the registered frames (review 5).
+%
+% ARXIV ABSTRACT FIELD: the limit is 1,920 characters, confirmed from
+% https://info.arxiv.org/help/prep.html. MEASURE, never eyeball -- see the
+% measurement note at the end of this file.
 
 \begin{abstract}
-% LENGTH TIGHTENING 2026-07-27 (phase 4). The abstract measured 2,043 characters
-% against arXiv's ~1,920-character abstract field. Prose was tightened per the
-% instruction; NO figure and NO sentence was cut, and the 145-cell sentence and
-% the per-item-outputs line are untouched. See the note at the end of the file
-% for the measured result.
-A fraction of a point of benchmark accuracy is the standard evidence that a
-compressed model is equivalent to its original. We show it is least
+A fraction of a point of benchmark accuracy is the usual evidence that a
+compressed model is equivalent to its original. We show this quantity is least
 informative precisely when two models are most alike: a net delta is what
 survives cancellation between opposing per-item changes, and cancellation is
-most complete in the regime every equivalence claim occupies.
+most complete in the regime equivalence claims occupy.
 
-% SOURCE: \S\ref{sec:atlas:netgross} (5.3x, ratio of medians on the 1,707-cell
-% rev-2 population); \S\ref{sec:minigrid:churnratio} Result 1 (median 12.7x);
-% \S\ref{sec:atlas:identical} (145 cells, 8.49% -> 8.5%; churn median 0.0720
-% -> 7.2%).
-Across an atlas of 1{,}707 paired model-by-task cells from public
-per-item evaluation dumps (3B--405B), per-item churn runs
-$5.3\times$ the net accuracy delta; between two compression methods at one bit
-width, the median is $12.7\times$. At the limit, 145 cells (8.5\%) post an
-\emph{exactly identical} accuracy to their baseline while disagreeing on a median
-of 7.2\% of items.
+% SOURCE: \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
+In a preregistered audit of 17 equivalence claims drawn from three registered
+frames---method papers, official quantized model cards and inference-stack
+vendor documentation---5 cannot be evaluated from what they report, 4 of the
+remaining 12 are underpowered for the margin they assert, and none of the 17
+releases the per-item outputs a third party would need to run the paired
+comparison itself. We audit evidential sufficiency, not truth: no claim is
+asserted false.
 
-% SOURCE: \S\ref{sec:audit:results} and Table~\ref{tab:audit-underpowered}
-% (4 of 12, 2.0x-12.9x); \S\ref{sec:audit:indeterminate} (5 of 17);
-% \S\ref{sec:audit} (0 of 17 release per-item outputs).
-In a preregistered audit of 17 equivalence claims from method papers, model
-cards and vendor docs, \textbf{4 of the 12 that permit a verdict are
-underpowered for their own assertion}, by
-$2.0\times$ to $12.9\times$; a further \textbf{5 of the 17} cannot be evaluated
-at all. \textbf{None of the 17 sources releases the per-item outputs a third
-party would need to run the paired comparison itself.} No claim is asserted
-false; we audit evidential sufficiency, not truth.
-
-% SOURCE: \S\ref{sec:certification}, Table~\ref{tab:certification}
-% (mmlu median 2,164; gpqa median 749) and \S\ref{sec:cert:churn-not-difficulty}.
-% LENGTH CUT 2026-07-27: the 4.2x pooled paired-advantage figure was dropped
-% here to reach the target length, per the drafting instruction's stated cut
-% order. It remains in \S\ref{sec:intro} and Table~\ref{tab:certification}.
-We supply the apparatus: equivalence testing at a declared margin, and
-\emph{certification tables} giving the items an evaluation needs, computed from
-disagreement observed under compression, not from
-independent-binomial variance. The requirement follows churn, not difficulty:
-MMLU needs about 2{,}164 items at 2\,pp where the harder GPQA needs 749.
+% SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:minigrid:churnratio} Result 1.
+Across an atlas of 1{,}707 paired model-by-task cells mined from public
+per-item evaluation dumps (3B--405B), per-item churn runs $5.3\times$ the net
+accuracy delta; between two compression methods at one bit width the median is
+$12.7\times$. We supply the corresponding apparatus: equivalence testing at a
+declared margin, and certification tables giving the items an evaluation needs,
+computed from disagreement observed under compression rather than from
+independent-binomial variance.
 
 % SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
-% (SIGNED). This is drafted variant (A) with ONE word changed: it read "not
-% reproducible", which over-claims against the bootstrap result of
-% \S\ref{sec:minigrid:supporting} (three cells show individual seeds disagreeing
-% while the five-seed mean survives resampling). "Unreliable" is what the
-% evidence carries. The registered artifact is the decision rule and the
-% verdict, not this prose; the change and its cause are recorded in
-% docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md.
-A preregistered experiment pairs GPTQ and AWQ on byte-identical
-calibration samples across five seeds. Under the frozen eight-cell
-decision rule, H3 is supported: the calibration seed alone reorders the two
-methods in \textbf{5 of 8} confirmatory cells, so a single-calibration
-comparison is unreliable.
-
-Every protocol was frozen before its analysis; every number is recomputable
-from released artifacts.
-% ARXIV ABSTRACT FIELD, MEASURED 2026-07-27: 1,912 characters / 306 words.
-% The 1,920 limit is confirmed from arXiv's own submission help
-% (https://info.arxiv.org/help/prep.html, read 2026-07-27): "abstracts longer
-% than 1920 characters will not be accepted". Measured after stripping markup
-% and expanding \times to " x ", which is CONSERVATIVE -- pasting "x" or the
-% multiplication sign gives a shorter string -- so 1,912 is an upper bound.
-%
-% THE MARGIN IS 8 CHARACTERS. Any future addition to this abstract must be
-% re-measured, not eyeballed. If it goes over, tighten prose: do NOT cut the
-% 145-cell sentence and do NOT touch the per-item-outputs line.
+% (SIGNED). "Unreliable", not "not reproducible": three cells show individual
+% seeds disagreeing while the five-seed mean survives resampling.
+A preregistered experiment pairs GPTQ and AWQ on byte-identical calibration
+samples across five seeds. Under the frozen eight-cell decision rule H3 is
+supported: changing the calibration draw was sufficient to reverse the observed
+method ordering in 5 of 8 confirmatory cells, so a single-calibration
+comparison of compression methods is unreliable. All per-item outputs,
+protocols and analysis code are released.
 \end{abstract}
 ```
 
@@ -120,125 +94,93 @@ from released artifacts.
 \section{Introduction}
 \label{sec:intro}
 
-A compressed language model is usually released with a sentence of the form
+% REWRITTEN 2026-07-31 (advisor review 3.1, 3.5, 3.6, 5, 1.8). Changes:
+%  - The eight \paragraph{} labels are gone. They made every paragraph read as
+%    an item in a generated executive summary.
+%  - Secondary numbers are cross-referenced rather than restated. Each headline
+%    keeps its three principal appearances (abstract, result section,
+%    conclusion); the introduction is not a fourth.
+%  - Field-wide language is scoped to the registered sampling frames.
+%  - "The calibration seed alone reorders" is replaced by what was observed.
+%  - The section-by-section map is one sentence naming three components.
+% This file remains DERIVATIVE: no primary figures originate here.
+
+Compressed language models are frequently released with a sentence of the form
 ``negligible degradation'' or ``$99.x\%$ recovery'', supported by a difference of
 a fraction of a point in aggregate accuracy on a fixed benchmark. That sentence
 is an equivalence claim. Equivalence claims have a statistical form---a declared
 margin, a test, and a sample size sufficient to reject the composite null that
-the difference exceeds the margin---and the sentence almost never has it.
+the difference exceeds the margin---and in the sources we audit it almost never
+has it.
 
-The problem is worse than a missing test, because the evidence being offered is
-weakest exactly where it is being offered. A net accuracy delta is the residue
-left after per-item changes in opposite directions cancel. The more alike two
-models are, the more completely those changes cancel, and the smaller the
-residue becomes relative to the behavioural change underneath it. So the
-quantity the field uses to establish that two models are the same is least
-informative precisely in the regime where that claim is made. Everything in this
-paper follows from taking that observation seriously and measuring it.
+The difficulty is not only a missing test. The evidence is weakest in the
+regime where it is offered. A net accuracy delta is the residue left
+after per-item changes in opposite directions cancel. The more alike two models
+are, the more completely those changes cancel, and the smaller the residue
+becomes relative to the behavioural change underneath it. The quantity used to
+establish that two models are the same is therefore least informative in the
+regime where that claim is made. This paper measures that gap and supplies an
+instrument for closing it.
 
-\paragraph{The audit.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline;
-% results/audit_verdicts_rev2.csv; \S\ref{sec:audit:results},
-% Table~\ref{tab:audit-underpowered}.
-%
-% QUANTITY CONFLATION, CORRECTED 2026-07-27 (phase 4 verification). This read
-% "the smallest difference their evaluation could resolve exceeds the difference
-% they pronounce negligible, by 2.0x to 12.9x" -- which describes the MDD ratio
-% (Table~\ref{tab:audit-mdd}, range 1.60x-4.05x) while quoting the SAMPLE-SIZE
-% shortfall n_req/n_reported (Table~\ref{tab:audit-underpowered}, range
-% 2.0x-12.9x). The numbers were right and attached to the wrong quantity,
-% inflating the stated MDD gap roughly threefold. The description now matches
-% the numbers. The abstract was already correct ("by factors of"), and its
-% SOURCE comment already cited tab:audit-underpowered.
-Of 17 equivalence claims enumerated from method papers, official quantized model
-cards, and inference-stack vendor documentation, 5 cannot be evaluated at all
-from what they report, and \textbf{4 of the remaining 12 are underpowered for
-their own assertion}: certifying the margin each of them pronounces negligible
-would take $2.0\times$ to $12.9\times$ the items the claim actually evaluated.
-\textbf{None of the 17 releases the per-item outputs} that a third
-party would need to run the paired comparison the claim asserts. No claim is
-described as false; the audited property is the evidential sufficiency of the
-reported evaluation.
+% results/audit_verdicts_rev2.csv; \S\ref{sec:audit:results}.
+% Numbers kept here: 17, 5 indeterminate, 4 of 12, 0 of 17. The shortfall range
+% (2.0x-12.9x), the worked R17 example and the MDD ratios now live only in
+% \S\ref{sec:audit:results}, which is where a reader can check them.
+We enumerate 17 equivalence claims from three registered sampling frames:
+method papers, official quantized model cards, and inference-stack vendor
+documentation. Five cannot be evaluated from what they report. Of the remaining
+12, four are underpowered for the margin they assert, in the sense that
+certifying that margin would require substantially more items than the claim
+evaluated, and none of the 17 releases the per-item outputs a third party would
+need to run the paired comparison the claim asserts
+(\S\ref{sec:audit:results}). No claim is described as false: the audited
+property is the evidential sufficiency of the reported evaluation, not the truth
+of the underlying equivalence.
 
-% LEGIBILITY EXAMPLE (TODO closed 2026-07-27). Restates
-% \S\ref{sec:audit:results} at equal precision: 0.15 pp, 28,659 items, "roughly
-% 370,000" against the table's exact 369,856. Chosen because it is the widest
-% shortfall in the set (12.9x) and the arithmetic is legible without the table.
-The shape of the finding is easiest to see in one claim. A Red~Hat model card
-asserts parity within \textbf{0.15\,pp} on an evaluation of \textbf{28{,}659}
-items; at the per-item disagreement rate that comparable compressed models
-actually exhibit, certifying parity that tight would take roughly
-\textbf{370{,}000} items. The claim may well be true. The evaluation offered for
-it cannot resolve the difference it declares negligible, and that is a property
-of the evidence rather than of the model---which is the distinction this paper
-is built to make, and to make measurable.
-
-\paragraph{The fix.}
-Equivalence is a certification problem. We compute certification tables---how
-many items an evaluation needs in order to certify a compressed model within
+Equivalence is a certification problem, so we compute certification
+tables---how many items an evaluation needs to certify a compressed model within
 $\pm m$ points of its baseline---from the per-item disagreement rates actually
-observed under compression rather than from independent-binomial variance.
-% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
-% (GSM8K 2.25--2.26, MuSR 14.66--14.68); docs/CERTIFICATION_TABLES_2026-07-20.md
-% §"Why the naive column". REV-2: GSM8K end was 1.7x under rev-1; corrected
-% 2026-07-26 to agree with Table~\ref{tab:certification} and §5.
-The correction is large: $2.3\times$ to $14.7\times$ fewer items by family,
-$4.2\times$ pooled. And the requirement is set by churn rather than difficulty,
-which defeats the natural intuition: MMLU needs about 2{,}164 items at 2\,pp
-where the harder GPQA needs 749.
+observed under compression rather than from independent-binomial variance. The
+paired correction is large, and the requirement is set by churn rather than by
+task difficulty, which defeats the natural intuition
+(\S\ref{sec:certification}).
 
-\paragraph{The evidence.}
-% SOURCE: \S\ref{sec:atlas:netgross} (5.3x on the rev-2 1,707-cell population);
-% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §Results;
-% results/identical_score_churn_rev2.csv (analysable_cells 1707,
-% zero_delta_cells 145, zero_delta_share 0.084944, churn_median 0.072000).
-% REV-2: "a median of 6.2%" was rev-1's churn_median 0.062176 and was corrected
-% to 7.2% on 2026-07-26, in step with the abstract and
-% \S\ref{sec:atlas:identical}. All three state the same quantity.
-% REV-1 SURVIVOR, CORRECTED 2026-07-27: "five to six times" was rev-1's ratio;
-% the rev-2 value is 5.3x in both strata. Fourth such survivor found.
+% SOURCE: \S\ref{sec:atlas:netgross}; results/identical_score_churn_rev2.csv.
 Both rest on an atlas of 1{,}707 paired model-by-task cells mined from public
 per-item evaluation dumps spanning 3B to 405B parameters, in which churn runs
-$5.3\times$ the net delta, and 145 cells (8.5\%) post an exactly identical
-accuracy to their baseline while still disagreeing with it on individual items,
-at a median of 7.2\% of items. The ratio is remarkably stable across a
-generational change in method: the two strata differ by nearly a factor of three
-in how much behaviour they disturb, and understate that disturbance by the same
-multiple---better methods have made the difference smaller without making the
-evidence for equivalence any more sufficient (\S\ref{sec:atlas:netgross}).
+$5.3\times$ the net delta. A substantial minority of cells post an accuracy
+identical to their baseline while still disagreeing with it on individual items
+(\S\ref{sec:atlas:identical}). The ratio is stable across a generational change
+in method: the two strata differ by nearly a factor of three in how much
+behaviour they disturb, and understate that disturbance by the same multiple.
 
-\paragraph{The controlled experiment.}
-% SOURCE: \S\ref{sec:minigrid:verdict};
-% docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED, 05c86f2);
-% \S\ref{sec:minigrid:churnratio} Result 1 (median 12.7x).
+% SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
+% (SIGNED, 05c86f2); \S\ref{sec:minigrid:churnratio} Result 1.
+% CAUSAL WORDING 2026-07-31: "the calibration seed alone reorders the two
+% methods" asserted sufficiency of a single factor. Replaced with the observed
+% statement. Residual randomness is documented in \S\ref{sec:minigrid}.
 The same logic predicts something sharper, and a preregistered experiment tests
-it. If cancellation grows with similarity, then the least informative comparison
-of all is not compressed against original but \emph{compressed against
-compressed}---two methods at the same bit width, which are far closer to each
-other than either is to its baseline. Pairing GPTQ and AWQ on byte-identical
-calibration samples across five calibration seeds, over eight registered
-model-by-benchmark cells, we find churn running a median of $12.7\times$ the net
-delta, more than double the atlas ratio; and under the frozen eight-cell decision
-rule \textbf{H3 is supported}---the calibration seed alone reorders the two
-methods in \textbf{5 of 8} cells. Which of two compression methods wins can be
-decided by a random draw of calibration data, at a gap the field would report as
-equivalence.
+it. If cancellation grows with similarity, the least informative comparison is
+not compressed against original but \emph{compressed against compressed}---two
+methods at the same bit width, far closer to each other than either is to its
+baseline. Pairing GPTQ and AWQ on byte-identical calibration samples across five
+calibration seeds, over eight registered model-by-benchmark cells, we observe
+churn running a median of $12.7\times$ the net delta, and under the frozen
+eight-cell decision rule H3 is supported: within the controlled pipeline,
+changing the calibration sample was sufficient to reverse the observed
+GPTQ--AWQ ranking in \textbf{5 of 8} registered cells, at gaps that would
+ordinarily be reported as equivalence (\S\ref{sec:minigrid:verdict}).
 
-\paragraph{The instrument is not fixed either.}
-% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §§1, 7;
-% docs/MINIGRID_FP16_GATE_RECORD_2026-07-21.md §4.2 (0.232 -> 0.566 on unchanged
-% generations); \S\ref{sec:sensitivity} for the registered ratio R.
-All of the above assumes the evaluation itself holds still. A small preregistered
-exploratory study says it does not: on a single fixed FP16 model, changing the
-answer-extraction filter moved reported GSM8K accuracy from $0.232$ to $0.566$
-with \emph{not one token of model output changed}. That is a scoring decision,
-not a modelling one, and it is larger than every compression effect in this
-paper. It is one model and licenses no confirmatory reading
-(\S\ref{sec:sensitivity}), but a reader can check it in an afternoon on the
-pinned harness version, and it bounds how much any unstated configuration choice
-can be worth.
+% SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §§1, 7.
+All of the above assumes the evaluation itself holds still. A small
+preregistered exploratory study indicates it does not: on a single fixed FP16
+model, changing the answer-extraction filter moved reported GSM8K accuracy from
+$0.232$ to $0.566$ with not one token of model output changed. That is a scoring
+decision rather than a modelling one, and it is larger than every compression
+effect reported here. It is one model on one task and licenses no confirmatory
+reading (\S\ref{sec:sensitivity}).
 
-\paragraph{What is new, and what is not.}
 Per-item flips as a diagnostic for compressed models are due to
 \citet{dutta2024flips}, and calibration-\emph{data} effects on quantization
 quality are due to \citet{williamsaletras2024}; we claim neither. Our
@@ -246,42 +188,28 @@ contributions are (i) the preregistered audit of published equivalence claims
 and its verdict artifact; (ii) empirical certification tables and the
 paired-design correction they quantify; (iii) the atlas of the public record,
 and the measured cancellation ratio in both the observational and controlled
-regimes; and (iv) a preregistered seed-paired experiment showing that the
-calibration seed alone reorders two compression methods in 5 of 8 registered
-cells. Relative to the closest existing work \citep{llmaccuracystats2026}, which
-performs one-sided McNemar \emph{detection}, our delta is the shift from
+regimes; and (iv) a preregistered seed-paired experiment in which the
+calibration draw reverses the method ordering in 5 of 8 registered cells.
+Relative to the closest existing work \citep{llmaccuracystats2026}, which
+performs one-sided McNemar \emph{detection}, our contribution is the shift from
 detection to certification: a declared margin, TOST, and required-$n$ tables.
 
-\paragraph{Preregistration.}
-All protocols were frozen before the analyses they govern
-(\S\ref{sec:prereg}), deviations are dated amendments rather than edits, and
-the analyst decisions that moved the headline are reported together with the
-direction they moved it---including the two corrections that removed the
-paper's largest numbers.
+All protocols were frozen before the analyses they govern (\S\ref{sec:prereg}),
+deviations are dated amendments rather than edits, and the analyst decisions
+that moved the headline are reported together with the direction they moved it.
 
-% PAPER MAP (TODO closed 2026-07-27). Deliberately short and \ref-driven: it
-% names what each section decides rather than restating findings, so it carries
-% no figures and cannot fall out of sync. Section order follows main.tex.
-\paragraph{Map.} Section~\ref{sec:related} positions the work and reconciles two
-antecedents that disagree about calibration sensitivity.
-Section~\ref{sec:prereg} states what was frozen, when, and which analyst
-decisions moved the headline. Section~\ref{sec:audit} is the audit;
-Section~\ref{sec:certification} builds the certification tables that say what
-the audited claims would have needed; Section~\ref{sec:atlas} is the atlas both
-rest on. Section~\ref{sec:minigrid} is the preregistered controlled experiment,
-Section~\ref{sec:sensitivity} the harness study, and
-Section~\ref{sec:discriminant} the discriminant check that the framework does
-not simply call everything noise. Section~\ref{sec:artifacts} lists what is
-released, Section~\ref{sec:limitations} what we do not claim.
+The paper has three components: an audit of published equivalence claims
+(\S\ref{sec:audit}), an atlas of the public evaluation record with the
+certification method it supports (\S\S\ref{sec:certification}--\ref{sec:atlas}),
+and a preregistered controlled experiment on calibration-seed sensitivity
+(\S\ref{sec:minigrid}). Supporting studies, artifacts and limitations follow in
+\S\S\ref{sec:sensitivity}--\ref{sec:limitations}.
 
-% RESOLVED 2026-07-30. Canonical DOI stated once here; the full identifier set
-% (concept DOI, source repo, dataset mirror) lives in \S\ref{sec:artifacts} and
-% App.~\ref{app:artifacts:metadata} rather than being restated three times.
+% RESOLVED 2026-07-30. Canonical DOI stated once here.
 Everything the paper reports---the per-item outputs behind every controlled
 result, the atlas, the audit table, the analysis package and the reproduction
-package---is archived at
-\versiondoi{} and
-itemised in Section~\ref{sec:artifacts}.
+package---is archived at \versiondoi{} and itemised in
+Section~\ref{sec:artifacts}.
 ```
 
 ---
@@ -372,7 +300,7 @@ methods. The nearest antecedents vary the calibration set itself, and they
 disagree with each other about how much that matters---which is the subject of
 \S\ref{sec:related:reconcile}.
 
-\subsection{The literature disagrees with itself, and our design says why}
+\subsection{Prior findings on calibration sensitivity}
 \label{sec:related:reconcile}
 
 \textbf{The two most direct antecedents of this paper reach opposite
@@ -665,14 +593,20 @@ asserting parity within 0.15\,pp has made a 0.15\,pp claim, and judging it
 against a 2\,pp yardstick audits a claim nobody made---and the third ruling then
 yielded the reported $K = 4$.
 
-The order in which those numbers arrived is the point. \emph{The correction ran
-against the direction the analyst's first instinct had gone.} The first pass had
-already produced a defensible, publishable, conservative number; the frozen text
-required a larger one and governed. That is the evidence available, from inside
-a solo-authored project, that the rule text drove the analysis rather than the
-desired result---and had it run the other way, the same discipline would have
-required reporting the smaller number. Both readings ship in the released CSV
-(\S\ref{sec:audit:results}).
+% NEUTRALISED 2026-07-31 (advisor review 3.3). Replaced an argument about the
+% analyst's intentions with the sequence of values. The frozen text governing
+% over the first pass is visible in the numbers themselves.
+%
+% OPEN -- SUBSTANTIVE, NOT RHETORICAL. The claim-specific margins referred to
+% here are, for most claims, the largest delta the source REPORTED, not a margin
+% the source DECLARED (see docs/audit_claim_table.csv: no margin field exists in
+% the frozen extraction, and every margin_basis in the derived CSV cites an
+% observed delta). Whether K should rest on them is the subject of the pending
+% dated amendment. Do not restate the "0.15 pp assertion is a 0.15 pp claim"
+% reasoning that this paragraph previously carried.
+Applying claim-specific margins changed $K$ from 1 to 5; applying the
+preregistered metric-compatibility rule to R04 produced the reported $K = 4$.
+Both readings ship in the released CSV (\S\ref{sec:audit:results}).
 
 \subsection{Result-inspection discipline}
 \label{sec:prereg:discipline}
@@ -732,7 +666,7 @@ selected after its result was known. The screen's per-cell outcomes are in
 \S\ref{sec:minigrid:escalation} and the verdict in
 \S\ref{sec:minigrid:verdict}; this section states neither.
 
-\subsection{The spot-check found a selection bias in our own pipeline}
+\subsection{Atlas validation and population correction}
 \label{sec:prereg-spotcheck}
 % SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md; the spot-check report of
 % 2026-07-21 (10 cells, 262/262 fields); ruling R7. Full narrative, the two
@@ -755,20 +689,19 @@ recomputing our own numbers---the natural, and useless, self-check---would have
 confirmed all of them and shipped the selection bias intact. What caught it was
 reconstructing the measurement from the protocol text rather than the code.
 
-\textbf{Preregistration did the work it is supposed to do.} The frozen text
+Preregistration did the work it is supposed to do. The frozen text
 determined the direction of the repair: we executed a rule already binding and
 under-implemented, rather than choosing one that flattered a result. The
 correction was nevertheless made \emph{after} results had been inspected, and we
 disclose that rather than presenting it as a pre-specified step.
 
-\textbf{Both revisions are public.} We publish rev-1 and rev-2 and report the
+Both revisions are public. We publish rev-1 and rev-2 and report the
 delta (Appendix~\ref{app:prereg:rev2delta}) rather than replacing the record
 with its corrected version; the repair enlarged the analysable population by
 44\% and left the audit's headline verdicts unmoved. A field whose
 near-lossless claims cannot be rechecked because per-item outputs are never
-released---the finding of Section~\ref{sec:audit}---is a field whose corrections
-are invisible. Ours is not, and that is the point of the artifact rather than an
-apology for it.
+released---the finding of Section~\ref{sec:audit}---is one whose corrections
+cannot be seen. Both revisions of our atlas are released.
 % CORRECTION TO THE RECORD (2026-07-22). Commit 272136b ("Update the paper's
 % banner-marked figures to atlas rev-2") states: "Every \revtwoBanner and
 % \revtwoTODO marker is resolved; none remain outside main.tex's macro
@@ -865,9 +798,20 @@ explicit $\leq 1$\,pp delta framed as parity). Every claim
 meeting the criterion is audited; there is no discretionary sub-selection.
 % SOURCE: docs/audit_claim_table.csv column `frame`: F1=7, F2=7, F3=3.
 The frozen table contains 17 claims: 7 method papers, 7 official model cards or
-blogs, and 3 vendor documents. Each claim's fields were extracted twice by
-mutually blind passes, with source content hashes recorded, and discrepancies
-reconciled before the verdict stage (\S\ref{sec:prereg}).
+blogs, and 3 vendor documents.
+% ADDED 2026-07-31. The body previously said only "extracted twice by mutually
+% blind passes" and never said by WHAT. That the passes were language-model
+% agent sessions was disclosed only inside the reproduced registration
+% (Amendment 1) in the appendix, which is not where a reader looks for it.
+Each claim's fields were extracted by \textbf{two blinded automated extraction
+passes}---separate language-model agent sessions, the second given no access to
+the first pass's output---with source content hashes recorded, followed by
+\textbf{human reconciliation} of every disagreement before the verdict stage
+(\S\ref{sec:prereg}). Separate sessions prevent the second pass from copying the
+first; they do not make the two passes statistically independent, because both
+share a common model prior. Appendix~\ref{app:extraction} specifies the
+procedure, reports what agreement between the passes can and cannot be measured
+after the fact, and states what was not recorded at the time.
 
 We state the limit of the exercise before its results.
 % SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4 closing paragraph.
@@ -877,11 +821,11 @@ that any audited model is in fact degraded.} The audited property is the
 offered in support of an equivalence claim was large enough to have detected the
 difference the claim pronounces negligible. A claim can be perfectly correct and
 still be unsupported by the evaluation offered for it, and several of the claims
-below are very probably correct. What the field lacks is not honesty but a
-reporting standard; this section measures the gap that standard would close, and
+below are very probably correct. What is missing from the audited sources is a
+reporting standard. This section measures the gap such a standard would close;
 Section~\ref{sec:certification} supplies the instrument.
 
-\subsection{The reproducibility zero}
+\subsection{Availability of per-item outputs}
 \label{sec:audit:v3}
 
 The most actionable finding requires no statistics at all.
@@ -1062,7 +1006,7 @@ instability of a verdict across the sweep---that happen to coincide on one
 claim, and they must not be read as one finding.
 Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 
-\subsection{Indeterminate claims: a finding, not a gap}
+\subsection{Indeterminate claims}
 \label{sec:audit:indeterminate}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Indeterminate;
@@ -1070,7 +1014,7 @@ Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 % indeterminate_reason.
 $J = 5$ of the 17 claims are indeterminate, in two kinds.
 
-\textbf{Insufficient reporting (4).} A registered input is genuinely absent.
+Insufficient reporting (4). A registered input is genuinely absent.
 R02 (LLM.int8()) and R11 (Meta's quantized-Llama blog) state no sample size, no
 baseline, and no numeric delta---their headline equivalence evidence exists only
 as a chart image. R13 (vLLM FP8 documentation) states $n = 250$ but shows no
@@ -1078,7 +1022,7 @@ on-page baseline run at all. R14 (vLLM FP8 KV-cache blog) states a margin of
 0.7\,pp and permits $n$ to be imputed, but reports no baseline; its comparison
 lives in a figure.
 
-\textbf{Metric-incompatible (1).} R04 (AWQ) reports enough, but about a quantity
+Metric-incompatible (1). R04 (AWQ) reports enough, but about a quantity
 the registered model cannot score; see below.
 
 Every indeterminate claim retains whatever components its available inputs
@@ -1095,7 +1039,7 @@ pre-registered audit cannot evaluate them is precisely the reporting-standards
 problem this paper exists to address: the claim may well be true, but it has been
 placed beyond the reach of checking.
 
-\subsection{R04: an exclusion we argue against our own interest}
+\subsection{R04: metric incompatibility}
 \label{sec:audit:r04}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and
@@ -1194,7 +1138,15 @@ section computes that requirement empirically.
 \label{sec:cert:method}
 
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
-For a discordance rate $p_d$ and margin $m$, at 95\% confidence and 80\% power,
+% CORRECTED 2026-07-31. This read "at 95% confidence and 80% power", which
+% contradicted the paragraph below it: z_{1-alpha} = 1.6449 is ONE-sided at
+% alpha = .05, and TOST at one-sided .05 corresponds to containment of a 90%
+% two-sided interval, not a 95% one. The formula and every computed value are
+% unchanged -- only the description of them was wrong. Four table captions
+% carried the same error and are corrected with it.
+For a discordance rate $p_d$ and margin $m$, under TOST at one-sided
+$\alpha=.05$ --- equivalent to requiring a 90\% two-sided confidence interval to
+fall inside $\pm m$ --- with 80\% power,
 \begin{align}
 \mathrm{sd}_{\mathrm{paired}}      &= \sqrt{p_d}, &
 \mathrm{sd}_{\mathrm{independent}} &= \sqrt{2p(1-p)}, \label{eq:sds}\\[2pt]
@@ -1210,6 +1162,23 @@ on churn. $z_{1-\alpha}$ is \textbf{one-sided}, since TOST rejects two one-sided
 nulls at level $\alpha$ each (\S\ref{sec:prereg:choices}, interpretive
 choice~5).
 
+% ADDED 2026-07-31. The design assumption was documented in the code
+% (scripts/audit_stats.py::required_n_for_tost, "assumed true difference zero")
+% but was never stated in the paper. Without it a reader may take these as the
+% n that would certify an already-observed delta, which they are not.
+\paragraph{These are design values at a true difference of zero.}
+Equation~\eqref{eq:nreq} is the standard TOST planning sample size under an
+assumed \emph{true} paired accuracy difference of zero. It answers ``how many
+items would this benchmark need for an equivalence test to have 80\% power,
+given how much models of this kind disagree item-by-item''. It does
+\emph{not} answer ``how many items would certify the delta this source
+observed''. Under a true difference $\delta$, the quantity TOST must resolve is
+the separation $m - |\delta|$ rather than $m$, so the requirement grows without
+bound as $|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in
+this paper is therefore a \textbf{lower bound} on what a non-zero true
+difference would demand, and the tables should be read as design tables, not as
+retrospective certification of any particular reported result.
+
 The discordance rates are not modelled; they are read off the atlas
 (\S\ref{sec:atlas}). For each benchmark family we take the 25th percentile,
 median, and 75th percentile of the per-cell accuracy-state churn observed across
@@ -1223,8 +1192,9 @@ compression behaviour. Quartiles are \texttt{numpy}'s linear-interpolation
 \begin{table}[t]
 \centering
 \small
-\caption{Items required to certify equivalence within $\pm 2$\,pp at 95\%
-confidence and 80\% power, by benchmark family, at the 25th/50th/75th
+\caption{Items required to certify equivalence within $\pm 2$\,pp under TOST at
+one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a
+true difference of zero, by benchmark family, at the 25th/50th/75th
 percentiles of the discordance rates the atlas observes for that family. The
 naive column is the same requirement computed by treating the two runs as
 independent samples. Eleven benchmark families plus the pooled row.}
@@ -1273,7 +1243,7 @@ the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing it to
 cost is quadratic; a claim of parity within 1\,pp is four times as expensive to
 certify as parity within 2\,pp.
 
-\subsection{Why the naive column belongs in the table}
+\subsection{The independent-binomial comparison}
 
 The independent-binomial column is not a straw man. It is what you get by
 treating the baseline and compressed evaluations as two unrelated samples and
@@ -1486,7 +1456,7 @@ hand-built sanity pairs ($n$ as low as 10, discordance up to 0.9) that would
 distort any quartile. The 1{,}807 figure of \S\ref{sec:atlas:coverage} is
 pipeline accounting and is never used as an analysis denominator.
 
-\subsection{Net delta understates behavioural change by a factor of 5.3}
+\subsection{Net delta versus per-item churn}
 \label{sec:atlas:netgross}
 
 % SOURCE: Table~\ref{tab:atlas-strata} (results/atlas_cells_summary_rev2.csv,
@@ -1526,7 +1496,7 @@ equivalence any more sufficient}, because the quantity that determines how much
 evidence is required scales down in lockstep with the quantity being claimed
 small.
 
-\subsection{The gray zone, and how it differs between the two strata}
+\subsection{Relationship between significance and equivalence}
 \label{sec:atlas:grayzone}
 
 \begin{table}[t]
@@ -1661,7 +1631,7 @@ differently.
 
 % COMPRESSED 2026-07-26. All four caveats retained: small n, symmetric flips
 % easier at small n, S1 provenance, and illustration-not-magnitude.
-\textbf{Caveats, in the same breath as the example.} At $n = 198$ symmetric flip
+Caveats, in the same breath as the example. At $n = 198$ symmetric flip
 counts are easier to hit by chance, and this is an S1 cell---a 2023-era
 community GPTQ of a 7B base model, the noisier stratum. It illustrates the
 mechanism, not a typical magnitude: the finding worth carrying away is the 145
@@ -1790,7 +1760,7 @@ labels and item indices.
 % docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED).
 The eight cells were built in two stages, and the second stage was authorized by
 the first under a rule frozen before either ran. The mini-grid executed
-\textbf{4 of the 8} cells, $\{$Qwen2.5-1.5B-Instruct,
+4 of the 8 cells, $\{$Qwen2.5-1.5B-Instruct,
 Llama-3.2-3B-Instruct$\}\times\{$MMLU, GSM8K$\}$; the 7B/8B cells sat behind a
 mechanical, pre-committed escalation screen described in
 \S\ref{sec:minigrid:escalation}. That screen fired, the deferred cells were
@@ -1818,7 +1788,7 @@ seen.
 Applied once, mechanically, to all eight cells:
 \textbf{H3 is supported.} The winner reverses across seeds in \textbf{5 of the 8}
 cells against a threshold of 3, and the range/gap criterion holds in
-\textbf{7 of the 8} against a threshold of 4. The supported limb of the frozen
+7 of the 8 against a threshold of 4. The supported limb of the frozen
 rule is a disjunction, and \emph{both disjuncts are satisfied independently}:
 either one alone would have returned the same verdict.
 
@@ -1828,8 +1798,8 @@ $\max\mathrm{range} < 0.5\,\mathrm{gap}$ in at least 6 of 8, which holds in 1.
 The two limbs cannot both hold and do not, so the frozen text classifies the
 outcome with no interpretation required.
 
-No exact accuracy tie occurs anywhere in the confirmatory set: \textbf{0 of 8}
-cells contain one, over \textbf{0 of 40} (model, task, seed) triples. The
+No exact accuracy tie occurs anywhere in the confirmatory set: 0 of 8
+cells contain one, over 0 of 40 (model, task, seed) triples. The
 registered tie convention---a tie is neither a flip nor a non-flip, and can
 neither create nor erase a flip between two non-tied seeds---therefore has no
 effect on any cell's classification, and the denominator for both criteria
@@ -1877,8 +1847,8 @@ Qwen2.5-7B   & GSM8K & 0.005800 & 0.048000 & 0.035000 & \textbf{TRUE}  & \textbf
 Llama-3.1-8B & MMLU  & 0.017163 & 0.040023 & 0.025495 & \textbf{TRUE}  & \textbf{TRUE} \\
 Llama-3.1-8B & GSM8K & 0.013200 & 0.033000 & 0.026000 & \textbf{TRUE}  & \textbf{TRUE} \\
 \midrule
-\multicolumn{7}{l}{Winner flip in \textbf{5 of 8} (threshold $\geq 3$: met)\quad$\cdot$\quad Range/gap in \textbf{7 of 8} (threshold $\geq 4$: met)} \\
-\multicolumn{7}{l}{$\max\mathrm{range} < 0.5\,\mathrm{gap}$ in \textbf{1 of 8} (disconfirm threshold $\geq 6$: not met)\quad$\cdot$\quad exact ties: \textbf{0 of 40}} \\
+\multicolumn{7}{l}{Winner flip in 5 of 8 (threshold $\geq 3$: met)\quad$\cdot$\quad Range/gap in 7 of 8 (threshold $\geq 4$: met)} \\
+\multicolumn{7}{l}{$\max\mathrm{range} < 0.5\,\mathrm{gap}$ in 1 of 8 (disconfirm threshold $\geq 6$: not met)\quad$\cdot$\quad exact ties: 0 of 40} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1988,7 +1958,7 @@ one we intend a practitioner to take away: \emph{a single calibration run can
 hand you the wrong winner}, and averaging over the registered five seeds is
 substantially more stable than any one of them.
 
-\textbf{The limitation on that reading, stated plainly.} With five seeds the
+The limitation on that reading, stated plainly. With five seeds the
 bootstrap resamples seed labels from a sample of five, so it has limited
 resolution on the seed-level distribution. What the low rates bound is the
 stability of \emph{this} observed mean under resampling; they do not establish
@@ -2093,7 +2063,7 @@ correspondingly better balanced, cancellation in the aggregate is more complete,
 and the surviving net delta therefore hides a proportionally larger amount of
 per-item movement.
 
-\textbf{We observe two regimes; we do not establish a curve.} These are two
+We observe two regimes; we do not establish a curve. These are two
 measured points---one observational contrast at 1{,}707 cells, one controlled
 contrast at 8---and nothing here licenses reading the ratio as a monotone
 function of aggregate closeness. What the two points support is the direction of
@@ -2139,7 +2109,7 @@ GSM8K ($n = 1{,}000$) & 1.92 -- 3.61  & 0.44 -- 5.65 \\
 \end{tabular}
 \end{table}
 
-\textbf{MMLU carries the result.} All four MMLU cells satisfy the range/gap
+MMLU carries the result. All four MMLU cells satisfy the range/gap
 criterion, their seed-induced ranges run $5.5$ to $17.5$ paired standard errors,
 and their seed-level SD exceeds item-level SE by $1.6$ to $5.9\times$
 (Table~\ref{tab:h3-variance}). The instability is far larger than the
@@ -2160,7 +2130,7 @@ is that the GSM8K cells carry materially less resolving power than the MMLU
 cells---a statement about where the evidence concentrates, not a reweighting of
 the rule.
 
-\subsection{The apparatus caught its own experiment}
+\subsection{Resolution of the confirmatory cells against the certification tables}
 \label{sec:minigrid:selfaudit}
 
 % SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, §"The paper's own
@@ -2175,12 +2145,14 @@ actually observed in them is $p_d = 0.1766$, $0.1808$, $0.2086$ and $0.2940$,
 at or above the table's p75, where the requirement is roughly three times the
 $n$ used.
 
-So the under-resolution was not a surprise: \textbf{this paper's own apparatus
-predicted its own experiment's shortfall, and predicted it conservatively.} We
-state that explicitly rather than let it be found. A tool that catches its
-author is worth more than one that never had to, and an audit standard whose
-first casualty is the audit's own controlled experiment is easier to trust than
-one that always exonerates.
+% NEUTRALISED 2026-07-31 (advisor review 3.3). The passage argued for its own
+% trustworthiness ("a tool that catches its author is worth more than one that
+% never had to"). The fact is stronger unadorned; the reader can draw the
+% inference.
+The certification table therefore predicted this shortfall in advance: the
+confirmatory cells ran below the item count the method requires at the observed
+discordance, and the same instrument applies to this experiment as to the
+audited claims.
 
 One caveat bounds the comparison. The certification table's discordance
 percentiles describe a quantized-against-FP16 contrast, while $p_d$ here is
@@ -2378,7 +2350,7 @@ against a signed known answer rather than a restatement of it.
 %  - R is never printed without C_cond and Qbar beside it (registration §5.1).
 % =====================================================================
 
-\section{How much does the harness move the score? A configuration-sensitivity study}
+\section{Exploratory scoring-pipeline sensitivity}
 \label{sec:sensitivity}
 
 The certification apparatus of \S\ref{sec:certification} treats the compressed
@@ -2564,7 +2536,7 @@ methods themselves.
 % pilot_outputs_20260711T000427Z.tar.gz, sha256 a72ff2fd...898a72ecb8).
 % =====================================================================
 
-\section{Discriminant validity: the framework does not call everything noise}
+\section{Discriminant validity}
 \label{sec:discriminant}
 
 A certification-first framework invites one objection: a method that demands
@@ -2921,9 +2893,9 @@ That generalises the standard past its own framing. Nothing in the five lines is
 about quantization. They are about comparing two models similar enough that
 somebody thought the comparison worth making---compressed against original,
 method against method, checkpoint against checkpoint, version against version.
-Aggregate accuracy is least informative exactly where it is most used, and the
-remedy is not a better summary statistic but the per-item evidence and the
-declared margin that make a similarity claim checkable at all.
+Aggregate accuracy is least informative in the regime where these comparisons
+are made. What makes such a comparison checkable is the per-item evidence and a
+declared margin.
 ```
 
 ---
@@ -3008,7 +2980,7 @@ R17 & w8a16 & 8 & mmlu & 28{,}659 & 0.15 & 0.135 & 3 & no & underpowered \\
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Power quantities per claim. MDD is the minimum detectable difference in percentage points, under the paired and the independent-binomial variance models. Required $n$ is the item count needed at 95\% confidence and 80\% power under the paired model, at 1, 2 and 3\,pp and at the claim's own applicable margin $m^{*}$. \emph{Sens.} flags a claim whose verdict is not stable across the 1\,pp\,$\to$\,3\,pp sweep. \textbf{Numbers on indeterminate rows are not verdicts and are not counted in $K$}; they are retained so a reader can see what the analysis could and could not evaluate.}
+\caption{Power quantities per claim. MDD is the minimum detectable difference in percentage points, under the paired and the independent-binomial variance models. Required $n$ is the item count needed under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, under the paired model, at 1, 2 and 3\,pp and at the claim's own applicable margin $m^{*}$. \emph{Sens.} flags a claim whose verdict is not stable across the 1\,pp\,$\to$\,3\,pp sweep. \textbf{Numbers on indeterminate rows are not verdicts and are not counted in $K$}; they are retained so a reader can see what the analysis could and could not evaluate.}
 \label{tab:audit-power}
 % GENERATED from results/audit_verdicts_rev2.csv. Values read, not retyped.
 \begin{tabular}{@{}lrrrrrrrl@{}}
@@ -3093,7 +3065,7 @@ pruning claims descend to tier~4 and match there, over 183 cells.
 % carries the rev-1 reading on this point -- do not "restore" from it. Both disclosed feasibility-probe pairs (99
 atlas cells) are excluded from the imputation pool, per the atlas registration.
 
-\subsection{The two robustness readings, and why they stay separate}
+\subsection{The two robustness readings}
 \label{app:audit:robustness}
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
@@ -3138,7 +3110,7 @@ factor of nine across a three-fold change in margin.
 \begin{table}[t]
 \centering
 \small
-\caption{Items required to certify equivalence within $\pm 1$\,pp at 95\% confidence and 80\% power, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
+\caption{Items required to certify equivalence within $\pm 1$\,pp under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
 \label{tab:certification-1pp}
 % GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 1.0.
 % Values are read from the CSV, never retyped. Row order matches
@@ -3167,7 +3139,7 @@ gsm8k & 24 & 0.040 / 0.077 / 0.198 & 2{,}473 / \textbf{4{,}735} / 12{,}270 & 10{
 \begin{table}[t]
 \centering
 \small
-\caption{Items required to certify equivalence within $\pm 3$\,pp at 95\% confidence and 80\% power, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
+\caption{Items required to certify equivalence within $\pm 3$\,pp under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
 \label{tab:certification-3pp}
 % GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 3.0.
 % Values are read from the CSV, never retyped. Row order matches
@@ -3366,16 +3338,11 @@ within 0.15\,pp has made a 0.15\,pp claim, and judging it against a 2\,pp
 yardstick audits a claim nobody made. Ruling on choice~3 then moved one claim
 out of the determinate set, yielding the reported \textbf{$K = 4$}.
 
-We draw a specific methodological conclusion from this sequence, and it is not
-that the frozen text was perfect. It is that the correction ran \emph{against}
-the direction the analyst's first instinct had gone. The first pass had already
-produced a defensible, publishable, conservative number; the frozen text
-required a larger one, and the frozen text governed. That is the evidence
-available, from inside a solo-authored project, that the rule text drove the
-analysis rather than the desired result. Had the correction run the other
-way---first pass large, frozen text small---the same discipline would have
-required reporting the small number, and this paragraph would say so. Both
-readings are reported in the paper (\S\ref{sec:audit:results}) and shipped in
+% NEUTRALISED 2026-07-31 (advisor review 3.3). The sequence of values is the
+% evidence; an argument about the analyst's instincts is not.
+The first pass returned the smaller value and the frozen text required the
+larger one. Both readings are reported in the paper
+(\S\ref{sec:audit:results}) and shipped in
 the released CSV, so a reader who prefers the uniform yardstick can have it.
 
 \paragraph{Choice 2: what counts as the claim's own margin.}
@@ -3397,9 +3364,13 @@ variance model (the paired assumption is the generous one, and
 Table~\ref{tab:audit-mdd} shows the independent bound is uniformly worse); the
 largest asserted delta as the margin; a claim's own margin rather than a uniform
 one; and imputation by \emph{median} discordance from the most specific matching
-atlas tier rather than by any upper quantile. \textbf{An audit that resolves
-every ambiguity in the audited source's favour and still finds shortfalls of
-$2$--$13\times$ is the armoured version of the finding.}
+atlas tier rather than by any upper quantile. Under all four choices the
+observed shortfalls are $2$--$13\times$.
+% NEUTRALISED 2026-07-31 (advisor review 3.3): "the armoured version of the
+% finding" argued for the result's robustness instead of stating it.
+% OPEN: "the largest asserted delta as the margin" is the construction the
+% pending dated amendment concerns -- for most claims that delta was reported,
+% not asserted as a bound.
 
 \paragraph{Choice 3: R04 is indeterminate rather than scored on a substituted
 benchmark.}
@@ -3440,7 +3411,7 @@ rows are handled per input rather than discarded whole, so an indeterminate
 claim keeps the components its available inputs support, reported as
 supplementary and never verdict-bearing.
 
-\subsection{The spot-check found a selection bias in our own pipeline}
+\subsection{Atlas validation and population correction}
 \label{app:prereg-spotcheck}
 % SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md; the spot-check report of
 % 2026-07-21 (10 cells, 262/262 fields); ruling R7.
@@ -3480,7 +3451,7 @@ would have confirmed all of them and shipped the selection bias intact. What
 caught it was reconstructing the measurement from the protocol text rather than
 from the code.
 
-\textbf{Preregistration did the work it is supposed to do.} The registration
+Preregistration did the work it is supposed to do. The registration
 text was frozen before any statistic existed, and it fully determined the
 direction of the repair: we did not choose a rule that flattered a result, we
 executed a rule that was already binding and had been under-implemented. That
@@ -3489,7 +3460,7 @@ we can say so without asking to be trusted. The correction was nevertheless made
 \emph{after} results had been inspected, and we disclose that plainly rather
 than presenting the repair as a pre-specified step.
 
-\textbf{Both revisions are public.} We publish rev-1 and rev-2 and report the
+Both revisions are public. We publish rev-1 and rev-2 and report the
 delta between them, rather than replacing the record with its corrected version.
 A field in which near-lossless claims cannot be rechecked because per-item
 outputs are never released---the finding of Section~\ref{sec:audit}---is a field
@@ -3523,7 +3494,7 @@ slightly (0.1327 $\to$ 0.1375) and S1 median $|$net delta$|$ rises
 rises sharply from 17.5\% to 26.5\%---the recovered pairs are larger-$n$ cells,
 which resolve more differences. Every S2 field is identical across revisions.
 
-\textbf{The headline verdicts did not move.} $K = 4$ of 12 determinate claims
+The headline verdicts did not move. $K = 4$ of 12 determinate claims
 underpowered for their own assertion and $J = 5$ indeterminate, identical to
 rev-1 under the rev-2 discordance imputation, with the uniform-2\,pp secondary
 reading unchanged at 1 of 12. No new verdict computation was triggered. In the
@@ -3640,7 +3611,7 @@ its reason, so the admitted population is auditable rather than asserted.
 This appendix holds the motivation and the design of the configuration-sensitivity
 study of \S\ref{sec:sensitivity}, whose two result tables remain in the main text.
 
-\subsection{Two live defects, not a hypothetical}
+\subsection{Two observed defects}
 \label{app:sensitivity:motivation}
 
 The motivation is on the record: this campaign produced two configuration
@@ -3723,7 +3694,7 @@ blindness is not weakened to obtain a number sooner.
 % SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §9.1
 % (option considered and declined by Amogh 2026-07-22).
 
-\subsection{Condition B in full: the scoring rule alone exceeds the quantization effect}
+\subsection{Condition B in full}
 \label{app:sensitivity:condB}
 
 Condition~B is the sharpest result and deserves isolating, because it holds the
@@ -3893,6 +3864,190 @@ replacement. \textbf{Adding atlas pairs requires a dated amendment to the atlas
 registration}, not a silent extension---the frozen pair manifest is what makes
 the population auditable, so growing it quietly would remove the property the
 artifact exists to demonstrate.
+```
+
+---
+
+## FILE: `paper/sections/appendix_extraction.tex`
+
+```latex
+% =====================================================================
+% Appendix: the automated extraction procedure, its reliability, and the
+% AI-use statement.  ADDED 2026-07-31.
+%
+% Motivated by advisor review: the paper described the claim extraction only as
+% "two mutually blind passes" and never said the passes were language-model
+% agent sessions. The only disclosure was inside the reproduced registration
+% (Amendment 1), which is not where a reader looks.
+%
+% RULE FOR THIS FILE: nothing here may be inferred. Every specification item is
+% either read from a committed artifact (cited inline) or explicitly listed as
+% NOT RECORDED. Do not fill a gap in the specification table with a plausible
+% value -- an invented model ID or temperature is worse than an admitted gap,
+% because it cannot be checked and it misrepresents the provenance the rest of
+% the paper is built on.
+% =====================================================================
+
+\section{Automated claim extraction: procedure, reliability, and AI use}
+\label{app:extraction}
+
+\subsection{Why this appendix exists}
+
+The claim table underlying \S\ref{sec:audit} was populated by language-model
+agent sessions rather than by human reading. That is a provenance fact a reader
+needs in order to weigh the audit, and it was previously stated only inside the
+reproduced audit registration (Amendment~1,
+\S\ref{app:reg:audit}). This appendix states it directly, specifies as much of
+the procedure as the record supports, and is explicit about the parts the
+record does not support.
+
+\subsection{The procedure as executed}
+
+% SOURCE: docs/AUDIT_RECONCILIATION_2026-07-15.md; commits 8a16722 (pass 1)
+% and 43ce229 (frozen table); docs/AUDIT_REGISTRATION_2026-07-15.md Amendment 1.
+\begin{enumerate}
+\item \textbf{Pass 1} enumerated the registered source frames and extracted the
+  registered fields for each qualifying claim, producing 13 rows
+  (\texttt{docs/audit\_claim\_table\_pass1.csv}, committed 2026-07-15 as an
+  explicitly unfrozen artifact). Some pass-1 fields were derived from a
+  summarised reading of the source rather than from the source text directly;
+  those rows are flagged in the reconciliation memo.
+\item \textbf{Pass 2} ran as a fresh session with the pass-1 file withheld,
+  instructed not to read it or recover it from version history, and given only
+  the frozen protocol and the source frames. It produced 23 rows---17 claims
+  plus 6 logged exclusions---and recorded a SHA-256 of each fetched source
+  (\texttt{docs/audit\_claim\_table\_pass2.csv}).
+\item \textbf{Human reconciliation} merged the two passes into
+  \texttt{docs/audit\_claim\_table.csv} (17 claims), resolving inclusion
+  disagreements against the registered trigger vocabulary, choosing the quote
+  anchored in that vocabulary, and re-reading the cited table wherever the
+  passes differed numerically. The merged table was frozen by commit
+  \texttt{43ce229} before any verdict, power or required-$n$ computation ran.
+  The adjudication is recorded claim-by-claim in
+  \texttt{docs/AUDIT\_RECONCILIATION\_2026-07-15.md}.
+\end{enumerate}
+
+This replaced the registration's original ``extracted twice on different days''
+independence mechanism. Amendment~1 records both the substitution and its
+rationale: temporal separation was a proxy for extractor independence calibrated
+to human memory, and a fresh session carries no memory of pass~1 at all. The
+amendment also records that it was made after pass-1 results were known but
+before any verdict computation, and that the \S3.1--3.2 inclusion and extraction
+rules were unchanged.
+
+\paragraph{What separate sessions do and do not buy.}
+They prevent direct leakage: pass~2 cannot copy pass~1 because it never saw it.
+They do \emph{not} deliver the property dual coding is normally used for. Two
+sessions of the same model share a prior, so a systematic misreading---a
+tendency to treat a reported delta as a declared bound, say, or to prefer the
+abstract's phrasing over a table footnote---will recur in both passes and will
+survive reconciliation looking like agreement. We therefore do not describe
+these passes as independent coders, and we do not report an inter-rater
+reliability coefficient, which would imply an independence the design does not
+have.
+
+\subsection{Specification: what is on record and what is not}
+
+% Every NOT RECORDED row below is a real gap in the 2026-07-15 provenance. They
+% are listed rather than omitted so a reader can see the exact boundary of what
+% is checkable.
+\begin{tabular}{@{}p{0.36\linewidth}p{0.58\linewidth}@{}}
+\toprule
+Item & Status \\
+\midrule
+Execution date & 2026-07-15, both passes (commit timestamps
+  \texttt{8a16722}, \texttt{43ce229}) \\
+Tool family & Command-line coding agent, operated under the repository's
+  committed agent guardrails (\texttt{AGENTS.md}, \texttt{CLAUDE.md}) \\
+Browsing / retrieval & Enabled; pass 2 fetched each source and recorded its
+  SHA-256 \\
+Input documents & The registered source frames; per-source SHA-256 in
+  \texttt{audit\_claim\_table\_pass2.csv} \\
+Output schema & The registered \S3.2 extraction fields; both raw pass files
+  are released \\
+Human adjudication & Documented per claim in
+  \texttt{docs/AUDIT\_RECONCILIATION\_2026-07-15.md} \\
+\midrule
+Exact model ID and version & \textbf{Not recorded} \\
+System and extraction prompts & \textbf{Not recorded; not released} \\
+Temperature, seed, reasoning setting & \textbf{Not recorded} \\
+Retry policy & \textbf{Not recorded} \\
+Whether prompts varied across sources & \textbf{Not recorded} \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\noindent
+The lower block is a genuine limitation and we state it as one rather than
+reconstructing plausible values after the fact. The consequence is specific:
+the extraction is \textbf{auditable but not re-executable}. A reader can check
+every extracted field against the released source hashes and the released raw
+pass files, and can re-do the extraction by any means they choose; they cannot
+reproduce \emph{our} extraction run. Prompt and model-identifier logging is a
+requirement we would register in advance if this study were run again, and it is
+part of the reporting standard \S\ref{sec:conclusion} proposes.
+
+\subsection{Agreement between the two passes}
+
+Eleven sources were extracted by both passes. Two were reached only by pass~1
+and twelve only by pass~2; the union was adjudicated by hand, and one source
+(QuIP\#) was included by pass~2 and excluded on adjudication because neither of
+its candidate phrases is in the registered trigger vocabulary.
+
+% SOURCE: computed over docs/audit_claim_table_pass1.csv and
+% docs/audit_claim_table_pass2.csv, joined on normalised source_url.
+On the eleven jointly extracted sources, the two categorical registered fields
+agree exactly:
+
+\begin{tabular}{@{}lr@{}}
+\toprule
+Field & Agreement \\
+\midrule
+\texttt{per\_item\_outputs\_released} (yes / no / partial) & 11 / 11 \\
+\texttt{statistical\_test\_or\_interval\_reported} (any / none) & 11 / 11 \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\noindent
+\textbf{The free-text numeric fields cannot be scored this way, and we do not
+report a number for them.} The two passes recorded different \emph{scope} by
+design rather than different values: pass~1 tended to record every task in the
+source's table, pass~2 the single anchor task attached to the quoted sentence.
+For GPTQ, for example, pass~1 recorded deltas for five OPT-175B tasks and
+pass~2 recorded the PIQA figure alone---the same underlying numbers at different
+granularity. A string-equality comparison scores that as a disagreement and
+would put ``exact agreement'' at 11\%, which would misdescribe the record. A
+value-level comparison is equally unreliable, because these fields are prose
+containing incidental numbers.
+
+What is on record is the reconciliation memo's finding, made at merge time by
+re-reading the cited table for every discrepancy: \emph{every} numeric
+disagreement between the passes was a difference of scope, not of value. We
+report that as the qualitative finding it is. A quantitative inter-pass
+agreement rate on numeric fields was not computed at extraction time and cannot
+be reconstructed now without imposing a scoring rule that did not exist then.
+
+\paragraph{Validation against human reading was not performed.}
+No random subset was independently extracted by a second human without sight of
+the agent output. That check would materially strengthen the audit and it is the
+first thing we would add.
+
+\subsection{AI-use statement}
+
+% Wording constraint: this must not claim human authorship of agent-produced
+% steps, and must not claim artifacts (prompts, model IDs) that are not released.
+Language-model tools were used in this work for two blinded structured
+extraction passes over the audited sources, and for copy-editing. The author
+designed the study, wrote the preregistrations and froze them before execution,
+wrote and verified the analysis code, adjudicated every extraction disagreement
+by re-reading the cited sources, checked the reported results against the
+released artifacts, and takes responsibility for the whole manuscript. The
+claim table produced by the extraction passes is released in both raw
+(per-pass) and reconciled form, together with per-source content hashes and the
+claim-by-claim adjudication record. Model identifiers, prompts and generation
+settings for the extraction sessions were not logged at the time and are
+therefore not released; see the specification table above.
 ```
 
 ---
@@ -4217,8 +4372,8 @@ Sections in reading order (numbered as the compiled paper numbers them; front ma
 | 6 | An atlas of the public record of compression evaluation | `paper/sections/atlas.tex` |
 | 7 | Does the calibration seed reorder compression methods? | `paper/sections/minigrid.tex` |
 | ↳ | (subsection) The mechanical escalation screen | `paper/sections/minigrid_escalation.tex` |
-| 8 | How much does the harness move the score? A configuration-sensitivity study | `paper/sections/harness_sensitivity.tex` |
-| 9 | Discriminant validity: the framework does not call everything noise | `paper/sections/discriminant.tex` |
+| 8 | Exploratory scoring-pipeline sensitivity | `paper/sections/harness_sensitivity.tex` |
+| 9 | Discriminant validity | `paper/sections/discriminant.tex` |
 | 10 | Artifacts | `paper/sections/artifacts.tex` |
 | 11 | Limitations | `paper/sections/limitations.tex` |
 | 12 | Conclusion: a reporting standard for compression claims | `paper/sections/conclusion.tex` |
@@ -4227,4 +4382,5 @@ Sections in reading order (numbered as the compiled paper numbers them; front ma
 | App. | Atlas construction detail | `paper/sections/appendix_atlas_detail.tex` |
 | App. | Harness-sensitivity detail | `paper/sections/appendix_harness_detail.tex` |
 | App. | Artifact detail | `paper/sections/appendix_artifacts_detail.tex` |
+| App. | Automated claim extraction: procedure, reliability, and AI use | `paper/sections/appendix_extraction.tex` |
 | App. | Preregistration documents | `paper/sections/appendix_registrations.tex` |
