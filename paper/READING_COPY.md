@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-28T06:01:08Z from `paper/main.tex` at commit `6b0a063`.**
+**Generated 2026-07-31T01:59:15Z from `paper/main.tex` at commit `ba861f4`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -274,7 +274,14 @@ Section~\ref{sec:discriminant} the discriminant check that the framework does
 not simply call everything noise. Section~\ref{sec:artifacts} lists what is
 released, Section~\ref{sec:limitations} what we do not claim.
 
-\TODO{artifact URLs and DOI, once minted --- see \S\ref{sec:artifacts}}
+% RESOLVED 2026-07-30. Canonical DOI stated once here; the full identifier set
+% (concept DOI, source repo, dataset mirror) lives in \S\ref{sec:artifacts} and
+% App.~\ref{app:artifacts:metadata} rather than being restated three times.
+Everything the paper reports---the per-item outputs behind every controlled
+result, the atlas, the audit table, the analysis package and the reproduction
+package---is archived at
+\href{https://doi.org/10.5281/zenodo.21708923}{10.5281/zenodo.21708923} and
+itemised in Section~\ref{sec:artifacts}.
 ```
 
 ---
@@ -2665,15 +2672,36 @@ campaign incident log. The incident log is included on purpose: a pipeline with
 a clean surface. Appendix~\ref{app:artifacts-detail} holds the datasheet,
 metadata and maintenance statements.
 
-% The version string v1.0.0 is pinned and stated in
-% Appendix~\ref{app:artifacts:metadata}; it is no longer a TODO here. The
-% remaining three are genuinely unresolved and must not be written until they
-% exist: the harness integration is an upstream comment awaiting a maintainer
-% reply, not a merged contribution, and must not be described as shipped.
-\TODO{Zenodo DOI (canonical) and dataset URL (secondary), once minted; the
-package repository URL, once the repository is public; and the
-lm-evaluation-harness integration status, once upstream replies --- see the
-release checklist. Nothing here may state an identifier before it exists.}
+% RESOLVED 2026-07-30. All four identifiers now exist and are stated:
+%   Zenodo version DOI 10.5281/zenodo.21708923  (concept 10.5281/zenodo.21708922)
+%   source repo        github.com/amoghsingh130/flipeval  (public since 2026-07-20)
+%   dataset mirror     huggingface.co/datasets/AmoghSingh123/flipeval-artifacts
+% VERIFIED against the live records, not against a plan document: the version /
+% concept split was read from https://zenodo.org/api/records/21708923 (doi vs
+% conceptdoi -- they differ only in the final digit), and the dataset's public,
+% ungated state and cc-by-4.0 metadata from an unauthenticated client.
+%
+% The harness sentence is deliberately SMALL. There is no pull request: as of
+% 2026-07-30 `author:amoghsingh130' returns 0 issues and 0 PRs in that
+% repository. What exists is a comment on issue #3831 (2026-07-21, followed up
+% 2026-07-24) and no maintainer reply. "Submitted", "contributed" and "upstream
+% patch" would all be false. Do not upgrade this wording without re-running that
+% search.
+\paragraph{Availability.} The archived release is canonical:
+\textbf{\href{https://doi.org/10.5281/zenodo.21708923}{10.5281/zenodo.21708923}},
+which resolves to the frozen \textbf{v1.0.0} state this paper describes. (The
+concept DOI \href{https://doi.org/10.5281/zenodo.21708922}{10.5281/zenodo.21708922}
+resolves to whichever version is latest and is deliberately \emph{not} the
+citation here, because the numbers reported above belong to one frozen state.)
+The analysis package is at \url{https://github.com/amoghsingh130/flipeval},
+tag \texttt{v1.0.0}. A copy of the data is mirrored for convenience at
+\url{https://huggingface.co/datasets/AmoghSingh123/flipeval-artifacts};
+\textbf{it is a secondary link}, provided because the per-item files are
+directly loadable there, and the DOI remains the citable record.
+
+The paired-comparison layer described here has been \textbf{proposed} to the
+\texttt{lm-evaluation-harness} maintainers, in a comment on issue \#3831; no
+integration has been merged, and none should be inferred.
 ```
 
 ---
@@ -3656,9 +3684,30 @@ remains visible is this paper's argument applied to itself.
 Released at version \textbf{v1.0.0}, the string shared by the source tag, the
 archived release and the dataset revision. The archived DOI is canonical for
 citation; the dataset repository is a convenience mirror.
-\TODO{Zenodo DOI, dataset URL and Croissant record, once minted --- see the
-release checklist. Nothing in this appendix may state a URL or DOI before it
-exists.}
+
+% RESOLVED 2026-07-30 -- see the head of sections/artifacts.tex for how each
+% identifier was verified. The version/concept distinction matters here more
+% than anywhere: they differ only in the final digit.
+\begin{tabular}{@{}ll@{}}
+\toprule
+Identifier & Value \\
+\midrule
+Version DOI (canonical) & \texttt{10.5281/zenodo.21708923} \\
+Concept DOI (latest) & \texttt{10.5281/zenodo.21708922} \\
+Source package & \texttt{github.com/amoghsingh130/flipeval}, tag \texttt{v1.0.0} \\
+Dataset mirror (secondary) & \texttt{huggingface.co/datasets/AmoghSingh123/} \\
+ & \texttt{flipeval-artifacts} \\
+Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\noindent The \textbf{version DOI is what this paper cites}: it resolves to one
+frozen state, which is the only thing the reported numbers describe. The concept
+DOI is correct only when referring to the artifact series. A
+\textbf{Croissant record} is served by the dataset repository at its standard
+\texttt{/croissant} endpoint and carries the CC-BY-4.0 licence through to the
+machine-readable metadata.
 
 \subsection{Maintenance}
 \label{app:artifacts:maintenance}
