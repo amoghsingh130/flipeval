@@ -83,9 +83,30 @@ remains visible is this paper's argument applied to itself.
 Released at version \textbf{v1.0.0}, the string shared by the source tag, the
 archived release and the dataset revision. The archived DOI is canonical for
 citation; the dataset repository is a convenience mirror.
-\TODO{Zenodo DOI, dataset URL and Croissant record, once minted --- see the
-release checklist. Nothing in this appendix may state a URL or DOI before it
-exists.}
+
+% RESOLVED 2026-07-30 -- see the head of sections/artifacts.tex for how each
+% identifier was verified. The version/concept distinction matters here more
+% than anywhere: they differ only in the final digit.
+\begin{tabular}{@{}ll@{}}
+\toprule
+Identifier & Value \\
+\midrule
+Version DOI (canonical) & \texttt{10.5281/zenodo.21708923} \\
+Concept DOI (latest) & \texttt{10.5281/zenodo.21708922} \\
+Source package & \texttt{github.com/amoghsingh130/flipeval}, tag \texttt{v1.0.0} \\
+Dataset mirror (secondary) & \texttt{huggingface.co/datasets/AmoghSingh123/} \\
+ & \texttt{flipeval-artifacts} \\
+Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\noindent The \textbf{version DOI is what this paper cites}: it resolves to one
+frozen state, which is the only thing the reported numbers describe. The concept
+DOI is correct only when referring to the artifact series. A
+\textbf{Croissant record} is served by the dataset repository at its standard
+\texttt{/croissant} endpoint and carries the CC-BY-4.0 licence through to the
+machine-readable metadata.
 
 \subsection{Maintenance}
 \label{app:artifacts:maintenance}
