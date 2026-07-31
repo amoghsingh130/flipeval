@@ -77,18 +77,21 @@ metadata and maintenance statements.
 % 2026-07-24) and no maintainer reply. "Submitted", "contributed" and "upstream
 % patch" would all be false. Do not upgrade this wording without re-running that
 % search.
+% ANONYMITY 2026-07-31: every identifier below goes through a macro defined in
+% main.tex, so the TMLR build suppresses them from one switch. Do not write a
+% URL, DOI or issue number directly into this paragraph.
 \paragraph{Availability.} The archived release is canonical:
-\textbf{\href{https://doi.org/10.5281/zenodo.21708923}{10.5281/zenodo.21708923}},
+\textbf{\versiondoi},
 which resolves to the frozen \textbf{v1.0.0} state this paper describes. (The
-concept DOI \href{https://doi.org/10.5281/zenodo.21708922}{10.5281/zenodo.21708922}
+concept DOI \conceptdoi{}
 resolves to whichever version is latest and is deliberately \emph{not} the
 citation here, because the numbers reported above belong to one frozen state.)
-The analysis package is at \url{https://github.com/amoghsingh130/flipeval},
+The analysis package is at \repourl,
 tag \texttt{v1.0.0}. A copy of the data is mirrored for convenience at
-\url{https://huggingface.co/datasets/AmoghSingh123/flipeval-artifacts};
+\dataseturl;
 \textbf{it is a secondary link}, provided because the per-item files are
 directly loadable there, and the DOI remains the citable record.
 
 The paired-comparison layer described here has been \textbf{proposed} to the
-\texttt{lm-evaluation-harness} maintainers, in a comment on issue \#3831; no
+\texttt{lm-evaluation-harness} maintainers, in a comment on \harnessissue; no
 integration has been merged, and none should be inferred.

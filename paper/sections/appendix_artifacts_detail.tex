@@ -87,15 +87,18 @@ citation; the dataset repository is a convenience mirror.
 % RESOLVED 2026-07-30 -- see the head of sections/artifacts.tex for how each
 % identifier was verified. The version/concept distinction matters here more
 % than anywhere: they differ only in the final digit.
-\begin{tabular}{@{}ll@{}}
+% Value column is p{} rather than l: the mirror path used to be hand-split
+% across two rows to fit an l column, which a macro cannot do. A p column wraps
+% at the \allowbreak points \datasetpath carries.
+\begin{tabular}{@{}l p{0.62\linewidth}@{}}
 \toprule
 Identifier & Value \\
 \midrule
-Version DOI (canonical) & \texttt{10.5281/zenodo.21708923} \\
-Concept DOI (latest) & \texttt{10.5281/zenodo.21708922} \\
-Source package & \texttt{github.com/amoghsingh130/flipeval}, tag \texttt{v1.0.0} \\
-Dataset mirror (secondary) & \texttt{huggingface.co/datasets/AmoghSingh123/} \\
- & \texttt{flipeval-artifacts} \\
+% ANONYMITY 2026-07-31: routed through main.tex macros for the TMLR build.
+Version DOI (canonical) & \versiondoi \\
+Concept DOI (latest) & \conceptdoi \\
+Source package & \repopath, tag \texttt{v1.0.0} \\
+Dataset mirror (secondary) & \datasetpath \\
 Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
 \bottomrule
 \end{tabular}

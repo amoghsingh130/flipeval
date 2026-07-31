@@ -1,0 +1,299 @@
+% =====================================================================
+% Appendix: the frozen preregistration documents, reproduced.
+%
+% GENERATED -- do not hand-edit. Regenerate with the session script
+% gen_registrations.py and re-check with verify_registrations.py, which
+% diffs the word stream of this file against the four frozen sources.
+%
+% Sources are FROZEN and are read READ-ONLY:
+%   PREREGISTRATION.md
+%   docs/MINIGRID_REGISTRATION_2026-07-15.md
+%   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md
+%   docs/AUDIT_REGISTRATION_2026-07-15.md
+%
+% Faithfulness: markdown structure becomes LaTeX structure and inline
+% markup becomes LaTeX inline markup. No word is added, dropped or
+% reordered; the verifier proves that. Verbatim environments were
+% rejected because PREREGISTRATION.md has unwrapped lines up to 967
+% characters, which would be clipped at the page edge.
+%
+% This appendix is IDENTICAL in the arXiv and TMLR builds: reproducing
+% the text rather than linking it is what keeps the frozen rules
+% readable under double-blind review.
+% =====================================================================
+
+\section{Preregistration documents}  % NON-SOURCE
+\label{app:registrations}  % NON-SOURCE
+
+\label{app:reg:note}  % NON-SOURCE
+% NON-SOURCE-BLOCK-BEGIN
+This appendix reproduces the four frozen protocol documents that
+\S\ref{sec:prereg} describes, so that the rule text can be read without
+leaving the paper. Each is reproduced in full, including its dated
+amendments. Formatting is typeset rather than plain-text, but no wording
+has been changed: the conversion is generated and machine-checked
+word-for-word against the frozen files. The authoritative copies are the
+files themselves in the archived source package
+(\S\ref{sec:artifacts}).
+% NON-SOURCE-BLOCK-END
+
+\subsection{FlipEval Main-Grid Pre-Registration}
+\label{app:reg:main}  % NON-SOURCE
+\emph{Reproduced from \texttt{PREREGISTRATION.md}; see \S\ref{app:reg:note}.}  % NON-SOURCE
+
+Changelog: 2026-07-11 --- resolved all TBDs and tightened the H3 decision rules prior to any main-grid execution; frozen by the commit containing this line.
+
+Created: 2026-07-10. Status: locked before the first main-grid job.
+
+After the first main-grid job starts, this file will not be edited. Any deviation or clarification will be appended under \textbf{Dated Amendments}, with its date, rationale, and whether results were inspected before the decision.
+
+\subsubsection{Claims}
+\begin{itemize}
+\item \textbf{H1 (net vs gross):} aggregate accuracy delta measures NET change and can be near zero because harmful and beneficial flips cancel, while GROSS behavioral churn on the same inputs stays large. Different quantities; report both.
+\item \textbf{H2 (underpowered, unstable ranking):} at common benchmark sizes, power to detect degradation and to order methods is low; rankings shift under resampling, seed, and calibration data.
+\item \textbf{H3 (calibration-seed instability, the ``spike''):} the calibration set used to fit the quantizer may change the method ranking as much as or more than the choice of method. If true, current single-run compression comparisons are effectively not reproducible. THIS is the potential main-track-caliber finding and the thing to hunt hardest in the pilot.
+\end{itemize}
+\subsubsection{Experimental Grid}
+Models:
+
+\begin{itemize}
+\item Qwen2.5-1.5B-Instruct
+\item Qwen2.5-7B-Instruct
+\item Llama-3.2-3B-Instruct
+\item Llama-3.1-8B-Instruct
+\end{itemize}
+Llama-3.2-3B-Instruct is used rather than the 1B model because near-floor GSM8K accuracy at 1B would make flip analysis degenerate and leave insufficient performance headroom across the four benchmarks.
+
+Compression cells:
+
+\begin{itemize}
+\item RTN at 4 and 3 bits; seed-free control
+\item GPTQ at 4 and 3 bits; calibration seeds \texttt{\{0, 1, 2, 3, 4\}} per model/bit cell
+\item AWQ at 4 and 3 bits; calibration seeds \texttt{\{0, 1, 2, 3, 4\}} per model/bit cell
+\item Wanda at 2:4 sparsity; calibration seeds \texttt{\{0, 1, 2, 3, 4\}}. Wanda is selected for its lower checkpoint-construction cost, documented implementation, and calibration dependence. SparseGPT is an explicitly out-of-scope pruning alternative.
+\item Calibration datasets: C4 for the full grid; C4 and WikiText-2 on Qwen2.5-1.5B-Instruct to separate sample-seed variance from calibration-distribution variance
+\end{itemize}
+For the full-grid C4 condition, each calibration set contains 128 samples of exactly 2,048 tokens from \texttt{allenai/\allowbreak{}c4}, configuration \texttt{en}, train split. For seed \texttt{s}, shuffle the complete C4 train-split document-index array using \texttt{numpy.random.default\_rng(s).shuffle}; visit documents in that order, tokenize each document without adding special tokens, skip documents shorter than 2,048 tokens, and retain the first 2,048 tokens from each eligible document until 128 samples have been collected. Persist the selected document indices and token hashes. GPTQ seed \texttt{s} and AWQ seed \texttt{s} receive the identical ordered calibration samples. This pairing makes a seed-\texttt{s} ranking difference attributable to method-by-calibration interaction rather than the methods seeing different data. The Qwen2.5-1.5B-Instruct WikiText-2 distribution analysis will use the same seeds, sample count, token length, eligibility rule, and method pairing, with dataset-specific indices retained.
+
+Benchmarks:
+
+\begin{itemize}
+\item MMLU
+\item ARC-Challenge
+\item HellaSwag, using the first 2,000 validation items in dataset index order (indices 0 through 1,999)
+\item GSM8K, at least 1,000 fixed test items
+\end{itemize}
+The model-family chat template is ON for every benchmark and method, including the FP16 baseline. GSM8K few-shot examples are inline within the user message. All paired methods receive identical item sets, prompt construction, and decoding/scoring settings.
+
+\subsubsection{Outcomes and Analysis}
+Primary per-pair metrics are net accuracy delta \texttt{(c-\allowbreak{}b)/\allowbreak{}n}, harmful flip rate \texttt{b/\allowbreak{}n}, beneficial flip rate \texttt{c/\allowbreak{}n}, accuracy-state churn \texttt{(b+c)/\allowbreak{}n}, wrong-to-different-wrong churn, and total answer churn. The primary inferential outputs are bootstrap 95\% confidence intervals, exact McNemar tests, TOST equivalence, minimum detectable difference at 80\% power, required n at 80\% power for the observed effect, and item-bootstrap rank-flip rates.
+
+The TOST equivalence margin is fixed at \textbf{2 percentage points} (\texttt{0.02}) for accuracy delta. We will not interpret failure to reject a difference as equivalence. McNemar tests are two-sided and exact. Bootstrap seeds, item IDs, calibration sample indices, and environment fingerprints will be retained. Family-wise multiple comparisons will use Holm correction within each benchmark/model family of planned method contrasts.
+
+\paragraph{Hierarchical aggregation across calibration seeds}
+\mbox{}\\
+Calibration seeds are treated as a random effect. Item-level bootstrap intervals from a single seed do not represent between-seed uncertainty. For every model/benchmark/bit/method cell, we will report (1) item-bootstrap uncertainty separately within each seed, (2) the standard deviation of the five seed-level accuracy estimates, and (3) a two-level paired bootstrap interval. Each replicate of the two-level bootstrap samples the five seed labels with replacement and, within every selected seed, samples the common evaluation items with replacement; GPTQ and AWQ retain the same sampled seed labels and item indices. We will report seed-level SD and item-level SE as separate variance components rather than collapsing them into an item-only interval.
+
+FlipEval's rank-instability metric will be reported both within each seed using item resampling, for comparison with the pilot, and across the paired seed-by-item joint bootstrap, which is the H3-relevant estimate. The joint procedure uses the same two-level resamples described above and reports exact-tie replicates separately.
+
+\subsubsection{H3 Decision Rule}
+The primary confirmatory analysis is restricted to 4-bit GPTQ and AWQ over the fixed set
+
+\texttt{S = \{Qwen2.5-\allowbreak{}1.5B-\allowbreak{}Instruct, Qwen2.5-\allowbreak{}7B-\allowbreak{}Instruct, Llama-\allowbreak{}3.2-\allowbreak{}3B-\allowbreak{}Instruct, Llama-\allowbreak{}3.1-\allowbreak{}8B-\allowbreak{}Instruct\} $\times$ \{MMLU, GSM8K\}},
+
+which contains eight model-by-benchmark cells. MMLU is the registered likelihood-based benchmark and GSM8K the registered generative benchmark in the confirmatory set. ARC-Challenge and HellaSwag are secondary. The identical H3 analyses at 3 bits are pre-declared secondary/exploratory analyses and will be reported regardless of outcome. Four-bit results are primary because 4-bit quantization is the deployment-relevant setting; 3-bit instability is expected to be larger and is interpreted only as a dose-response check, not as a second opportunity for confirmatory significance.
+
+For seed \texttt{s}, GPTQ-\texttt{s} is compared with AWQ-\texttt{s} using the paired calibration set. Let
+
+\texttt{d\_s(model, benchmark, bit) = acc\_GPTQ,s -\allowbreak{} acc\_AWQ,s}.
+
+A winner flip occurs in a cell if there are registered seeds \texttt{s} and \texttt{t} for which \texttt{sign(d\_s) != sign(d\_t)} and both differences are nonzero. An exact accuracy tie (\texttt{d\_s = 0}), which can occur because item counts are discrete, is counted as neither a flip nor a non-flip and is reported separately. Thus a tie cannot create or erase a flip between two non-tied seeds.
+
+Define the absolute mean method gap as
+
+\texttt{gap(model, benchmark, bit) = |mean\_s(acc\_GPTQ,s) -\allowbreak{} mean\_s(acc\_AWQ,s)|},
+
+and, for method \texttt{m} in \texttt{\{GPTQ, AWQ\}}, define the seed-induced range as
+
+\texttt{range\_m(model, benchmark, bit) = max\_s(acc\_m,s) -\allowbreak{} min\_s(acc\_m,s)}.
+
+The range/gap criterion holds in a cell exactly when
+
+\texttt{max(range\_GPTQ, range\_AWQ) >= gap}.
+
+\textbf{Supported:} H3 is supported if winner flips occur in at least 3 of the 8 confirmatory cells, or the range/gap criterion holds in at least 4 of the 8 confirmatory cells.
+
+\textbf{Disconfirmed:} H3 is disconfirmed if winner flips occur in at most 1 of the 8 confirmatory cells and \texttt{max(range\_GPTQ, range\_AWQ) < 0.5 $\times$ gap} in at least 6 of the 8 confirmatory cells.
+
+\textbf{Inconclusive:} Every outcome satisfying neither the support rule nor the disconfirmation rule is reported as inconclusive, without post-hoc promotion. Calibration-dataset effects, 3-bit results, ARC-Challenge, and HellaSwag are reported separately and cannot substitute for the eight-cell confirmatory rule.
+
+H1 and H2 will be reported as estimated effects with confidence intervals rather than converted into new post-hoc binary thresholds. The preregistered pilot-motivated diagnostics are cancellation (\texttt{harmful} and \texttt{beneficial} both nonzero relative to net delta), required-n relative to benchmark size, and bootstrap method-rank flips.
+
+\subsubsection{Exclusions and Missing Runs}
+An item is excluded only for a benchmark loader/scorer failure that affects all compared methods; exclusions and reasons are logged before analysis. Failed checkpoint builds or jobs are rerun with the same registered seed and calibration indices. Backend changes create a new environment cell and do not silently replace prior results.
+
+\subsubsection{Dated Amendments}
+\paragraph{2026-07-20 --- WikiText-2 document definition (Decision Point A)}
+\mbox{}\\
+\textbf{Decision owner:} \authorname{}, alone.
+
+\textbf{Results inspected before this decision:} No main-grid or mini-grid accuracy result has been inspected, and none exists. The only evidence seen is calibration-eligibility data, recorded below.
+
+The 2026-07-13 calibration preflight failure recorded in \texttt{docs/\allowbreak{}WIKITEXT2\_PROTOCOL\_BLOCKER.md}: on \texttt{Salesforce/\allowbreak{}wikitext}, \texttt{wikitext-\allowbreak{}2-\allowbreak{}raw-\allowbreak{}v1}, train split, dataset revision \texttt{b08601e04326c79dfdd32d625aee71d232d685c3}, tokenized with \texttt{Qwen/\allowbreak{}Qwen2.5-\allowbreak{}1.5B-\allowbreak{}Instruct} revision \texttt{989aa7980e4cf806f80c7fef2b1adb7bc71aa306} under the pinned runtime (torch 2.13.0, transformers 5.13.0, datasets 5.0.0), seed 0, no added special tokens: \textbf{0 of 36,718 rows contain at least 2,048 tokens}, against a registered requirement of 128. No calibration artifact or checkpoint was produced. This is a property of the corpus layout, not of the seed --- WikiText-2 raw distributes each article across many short rows --- so no reseeding can make the registered row-level reading executable.
+
+The 2026-07-20 eligibility probe, run \textbf{before} this decision was taken, on the same pinned dataset revision, tokenizer revision, and runtime, applying the reconstruction rule below verbatim (SLURM job \texttt{11303825}, embers CPU, in-image; algorithm \texttt{wikitext2-\allowbreak{}level1-\allowbreak{}heading-\allowbreak{}articles-\allowbreak{}v1}): \textbf{629 articles reconstructed from 36,718 rows, of which 425 contain at least 2,048 tokens} against the registered requirement of 128 --- verdict SUFFICIENT, a 3.3$\times$ pool. Token-length distribution across the 629 reconstructed articles: min 10, p25 1,703, median 2,857, p75 5,320, p90 8,577, max 21,295, mean 4,002.0; 2,517,232 tokens total. Eligibility is a property of the articles and not of the seed, so this single count satisfies all five registered seeds. The probe script is persisted at \texttt{scripts/\allowbreak{}wikitext2\_article\_probe.py} and is the \textbf{reference implementation} of the reconstruction rule: the builder's reconstruction must match its \texttt{reconstruct\_articles} and \texttt{is\_level1\_heading} functions verbatim.
+
+\textbf{Rationale:} The preregistration requires the WikiText-2 condition to sample 128 \emph{documents} of 2,048 tokens. It did not operationalize ``document'' for a corpus whose Hugging Face rows are line fragments rather than documents. This amendment supplies that definition. It changes no other registered parameter.
+
+\textbf{Amended rule.} For the Qwen2.5-1.5B-Instruct WikiText-2 calibration condition, a \emph{document} is one article, reconstructed deterministically from the raw corpus as follows:
+
+\begin{enumerate}
+\item Read the train split in source row order at the pinned dataset revision.
+\item An article begins at each row that is a level-1 heading --- a row whose text, after stripping surrounding whitespace, matches a single \texttt{=}-delimited title (\texttt{= Title =}) and not a deeper heading (\texttt{= = Subtitle = =} or lower). All rows up to but excluding the next level-1 heading belong to that article. Rows preceding the first level-1 heading form no article and are discarded.
+\item An article's text is its member rows concatenated in source order, joined exactly as stored, with no normalization beyond that already present in the raw corpus.
+\item The reconstruction algorithm is versioned and persisted with the artifact, together with the ordered article index array and a hash of each reconstructed article, so the reconstruction is independently checkable.
+\end{enumerate}
+The registered sampling rule then applies unchanged to that article array: for seed \texttt{s}, shuffle the complete reconstructed-article index array using \texttt{numpy.random.default\_rng(s).shuffle}; visit articles in that order; tokenize each without adding special tokens; skip articles shorter than 2,048 tokens; retain the first 2,048 tokens from each eligible article until 128 samples are collected. Persist the selected article indices and token hashes. GPTQ seed \texttt{s} and AWQ seed \texttt{s} receive the identical ordered calibration samples, as for C4.
+
+Seeds \texttt{\{0,1,2,3,4\}}, sample count 128, token length 2,048, the eligibility threshold, method pairing, and index retention are \textbf{unchanged} from the frozen protocol.
+
+\textbf{Fail-closed condition.} The builder continues to fail closed on the WikiText-2 condition until this rule is implemented and tested. If the reconstruction yields fewer than 128 eligible articles for any seed, the builder must raise rather than relax any registered parameter, and the shortfall returns here as a new dated amendment.
+
+
+\subsection{Mini-Grid Registration: Scope, Escalation Rule, and Reporting}
+\label{app:reg:minigrid}  % NON-SOURCE
+\emph{Reproduced from \texttt{docs/\allowbreak{}MINIGRID\_REGISTRATION\_2026-\allowbreak{}07-\allowbreak{}15.md}; see \S\ref{app:reg:note}.}  % NON-SOURCE
+
+Status: \textbf{FROZEN 2026-07-15}, by the commit containing this line, before any mini-grid job exists and before any mini-grid accuracy result was inspected. Deviations require a dated entry under Dated Amendments stating whether results were inspected before the decision.
+
+This document does not amend \texttt{PREREGISTRATION.md} (frozen 2026-07-11). It constrains the experimenter for a staged subset of the registered grid. The registered H3 protocol, metrics, and decision rule are unchanged.
+
+\subsubsection{1. Scope}
+The mini-grid executes exactly 4 of the 8 registered confirmatory H3 cells:
+
+\texttt{\{Qwen2.5-\allowbreak{}1.5B-\allowbreak{}Instruct, Llama-\allowbreak{}3.2-\allowbreak{}3B-\allowbreak{}Instruct\} $\times$ \{MMLU, GSM8K\}}
+
+at 4-bit, GPTQ and AWQ, calibration seeds \{0,1,2,3,4\}, paired C4 calibration sets per the registered sampling algorithm. Pinned model, dataset, and benchmark revisions are those in \texttt{configs/\allowbreak{}main\_grid\_manifest.yaml}. The 7B/8B cells (Qwen2.5-7B-Instruct, Llama-3.1-8B-Instruct $\times$ MMLU, GSM8K) are deferred and executed only if the escalation rule in \S{}3 fires.
+
+\subsubsection{2. Benchmark execution parameters not fixed by the preregistration}
+\begin{itemize}
+\item GSM8K few-shot count for all mini-grid (and any later confirmatory) cells: \textbf{1 few-shot example, inline in the user message --- matching the validated bridge configuration \texttt{configs/\allowbreak{}pace\_bridge\_chat.yaml}}.
+\item GSM8K items: test indices 0--999 in dataset order. MMLU: full test split.
+\item Chat template ON for every method including FP16 baselines (registered).
+\item Llama-3.2-3B FP16 operational acceptance ranges: to be derived from a trusted lm-evaluation-harness reference run on the pinned snapshot (procedure of \texttt{docs/\allowbreak{}MMLU\_REFERENCE\_RUN.md}) and committed into the mini-grid config \textbf{before any quantized Llama-3.2-3B result exists}. This registration deliberately freezes the derivation procedure, not the values; the values are recorded in the mini-grid config commit and are operational gates only.
+\end{itemize}
+\subsubsection{3. Escalation rule (mechanical, pre-committed)}
+Compute, per the frozen algebra of \texttt{PREREGISTRATION.md}, for each of the 4 cells at 4-bit: winner flips across seeds (ties counted separately, per the registered tie rule) and the range/gap criterion \texttt{max(range\_GPTQ, range\_AWQ) >= gap}.
+
+\textbf{Escalate} to the deferred 7B/8B seed cells iff:
+
+\begin{itemize}
+\item winner flips occur in \textbf{at least 1 of the 4 cells}, OR
+\item the range/gap criterion holds in \textbf{at least 2 of the 4 cells}.
+\end{itemize}
+If neither condition holds, the 7B/8B cells are not built, and no other result (3-bit, other benchmarks, atlas findings) can substitute to trigger escalation.
+
+\subsubsection{4. Relation to the frozen H3 decision rule}
+The registered Supported/Disconfirmed/Inconclusive rule is defined over all 8 confirmatory cells. Therefore:
+
+\begin{enumerate}
+\item If escalation fires and all 8 cells complete, the frozen rule is applied exactly as registered.
+\item If escalation does not fire (or the 7B/8B cells are otherwise not run), the paper reports the 4 completed cells \textbf{descriptively}, and H3 is reported as \textbf{formally inconclusive under the registered rule} --- never as supported or disconfirmed on 4 cells. No reduced-cell variant of the rule will be constructed after results are seen.
+\item The registered secondary analyses (3-bit dose-response, ARC-Challenge, HellaSwag, WikiText-2 calibration-distribution contrast) remain deferred with the rest of the main grid and are not part of the mini-grid.
+\end{enumerate}
+\subsubsection{5. Analysis and inspection discipline}
+\begin{itemize}
+\item During fan-out, only job health, checksums, expected-file coverage, and receipt pairing are inspected (runbook grid discipline). First accuracy inspection happens only after the mini-grid validator passes over the complete 44-JSONL expected set.
+\item The registered hierarchical analysis (\texttt{flipeval paired-\allowbreak{}seeds}, 2000 replicates, bootstrap seed 0) is run once per cell; the escalation rule in \S{}3 is then applied mechanically and a dated escalation decision record is written the same day.
+\item The paired-bootstrap rank-flip denominator convention (tie replicates included in the denominator, ties also reported separately) is the one implemented and documented in \texttt{flipeval/\allowbreak{}core.py} as of commit \texttt{a8ba9f0}; it is hereby fixed in words and will not be re-chosen after inspection.
+\end{itemize}
+\subsubsection{Dated Amendments}
+\paragraph{Amendment 2 (2026-07-21, \authorname{}): GSM8K few-shot binding}
+\mbox{}\\
+\S{}2 states GSM8K uses ``1 few-shot example, inline in the user message --- matching the validated bridge configuration.'' These two clauses conflict: the validated bridge configuration (\texttt{configs/\allowbreak{}pace\_bridge\_chat.yaml}, \texttt{fewshot: 1}) is implemented in \texttt{pilot\_eval/\allowbreak{}tasks.py} as a boolean switch that emits the fixed 3-example \texttt{GSM8K\_FEWSHOT} block, so the bridge canary that passed was validated with 3 inline examples. The operative binding for the mini-grid is the validated bridge configuration: 3 inline few-shot examples, byte-identical prompt path to the bridge. The literal count ``1'' in \S{}2 was a drafting error. The config key \texttt{fewshot} retains its existing boolean semantics (truthy $\Rightarrow$ the fixed 3-example block; the integer is not a count).
+
+Results-blind status: no mini-grid accuracy results exist or have been inspected as of this amendment; the bridge canary results that were inspected are operational validation runs outside the mini-grid's confirmatory set.
+
+
+\subsection{Public Per-Item Atlas Mining Registration}
+\label{app:reg:atlas}  % NON-SOURCE
+\emph{Reproduced from \texttt{docs/\allowbreak{}ATLAS\_MINING\_REGISTRATION\_2026-\allowbreak{}07-\allowbreak{}15.md}; see \S\ref{app:reg:note}.}  % NON-SOURCE
+
+Status: \textbf{FROZEN 2026-07-15}, by the commit containing this line --- before any flip statistic from these sources was computed beyond the two feasibility probes disclosed in \S{}1. Deviations require a dated entry under Dated Amendments stating whether results were inspected before the decision.
+
+Purpose: extend the Compression Flip Atlas with paired per-item records mined from public evaluation dumps, at zero GPU cost. These analyses are \textbf{descriptive/exploratory}: they estimate flip and churn magnitudes in the wild and feed the certification tables. They test no registered hypothesis and cannot substitute for any H3 cell. This protocol is registered to prevent source- or pair-selection after seeing results.
+
+\subsubsection{1. Disclosure of pre-registration data contact}
+Two feasibility probes were run on 2026-07-15 before this draft was written, and their results are known: (a) TheBloke/Llama-2-7B-GPTQ vs meta-llama/Llama-2-7b-hf on ARC-Challenge (74/1,170 flips, net $-$1.03 pp), and (b) neuralmagic Llama-3.1-8B baseline vs W4A16 on bbh\_boolean\_expressions (17/250 flips, net +1.2 pp). These two cells are flagged \texttt{probe=true} in the atlas and excluded from any aggregate statistic quoted in the paper's abstract or headline claims.
+
+\subsubsection{2. Sources (fixed; no additions after freeze without a dated amendment)}
+\begin{itemize}
+\item \textbf{S1 --- Open LLM Leaderboard v1 archive} (\texttt{open-\allowbreak{}llm-\allowbreak{}leaderboard-\allowbreak{}old} details datasets; public, ungated; no declared license --- recorded as a limitation in the datasheet).
+\item \textbf{S2 --- Neural Magic/Red Hat per-item dumps}: \texttt{neuralmagic/\allowbreak{} quantized-\allowbreak{}llama-\allowbreak{}3.1-\allowbreak{}leaderboard-\allowbreak{}v2-\allowbreak{}evals} (Apache-2.0) and, if their per-item schema validates, the companion arena-hard and humaneval datasets.
+\end{itemize}
+\subsubsection{3. Pair enumeration rule (run BEFORE any flip computation)}
+\begin{enumerate}
+\item Enumerate all S1 details datasets whose model name matches, case-insensitive, any of: \texttt{GPTQ}, \texttt{AWQ}, \texttt{GGUF}, \texttt{8bit}, \texttt{4bit}, \texttt{bnb}. For each, identify the base model from the quantizer's model card; include the pair iff a details dataset exists for that exact base model.
+\item Within a pair, use the latest run timestamp per task for each side unless prompt-hash agreement (rule \S{}4.2) fails, in which case try earlier run combinations in reverse-chronological order and record the choice.
+\item S2 pairs are the nine baseline$\times$\{W4A16, W8A8-INT8, W8A8-FP8\} combinations at 8B/70B/405B, all tasks present in the dump.
+\item The frozen pair list (a machine-readable manifest with dataset URLs, run timestamps, and task lists) is committed as \texttt{docs/\allowbreak{}atlas\_pair\_manifest.json} \textbf{before} flip statistics are computed. Pairs discovered later require a dated amendment here.
+\end{enumerate}
+\subsubsection{4. Item pairing validity rules (mechanical)}
+\begin{enumerate}
+\item Join key: S1 \texttt{hashes.example}; S2 \texttt{doc\_id} with byte-identical \texttt{doc} (or \texttt{doc\_hash} where present). Duplicated join keys within a file are dropped entirely (both occurrences) and counted.
+\item An item enters the paired analysis iff its full-prompt hash (S1 \texttt{hashes.full\_prompt}; S2 \texttt{prompt\_hash}) is identical across the pair. A pair-task cell is \textbf{excluded} iff fewer than \textbf{99\%} of joinable items pass this identity check; exclusions are reported with their rates.
+\item Per cell, record both sides' harness identity (lighteval/lm-eval git SHA, model args, dtype) verbatim from the results JSON. Differing harness SHAs do not exclude a cell (prompt-hash identity is the operative control) but are recorded and disclosed per cell.
+\end{enumerate}
+\subsubsection{5. Metrics (identical to the controlled-atlas suite)}
+Per cell: net accuracy delta, harmful/beneficial flip rates, accuracy-state churn, total answer churn where raw predictions exist, exact two-sided McNemar, TOST at the registered 2 pp margin, minimum detectable difference at 80\% power, and required-n. Primary correctness column: \texttt{acc\_norm} where present, else \texttt{acc} (S1); the task's primary metric as logged (S2); the choice is recorded per cell. No cell-level results drive inclusion/exclusion decisions.
+
+\subsubsection{6. Reporting}
+All enumerated, non-excluded cells are reported in the atlas regardless of outcome. Aggregates over cells are accompanied by the cell count and the exclusion table. The \texttt{probe=true} cells of \S{}1 appear in the atlas but not in headline aggregates.
+
+\subsubsection{Dated Amendments}
+None.
+
+
+\subsection{Published-Claim Audit Registration}
+\label{app:reg:audit}  % NON-SOURCE
+\emph{Reproduced from \texttt{docs/\allowbreak{}AUDIT\_REGISTRATION\_2026-\allowbreak{}07-\allowbreak{}15.md}; see \S\ref{app:reg:note}.}  % NON-SOURCE
+
+Status: \textbf{FROZEN 2026-07-15}, by the commit containing this line --- before any per-claim power computation was run. The claim list itself must also be frozen (\S{}3.4) before verdicts are computed. Deviations require a dated entry under Dated Amendments stating whether results were inspected before the decision.
+
+Purpose: systematically assess whether published ``near-lossless'' compression claims are statistically supported at their reported evaluation sizes. Framing is constructive --- the field lacks reporting standards; flipeval and the certification tables are the proposed fix --- not an indictment of specific papers. Every verdict is mechanical and recomputable.
+
+\subsubsection{1. Disclosure of pre-registration data contact}
+Five candidate claims were collected with exact quotes on 2026-07-15 (GPTQ, LLM.int8(), SmoothQuant abstracts; the RedHatAI W4A16 Llama-3.1-8B model card; Meta's quantized Llama 3.2 blog) during a feasibility sweep. No power computation has been run on any of them. They enter the pool through the same \S{}3 criteria as later-collected claims.
+
+\subsubsection{2. Population and sampling frame (fixed)}
+Claim sources, enumerated exhaustively within each frame:
+
+\begin{itemize}
+\item \textbf{F1 --- Method papers:} the published versions of GPTQ, AWQ, SmoothQuant, LLM.int8(), SpinQuant, QuIP\#, SqueezeLLM, Wanda, and SparseGPT, plus any paper citing one of these that appears in the related-work sweep (\texttt{docs/\allowbreak{}related\_work\_checklist.md}) and makes an equivalence-type claim.
+\item \textbf{F2 --- Official quantized model cards:} Meta, Qwen, Mistral, and Red Hat AI/Neural Magic quantized releases of models in the Llama-2/3.x and Qwen2.5 families on Hugging Face.
+\item \textbf{F3 --- Inference-stack vendor posts:} vLLM, TensorRT-LLM, and llama.cpp official blog/docs pages making quantization-quality claims.
+\end{itemize}
+Target: \textbf{at least 10} claims; all claims meeting \S{}3 inclusion are audited (no discretionary sub-selection).
+
+\subsubsection{3. Claim inclusion and extraction (mechanical)}
+\begin{enumerate}
+\item \textbf{Inclusion:} the source asserts, in prose or a table caption, that a compressed model's benchmark quality is equivalent-or-negligibly-different from its uncompressed baseline (trigger vocabulary: ``near-lossless'', ``negligible'', ``no (significant) degradation'', ``matches'', ``preserves accuracy'', ``X\% recovery'' with X $\geq$ 98, or an explicit $\leq$1 pp delta framed as parity). Perplexity-only claims are included only if a benchmark-accuracy claim also appears.
+\item \textbf{Extraction fields (per claim):} exact quote ($\leq$15 words), source and version/date, benchmark(s), reported n per benchmark (as stated, else the benchmark's standard size, recorded as \texttt{imputed}), reported baseline accuracy, reported delta, whether per-item outputs are released, whether any statistical test or interval is reported.
+\item \textbf{Double extraction:} each claim's fields are extracted twice on different days (solo-author substitute for dual coding) and discrepancies resolved before the verdict stage.
+\item \textbf{Freeze:} the completed claim table is committed as \texttt{docs/\allowbreak{}audit\_claim\_table.csv} before any verdict is computed. Claims found after that commit go into a separately reported ``post-freeze'' stratum.
+\end{enumerate}
+\subsubsection{4. Verdict rules (mechanical, computed only after \S{}3.4 freeze)}
+For each claim $\times$ benchmark, at the claim's reported n and baseline accuracy:
+
+\begin{itemize}
+\item \textbf{V1 --- Detection power:} minimum detectable accuracy delta at 80\% power, two-sided $\alpha$=0.05, under the paired-flip model with the discordance rate imputed from the atlas's empirical flip-rate distribution for the nearest (method family, bit width, benchmark) cell --- sensitivity-checked against the independent-binomial bound. Report MDD/claimed-margin ratio.
+\item \textbf{V2 --- Equivalence support:} the n required for TOST at margin \textbf{2 pp} --- matching the registered main-grid TOST margin --- (and at the claim's own margin when it states one). A claim is labeled \textbf{``underpowered for its own assertion''} iff reported n < required n at the applicable margin.
+\item \textbf{V3 --- Reproducibility:} binary --- could a third party run a paired test from released artifacts (per-item outputs public)?
+\end{itemize}
+Headline statistic: the fraction of audited claims labeled underpowered under V2, reported with its count and the full claim table. No claim is described as ``false'' or ``wrong''; the audited property is the evidential sufficiency of the reported evaluation, not the truth of the underlying equivalence.
+
+\subsubsection{5. Robustness reporting}
+Verdicts are recomputed under (a) the independent-binomial bound instead of the atlas-imputed discordance rate and (b) a margin sweep over 1 pp and 3 pp; a claim's verdict is called margin-sensitive if it changes across the sweep, and the count of margin-sensitive verdicts accompanies the headline number.
+
+\subsubsection{Dated Amendments}
+\textbf{2026-07-15 --- Amendment 1 (\S{}3.3 independence mechanism).} The requirement that the two extractions occur ``on different days'' is replaced by an extractor-independence requirement: the second extraction is performed in a fresh agent session with \textbf{no access to pass-1 outputs} --- the extractor is withheld \texttt{docs/\allowbreak{}audit\_claim\_table\_pass1.csv}, instructed not to read it or retrieve it from git history, and receives only the frozen protocol and the source frames. Rationale: temporal separation was a proxy for extractor independence calibrated to human memory; a fresh agent session carries no memory of pass 1, so blind same-day extraction provides at least the intended independence; the source-stability benefit of a second-day fetch is instead obtained by recording source content hashes in both passes where feasible. Decision context: made after pass-1 extraction results were known, but before any verdict, power, MDD, or required-n computation was run; the \S{}4 verdict rules and the \S{}3.1--3.2 inclusion/extraction rules are unchanged.

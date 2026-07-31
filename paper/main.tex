@@ -45,8 +45,63 @@
   superseded pending rev-2: #1 The rev-1 per-cell arithmetic is independently
   confirmed; the denominator is what changes.}\end{quote}}
 
+% =====================================================================
+% BUILD MODE -- the ONE switch that separates the two planned submissions.
+%
+%   \anonfalse  arXiv preprint: named author block, real identifiers.
+%   \anontrue   TMLR submission: TMLR is double-blind (JMLR editorial
+%               policies), so the author block and every identifier that
+%               names the author are suppressed. TMLR explicitly permits an
+%               arXiv preprint of a submission, so both builds may exist at
+%               once -- they must be produced from THIS source, differing
+%               only by this flag.
+%
+% Every de-anonymising item in the paper is routed through the macros below.
+% If you add another identifier -- a DOI, a repo, a handle, an issue number,
+% an acknowledgement -- add it HERE and use the macro at the site. A raw URL
+% written directly into a section silently breaks the anonymous build, and
+% nothing in the toolchain will warn you.
+% =====================================================================
+\newif\ifanon
+\anonfalse
+
+\newcommand{\withheld}{\textsc{[withheld for double-blind review]}}
+\ifanon
+  \newcommand{\versiondoi}{\withheld}
+  \newcommand{\conceptdoi}{\withheld}
+  \newcommand{\repourl}{\withheld}
+  \newcommand{\dataseturl}{\withheld}
+  \newcommand{\repopath}{\withheld}
+  \newcommand{\datasetpath}{\withheld}
+  % The harness issue is public and its comment carries the author's handle,
+  % so the number itself is an identifier under blind review.
+  \newcommand{\harnessissue}{an open issue}
+  % The reproduced registrations name their decision owner. The name is source
+  % text and is not dropped -- it is routed here, so the blind build shows a
+  % visible marker instead of a silent deletion.
+  \newcommand{\authorname}{\withheld}
+\else
+  \newcommand{\versiondoi}{%
+    \href{https://doi.org/10.5281/zenodo.21708923}{10.5281/zenodo.21708923}}
+  \newcommand{\conceptdoi}{%
+    \href{https://doi.org/10.5281/zenodo.21708922}{10.5281/zenodo.21708922}}
+  \newcommand{\repourl}{\url{https://github.com/amoghsingh130/flipeval}}
+  \newcommand{\dataseturl}{%
+    \url{https://huggingface.co/datasets/AmoghSingh123/flipeval-artifacts}}
+  % \allowbreak after each slash: these are set in a fixed-width table column
+  % and \texttt will not hyphenate, so without break points they overrun it.
+  \newcommand{\repopath}{\texttt{github.com/\allowbreak amoghsingh130/\allowbreak flipeval}}
+  \newcommand{\datasetpath}{\texttt{huggingface.co/\allowbreak datasets/\allowbreak AmoghSingh123/\allowbreak flipeval-artifacts}}
+  \newcommand{\harnessissue}{issue \#3831}
+  \newcommand{\authorname}{Amogh Singh}
+\fi
+
 \title{Certifying Compressed Language Models:\\ An Audit and a Statistical Toolkit}
-\author{Amogh Singh\\ Georgia Institute of Technology}
+\ifanon
+  \author{Anonymous authors\\ Paper under double-blind review}
+\else
+  \author{Amogh Singh\\ Georgia Institute of Technology}
+\fi
 \date{Draft \today}
 
 \begin{document}
@@ -86,5 +141,9 @@
 \input{sections/appendix_atlas_detail}
 \input{sections/appendix_harness_detail}
 \input{sections/appendix_artifacts_detail}
+% Added 2026-07-31: the four frozen protocol documents, reproduced. GENERATED --
+% regenerate rather than hand-edit, and re-run the word-stream check against the
+% frozen sources. Identical in the arXiv and TMLR builds by design.
+\input{sections/appendix_registrations}
 
 \end{document}

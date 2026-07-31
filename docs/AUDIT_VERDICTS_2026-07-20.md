@@ -44,6 +44,11 @@ the nearest (method family, bit width, benchmark) cell. The matcher tries tiers
 most-specific-first and takes the **median** over the first non-empty tier
 (median, not mean: per-cell discordance is right-skewed):
 
+> **Annotation 2026-07-31 — the table below is REV-1 and is superseded.** Rows 4
+> and 6 changed under rev-2 (tier 4: 1 → 3; global: 2 → 0). The rev-1 values are
+> left in place because this document is the record of what was computed on
+> 2026-07-20. See "Dated Corrections" at the end of this file before citing them.
+
 | tier | matched on | claims |
 |---|---|---|
 | 1 | family + bits + benchmark | 1 |
@@ -224,3 +229,44 @@ were ruled on by Amogh on 2026-07-20; #1 and #3 are recorded below as ruled.
 | headline-emitting recompute | embers CPU job `11297536`, in-image — the run whose `AUDIT_HEADLINE` line matches the committed `results/audit_verdicts.csv` (K = 4 of 12, J = 5) |
 | gate | 111 passed, 0 skipped (109 baseline + 2 tests added for ruling #3) |
 | gate caveat | run as `apptainer exec -B <scratch>/fake_scratch:/scratch "$IMAGE" python -m pytest -q`; without the bind, 2 GPTQModel tests fail at import on nodes whose `/scratch` is root-owned (`tokenicer` mkdirs the image-pinned `HF_HOME=/scratch/hf_cache`). Environmental, not a code failure; unrelated to this analysis |
+
+## Dated Corrections
+
+Appended entries only. Nothing above this section is rewritten: this document
+records what was computed on 2026-07-20, and later results supersede it rather
+than replace it in place.
+
+### 2026-07-31 — the imputation-tier distribution above is rev-1
+
+**What is wrong.** The "Discordance imputation" table reports the tier
+distribution `{family+bits+benchmark 1, family+bits 11, bits+benchmark 2,
+bits 1, benchmark 0, global 2}`. That is the **rev-1** distribution. Rev-2
+(2026-07-21) is `{1, 11, 2, 3, 0, 0}` — tier 4 gains two claims and **no claim
+reaches the global tier**.
+
+**Verified against the artifacts, not against a prior write-up.** Counting
+`discordance_match_tier` over all 17 rows:
+
+| file | family+bits+benchmark | family+bits | bits+benchmark | bits | global |
+|---|---|---|---|---|---|
+| `results/audit_verdicts.csv` (rev-1) | 1 | 11 | 2 | 1 | 2 |
+| `results/audit_verdicts_rev2.csv` (rev-2) | 1 | 11 | 2 | 3 | 0 |
+
+**Cause.** Rev-1's parser dropped the bit-width-less pruning cells, so R06 and
+R07 had nothing to match at tier 4 (bits) and descended to the global tier,
+where their p_d was the median over all 1,155 analysable cells. Rev-2 matches
+both at tier 4, over 183 cells. The `None`-field rule quoted under the table is
+unchanged and correct; what changed is which cells existed for it to match
+against.
+
+**Why this entry exists.** The paper carried the rev-1 sentence until
+2026-07-30 (fixed in `c69ddcf`, the seventh rev-1 survivor found). The fix
+noted that this document still reads rev-1 but did not annotate it, leaving a
+committed document that would silently restore the error if anyone used it to
+check the paper. The numbers above are the check to use instead.
+
+**Scope.** Only the tier distribution is corrected here. This entry does not
+revisit any verdict, ruling or headline in this document; the rev-2 verdict
+figures the paper reports (K = 4 underpowered, J = 5 indeterminate, 12
+determinate, V3 14 no / 3 partial / 0 yes) come from
+`results/audit_verdicts_rev2.csv` and are unaffected by this annotation.
