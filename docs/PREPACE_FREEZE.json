@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-30T00:43:20.590748+00:00",
-  "source_commit": "28c4c89beb6c51cb8bdecf6629c84a5d422630ba",
-  "source_tree": "e57e3058fdc429e142844d58737f920c8607d553",
+  "created_at": "2026-07-31T18:39:10.572150+00:00",
+  "source_commit": "de5539f4c136bfd0eb8f68467e7247cd0aac3163",
+  "source_tree": "151d67e0aff26d2d905c8779587b3e269e71e11f",
   "branch": "main",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -37,8 +37,8 @@
     "pilot_eval/tasks.py": "9befb8061cd7f0dff198e593a4e84f58de4b94ca4b336ebb3622ea28312062ee",
     "pyproject.toml": "cd3349eca8a076b1aabfb7dac258e1de78094a1356913b99d1f29c6450ac37c3",
     "scripts/atlas_flip_analysis.py": "cde64181b159a91e65bb130ef4e210a07358060f5327897a76ec9c9d6bdebcab",
-    "scripts/audit_stats.py": "ba1ca41dc02cbcf76189a41e1277b54d67459dda71ef77e483c4267d6fb57571",
-    "scripts/audit_verdicts.py": "b494fdbf38c7d66caf8346b428e3e9b89702b55a6fafd24241d444f1bcb2717b",
+    "scripts/audit_stats.py": "e7e2b417a6a96bdb6946fc63e3ff404f53b8b594b08f5251439ac7a3d95db296",
+    "scripts/audit_verdicts.py": "f48d1f73d424f683d3b323d21183a086a9ad00aa83645931c902dd66ab0a70a4",
     "scripts/build_quantized.py": "73fce25b619799a713e0c0090221c8c110b933028694270772ad73b040852c80",
     "scripts/certification_tables.py": "60512e7bc615fb6edba44350fcce249f6780e9de12f40f2fe76de23c0d580164",
     "scripts/compare_mmlu_reference.py": "2e47f1e89bf77e0f6edaee87c685f399e77fbb2f39e2b816327c5f438f275c88",
@@ -56,6 +56,7 @@
     "scripts/slurm/reference_run.sbatch": "01bb6d817249bccd25e62b537449ef87b4af00276952a565debadc51268bd06c",
     "scripts/slurm/run_bridge.sbatch": "4e52f6b275e87d24500dbe663026dd429123fa324ad201f04064b0e343ac135b",
     "scripts/slurm/run_minigrid.sbatch": "282828ea9f96f736ac4fa5b2c8cbae136d4b48adb0a6c4e1e866ab33cea1acf2",
+    "scripts/slurm/run_tests.sbatch": "29617802e80ac41e3d310d22d4aee8884ef134424f436a4d36418be5c0a12f22",
     "scripts/slurm/verify_bridge.sbatch": "cc8d8204c6bb3ce3c984768b5b5c3283b99f4d06fbbeb7232c3e9824f14c2f57",
     "scripts/slurm/verify_minigrid.sbatch": "6e5e6c5892f4567e6c242c78a9d657c4927cae8e9a469c7aabbdc36eb4e95766",
     "scripts/slurm/verify_row_count.sbatch": "75ae8091fa3cc425788827ee96ecb1ef342062efc83488a63b8a3b009d0787e8",
@@ -70,7 +71,7 @@
     "tests/fixtures/pilot/pair_summary.csv": "c4a98d9b2c3f618d77a0c2702417fa576375d9c73c26704eb45e038f0979ef3f",
     "tests/fixtures/pilot/rank_instability.csv": "5ba85412c95eba0c86f39603f6063c5161a8a5931aa2f9bf96f5b31136156ea4",
     "tests/test_atlas_flip_analysis.py": "3c1b308ba90160818ecc70605acd28aefa9cc2a4e4e0c02a835323b877255dea",
-    "tests/test_audit_stats.py": "d2ede3e4149bbd84d5e46cce01cd02dfe2063c2d241e6db10ee6088a0ab52ca9",
+    "tests/test_audit_stats.py": "335b82a3343f595f08fd0279cac1d10600eeb3ed35269e49b4807edae9202b4e",
     "tests/test_build_quantized.py": "50b5857a99502b30087007bc15b30825f21bc13497a1f502efe0af98129e43d9",
     "tests/test_compare_mmlu_reference.py": "887b9539311e16bed12c9886da6a3e5675bb4a03a21a28b3f2b5e2ad7de7271a",
     "tests/test_core.py": "3a7bbabf822bc89c08db5b4d49e4c5d9c2347e24105a0d796c671847d9d6e6b5",
@@ -87,5 +88,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "8cde9592be41c6f8a1daa0e5732c0852ee63ed8041e82b7d7541e3b6905b02e8"
+  "manifest_payload_sha256": "6a0e324f4b49979970eb9b7f43a6342b01aa3a2f3c04d8c8ea6e1d4c51c18185"
 }
