@@ -13,6 +13,13 @@
 %
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
 % exists.
+%
+% RULE, ADDED 2026-08-02: docs/audit_sources_20260731.tar.gz is a PRIVATE
+% working copy. It must never be described here, or anywhere else in the paper,
+% as released, shipped, published, mirrored or downloadable. The paragraph
+% "The audited sources are identified, not redistributed" below is the only
+% place the corpus is described, so any future edit that promotes the tarball
+% has to pass through it.
 % =====================================================================
 
 \section{Artifacts}
@@ -51,8 +58,61 @@ margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum detectable
 difference, required-$n$, and the certification-table generator
 (\textbf{Apache-2.0}; everything else is \textbf{CC-BY-4.0}). The \textbf{audit
 artifacts} are the frozen 17-claim table with source content hashes and the
-per-claim verdict CSV, with every robustness and transparency column. The
-\textbf{certification tables} ship twelve rows per margin at 1, 2 and 3\,pp.
+per-claim verdict CSV, with every robustness and transparency column, plus the
+source manifest and retrieval script described below; the captured source text
+itself is not among them. The \textbf{certification tables} ship twelve rows per
+margin at 1, 2 and 3\,pp.
+
+% ADDED 2026-08-02. Final rev-3 checklist §8: "audit redistribution licenses
+% before publishing archived copies of papers, model cards, or web pages" and
+% "if redistribution is not permitted, publish URLs, version identifiers,
+% hashes, retrieval scripts, manifests, and compliant excerpts; keep full
+% captures private". Option A, chosen by Amogh 2026-08-02.
+% SOURCE, licensing: redistribution review of 2026-08-02, recorded in
+% docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §10. Four sources with no
+% third-party republication grant (R11 Meta AI blog, R12 NVIDIA TensorRT-LLM
+% doc, R13 and R14 vLLM pages) plus the arXiv default licence over R01-R07.
+% SOURCE, provenance: docs/audit_sources_manifest.tsv status column (15 MATCH,
+% R11 MISMATCH, R13 NO-BASELINE) and scripts/fetch_audit_sources.py, whose
+% UNSTABLE map lists R11 and R12. Offline run 2026-08-02 over the private
+% archive: 17 verified, 0 drifted, 0 expected-drift, 0 unverifiable, 0 failed.
+% DO NOT write "no source permits redistribution" or any general statement of
+% what is lawful. What is claimed here is what was checked and what it found.
+\paragraph{The audited sources are identified, not redistributed.} The audit
+reads 17 sources in full, and \textbf{their full-text captures are in no
+release}. A redistribution review conducted on 2026-08-02 examined the terms
+attached to each source before any copy was published. It found four sources,
+the Meta AI blog post, the NVIDIA TensorRT-LLM documentation page and two vLLM
+pages, carrying no grant that would permit a third party to republish their
+text, and it found the seven method papers under arXiv's default licence, which
+authorises arXiv to distribute them rather than authorising us to. Publishing
+the corpus was therefore never an option that was open to us, and the working
+archive of it is kept private.
+
+What ships instead is what makes the corpus rebuildable and checkable: the
+source URL and pinned version identifier for every claim, a SHA-256 for every
+captured file, the per-file manifest
+\texttt{docs/\allowbreak{}audit\_sources\_\allowbreak{}manifest.tsv} carrying
+both digests and a per-row provenance status, and
+\texttt{scripts/\allowbreak{}fetch\_\allowbreak{}audit\_sources.py}, a
+standard-library script that re-fetches each source by the retrieval method
+recorded for it and compares the result against the recorded digest. Quoted text
+appears in this paper as short excerpts with their locations. A reader who runs
+the script obtains each source from its own publisher, which is where it is
+offered for reading.
+
+\textbf{Two of the seventeen bound what a digest can establish, and the manifest
+records that per row rather than averaging it away.} R11 is served with
+per-response content: two fetches made seconds apart returned different bytes,
+so the digest recorded for it was never a valid fingerprint of the page, and the
+retrieval script reports it as expected drift rather than as a verification
+failure. R13 does carry a digest for the archived capture, so a re-fetch can be
+checked against that capture; what is absent is any digest recorded \emph{before}
+the capture was made, so the capture itself was never corroborated against an
+independent earlier record. Provenance for these two is documentary rather than
+cryptographic, neither is described anywhere in this paper as hash-verified, and
+the other fifteen reproduced their recorded digests exactly when re-fetched on
+2026-07-31.
 
 \paragraph{Reproduction package.} Registrations and their dated amendments,
 signed decision records, configs, the container image SHA-256 and build recipe,

@@ -27,6 +27,13 @@ checksum in `.sha256`, per-file manifest in `docs/audit_sources_manifest.tsv`).
 Round-trip verified: extracted and re-hashed all 17 files against the manifest,
 0 mismatches.
 
+> **Status correction, 2026-08-02.** That archive is a **private working copy**
+> and stays private. It is not released, published, mirrored or downloadable, and
+> nothing in the paper, the README or any release note may describe it as an
+> artifact. The redistribution review in §10 is why. What is published is the
+> manifest, the digests, the pinned version identifiers and
+> `scripts/fetch_audit_sources.py`.
+
 ## 2. The hashing method, recovered
 
 `source_sha256` was never a registered §3.2 extraction field, no script in the
@@ -57,7 +64,7 @@ abs page `9f2c644d…`, ar5iv `5f8745bf…` — the last matching the recorded v
 | R12 | **MATCH** | TensorRT-LLM Markdown unchanged on `main`. |
 | R14 | **MATCH** | vLLM blog, live fetch, stable. |
 | R11 | **MISMATCH** | See below. |
-| R13 | **NO BASELINE** | `source_sha256` is empty in the frozen claim table. Nothing to check against. |
+| R13 | **NO BASELINE** | `source_sha256` is empty in the frozen claim table, so today's fetch has no *prior* digest to check against. See the 2026-08-02 note below: a digest of today's capture **is** recorded in the manifest. |
 
 **R11 (Meta blog) — the mismatch is not evidence of drift.** Two fetches made
 seconds apart produced different digests (`4afd4da2…` / `5dba7ea7…`) and
@@ -188,7 +195,12 @@ inter-coder reliability.
    field, not to any margin. R10's inclusion under §3.1 also needs review, since
    inclusion requires an assertion "in prose or a table caption" and R10's is in
    neither.
-2. **R13 has no recorded source hash** and cannot be pinned to its July state.
+2. **R13 has no recorded source hash** *in the frozen claim table*, and cannot
+   be pinned to its July state. It is not hashless: `audit_sources_manifest.tsv`
+   records `92cf7d8e…` for the 2026-07-31 capture, so a re-fetch verifies
+   against that capture. What is missing is a *pre-capture* baseline. Stated
+   this way from 2026-08-02; the shorter form above reads as "no hash exists",
+   which is false and was written into a draft docstring before being caught.
 3. **R11 cannot be cryptographically verified** and never could have been.
 4. Whether §3.2 should be extended to require **archiving** sources, not just
    hashing them. This gap cost nothing here only because 15 of 17 sources
@@ -234,3 +246,91 @@ statistic is drawn from a highly dispersed distribution. It must be reported as 
 without its reversal point and this fraction. This makes advisor item 1.5
 (imputation uncertainty) load-bearing rather than optional polish: it is now the
 item that determines whether the audit has a quantitative power finding at all.
+
+## 10. Redistribution review and the published package (added 2026-08-02)
+
+Closes open item 4 of §8 and the two licensing lines of the final rev-3
+checklist §8. Amogh chose **Option A** on 2026-08-02.
+
+### What was checked
+
+The terms attached to each of the 17 sources were examined before any copy was
+published, which is the order the checklist requires ("audit redistribution
+licenses **before** publishing archived copies").
+
+| Sources | Finding |
+|---|---|
+| R11 (Meta AI blog), R12 (NVIDIA TensorRT-LLM doc), R13 and R14 (vLLM pages) | **No redistribution right granted.** Nothing attached to these four pages permits a third party to republish their text. |
+| R01–R07 (arXiv method papers) | **arXiv default licence.** It grants arXiv the right to distribute; it does not extend that right to third parties. |
+
+### What was concluded
+
+**"Publish everything" was never an available option.** Four sources alone are
+sufficient to rule out republishing the corpus, and the arXiv default licence
+rules out the seven papers independently. Because the corpus cannot be published
+as a whole, the remaining sources were not individually cleared for
+redistribution: clearing them would change nothing about the outcome.
+
+**This is a record of what was checked and what it found. It is not legal
+advice and asserts nothing about what redistribution is lawful in general.**
+
+### What is published instead (Option A)
+
+Everything needed to rebuild the corpus and confirm it is the same one the audit
+read, and nothing that republishes the sources:
+
+1. **Source URL per claim.** `docs/audit_claim_table.csv`, frozen, column
+   `source_url`.
+2. **Pinned version identifier, byte count, SHA-256 and provenance status per
+   source.** `docs/audit_sources_manifest.tsv`.
+3. **Retrieval script.** `scripts/fetch_audit_sources.py`. `--manifest`,
+   `--claims` and `--out` are all required with no defaults; `--offline`
+   verifies a directory already on disk and fetches nothing.
+4. **Compliant excerpts.** The recorded `exact_quote` values, with their
+   locations, in the paper.
+
+**Kept private:** `docs/audit_sources_20260731.tar.gz`, its `.sha256`, and the
+sealed copy outside the repository. The tarball remains committed in git history
+and cannot be removed without rewriting 21 commits, one of which (`bb45528`) is
+cited in the signed Amendment 2. That rewrite is **blocked pending a dated
+amendment only Amogh can sign**, and the branch therefore stays unpushed. See
+`SESSION_HANDOFF_2026-08-02.md` §3.
+
+### Provenance limits, stated precisely
+
+Verified 2026-08-02 against `docs/audit_sources_manifest.tsv`,
+`docs/audit_claim_table.csv` and the code of `scripts/fetch_audit_sources.py`,
+plus an offline run of the script over the archive (`17 verified, 0 drifted,
+0 expected-drift, 0 unverifiable, 0 failed`, exit 0).
+
+**R11 is `MISMATCH`, and the drift is expected.** The page is served with per-response
+content: the two fetches of 2026-07-31 differed by 9 bytes. The digest recorded
+in the frozen claim table (`81ba9d09…`) was therefore **never a valid
+fingerprint** of the page, and it can neither confirm nor refute a content
+change. `fetch_audit_sources.py` lists R11 in its `UNSTABLE` map, so a live run
+prints `EXPECTED-DRIFT` and does not fail. R11 is substantively verified,
+cryptographically unverified, and must be described that way.
+
+**R13 is `NO-BASELINE`, which is not the same as "no hash".** The manifest
+records `92cf7d8eb55f5d5d900d15633919ff57f0deec9e5fcbf6d78ba108fd6c9784d1` for
+the 2026-07-31 capture, so a re-fetch **can** be checked against the archived
+capture, and the offline run above verifies it. What is missing is a digest
+recorded *before* that capture (`source_sha256` is empty for R13 in the frozen
+claim table), so **the capture itself was never independently corroborated**.
+Verifying against it proves you hold the bytes the audit read; it does not prove
+those bytes were the page as it stood when the claim was extracted.
+
+Neither limitation is to be softened. Provenance for these two is documentary,
+not cryptographic, and neither may be described anywhere as hash-verified. The
+first draft of the script's docstring claimed R13 had no recorded hash at all;
+the offline run contradicted it and it was corrected before commit.
+
+### Where this is stated in the shipped material
+
+- `paper/sections/artifacts.tex`, paragraph "The audited sources are identified,
+  not redistributed". The primary statement.
+- `paper/sections/appendix_artifacts_detail.tex`, datasheet "Distribution and
+  licensing". The same decision as a datasheet entry.
+- `README.md`, "Audited source corpus". The reader-facing rebuild instructions.
+- `paper/sections/audit.tex`. The extraction sentence now says hashes were
+  recorded for 16 of 17, not for all of them.

@@ -326,6 +326,14 @@ identifiers, hashes, retrieval scripts, manifests and short permitted excerpts,
 and keep the full-text captures private. **This is not yet checked and the
 tarball is already committed** — resolve before any public release.
 
+> **Resolved 2026-08-02.** The review was run and no source permitted
+> republication of the corpus as a whole, so Option A applies: URLs, pinned
+> version identifiers, digests, the manifest and `scripts/fetch_audit_sources.py`
+> ship; `docs/audit_sources_20260731.tar.gz` stays **private**. Findings and the
+> published package are recorded in `AUDIT_SOURCE_VERIFICATION_2026-07-31.md`
+> §10. The tarball stays in git history: removing it would rewrite `bb45528`,
+> which signed Amendment 2 cites, so the branch stays unpushed instead.
+
 **Second human.** Before submission, a real person other than Amogh verifies:
 eligibility for all 17; exact quotations and locations; margin classification;
 task-to-output matching; the five non-assessability reasons; R17's source
