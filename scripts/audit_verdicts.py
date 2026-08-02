@@ -179,6 +179,18 @@ CLAIM_PROFILES = [
                  _sum(("boolq", "rte", "hellaswag", "winogrande", "arc_easy", "arc_challenge", "openbookqa")),
                  "frozen row itemises the 7 zero-shot splits",
                  0.6697, 0.30, "LLaMA-65B -0.30pp, the larger of the two stated deltas",
+                 # THE `notes` STRING BELOW IS WRONG AND IS DELIBERATELY LEFT WRONG.
+                 # "imputation descends to the global tier" is REV-1 behaviour, the
+                 # eighth rev-1 survivor found in this project and the first in a
+                 # comment. Under rev-2 it descends to the `bits` tier and matches 183
+                 # cells that are all 4-bit quantization, carrying bits=None only
+                 # because their labels are missing from _METHOD_PROFILE (see
+                 # audit_stats.nearest_cell_discordance).
+                 # DO NOT FIX IT HERE. `notes` is emitted verbatim into the output CSV,
+                 # and this exact string is in the SEALED, paper-cited
+                 # results/audit_verdicts_rev3.csv. Editing it would mean HEAD no longer
+                 # reproduces that artifact, to correct a field nothing reads. The
+                 # correction is published in the audit appendix instead.
                  notes="50% unstructured pruning: no bit width, and the atlas contains no pruning "
                        "cells, so imputation descends to the global tier by construction."),
     ClaimProfile("R07", "pruning", None, None,

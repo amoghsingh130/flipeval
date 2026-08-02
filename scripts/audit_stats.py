@@ -281,9 +281,16 @@ def nearest_cell_discordance(
       5. benchmark                   same benchmark at any precision
       6. global                      all analysable cells
 
-    A tier whose target field is None can never match (`cell.bits == None` is
-    false for every real cell), so an unmappable claim descends automatically
-    rather than being forced into a wrong cell. The **median** over matching
+    A tier whose target field is None descends rather than being forced into a
+    wrong cell -- but NOT always, and this docstring used to claim otherwise.
+    It said `cell.bits == None` is "false for every real cell". That is false
+    for 183 of them: `bnb-4bit`, `QLoRA-4bit` and `bnb-4bit(DPO-FT)` are absent
+    from `_METHOD_PROFILE`, so they parse with `bits=None` despite plainly being
+    4-bit. A claim with no bit width therefore MATCHES them at the `bits` tier,
+    on the two sides sharing a missing field rather than a real one. R06 and R07
+    are exactly this case. The behaviour is registered and is not changed here;
+    it is disclosed in the audit appendix instead. Do not restore the old
+    sentence. The **median** over matching
     cells is used, not the mean: per-cell discordance is right-skewed and a few
     high-churn generative cells would otherwise dominate.
     """
