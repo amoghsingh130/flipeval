@@ -26,10 +26,10 @@
 Compressed language models are frequently released with a sentence of the form
 ``negligible degradation'' or ``$99.x\%$ recovery'', supported by a difference of
 a fraction of a point in aggregate accuracy on a fixed benchmark. That sentence
-is an equivalence claim. Equivalence claims have a statistical form---a declared
+is an equivalence claim. Equivalence claims have a statistical form: a declared
 margin, a test, and a sample size sufficient to reject the composite null that
-the difference exceeds the margin---and in the sources we audit it almost never
-has it.
+the difference exceeds the margin. In the sources we audit, that form is almost
+never present.
 
 The difficulty is not only a missing test. The evidence is weakest in the
 regime where it is offered. A net accuracy delta is the residue left
@@ -40,26 +40,34 @@ establish that two models are the same is therefore least informative in the
 regime where that claim is made. This paper measures that gap and supplies an
 instrument for closing it.
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline;
-% results/audit_verdicts_rev2.csv; \S\ref{sec:audit:results}.
-% Numbers kept here: 17, 5 indeterminate, 4 of 12, 0 of 17. The shortfall range
-% (2.0x-12.9x), the worked R17 example and the MDD ratios now live only in
-% \S\ref{sec:audit:results}, which is where a reader can check them.
+% SOURCE: results/audit_verdicts_rev3.csv; \S\ref{sec:audit:taxonomy} and
+% \S\ref{sec:audit:results}.
+% Numbers kept here: 17 candidates, 16 eligible, 5 not assessable, 11
+% assessable, 10/1/0 sensitivity, 0 of 16 task-matched outputs. The worked
+% examples and the MDD ratios live only in \S\ref{sec:audit:results}.
+% THE 2.0x-12.9x SHORTFALL RANGE IS WITHDRAWN, NOT RECOMPUTED. It divided by
+% margins no source declared. At the registered 2 pp margin ten of the eleven
+% assessable claims have no shortfall at all, so there is no range. Do not
+% reintroduce this sentence with new numbers in it.
 We enumerate 17 equivalence claims from three registered sampling frames:
 method papers, official quantized model cards, and inference-stack vendor
-documentation. Five cannot be evaluated from what they report. Of the remaining
-12, four are underpowered for the margin they assert, in the sense that
-certifying that margin would require substantially more items than the claim
-evaluated, and none of the 17 releases the per-item outputs a third party would
-need to run the paired comparison the claim asserts
-(\S\ref{sec:audit:results}). No claim is described as false: the audited
-property is the evidential sufficiency of the reported evaluation, not the truth
-of the underlying equivalence.
+documentation. One is ruled ineligible against the registered inclusion rule,
+leaving 16. Not one of the 16 declares a numerical tolerance in advance, and not
+one releases per-item outputs for the tasks its claim rests on, so no equivalence
+claim in the sample can be checked against a standard its author set or rerun by
+a reader. Five cannot be assessed numerically at all from what they report. Of
+the remaining 11, ten were sized to carry the claim made on them at a uniform
+2\,pp margin, and the eleventh cannot be classified without committing to a
+discordance rate its source never reported
+(\S\ref{sec:audit:taxonomy}, \S\ref{sec:audit:results}). No claim is described
+as false: the audited property is the evidential sufficiency of the reported
+evaluation, not the truth of the underlying equivalence.
 
 Equivalence is a certification problem, so we compute certification
-tables---how many items an evaluation needs to certify a compressed model within
-$\pm m$ points of its baseline---from the per-item disagreement rates actually
-observed under compression rather than from independent-binomial variance. The
+tables, giving the number of items an evaluation needs to certify a compressed
+model within $\pm m$ points of its baseline, from the per-item disagreement
+rates actually observed under compression rather than from independent-binomial
+variance. The
 paired correction is large, and the requirement is set by churn rather than by
 task difficulty, which defeats the natural intuition
 (\S\ref{sec:certification}).
@@ -80,7 +88,7 @@ behaviour they disturb, and understate that disturbance by the same multiple.
 % statement. Residual randomness is documented in \S\ref{sec:minigrid}.
 The same logic predicts something sharper, and a preregistered experiment tests
 it. If cancellation grows with similarity, the least informative comparison is
-not compressed against original but \emph{compressed against compressed}---two
+not compressed against original but \emph{compressed against compressed}: two
 methods at the same bit width, far closer to each other than either is to its
 baseline. Pairing GPTQ and AWQ on byte-identical calibration samples across five
 calibration seeds, over eight registered model-by-benchmark cells, we observe
@@ -124,7 +132,7 @@ and a preregistered controlled experiment on calibration-seed sensitivity
 \S\S\ref{sec:sensitivity}--\ref{sec:limitations}.
 
 % RESOLVED 2026-07-30. Canonical DOI stated once here.
-Everything the paper reports---the per-item outputs behind every controlled
-result, the atlas, the audit table, the analysis package and the reproduction
-package---is archived at \versiondoi{} and itemised in
+Everything the paper reports, from the per-item outputs behind every controlled
+result to the atlas, the audit table, the analysis package and the reproduction
+package, is archived at \versiondoi{} and itemised in
 Section~\ref{sec:artifacts}.

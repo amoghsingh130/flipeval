@@ -8,11 +8,15 @@
 \label{sec:conclusion}
 
 The claim ``near-lossless'' is cheap to write and expensive to support. This
-paper measured the gap---\textbf{4 of 12 determinate claims underpowered for
-their own assertion, 5 of 17 unevaluable from what is reported, 0 of 17
-reproducible from released artifacts}---and supplied the apparatus that closes
-it: equivalence certification at a declared margin, and sample-size tables
-computed from observed churn rather than assumed variance.
+paper measured the gap, and what the measurement mostly found was absence rather
+than error. Across \textbf{16 eligible sources, none declares a prospective
+numerical equivalence margin and none releases per-item outputs for the tasks
+its claim rests on}; five cannot be assessed at all from what they report. Of
+the eleven that can, ten were sized to carry their claim at a uniform
+2\,pp margin and one cannot be classified without committing to a discordance
+rate its source never reported. The apparatus that closes the gap is equivalence
+certification at a declared margin, with sample-size tables computed from
+observed churn rather than assumed variance.
 
 % Sequential certification was a full section in earlier drafts. It is a
 % registered-but-unrun component and a results-free section reads as padding, so
@@ -60,8 +64,8 @@ We propose five lines that a model card or method paper can adopt directly.
 The controlled experiment says where this standard actually bites, and it is not
 where the five lines above suggest. Every one of them is written as though the
 comparison at issue were a compressed model against its original. H3 compares
-two \emph{compressed} models---GPTQ against AWQ at the same bit width, the
-choice a practitioner makes after deciding to compress at all---and finds the
+two \emph{compressed} models, GPTQ against AWQ at the same bit width, which is
+the choice a practitioner makes after deciding to compress at all. It finds the
 evidence problem strictly worse there: churn at $12.7\times$ the net delta
 against the atlas's $5.3\times$, and the winner reversing on nothing but the
 calibration seed in 5 of 8 registered cells. The reason is the same mechanism in
@@ -70,7 +74,7 @@ original, so cancellation is more complete and the aggregate hides more.
 
 That generalises the standard past its own framing. Nothing in the five lines is
 about quantization. They are about comparing two models similar enough that
-somebody thought the comparison worth making---compressed against original,
+somebody thought the comparison worth making: compressed against original,
 method against method, checkpoint against checkpoint, version against version.
 Aggregate accuracy is least informative in the regime where these comparisons
 are made. What makes such a comparison checkable is the per-item evidence and a

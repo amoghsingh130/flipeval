@@ -35,8 +35,8 @@ moves them under a fixed configuration?}
 % statement), header + §§1, 7 (exploratory status; results-blind at freeze; the
 % two live defects, one moving GSM8K accuracy 0.232 -> 0.566 on unchanged
 % generations). Both defects and the full design: app:harness-detail.
-It is a small, preregistered, \emph{exploratory} study---one model, the bridge
-item subsets---frozen before any of its own results existed. The motivation is
+It is a small, preregistered, \emph{exploratory} study on one model and the bridge
+item subsets, frozen before any of its own results existed. The motivation is
 not hypothetical: this campaign produced two live configuration defects inside
 eight days on the pinned \texttt{lm\_eval}~0.4.12, one of which moved reported
 GSM8K accuracy $0.232 \to 0.566$ with not one token of model output changed
@@ -54,7 +54,7 @@ The headline statistic, fixed before any run, is
 $R_{\mathrm{cond}} = C_{\mathrm{cond}}/\bar{Q}$: churn between the reference
 configuration and a condition on the fixed FP16 model, over the mean churn of
 the ten Qwen2.5-1.5B quantized variants against that model's FP16 cell on the
-same items---$\bar{Q}(\text{MMLU}) = \mathbf{0.199}$,
+same items, giving $\bar{Q}(\text{MMLU}) = \mathbf{0.199}$ and
 $\bar{Q}(\text{GSM8K}) = \mathbf{0.287}$. So $R$ asks directly how a
 configuration change compares with swapping in a quantized model. The
 registration forbids printing the ratio without both inputs, and both appear in
@@ -91,8 +91,8 @@ D & stock defaults (chat off, 5-shot) & 0.495 & $-0.080$ & \textbf{0.300} & 38 /
 % TRIMMED 2026-07-27 (phase 4 trim, candidate 5). The per-condition R values are
 % in the table one line above; restating all four in prose was redundant.
 Table~\ref{tab:sensitivity-gsm8k} reads directly against the denominator. Three
-of the four GSM8K conditions---turning the chat template off, accepting every
-stock default at once, and switching the extraction filter---have $R \geq 1$:
+of the four GSM8K conditions (turning the chat template off, accepting every
+stock default at once, and switching the extraction filter) have $R \geq 1$:
 each moves a fixed model's per-item correctness by \emph{as much as or more
 than} swapping in one of ten quantized variants moves it. Only condition~A, the
 multiturn exemplar placement, stays below the quantization scale ($R=0.836$).
@@ -101,7 +101,7 @@ directional churn that the
 $\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column keeps separate.
 % SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K table (R values
 % 0.836/1.585/1.115/1.045; net deltas -0.060/-0.455/-0.100/-0.080).
-Condition~B is sharpest because it holds the generations fixed---the stock task
+Condition~B is sharpest because it holds the generations fixed: the stock task
 applies both filters to the same outputs, so B is a rescore of \emph{identical}
 generations at zero GPU cost, and its $91/0$ split means \texttt{strict-match}
 accepts a strict subset of what \texttt{flexible-extract} accepts here
@@ -131,12 +131,12 @@ $C\equiv D$ & chat template off, zero-shot & 0.460 & $\mathbf{+0.045}$ & \textbf
 
 The MMLU cell makes a point the net delta hides. Turning the chat template off
 \emph{raises} reported accuracy by $+4.5$\,pp ($0.415 \to 0.460$), with a
-directional split of $33/51$---more items recovered than lost.
+directional split of $33/51$, meaning more items recovered than lost.
 % SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, MMLU row (net +0.0450,
 % dir 33/51).
 So the harness default is not uniformly worse than the reference: on MMLU it is
 better, on GSM8K worse, and either way \emph{different}. The churn behind the
-$+4.5$\,pp is $C_{C\equiv D}=0.210$ ($84$ of $400$ items), giving $R=1.055$---again
+$+4.5$\,pp is $C_{C\equiv D}=0.210$ ($84$ of $400$ items), giving $R=1.055$, again
 on the quantization scale. The movement is real, signed differently on the two
 tasks, and of a kind compression papers do not report: the setting that almost
 never appears in a model card is precisely the one silently moving the number a
@@ -146,8 +146,8 @@ never appears in a model card is precisely the one silently moving the number a
 varying the instrument is not specific to compression.
 \citet{bronder2026instrument} do it for language-model \emph{honesty}
 evaluation: with the player model held fixed, four instrument
-choices---outcome grammar, criterion disclosure, budget rendering and register
-presence---substantially changed what the evaluation would have reported, under
+choices (outcome grammar, criterion disclosure, budget rendering and register
+presence) substantially changed what the evaluation would have reported, under
 decision rules recorded before results were read. That study and this one share
 a design and a conclusion on different objects, which is the reason to expect
 the effect wherever an evaluation is treated as a fixed instrument.
@@ -158,9 +158,9 @@ the effect wherever an evaluation is treated as a fixed instrument.
 % added only after its canary pair passes), §7 (exploratory; licenses no
 % confirmatory read; no gate/rule adjusted).
 On a fixed FP16 model and matched items, harness configuration moves per-item
-correctness by an amount comparable to quantization---$R \in [0.836,\,1.585]$
-across the five conditions, the scoring-filter choice ($R=1.585$) exceeding the
-quantization denominator outright---so a compression comparison run under an
+correctness by an amount comparable to quantization, with $R \in [0.836,\,1.585]$
+across the five conditions and the scoring-filter choice ($R=1.585$) exceeding
+the quantization denominator outright, so a compression comparison run under an
 unstated or mismatched configuration can be dominated by the configuration.
 These caveats travel with the numbers. This is \textbf{one model}
 (Qwen2.5-1.5B-Instruct); the Llama-3.2-3B arm is admitted only after its seed-0

@@ -29,9 +29,9 @@
 \subsection{Detection is not certification}
 
 The statistical question behind ``near-lossless'' is not the one usually
-answered. A McNemar test---including the one-sided variant developed by the
+answered. A McNemar test, including the one-sided variant developed by the
 closest existing work on LLM accuracy statistics
-\citep{llmaccuracystats2026}---asks whether there is evidence that the
+\citep{llmaccuracystats2026}, asks whether there is evidence that the
 compressed model differs from its baseline. Failing to find such evidence is not
 evidence of equivalence; with a small enough evaluation, nothing is detectable.
 Our registration commits to this in advance: ``we will not interpret failure to
@@ -39,7 +39,7 @@ reject a difference as equivalence''.
 % SOURCE: PREREGISTRATION.md §"Outcomes and Analysis".
 
 Certification asks the other question: \emph{is the difference provably smaller
-than a margin I declare in advance?} The standard instrument is TOST---two
+than a margin I declare in advance?} The standard instrument is TOST: two
 one-sided tests at level $\alpha$ each, rejecting the composite null
 $|\Delta| \geq m$ in favour of equivalence within $\pm m$. TOST converts an
 equivalence claim into something with a sample-size requirement, and this
@@ -56,8 +56,8 @@ section computes that requirement empirically.
 % unchanged -- only the description of them was wrong. Four table captions
 % carried the same error and are corrected with it.
 For a discordance rate $p_d$ and margin $m$, under TOST at one-sided
-$\alpha=.05$ --- equivalent to requiring a 90\% two-sided confidence interval to
-fall inside $\pm m$ --- with 80\% power,
+$\alpha=.05$ (equivalent to requiring a 90\% two-sided confidence interval to
+fall inside $\pm m$) with 80\% power,
 \begin{align}
 \mathrm{sd}_{\mathrm{paired}}      &= \sqrt{p_d}, &
 \mathrm{sd}_{\mathrm{independent}} &= \sqrt{2p(1-p)}, \label{eq:sds}\\[2pt]
@@ -148,7 +148,7 @@ compute if you ignored pairing.
 % doc is moot: both are superseded by rev-2, and the CSV remains authoritative.
 \paragraph{Worked example.} \emph{MMLU, 2\,pp margin, typical discordance
 $\Rightarrow$ evaluate at least 2{,}164 items.} Ignoring pairing would have
-demanded 7{,}727---$3.6\times$ the compute for the same conclusion. Tightening
+demanded 7{,}727, or $3.6\times$ the compute for the same conclusion. Tightening
 the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing it to
 3\,pp lowers it to 962. The margin is the practitioner's declaration, and its
 cost is quadratic; a claim of parity within 1\,pp is four times as expensive to
@@ -172,7 +172,7 @@ The advantage column is exactly that gap. It ranges from $\mathbf{2.3\times}$
 (GSM8K) to $\mathbf{14.7\times}$ (MuSR) and sits at $\mathbf{4.2\times}$ pooled
 over 1{,}707 cells: a practitioner using the paired design reaches the same
 equivalence conclusion on roughly a quarter of the evaluation budget. The
-variation across families is informative in itself---low-churn families (MuSR,
+variation across families is informative in itself: low-churn families (MuSR,
 BBH, GPQA) reward pairing most, while high-churn generative families (MATH,
 MMLU) both need more items \emph{and} gain less from pairing.
 
@@ -189,7 +189,7 @@ is the section's main conceptual point.
 % mmlu 0.39. Discordances are column discordance_median: mmlu 0.13733,
 % gpqa 0.048397.
 MMLU needs about \textbf{2{,}164} items at a 2\,pp margin. GPQA needs
-\textbf{749}. GPQA is by any ordinary account the harder benchmark---its median
+\textbf{749}. GPQA is by any ordinary account the harder benchmark, and its median
 baseline accuracy in the atlas is 0.373 against MMLU's 0.390, on a task designed
 to resist exactly the models that saturate MMLU. Difficulty is not what sets the
 requirement. What sets it is how much the compressed model's per-item
@@ -224,8 +224,8 @@ Families with fewer than four analysable cells are omitted, because a quartile
 over three points is not an empirical distribution; this drops nothing from the
 registered set, and all surviving families appear in
 Table~\ref{tab:certification}. Of those that survive, two rest on thin evidence
-and are indicative only---\texttt{mmlu\_pro} (5 cells) and \texttt{ifeval}
-(8)---and should be treated as a starting hypothesis to be replaced by the
+and are indicative only, \texttt{mmlu\_pro} (5 cells) and \texttt{ifeval}
+(8), and should be treated as a starting hypothesis to be replaced by the
 reader's own measured churn, not as a reference constant.
 Appendix~\ref{app:cert:caveats-detail} covers the remaining two: that family
 aggregation makes the quartile columns \emph{conservative} rather than
@@ -244,5 +244,6 @@ the other is the error this section exists to prevent.
 This section \textbf{does not support}: extrapolation to benchmark families
 absent from the atlas; extrapolation to compression methods absent from the
 atlas population (\S\ref{sec:atlas:caveats}); or any claim that a model meeting
-these counts is equivalent---meeting the count makes the test \emph{informative},
+these counts is equivalent, because meeting the count makes the test
+\emph{informative},
 and the test still has to be run and to pass.

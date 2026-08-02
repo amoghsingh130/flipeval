@@ -58,8 +58,8 @@ empirical quantity worth measuring rather than asserting.
 
 % SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §§3-4.
 The study varies one native \texttt{lm\_eval} knob at a time from a fixed
-reference---chat template on, three inline GSM8K exemplars (zero-shot for MMLU),
-\texttt{flexible-extract} scoring---which is the configuration the mini-grid's
+reference (chat template on, three inline GSM8K exemplars, zero-shot for MMLU,
+and \texttt{flexible-extract} scoring), which is the configuration the mini-grid's
 own reference runs use. All runs are FP16-only, on the bridge item subsets
 exclusively: the four bridge MMLU subjects at 100 items each ($n=400$) and GSM8K
 test indices 0--199 ($n=200$). No quantized checkpoint is loaded under this
@@ -75,9 +75,9 @@ R_{\mathrm{cond}} \;=\; \frac{C_{\mathrm{cond}}}{\bar{Q}},
 \label{eq:sensitivity-R}
 \end{equation}
 where the numerator $C_{\mathrm{cond}}$ is the correctness-state churn between
-the reference and a condition---the fraction of items whose correct/incorrect
-state changes, the same churn definition the atlas uses
-(\S\ref{sec:atlas})---on the FP16 model over the item set above, and the
+the reference and a condition, meaning the fraction of items whose
+correct/incorrect state changes, on the same churn definition the atlas uses
+(\S\ref{sec:atlas}), on the FP16 model over the item set above, and the
 denominator $\bar{Q}$ is the mean, over the ten Qwen2.5-1.5B quantized variants
 $\{\mathrm{gptq}_{s0\ldots s4},\ \mathrm{awq}_{s0\ldots s4}\}$, of
 correctness-state churn against that model's FP16 cell on the \emph{same} item
@@ -97,14 +97,14 @@ Their provenance is deliberate. Under the registration's two-phase design the
 numerators run immediately on freeze, but $\bar{Q}$ is computed \emph{only} from
 mini-grid results after the registered validator passed over the complete
 44-JSONL set (409/409 checks) and the first accuracy inspection that
-\texttt{MINIGRID\_REGISTRATION} \S5 permits had been authorized---so the
+\texttt{MINIGRID\_REGISTRATION} \S5 permits had been authorized, so the
 denominator is not an early look at the confirmatory grid under another name.
 % SOURCE: docs/HARNESS_SENSITIVITY_QBAR_2026-07-23.md (validator 11375247,
 % 409/409, first inspection authorized 2026-07-23);
 % docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §5.2 (two-phase deferral).
-A shortcut that would have produced the ratio roughly five weeks earlier---a
+A shortcut that would have produced the ratio roughly five weeks earlier, a
 dated amendment permitting an early partial inspection of the bridge quantized
-deltas---was considered and declined, on the ground that the registered
+deltas, was considered and declined, on the ground that the registered
 blindness is not weakened to obtain a number sooner.
 % SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §9.1
 % (option considered and declined by Amogh 2026-07-22).
@@ -115,14 +115,14 @@ blindness is not weakened to obtain a number sooner.
 Condition~B is the sharpest result and deserves isolating, because it holds the
 generations fixed. It costs zero GPU time: the stock \texttt{gsm8k} task applies
 both \texttt{strict-match} and \texttt{flexible-extract} to the same outputs in a
-single run, so B is read out of the reference run's own samples file---a genuine
+single run, so B is read out of the reference run's own samples file, a genuine
 rescore of \emph{identical} generations, not a second pass.
 % SOURCE: docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §3.1 (B is a filter
 % rescore of REF, zero GPU); docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md
 % (B derived from REF samples).
 Its correctness churn is therefore the pure effect of the extraction filter:
 $C_B = 0.455$ ($91$ of $200$ items), with a directional split of
-$\textbf{91}/\textbf{0}$---every changed item went correct$\to$incorrect, so the
+$\textbf{91}/\textbf{0}$: every changed item went correct$\to$incorrect, so the
 $0.455$ accuracy drop equals the churn exactly and \texttt{strict-match} accepts
 a strict subset of what \texttt{flexible-extract} accepts here. The resulting
 $R_B = 0.455/0.287 = \textbf{1.585}$: on these items, choosing one of two

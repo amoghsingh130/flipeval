@@ -69,8 +69,8 @@ The frozen claim table's content hash is recorded with the verdicts
 (\texttt{98201ade...10a4712d}) and the container image's, so a reader can
 confirm the inputs to any reported number were the frozen ones. Three properties
 of this arrangement do work in the paper. The mechanical parts of the
-audit---inclusion trigger vocabulary, extraction fields, verdict formulas,
-robustness sweep---were fixed before any claim's power was computed, so the
+audit (inclusion trigger vocabulary, extraction fields, verdict formulas,
+robustness sweep) were fixed before any claim's power was computed, so the
 audit cannot have selected its claims or its statistics to produce a headline;
 the atlas pair list was frozen before any flip statistic, so the atlas cannot
 have selected pairs to produce churn; and the H3 decision rule was fixed, in
@@ -114,35 +114,34 @@ the alternative, and all seven are stated in full in
 Appendix~\ref{app:prereg:choices}. One carries a methodological point that
 belongs in the main text.
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1,
-% including the "Methods-narrative note" paragraph; K values cross-checked
-% against results/audit_verdicts_rev2.csv columns verdict and
-% verdict_at_registered_2pp.
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1 (the
+% SUPERSEDED record); resolved by docs/AUDIT_REGISTRATION_2026-07-15.md "Dated
+% Amendments" Part 1, signed 2026-07-31. Current values from
+% results/audit_verdicts_rev3.csv.
+%
+% RESOLVED, NOT OPEN. The previous version of this paragraph carried the
+% reasoning "a source asserting parity within 0.15 pp has made a 0.15 pp claim",
+% which is the error Amendment 2 exists to correct: R17's 0.15 is an OBSERVED
+% DELTA (68.69 vs 68.54), not a declared tolerance. It must not be restated as
+% the paper's position anywhere, in any file, in any wording.
 The frozen §4 names the 2\,pp registered margin first, adds ``(and at the
 claim's own margin when it states one)'', and labels the verdict
-``underpowered for its own assertion'' \emph{at the applicable margin}. Two
-readings survive that text: a uniform 2\,pp yardstick gives $K = 1$ of 12, while
-each claim's own stated margin gives $K = 5$, and $K = 4$ after the ruling that
-moved R04 out of the determinate set. \textbf{The first pass of this analysis
-returned $K = 1$.} Re-reading the frozen label produced $K = 5$---a source
-asserting parity within 0.15\,pp has made a 0.15\,pp claim, and judging it
-against a 2\,pp yardstick audits a claim nobody made---and the third ruling then
-yielded the reported $K = 4$.
+``underpowered for its own assertion'' \emph{at the applicable margin}. We took
+that as two live readings and chose the claim-specific one. The choice was
+wrong, and correcting it is the substance of Amendment~2
+(Appendix~\ref{app:prereg-detail}).
 
-% NEUTRALISED 2026-07-31 (advisor review 3.3). Replaced an argument about the
-% analyst's intentions with the sequence of values. The frozen text governing
-% over the first pass is visible in the numbers themselves.
-%
-% OPEN -- SUBSTANTIVE, NOT RHETORICAL. The claim-specific margins referred to
-% here are, for most claims, the largest delta the source REPORTED, not a margin
-% the source DECLARED (see docs/audit_claim_table.csv: no margin field exists in
-% the frozen extraction, and every margin_basis in the derived CSV cites an
-% observed delta). Whether K should rest on them is the subject of the pending
-% dated amendment. Do not restate the "0.15 pp assertion is a 0.15 pp claim"
-% reasoning that this paragraph previously carried.
-Applying claim-specific margins changed $K$ from 1 to 5; applying the
-preregistered metric-compatibility rule to R04 produced the reported $K = 4$.
-Both readings ship in the released CSV (\S\ref{sec:audit:results}).
+The conditional decides it. \emph{When it states one}: no audited source states
+one, so the applicable margin is the registered 2\,pp throughout, and what the
+superseded implementation had substituted was each source's largest reported
+delta. That substitution treats a measured outcome as a decision rule the source
+never adopted. The sequence of values is reported plainly because it is the
+disclosure: the first pass returned $K = 1$ of 12, the claim-specific reading
+raised it to $K = 5$, the metric-compatibility ruling on R04 gave the $K = 4$
+that was published, and the rev-3 recomputation at the registered margin returns
+\textbf{1 of 11 assessable claims below the approximate planning threshold},
+which is the claim the first pass had flagged. All readings ship in the released
+CSV (\S\ref{sec:audit:results}).
 
 \subsection{Result-inspection discipline}
 \label{sec:prereg:discipline}
@@ -157,8 +156,8 @@ mechanically, and a dated escalation decision record written the same day. The
 paired-bootstrap rank-flip denominator convention (tie replicates included,
 ties also reported separately) was fixed in words in the registration, naming
 the implementing commit, so it cannot be re-chosen after inspection. No
-registered analysis---calibration builder, paired bootstrap, or verdict
-rule---is tuned after results are seen.
+registered analysis is tuned after results are seen: not the calibration
+builder, not the paired bootstrap, not the verdict rule.
 
 \subsection{The H3 reporting rule, stated before the results exist}
 \label{sec:prereg:h3rule}
@@ -186,8 +185,8 @@ cells deferred behind a pre-committed, mechanical escalation rule. The mini-grid
 registration stated the consequence of each branch in advance: if all eight
 cells complete, the frozen rule is applied exactly as registered; if they do
 not, the paper reports the four completed cells descriptively and H3 is
-undecided under the registered rule---never supported or disconfirmed on four
-cells---and no reduced-cell variant of the rule is constructed after results are
+undecided under the registered rule, never supported or disconfirmed on four
+cells, and no reduced-cell variant of the rule is constructed after results are
 seen.
 
 The escalation screen fired on 2026-07-23, the 7B/8B cells were built, and
@@ -213,16 +212,16 @@ The protocol required an independent spot-check before any atlas number could be
 quoted externally. It re-derived ten stratified cells from a fresh
 reimplementation of the registered definitions rather than a rerun of our own
 code, and all 262 compared fields reconciled exactly. The arithmetic was right;
-the \emph{population} was not. Two defects---an omitted reverse-chronological
-fallback clause of our own registration, and a parser that missed a newer nested
-metrics schema---had silently dropped cells, the first non-randomly, removing
+the \emph{population} was not. Two defects had silently dropped cells: an omitted
+reverse-chronological fallback clause of our own registration, and a parser that
+missed a newer nested metrics schema. The first dropped them non-randomly, the first non-randomly, removing
 exactly those pairs whose quantized side had been re-evaluated later. Three
 points follow, and none is that we were unlucky.
 
 \textbf{An aggregate can be exactly right and still be built on the wrong
 population.} Every cell we checked was computed correctly. Validating by
-recomputing our own numbers---the natural, and useless, self-check---would have
-confirmed all of them and shipped the selection bias intact. What caught it was
+recomputing our own numbers, which is the natural and useless self-check, would
+have confirmed all of them and shipped the selection bias intact. What caught it was
 reconstructing the measurement from the protocol text rather than the code.
 
 Preregistration did the work it is supposed to do. The frozen text
@@ -236,8 +235,8 @@ delta (Appendix~\ref{app:prereg:rev2delta}) rather than replacing the record
 with its corrected version; the repair enlarged the analysable population by
 44\% and left the audit's headline verdicts unmoved. A field whose
 near-lossless claims cannot be rechecked because per-item outputs are never
-released---the finding of Section~\ref{sec:audit}---is one whose corrections
-cannot be seen. Both revisions of our atlas are released.
+released, which is the finding of Section~\ref{sec:audit}, is one whose
+corrections cannot be seen. Both revisions of our atlas are released.
 % CORRECTION TO THE RECORD (2026-07-22). Commit 272136b ("Update the paper's
 % banner-marked figures to atlas rev-2") states: "Every \revtwoBanner and
 % \revtwoTODO marker is resolved; none remain outside main.tex's macro

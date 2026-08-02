@@ -41,8 +41,8 @@ record does not support.
   those rows are flagged in the reconciliation memo.
 \item \textbf{Pass 2} ran as a fresh session with the pass-1 file withheld,
   instructed not to read it or recover it from version history, and given only
-  the frozen protocol and the source frames. It produced 23 rows---17 claims
-  plus 6 logged exclusions---and recorded a SHA-256 of each fetched source
+  the frozen protocol and the source frames. It produced 23 rows (17 claims
+  plus 6 logged exclusions) and recorded a SHA-256 of each fetched source
   (\texttt{docs/audit\_claim\_table\_pass2.csv}).
 \item \textbf{Human reconciliation} merged the two passes into
   \texttt{docs/audit\_claim\_table.csv} (17 claims), resolving inclusion
@@ -65,9 +65,9 @@ rules were unchanged.
 \paragraph{What separate sessions do and do not buy.}
 They prevent direct leakage: pass~2 cannot copy pass~1 because it never saw it.
 They do \emph{not} deliver the property dual coding is normally used for. Two
-sessions of the same model share a prior, so a systematic misreading---a
-tendency to treat a reported delta as a declared bound, say, or to prefer the
-abstract's phrasing over a table footnote---will recur in both passes and will
+sessions of the same model share a prior, so a systematic misreading, such as a
+tendency to treat a reported delta as a declared bound or to prefer the
+abstract's phrasing over a table footnote, will recur in both passes and will
 survive reconciliation looking like agreement. We therefore do not describe
 these passes as independent coders, and we do not report an inter-rater
 reliability coefficient, which would imply an independence the design does not
@@ -142,8 +142,8 @@ report a number for them.} The two passes recorded different \emph{scope} by
 design rather than different values: pass~1 tended to record every task in the
 source's table, pass~2 the single anchor task attached to the quoted sentence.
 For GPTQ, for example, pass~1 recorded deltas for five OPT-175B tasks and
-pass~2 recorded the PIQA figure alone---the same underlying numbers at different
-granularity. A string-equality comparison scores that as a disagreement and
+pass~2 recorded the PIQA figure alone, which is the same underlying numbers at
+different granularity. A string-equality comparison scores that as a disagreement and
 would put ``exact agreement'' at 11\%, which would misdescribe the record. A
 value-level comparison is equally unreliable, because these fields are prose
 containing incidental numbers.

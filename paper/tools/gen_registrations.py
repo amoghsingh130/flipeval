@@ -51,6 +51,12 @@ UNICODE = {
     "’": "'",
     "“": "``",
     "”": "''",
+    # Entered the corpus with Amendment 2 (signed 2026-07-31), which is the
+    # first frozen text to use an ellipsis character. The generator fails closed
+    # on an unmapped codepoint rather than dropping or mangling it, which is
+    # what surfaced this: the appendix could not be regenerated until the map
+    # covered it.
+    "…": r"\dots{}",
 }
 
 SPECIALS = {

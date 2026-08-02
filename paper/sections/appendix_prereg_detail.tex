@@ -95,71 +95,98 @@ require a ruling before verdicts could be computed. All seven were ruled on
 2026-07-20, each is implemented in code, and each is reversible by re-running
 with the alternative. Four matter for how the results should be read.
 
-\paragraph{Choice 1: which margin is ``the applicable margin''---and the
+\paragraph{Choice 1: which margin is ``the applicable margin'', and the
 $K = 1 \to 5 \to 4$ correction.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1,
-% including the "Methods-narrative note" paragraph; K values cross-checked
-% against results/audit_verdicts_rev2.csv columns verdict and
-% verdict_at_registered_2pp.
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1 (the
+% SUPERSEDED record); resolution in docs/AUDIT_REGISTRATION_2026-07-15.md
+% "Dated Amendments" Part 1, signed 2026-07-31; values in
+% results/audit_verdicts_rev3.csv.
+%
+% THIS CHOICE IS RETIRED. Amendment 2 resolved it, and this paragraph is now a
+% record of a resolved ambiguity rather than a live interpretive option. The
+% previous version argued FOR the own-margin reading in the present tense,
+% including the "0.15 pp" sentence the advisor review identified as the
+% load-bearing error. That sentence is retained ONLY as the quoted reasoning
+% that was found wrong; it must never be restated as the paper's position.
 The frozen §4 names the 2\,pp registered margin first, adds ``(and at the
 claim's own margin when it states one)'', and then labels the verdict
-``underpowered for its own assertion'' \emph{at the applicable margin}. Two
-readings survive that text. Judged against a uniform 2\,pp yardstick,
-$K = 1$ of 12. Judged against each claim's own stated margin, with 2\,pp as the
-fallback for claims that state none, $K = 5$---and $K = 4$ after choice~3 below.
+``underpowered for its own assertion'' \emph{at the applicable margin}. We read
+that as leaving two live options, and chose the second. That was an error, and
+Amendment~2 corrects it.
 
-The order in which those numbers arrived is the point, so we report it exactly.
-\textbf{The first pass of this analysis returned $K = 1$}, by applying the 2\,pp
-margin uniformly. Re-reading the frozen label---``underpowered for its
-\emph{own} assertion''---produced \textbf{$K = 5$}: a source that asserts parity
-within 0.15\,pp has made a 0.15\,pp claim, and judging it against a 2\,pp
-yardstick audits a claim nobody made. Ruling on choice~3 then moved one claim
-out of the determinate set, yielding the reported \textbf{$K = 4$}.
+The conditional in the frozen text is the whole of it: \emph{when it states
+one}. No audited source states one (\S\ref{sec:audit:taxonomy}). What the
+superseded implementation substituted was each source's largest reported
+$|\Delta|$, and the reasoning it ran on was that ``a source asserting parity
+within 0.15\,pp has made a 0.15\,pp claim''. It has not. A reported delta is an
+outcome of an evaluation that has already been run; a margin is a tolerance
+fixed before it runs, and a claim cannot be held to a decision rule its authors
+never adopted. Treating the one as the other inverted the direction of the
+inference and, because a measured delta is typically far tighter than any
+tolerance a author would have declared, it also made the test far harsher than
+the registration authorised.
 
-% NEUTRALISED 2026-07-31 (advisor review 3.3). The sequence of values is the
-% evidence; an argument about the analyst's instincts is not.
-The first pass returned the smaller value and the frozen text required the
-larger one. Both readings are reported in the paper
-(\S\ref{sec:audit:results}) and shipped in
-the released CSV, so a reader who prefers the uniform yardstick can have it.
+% The sequence of values is the evidence. Reported plainly, with no argument
+% about what the analyst believed at each step (advisor review 3.3).
+The sequence is reported exactly, because the order in which the numbers arrived
+is itself the disclosure. The first pass applied the 2\,pp margin uniformly and
+returned $K = 1$ of 12. Re-reading the frozen label produced $K = 5$; ruling on
+choice~3 below moved one claim out of the determinate set, giving the $K = 4$
+that was reported for ten days. Amendment~2 returns the analysis to the uniform
+registered margin, where the rev-3 recomputation gives \textbf{1 of 11
+assessable claims below the approximate planning threshold}, the same claim the
+very first pass had flagged.
 
-\paragraph{Choice 2: what counts as the claim's own margin.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #2;
-% results/audit_verdicts_rev2.csv columns claimed_margin_pp, margin_basis, and the
-% R01 note in column `notes`.
-Most claims cover several benchmarks with different deltas. We define the
-claimed margin as \textbf{the largest $|\Delta|$ the source asserts is
-negligible}. This is the reading most favourable to the source: it grants the
-claim the widest margin its own sentence can bear, and therefore the smallest
-required sample size. The harsher alternative---matching the delta to the
-benchmark whose $n$ was actually used---would, for R01 alone (whose $n$ is
-PIQA's 1{,}838 while its largest delta is ARC-Easy's), raise the MDD-to-margin
-ratio by roughly $34\times$. We did not take it.
+\paragraph{Choice 2: what counted as the claim's own margin (withdrawn).}
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #2 (the
+% SUPERSEDED record). Retained as the construction Amendment 2 withdraws.
+%
+% THE 2.0x-12.9x SHORTFALL RANGE IS WITHDRAWN HERE, NOT RECOMPUTED. It was
+% required-n over reported-n AT THE RESULT-DERIVED MARGINS, so recomputing it at
+% 2 pp does not produce a corrected version of the same quantity: ten of the
+% eleven assessable claims have no shortfall at all, so there is no range to
+% state. Do not reintroduce the sentence with new numbers in it.
+This choice is withdrawn with the margins it operated on, and is recorded
+because the withdrawn quantities were reported publicly.
 
-The principle generalises to the whole audit. Every ambiguity was resolved in
-the source's favour: pairing rather than independent binomial variance for the
-variance model (the paired assumption is the generous one, and
-Table~\ref{tab:audit-mdd} shows the independent bound is uniformly worse); the
-largest asserted delta as the margin; a claim's own margin rather than a uniform
-one; and imputation by \emph{median} discordance from the most specific matching
-atlas tier rather than by any upper quantile. Under all four choices the
-observed shortfalls are $2$--$13\times$.
-% NEUTRALISED 2026-07-31 (advisor review 3.3): "the armoured version of the
-% finding" argued for the result's robustness instead of stating it.
-% OPEN: "the largest asserted delta as the margin" is the construction the
-% pending dated amendment concerns -- for most claims that delta was reported,
-% not asserted as a bound.
+Most claims cover several benchmarks with different deltas, so the superseded
+implementation defined the claimed margin as the largest $|\Delta|$ the source
+reports. Within its own frame that was the reading most favourable to the
+source, granting the claim the widest margin its sentence could bear and
+therefore the smallest required sample size. The point Amendment~2 makes is that
+the frame was wrong to begin with: no choice among a source's reported deltas
+yields a margin, because none of them is one.
+
+Two published quantities fall with it. The shortfall range of $2.0\times$ to
+$12.9\times$ was required $n$ over reported $n$ at those derived margins, and it
+is \textbf{withdrawn rather than recomputed}; at the registered 2\,pp margin ten
+of the eleven assessable claims have no shortfall at all, so there is no range
+to restate. The MDD-to-margin ratios are likewise recomputed against the
+registered margin in Table~\ref{tab:audit-mdd}, where the values themselves are
+unchanged and only the denominators move.
+
+What survives the withdrawal is the disposition of the remaining choices, which
+were and remain resolved in the source's favour: pairing rather than independent
+binomial variance (the paired assumption is the generous one, and
+Table~\ref{tab:audit-mdd} shows the independent bound is uniformly worse), and
+imputation by \emph{median} discordance from the most specific matching atlas
+tier rather than by any upper quantile.
 
 \paragraph{Choice 3: R04 is indeterminate rather than scored on a substituted
 benchmark.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and the
-% R04 bullet in §Indeterminate; results/audit_verdicts_rev2.csv row R04.
-Discussed in full at \S\ref{sec:audit:r04}. It is recorded here as a ruling
-because it is the second correction that cost the paper a number: it removed
-what the first pass had reported as the audit's largest shortfall ($38.3\times$)
-and moved the headline from $K = 5, J = 4$ to $K = 4, J = 5$. The GSM8K
-computation is retained in the released CSV as a labelled transparency column so
-that the set-aside quantity is inspectable rather than deleted.
+% R04 bullet in §Indeterminate; results/audit_verdicts_rev3.csv row R04.
+% The K and shortfall figures below are PRE-AMENDMENT-2 HISTORY, quoted as what
+% was decided at the time. Do not update them to rev-3 values.
+Discussed in full at \S\ref{sec:audit:r04}, and unaffected by Amendment~2: R04
+sits outside the registered binary paired-outcome calculation whichever margin
+is applied. It is recorded here as a ruling because it is the second correction
+that cost the paper a number. Under the rules then current it removed what the
+first pass had reported as the audit's largest shortfall ($38.3\times$) and
+moved the headline from $K = 5, J = 4$ to $K = 4, J = 5$; those figures are
+quoted as history and are not current results. The GSM8K computation is retained
+in the released CSV as a labelled transparency column so that the set-aside
+quantity is inspectable rather than deleted.
 
 \paragraph{Choice 5: TOST uses the one-sided $z$.}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #5;
@@ -168,7 +195,7 @@ The project's own helper, \texttt{flipeval.required\_n\_for\_effect}, uses the
 two-sided $z_{1-\alpha/2}$. That is correct for \emph{detection} and wrong for
 TOST, which rejects two one-sided nulls at level $\alpha$ each. Reusing the
 helper unchanged would have inflated every required $n$ in this paper by about
-27\%---in the conservative direction, under the name ``TOST'', and with no
+27\%, in the conservative direction, under the name ``TOST'', and with no
 symptom visible in any output. It would have made every audit shortfall and
 every certification count larger than the correct value. The TOST formula is
 therefore implemented locally with the one-sided $z_{1-\alpha} = 1.6449$,
@@ -202,7 +229,7 @@ The check re-downloaded the raw per-item files for ten cells, stratified across
 both sources and across zero-delta, high-churn, McNemar-significant and excluded
 strata, and recomputed the joins, pairing gates, flip counts, churn, net deltas
 and exact McNemar $p$ values from a \emph{fresh reimplementation of the
-registered definitions}---deliberately not a rerun of our own pipeline, since
+registered definitions}, deliberately not a rerun of our own pipeline, since
 rerunning the same code confirms determinism rather than correctness. All
 262 compared fields reconciled exactly, including dyadic $p$ values reproduced
 without \texttt{scipy}, and no upstream data drift was detected.
@@ -224,8 +251,8 @@ We draw three points from this, and none of them is that we were unlucky.
 
 \textbf{An aggregate can be exactly right and still be built on the wrong
 population.} Every cell we checked was computed correctly. Had we validated by
-recomputing our own numbers---the natural, and useless, form of self-check---we
-would have confirmed all of them and shipped the selection bias intact. What
+recomputing our own numbers, which is the natural and useless form of
+self-check, we would have confirmed all of them and shipped the selection bias intact. What
 caught it was reconstructing the measurement from the protocol text rather than
 from the code.
 
@@ -241,8 +268,8 @@ than presenting the repair as a pre-specified step.
 Both revisions are public. We publish rev-1 and rev-2 and report the
 delta between them, rather than replacing the record with its corrected version.
 A field in which near-lossless claims cannot be rechecked because per-item
-outputs are never released---the finding of Section~\ref{sec:audit}---is a field
-whose corrections are invisible. Ours is not, and the difference is the point of
+outputs are never released, which is the finding of Section~\ref{sec:audit}, is
+a field whose corrections are invisible. Ours is not, and the difference is the point of
 the artifact rather than an apology for it.
 
 \subsection{The rev-1 to rev-2 delta}
@@ -269,8 +296,8 @@ than in the direction that would flatter the paper. S1 median churn rises
 slightly (0.1327 $\to$ 0.1375) and S1 median $|$net delta$|$ rises
 (0.0226 $\to$ 0.0263), while the share of S1 cells certifiable at 2\,pp
 \emph{falls} from 5.6\% to 4.9\% and the share showing a detectable difference
-rises sharply from 17.5\% to 26.5\%---the recovered pairs are larger-$n$ cells,
-which resolve more differences. Every S2 field is identical across revisions.
+rises sharply from 17.5\% to 26.5\%, because the recovered pairs are larger-$n$
+cells, which resolve more differences. Every S2 field is identical across revisions.
 
 The headline verdicts did not move. $K = 4$ of 12 determinate claims
 underpowered for their own assertion and $J = 5$ indeterminate, identical to

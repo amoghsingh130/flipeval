@@ -146,7 +146,7 @@ right-skewed. One claim matched at tier~1 (family + bits + benchmark), 11 at
 tier~2 (family + bits), 2 at tier~3 (bits + benchmark), and 3 at tier~4 (bits);
 \textbf{no claim reached the global tier}. A tier whose target field is
 \texttt{None} cannot match, so a pruning claim with no bit width descends
-automatically rather than being forced into a wrong cell---in rev-2 the two
+automatically rather than being forced into a wrong cell. In rev-2 the two
 pruning claims descend to tier~4 and match there, over 183 cells.
 % CORRECTED 2026-07-30 -- SEVENTH rev-1 survivor. This sentence read "1 at
 % tier~4 (bits), and 2 fell through to the global tier", which is the REV-1
@@ -163,35 +163,36 @@ atlas cells) are excluded from the imputation pool, per the atlas registration.
 \subsection{The two robustness readings}
 \label{app:audit:robustness}
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
-% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts_rev2.csv
-% columns verdict_at_registered_2pp and margin_sensitive.
-% CARE -- THE TWO "1 of 12" FIGURES ARE DIFFERENT FACTS. First: one determinate
-% claim is underpowered under the uniform 2 pp yardstick. Second: one
-% determinate claim's verdict is unstable across the 1 pp -> 3 pp sweep. They
-% happen to concern the same claim (R01) and MUST NEVER be merged into a single
-% sentence or read as one finding. The body states both separately and points
-% here; this appendix carries the reasoning.
+% SOURCE: results/audit_verdicts_rev3.csv columns margin_sensitive and
+% robustness.
+% CARE -- THE TWO SENSITIVITIES ARE DIFFERENT FACTS. First: the classification
+% is unstable across the MARGIN sweep (1 pp -> 3 pp). Second: it is unstable
+% across the IMPUTATION interval (atlas Q1 -> Q3). Both land on R01, which is a
+% coincidence and MUST NEVER be merged into one sentence.
+% THE PARAGRAPH THIS REPLACES restated the "judging a 0.15 pp parity claim
+% against a 2 pp yardstick audits a claim nobody made" reasoning, which is the
+% error Amendment 2 corrects: R17's 0.15 is an observed delta. Do not restore it
+% in any wording.
 
-Both readings ship in the released CSV (\texttt{verdict},
-\texttt{verdict\_at\_registered\_2pp}). The factor-of-four difference between
-judging each claim against its own stated margin and judging all of them against
-the uniform registered 2\,pp margin is \emph{interpretive, not statistical}, and
-the reasoning that selects the primary reading is at
-\S\ref{sec:prereg:choices}: the frozen label is ``underpowered for its
-\emph{own} assertion'', and judging a 0.15\,pp parity claim against a 2\,pp
-yardstick audits a claim nobody made.
+The choice this appendix used to defend no longer exists. Amendment~2 settles
+the applicable margin at the registered 2\,pp for every claim, because the
+frozen text makes the claim-specific reading conditional on a source stating a
+margin and none does. What was previously presented as a factor-of-four
+interpretive gap was a comparison against quantities that were never margins,
+and it is withdrawn rather than restated. The reasoning is at
+\S\ref{sec:prereg:choices}.
 
-Margin sensitivity is a separate property, and it qualifies a headline verdict,
-so it is counted over the claims that have one. R01's verdict flips between
-underpowered and adequately powered across the 1\,pp\,$\to$\,3\,pp sweep, making
-that verdict an artefact of margin choice rather than a robust finding; it is
-reported as such rather than counted as evidence in either direction. R04 and
-R14 also flip across the sweep and retain the \texttt{margin\_sensitive} column
-in the released CSV, but neither carries a verdict to qualify.
-
-These are two distinct properties---a verdict under an alternative yardstick,
-and instability of a verdict across the sweep---that coincide on one claim.
+The surviving sensitivities are two, and they are independent of each other.
+\textbf{Margin sensitivity} asks whether a classification depends on where the
+yardstick is set: R01's flips across the registered 1\,pp\,$\to$\,3\,pp sweep,
+and R04 and R14 also flip but carry no classification to qualify.
+\textbf{Imputation sensitivity} asks whether it depends on a quantity no source
+reported: R01's flips across the interquartile range of the atlas cells
+supplying its discordance rate, reversing at $d = 0.118915$, with 345 of the 792
+supporting cells below that point. No other assessable claim is sensitive in
+either direction, and R01 is the only claim sensitive in both. That coincidence
+is worth stating precisely because it is a coincidence: the two properties
+answer different questions and neither implies the other.
 
 \section{Certification tables at 1\,pp and 3\,pp}
 \label{app:certification-margins}
@@ -199,7 +200,7 @@ and instability of a verdict across the sweep---that coincide on one claim.
 The 2\,pp margin is Table~\ref{tab:certification} in the main text; the
 1\,pp margin is Table~\ref{tab:certification-1pp} and the 3\,pp margin
 Table~\ref{tab:certification-3pp}. Note the quadratic margin scaling: MMLU's median
-requirement is 8{,}656 items at 1\,pp, 2{,}164 at 2\,pp, and 962 at 3\,pp---a
+requirement is 8{,}656 items at 1\,pp, 2{,}164 at 2\,pp, and 962 at 3\,pp, a
 factor of nine across a three-fold change in margin.
 
 \begin{table}[t]
@@ -298,8 +299,8 @@ evaluating a single model would see, and therefore makes the quartile columns
 
 \paragraph{Feasibility-probe pairs are excluded.} Both disclosed
 feasibility-probe pairs (99 cells) are excluded per the atlas registration §6,
-as tiny hand-built sanity pairs---$n$ as low as 10, discordance up to
-0.9---that would distort every quartile.
+as tiny hand-built sanity pairs ($n$ as low as 10, discordance up to
+0.9) that would distort every quartile.
 
 % MOVED 2026-07-31. This file used to end with a \TODO asking for the frozen
 % protocol documents to be "reproduced verbatim ... or linked at the archived

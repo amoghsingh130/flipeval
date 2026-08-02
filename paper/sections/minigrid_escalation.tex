@@ -17,10 +17,10 @@
 
 % SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md (design recap);
 % docs/MINIGRID_REGISTRATION_2026-07-15.md §§1-2.
-The four executed cells---$\{$Qwen2.5-1.5B-Instruct, Llama-3.2-3B-Instruct$\}
+The four executed cells, $\{$Qwen2.5-1.5B-Instruct, Llama-3.2-3B-Instruct$\}
 \times\{$MMLU, GSM8K$\}$, 4-bit GPTQ against 4-bit AWQ at seeds
 $\{0,1,2,3,4\}$, with GPTQ and AWQ receiving byte-identical calibration samples
-at each seed (\S\ref{sec:minigrid})---feed a pre-committed screen that decides
+at each seed (\S\ref{sec:minigrid}), feed a pre-committed screen that decides
 only one thing: whether the deferred 7B/8B cells are built. The screen is
 mechanical and was frozen with the mini-grid registration before any of these
 accuracies existed.
@@ -107,7 +107,7 @@ authorizing construction and evaluation of the deferred 7B/8B seed cells
 % TRIMMED 2026-07-27 (phase 4 trim, candidate 12). Both facts kept -- the seal
 % held until the validator passed, and the gates were settled before any
 % inspection -- with the document path dropped to the commit hash.
-The four cells stayed sealed---no accuracy read by anyone---until the registered
+The four cells stayed sealed, with no accuracy read by anyone, until the registered
 validator passed over the complete 44-JSONL expected set (job \texttt{11375247},
 409/409 checks), which is the first mini-grid accuracy inspection the
 registration permits. The FP16 gate failure that preceded the run was resolved
@@ -122,7 +122,7 @@ gates were already settled rather than tuned to its result.
 Escalation is a screening decision about \emph{which cells to build}, not a
 conclusion about H3. The confirmatory verdict is the frozen
 Supported/Disconfirmed/Inconclusive rule applied once, mechanically, over all
-eight cells---this grid plus the 7B/8B cells---and it is defined only when all
+eight cells, this grid plus the 7B/8B cells, and it is defined only when all
 eight exist. None of the 7B/8B cells existed when the screen fired, so no verdict
 follows from it. That the screen fired says the registered rule judged these four
 cells to warrant the confirmatory eight; it said nothing, in either direction,

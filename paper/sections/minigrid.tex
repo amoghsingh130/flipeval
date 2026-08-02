@@ -63,7 +63,7 @@ $\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}}) \geq
 \mathrm{gap}$. Seed-level SD and item-level SE are reported as separate variance
 components rather than collapsed, and the H3-relevant rank-instability estimate
 comes from the two-level paired bootstrap that resamples seed labels and, within
-each selected seed, items---with GPTQ and AWQ retaining the same sampled seed
+each selected seed, items, with GPTQ and AWQ retaining the same sampled seed
 labels and item indices.
 
 \subsection{How the eight cells came to exist}
@@ -85,7 +85,7 @@ Two properties of that sequence matter for how the verdict should be read. The
 escalation screen decides only \emph{which cells to build} and states no H3
 outcome, so the confirmatory rule was never applied to a cell set chosen after
 its own result was known. And the confirmatory rule is defined over all eight
-cells and was applied only when all eight existed, exactly as registered---no
+cells and was applied only when all eight existed, exactly as registered. No
 reduced-cell variant was constructed at any point, before or after results were
 seen.
 
@@ -107,15 +107,15 @@ rule is a disjunction, and \emph{both disjuncts are satisfied independently}:
 either one alone would have returned the same verdict.
 
 The disconfirming limb is a conjunction, and both of its conjuncts fail. It
-requires winner flips in at most 1 of 8---there are 5---and
+requires winner flips in at most 1 of 8, and there are 5, and it requires
 $\max\mathrm{range} < 0.5\,\mathrm{gap}$ in at least 6 of 8, which holds in 1.
 The two limbs cannot both hold and do not, so the frozen text classifies the
 outcome with no interpretation required.
 
 No exact accuracy tie occurs anywhere in the confirmatory set: 0 of 8
 cells contain one, over 0 of 40 (model, task, seed) triples. The
-registered tie convention---a tie is neither a flip nor a non-flip, and can
-neither create nor erase a flip between two non-tied seeds---therefore has no
+registered tie convention, under which a tie is neither a flip nor a non-flip
+and can neither create nor erase a flip between two non-tied seeds, therefore has no
 effect on any cell's classification, and the denominator for both criteria
 remains all eight cells.
 
@@ -197,7 +197,7 @@ Llama-3.1-8B & GSM8K & $+0.023000$ & $-0.015000$ & $-0.004000$ & $-0.036000$ & $
 
 % SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, header paragraph.
 The three registered analyses below were run once per cell at the registered
-parameters---2{,}000 bootstrap replicates, RNG seed 0---as part of the same job
+parameters (2{,}000 bootstrap replicates, RNG seed 0) as part of the same job
 that produced the verdict. \textbf{None of them modifies the verdict, and none
 can.} The verdict is what the frozen rule returned over winner flips and
 range/gap; a weak bootstrap rate or a poorly resolved cell is a limitation to
@@ -209,16 +209,16 @@ report, not a second application of the rule.
 % side by side and never pooled.
 Table~\ref{tab:h3-variance} reports seed-level SD and item-level SE as the
 registration requires: side by side, never collapsed into a single dispersion
-figure. The two answer different questions---how much a method's accuracy moves
-when the calibration seed changes, against how precisely a single seed's
-accuracy is estimated from the items---and the comparison between them is the
+figure. The two answer different questions, namely how much a method's accuracy moves
+when the calibration seed changes against how precisely a single seed's
+accuracy is estimated from the items, and the comparison between them is the
 point. On MMLU the calibration seed moves the number more than the sample of
 items does, in every cell: taking per cell the larger of the two seed-level SDs
 against its own item-level SE, the ratio runs $1.6$ to $5.9\times$
 (Qwen2.5-7B $0.006224$ against $0.003983$; Llama-3.2-3B $0.024925$ against
 $0.004214$). On GSM8K the two components are of the same order throughout, and
 in \emph{five of the eight} method-by-cell entries the item-level SE is the
-larger of the two---the sample of items is moving the number as much as the
+larger of the two, so the sample of items is moving the number as much as the
 calibration seed is.
 % Ratios are arithmetic on this table: MMLU per-cell larger-SD/its-SE =
 % 4.54, 5.91, 1.56, 3.61 -> range 1.6-5.9. GSM8K SE > SD in 5 of 8 entries
@@ -256,7 +256,7 @@ Llama-3.1-8B & GSM8K & 0.014307 & 0.010654 & 0.013874 & 0.013640 \\
 % 6/8 bootstrap < 0.05, 3/8 both; the two unstable-on-both cells 0.2575, 0.1260).
 The two columns of Table~\ref{tab:h3-bootstrap} measure different things, and a
 reader who assumes otherwise will read them as self-contradictory. A winner flip
-asks whether two \emph{individual seeds} disagree on sign---H3's registered
+asks whether two \emph{individual seeds} disagree on sign, which is H3's registered
 question, and a description of what happens when a practitioner runs one
 calibration and takes the winner. The bootstrap rank-flip rate asks whether the
 \emph{five-seed mean} ranking survives resampling seed labels and items
@@ -264,7 +264,7 @@ together, with GPTQ and AWQ holding the same sampled labels and indices.
 
 The combination is the sharpest form of the finding. Winner flips occur in 5 of
 8 cells; the bootstrap rate is below $0.05$ in 6 of 8; and \textbf{3 cells have
-both}---Qwen2.5-1.5B/MMLU ($0.0445$), Llama-3.2-3B/GSM8K ($0.0220$) and
+both}: Qwen2.5-1.5B/MMLU ($0.0445$), Llama-3.2-3B/GSM8K ($0.0220$) and
 Llama-3.1-8B/MMLU ($0.0405$). In each, some pair of individual seeds disagrees
 about which method wins while the five-seed average ranking survives resampling
 in more than 95\% of replicates. The practical reading is actionable and is the
@@ -278,8 +278,8 @@ resolution on the seed-level distribution. What the low rates bound is the
 stability of \emph{this} observed mean under resampling; they do not establish
 that five seeds suffice in general, and no result here should be read as
 licensing five as a sufficient number. Two GSM8K cells are unstable on both
-measures---Qwen2.5-7B/GSM8K at $0.2575$ (515 of 2{,}000 replicates) and
-Llama-3.1-8B/GSM8K at $0.1260$ (252 of 2{,}000)---where even the five-seed mean
+measures, Qwen2.5-7B/GSM8K at $0.2575$ (515 of 2{,}000 replicates) and
+Llama-3.1-8B/GSM8K at $0.1260$ (252 of 2{,}000), and there even the five-seed mean
 ranking does not survive resampling, and no amount of seed averaging at
 $n = 1{,}000$ rescues the comparison.
 
@@ -366,7 +366,7 @@ controlled cells, comparing GPTQ with AWQ at the same bit width, it runs
 
 The extreme cell makes the size of the discrepancy concrete. On
 Qwen2.5-7B/GSM8K the two methods differ by \textbf{0.58\,pp} in aggregate
-accuracy---a gap any reader would call equivalence---while \textbf{17.7\%} of
+accuracy, a gap any reader would call equivalence, while \textbf{17.7\%} of
 items change correctness state between them and \textbf{28.7\%} of answers
 change outright.
 
@@ -378,8 +378,8 @@ and the surviving net delta therefore hides a proportionally larger amount of
 per-item movement.
 
 We observe two regimes; we do not establish a curve. These are two
-measured points---one observational contrast at 1{,}707 cells, one controlled
-contrast at 8---and nothing here licenses reading the ratio as a monotone
+measured points, one observational contrast at 1{,}707 cells and one controlled
+contrast at 8, and nothing here licenses reading the ratio as a monotone
 function of aggregate closeness. What the two points support is the direction of
 the effect and the fact that the regime in which equivalence claims are actually
 made is the less favourable of the two.
@@ -394,16 +394,16 @@ made is the less favourable of the two.
 % from that document, not paraphrased.
 \paragraph{Disclosure.} \textbf{This quantity was not registered.} It was
 requested on 2026-07-26, \emph{after} the eight-cell verdict had been computed
-and signed, in response to prior art identified the same day---%
-\citet{paglieri2024outliers}, which reports calibration effects diminishing in
+and signed, in response to prior art identified the same day,%
+\ \citet{paglieri2024outliers}, which reports calibration effects diminishing in
 modern LLMs (\S\ref{sec:related:reconcile}). It is descriptive, it tests no
 hypothesis, and it does not modify the verdict. It is recorded with its
 provenance rather than folded silently into the registered results.
 
-Using the machinery of \S\ref{sec:certification} itself---paired
-$\mathrm{sd} = \sqrt{p_d}$ and paired $\mathrm{SE} = \sqrt{p_d/n}$, with $p_d$
+Using the machinery of \S\ref{sec:certification} itself, with paired
+$\mathrm{sd} = \sqrt{p_d}$ and paired $\mathrm{SE} = \sqrt{p_d/n}$ and $p_d$
 the per-cell GPTQ-against-AWQ accuracy-state churn of
-Table~\ref{tab:h3-flips}---the two tasks separate sharply.
+Table~\ref{tab:h3-flips}, the two tasks separate sharply.
 
 \begin{table}[t]
 \centering
@@ -432,7 +432,7 @@ measurement noise, and the benchmark resolves it comfortably.
 \textbf{GSM8K is under-resolved at $n = 1{,}000$.} There the ranges run roughly
 two to three-and-a-half SE, seed-level SD is of the same order as item-level SE,
 and in three of the four GSM8K cells the \emph{mean gap itself} sits at or below
-$1.25$ SE ($0.44$, $0.98$, $1.23$)---the quantity the range/gap criterion
+$1.25$ SE ($0.44$, $0.98$, $1.23$), so the quantity the range/gap criterion
 compares against is, in those cells, not resolved by the benchmark at the $n$
 used. Any per-cell reading of GSM8K should say so, and
 \S\ref{sec:limitations} does.
@@ -441,7 +441,7 @@ This does not weaken the verdict. The range/gap criterion holds in 7 of 8 cells
 and winner flips occur in 5 of 8, both computed from the registered per-seed
 accuracies by the frozen rule, and neither is a significance test. What it means
 is that the GSM8K cells carry materially less resolving power than the MMLU
-cells---a statement about where the evidence concentrates, not a reweighting of
+cells, which is a statement about where the evidence concentrates, not a reweighting of
 the rule.
 
 \subsection{Resolution of the confirmatory cells against the certification tables}
@@ -454,7 +454,7 @@ the rule.
 The certification table of \S\ref{sec:certification} requires, for GSM8K at a
 2\,pp margin, about \textbf{1{,}184} items at median discordance and
 \textbf{3{,}068} at the p75 discordance. The confirmatory GSM8K cells ran at
-$n = 1{,}000$---already below the median requirement---and the discordance
+$n = 1{,}000$, already below the median requirement, and the discordance
 actually observed in them is $p_d = 0.1766$, $0.1808$, $0.2086$ and $0.2940$,
 at or above the table's p75, where the requirement is roughly three times the
 $n$ used.

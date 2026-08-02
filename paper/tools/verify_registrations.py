@@ -31,6 +31,11 @@ UNICODE_BACK = {
     r"$\Rightarrow$": "⇒", "$-$": "−", r"$\alpha$": "α",
     r"$\leq$": "≤", r"$\geq$": "≥",
     "``": '"', "''": '"',
+    # Must stay in step with UNICODE in gen_registrations.py. A codepoint the
+    # generator maps but this table does not shows up as a false MISMATCH on a
+    # correctly generated appendix, which is exactly as misleading as a missed
+    # real one.
+    r"\dots{}": "…",
 }
 
 

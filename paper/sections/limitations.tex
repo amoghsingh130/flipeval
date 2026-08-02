@@ -51,8 +51,8 @@ nothing about whether an audited model is in fact equivalent.
 % RESOLVED 2026-07-27: escalation fired, the 7B/8B cells completed, and all
 % eight confirmatory cells exist. The \minigridTODO this paragraph carried is
 % closed by stating the executed scope rather than the deferred one.
-The controlled experiment covers all 8 registered confirmatory cells---1.5B to
-8B parameters, two benchmarks, 4 bits, two methods, five seeds---and nothing
+The controlled experiment covers all 8 registered confirmatory cells (1.5B to
+8B parameters, two benchmarks, 4 bits, two methods, five seeds) and nothing
 beyond them. The verdict licenses no statement about 3-bit behaviour,
 ARC-Challenge, HellaSwag, calibration-\emph{dataset} effects, or any model or
 benchmark outside the registered set. The atlas reaches 405B but is
@@ -69,7 +69,7 @@ distribution it is drawing from. Where its rank-flip rate is low, what that
 bounds is the stability of the \emph{observed} five-seed mean under resampling.
 It is not evidence that five seeds are sufficient in general, and the three
 cells that combine a winner flip with a rank-flip rate below $0.05$ should be
-read as ``one calibration run can mislead, and five were more stable here''---not
+read as ``one calibration run can mislead, and five were more stable here'', not
 as a recommendation of five. A design aimed at the seed-level distribution
 itself would need more seeds than the registration committed to.
 
@@ -84,7 +84,7 @@ the four cells (\S\ref{sec:minigrid:resolution}). Seed-level SD and item-level S
 are of the same order there, where on MMLU the seed term dominates. This paper's
 own certification table asked for about $1{,}184$ GSM8K items at median
 discordance and $3{,}068$ at p75, and the discordance observed in these cells sits
-at or above p75---so the shortfall was predicted by \S\ref{sec:certification}
+at or above p75, so the shortfall was predicted by \S\ref{sec:certification}
 before it was measured (\S\ref{sec:minigrid:selfaudit}). The verdict is unaffected,
 being a count over the frozen rule rather than a significance test, but the MMLU
 cells carry the evidence and any per-cell reading of GSM8K should say so.
@@ -98,8 +98,8 @@ cells carry the evidence and any per-cell reading of GSM8K should say so.
 % it in another.
 All benchmarks are English and predominantly multiple-choice or short-answer,
 with per-item correctness defined by the original harness. Float-scored
-generation tasks are outside the flip model entirely---33 atlas cells were
-excluded for exactly this reason---so nothing here applies to quality claims
+generation tasks are outside the flip model entirely, and 33 atlas cells were
+excluded for exactly this reason, so nothing here applies to quality claims
 about open-ended generation, including the CIDEr-style metric that made one
 audited claim unscoreable (\S\ref{sec:audit:r04}).
 
@@ -120,7 +120,7 @@ audited claim unscoreable (\S\ref{sec:audit:r04}).
 % evidence. Both reconciliation counts are retained.
 The atlas pipeline had two bugs found and fixed during its run, and its numbers
 were held provisional pending an independent spot-check. That check has since
-been completed twice---262 compared fields reconciled on the first pass, which
+been completed twice: 262 compared fields reconciled on the first pass, which
 surfaced the population defect that produced rev-2, and 14 of 14 cells with 126
 of 126 fields on the targeted second (\S\ref{sec:prereg-spotcheck}). The figures
 reported here are rev-2 and are no longer provisional; the delta between the two

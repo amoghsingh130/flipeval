@@ -35,8 +35,8 @@ downloads the release.
 % column v3_per_item_outputs (0 yes, 3 partial, 14 no).
 
 They ship in \textbf{both forms, deliberately}. The extracted files are directly
-loadable; the \textbf{two sealed run archives}---the mini-grid and the escalation
-grid---carry the same bytes with a \textbf{per-file SHA-256 manifest} and an
+loadable; the \textbf{two sealed run archives}, the mini-grid and the escalation
+grid, carry the same bytes with a \textbf{per-file SHA-256 manifest} and an
 archive checksum recorded when the runs completed, so the loadable copy can be
 checked against the record made at run time rather than trusted. Shipping only
 the extracted copy would be usable but unverifiable; only the archive,
@@ -46,7 +46,7 @@ concedes half its own case if it supplies one.
 \paragraph{The remaining four.} The \textbf{flip atlas} gives per-cell paired
 statistics for every enumerated pair-task cell, with the exclusion table and the
 frozen 59-pair manifest. \textbf{\texttt{flipeval}} is the analysis
-package---flip rates, the churn family, exact McNemar, TOST at a declared
+package: flip rates, the churn family, exact McNemar, TOST at a declared
 margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum detectable
 difference, required-$n$, and the certification-table generator
 (\textbf{Apache-2.0}; everything else is \textbf{CC-BY-4.0}). The \textbf{audit

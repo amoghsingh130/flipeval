@@ -102,8 +102,8 @@ eligible sources; every count in this section is over those 16.
 % agent sessions was disclosed only inside the reproduced registration
 % (Amendment 1) in the appendix, which is not where a reader looks for it.
 Each claim's fields were extracted by \textbf{two blinded automated extraction
-passes}---separate language-model agent sessions, the second given no access to
-the first pass's output---with source content hashes recorded, followed by
+passes} (separate language-model agent sessions, the second given no access to
+the first pass's output), with source content hashes recorded, followed by
 \textbf{human reconciliation} of every disagreement before the verdict stage
 (\S\ref{sec:prereg}). Separate sessions prevent the second pass from copying the
 first; they do not make the two passes statistically independent, because both
@@ -164,7 +164,7 @@ to assess it numerically at all.
 evidence offered; rows are whether the source reports enough for a numerical
 assessment under the registered paired-outcome framework. \emph{Prospective
 numerical decision margin} means a tolerance stated independently of the
-observed result---a threshold that could have been written down before the
+observed result: a threshold that could have been written down before the
 evaluation ran. That column is empty.}
 \label{tab:audit-taxonomy}
 % SOURCE: results/audit_verdicts_rev3.csv, cross-tabulating margin_category
@@ -188,8 +188,8 @@ Not numerically assessable & 0 & 1 & 3 \\
 % appendices and reference lists; model cards searched as raw Markdown.
 \textbf{No audited source declares a prospective numerical equivalence margin}
 (Table~\ref{tab:audit-taxonomy}). Ten of the sixteen make the claim in purely
-qualitative terms---``negligible'', ``matches'', ``practically no accuracy
-decrease''---with no number attached to the assertion at all. The remaining six
+qualitative terms (``negligible'', ``matches'', ``practically no accuracy
+decrease''), with no number attached to the assertion at all. The remaining six
 cite a number, and in every case it is a measured outcome: a recovery percentage
 or an achieved benchmark score, computed after the evaluation rather than set
 before it. This is established over complete source text, not the quoted
@@ -224,15 +224,15 @@ The most actionable finding requires no statistics at all.
 % per-item outputs" is false without "task-matched"; see the carry checklist §15.
 \begin{quote}
 \textbf{0 of the 16 eligible sources release \emph{task-matched} per-item
-outputs}---the item-level results, for the tasks the equivalence claim is
+outputs}, meaning the item-level results, for the tasks the equivalence claim is
 actually about, that a third party would need to rerun the paired comparison.
 The tally is 0 \emph{yes}, 3 \emph{partial}, 13 \emph{no}.
 \end{quote}
 
-The three partial cases---%
+The three partial cases,%
 % SOURCE: results/audit_verdicts_rev3.csv rows R08, R15, R16 (v3_per_item_outputs =
 % "partial", with the per-row `notes` column giving the suite mismatch).
-R08, R15 and R16, all Red~Hat AI model cards---are the closest the record comes
+R08, R15 and R16, all Red~Hat AI model cards, are the closest the record comes
 to reproducibility, and they illustrate why the count is nonetheless zero: they
 release per-item outputs for Arena-Hard, OpenLLM~v2 and HumanEval, but
 \emph{not} for the OpenLLM~v1 tasks that the audited equivalence claim is
@@ -269,14 +269,14 @@ the uniform 2\,pp registered in advance}; a source's reported deltas are
 outcomes of its evaluation, not a decision rule it adopted, and are never used
 as one.
 
-\paragraph{V1 --- detection resolution.} The minimum detectable difference (MDD)
+\paragraph{V1: detection resolution.} The minimum detectable difference (MDD)
 at 80\% power and two-sided $\alpha = 0.05$, under the paired-flip model. The
 per-item accuracy difference is $d_i \in \{-1, 0, +1\}$; under the null of no
 true difference, $\mathrm{Var}(d) = p_d$, the discordance rate, so
 $\mathrm{sd} = \sqrt{p_d}$. We report the MDD and its ratio to the registered
 margin.
 
-\paragraph{V2 --- equivalence support.} The number of items required for TOST at
+\paragraph{V2: equivalence support.} The number of items required for TOST at
 the applicable margin,
 \begin{equation}
 n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil ,
@@ -292,10 +292,10 @@ at the registered margin. The choice of one-sided $z$ is not cosmetic; see
 % designed to carry -- not a retrospective diagnosis that a completed study was
 % "underpowered". Do not reintroduce a definitive underpowered verdict here.
 Equation~\ref{eq:tost-n} answers a question asked \emph{before} an evaluation is
-run---how many items would it need?---so falling below it is a statement about
+run, namely how many items it would need, so falling below it is a statement about
 how the evaluation was sized, not a diagnosis applied to its result.
 
-\paragraph{V3 --- reproducibility.} Binary, read from the frozen
+\paragraph{V3: reproducibility.} Binary, read from the frozen
 \texttt{per\_item\_outputs\_released} column and cross-checked against the
 extraction reconciliation memo.
 
@@ -339,8 +339,8 @@ observed cells.
 % v2_underpowered_paired_2pp, robustness. Counts over the 16 ELIGIBLE rows.
 % DENOMINATOR LEDGER (carry checklist §9): 17 - 1 = 16; 11 + 5 = 16;
 % 0 + 1 + 10 = 11. Every one of these is checkable in the CSV.
-Of the 16 eligible claims, 5 are \textbf{not numerically assessable}---their
-reporting does not support a verdict under the registered framework---leaving 11
+Of the 16 eligible claims, 5 are \textbf{not numerically assessable}: their
+reporting does not support a verdict under the registered framework, leaving 11
 assessable claims. Of those 11, \textbf{one falls below the approximate planning
 threshold} at the registered 2\,pp margin under the median discordance
 imputation, and that one claim's classification does not survive the sensitivity
@@ -463,7 +463,7 @@ transparency, but they are excluded from the assessable set
 The ordering also makes the audit's reach visible. Only R01's evaluation is
 coarser than the registered margin; the other ten resolve differences between
 a sixth and a half of it. \textbf{An audit at a 2\,pp margin is a weak test, and
-it should be understood as one}---the sources were not asked to meet a standard
+it should be understood as one}. The sources were not asked to meet a standard
 this permissive, because they were not asked to meet any stated standard at all.
 What the table shows is that ten evaluations would already satisfy a reporting
 requirement none of them was given.
@@ -488,8 +488,8 @@ turns on where the yardstick is set. Second, and separately, it is
 \textbf{imputation-sensitive}: it flips across the interquartile range of the
 atlas cells supplying its discordance rate, so it also turns on a quantity its
 source never reported. No other assessable claim is sensitive in either
-direction. These are two distinct properties---instability with respect to the
-standard applied, and instability with respect to a missing input---that happen
+direction. These are two distinct properties, instability with respect to the
+standard applied and instability with respect to a missing input, that happen
 to land on the same claim, and they must not be read as one finding.
 Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 
@@ -504,7 +504,7 @@ Each is recorded with exactly one primary blocker.
 
 Insufficient reporting (4). A registered input is genuinely absent.
 R02 (LLM.int8()) and R11 (Meta's quantized-Llama blog) state no sample size, no
-baseline, and no numeric delta---their headline equivalence evidence exists only
+baseline, and no numeric delta, and their headline equivalence evidence exists only
 as a chart image. R13 (vLLM FP8 documentation) states $n = 250$ but shows no
 on-page baseline run at all. R14 (vLLM FP8 KV-cache blog) reports an observed
 0.7\,pp difference and permits $n$ to be imputed, but reports no baseline; its
@@ -529,7 +529,7 @@ below.
 
 Every non-assessable claim retains whatever components its available inputs
 support, listed in the CSV column \texttt{determinate\_components} and reported
-as supplementary transparency only---never verdict-bearing. R13 retains V2 (the
+as supplementary transparency only, never verdict-bearing. R13 retains V2 (the
 paired standard deviation depends on discordance, not on baseline accuracy);
 R14 retains V1 (paired) and V2; R04 retains V1 and V2 computed on a substituted
 benchmark.
@@ -551,8 +551,8 @@ placed beyond the reach of checking.
 % framework" -- CIDEr supports paired resampling perfectly well; it is the
 % flip model, not pairing, that does not apply.
 R04 is recorded because excluding it removed what was, at the time, the audit's
-largest single number. The AWQ paper's qualifying sentence---the one that meets
-the frozen §3 inclusion trigger---asserts negligible loss on \textbf{COCO
+largest single number. The AWQ paper's qualifying sentence, the one that meets
+the frozen §3 inclusion trigger, asserts negligible loss on \textbf{COCO
 CIDEr}, a generation metric that assigns a graded score to a caption and has no
 per-item correct/incorrect state. V1 and V2 are flip-model quantities defined on
 $d_i \in \{-1,0,+1\}$, and there is no discordance rate to impute because there
@@ -570,9 +570,9 @@ registered.
 The first extraction pass nonetheless scored R04 on GSM8K, the source's own
 accuracy benchmark ($-0.30$\,pp at $n = 1{,}319$), and reported it as the
 audit's largest shortfall at $38.3\times$. On review this was
-overruled---computing a TOST requirement on GSM8K audits a sentence the source
-wrote about a different benchmark, in different and non-trigger language---which
-under the then-current rules moved the headline from $K = 5$ to $K = 4$ and
+overruled, because computing a TOST requirement on GSM8K audits a sentence the
+source wrote about a different benchmark, in different and non-trigger language.
+Under the then-current rules the ruling moved the headline from $K = 5$ to $K = 4$ and
 removed the audit's biggest number. Those counts and that ratio are quoted as
 history: they were computed under the superseded reading that took each source's
 reported delta as its margin, and they are not current results. The GSM8K
@@ -592,7 +592,7 @@ protocol as amended, and they are claims about evidence rather than about
 models. This section \textbf{does not establish}: that any audited model is
 degraded; that any audited claim is false; that the claims' authors reached a
 wrong conclusion; or that any claim is underpowered in a sense that survives the
-sensitivity analysis---none is.
+sensitivity analysis, and none is.
 % SCOPE RULE (carry checklist §8 and §15). Two overreadings to block explicitly:
 % (a) generalising 16 audited sources to a prevalence claim about the field,
 % (b) reading "robust" as anything wider than the atlas-IQR interval actually
@@ -601,7 +601,7 @@ Nor does it establish a prevalence: 16 eligible sources within three frozen
 frames are not a sample from which the field's reporting practice can be
 estimated, and no proportion reported here should be read as one. Where a
 classification is called robust, that means only that it holds throughout the
-interquartile range of the atlas cells supplying its discordance rate---not
+interquartile range of the atlas cells supplying its discordance rate, not
 across every plausible model of discordance. It also does not
 establish anything about sources outside the three frozen frames, and it
 operates at claim-level rather than claim\,$\times$\,benchmark granularity,
