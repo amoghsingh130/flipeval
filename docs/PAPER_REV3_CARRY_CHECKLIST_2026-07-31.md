@@ -1,5 +1,12 @@
 # Paper carry checklist — rev-2 → rev-3 audit verdicts
 
+> **SUPERSEDED AS A PLAN, 2026-08-02.** The authoritative carry checklist is now
+> `docs/PAPER_REV3_FINAL_CHECKLIST_2026-08-02.md`, supplied by Amogh. This file
+> is retained unchanged as the historical record: its §0 defect analysis and its
+> per-item computed values remain the working reference for the numbers, and
+> several sections here are the technical specification behind items in the new
+> checklist. Do not plan work from this file.
+
 Built 2026-07-31 from the paper text and `results/audit_verdicts_rev3.csv`
 (job `11591245`, sha `c85d6f8a…b150082b`, single run under Amendment 2).
 **Revised the same day** with twelve additions from advisor review, plus two
