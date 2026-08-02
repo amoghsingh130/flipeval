@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-02T05:54:38.401364+00:00",
-  "source_commit": "b3fdfdee654daa21167680fbac9ae0f2e796ccb1",
-  "source_tree": "e9837fbc79e76b068b92ff47fc240ac3eb4d56ca",
+  "created_at": "2026-08-02T06:50:07.851748+00:00",
+  "source_commit": "5adf2fb02e1575ac9a3472c6ba6e71032a68dc20",
+  "source_tree": "b6104ee3fbf4a1ec2ee753812dfd90bcf3a6b0f3",
   "branch": "main",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -43,6 +43,7 @@
     "scripts/certification_tables.py": "e540e83c25ac6d7797c2df694350e12f053632ed71ebe39c5dae092fded82fdb",
     "scripts/compare_mmlu_reference.py": "2e47f1e89bf77e0f6edaee87c685f399e77fbb2f39e2b816327c5f438f275c88",
     "scripts/expected_grid.py": "d56cab5397c8928d22d716655fc1398ed69b7ee7942720f72e3f557fc0f8b4fe",
+    "scripts/fetch_audit_sources.py": "dadacb9a509e0a809d690d36fb34418ba5ccafc503c93bd6e6a314c4922dfd42",
     "scripts/freeze_prepace.py": "71d08634bcf92b29f82d29e391f913477bdfd3871bc760d4f25824d15dbc4b1b",
     "scripts/kaggle_bootstrap.py": "c18c3528d281e3ab97a0e9dff3c5b1101afb06b4d41abae31536ed00d2e5c1fe",
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
@@ -89,5 +90,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "092bfd562b69e74121951cc788cb94ef4aa3340bca814c29c295a3cd19cd9058"
+  "manifest_payload_sha256": "90bacb6107968966e53378d9dcc518679f966f26bf2208df3d74afa59acc59e9"
 }
