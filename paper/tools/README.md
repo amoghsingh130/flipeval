@@ -16,6 +16,7 @@ session scratchpads and lost, which is why these are committed.
 | `verify_registrations.py` | Proves that appendix reproduces the frozen text word-for-word, by diffing word streams. Exits non-zero on any mismatch. |
 | `check_paper.py` | Stand-in for a LaTeX build: recursive `\input` expansion, then labels, refs, cite keys, environment balance, and the anonymous-build leak check. |
 | `gen_reading_copy.py` | Regenerates `READING_COPY.md`. Run it *after* committing content, so the recorded commit is the state it reflects. |
+| `gen_denominator_macros.py` | Regenerates `paper/audit_denominators.tex`, the single ledger of every repeated rev-3 audit count, from the sealed `results/audit_verdicts_rev3.csv`. `--check` validates the input digest, the canonical invariants and the committed ledger. |
 
 Order after editing paper content:
 
@@ -42,6 +43,11 @@ build.
 - `verify_registrations.py` was negative-controlled: it detects a changed
   number, a changed word ending, and a deleted `\item`.
 - `check_paper.py`'s leak check was negative-controlled with a planted name.
+- `gen_denominator_macros.py --check` was negative-controlled on each of its
+  three layers separately: a tampered committed ledger, a tampered canonical
+  literal, and a tampered recorded digest each fail alone, with the other two
+  still reporting OK. Its counts are additionally re-derived from the CSV by
+  `tests/test_audit_denominators.py`, which is the fingerprinted gate.
 - `gen_reading_copy.py` was validated by regenerating `READING_COPY.md` at
   `b4b2d99` in a detached worktree and diffing against the committed file:
   **zero content lines differ**. The only differences are whitespace, and they

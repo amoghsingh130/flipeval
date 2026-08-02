@@ -1,0 +1,190 @@
+% audit_denominators.tex -- GENERATED, DO NOT EDIT BY HAND.
+% Regenerate: python3 paper/tools/gen_denominator_macros.py --write
+% Validate:   python3 paper/tools/gen_denominator_macros.py --check
+%
+% Source: results/audit_verdicts_rev3.csv (sealed 0444, single run, job 11591245)
+% sha256: c85d6f8a5a25023389b27201a4165b79fbfdc6f274b89ca91e64182ab150082b
+% Identity cross-checked against docs/audit_claim_table.csv (FROZEN).
+% Margin: uniform 2 pp, registered. Planning size increasing in d, so the
+% Q1 and Q3 columns bracket the whole atlas-IQR interval by monotonicity.
+%
+% Denominators. `Eligible` passes the frozen 3.1 inclusion rule;
+% `Assessable` is eligible AND determinate and is the denominator of every
+% threshold count.
+
+\newcommand{\AuditFrozenCandidates}{17}
+\newcommand{\AuditIneligible}{1}
+\newcommand{\AuditEligible}{16}
+\newcommand{\AuditAssessable}{11}
+\newcommand{\AuditNotAssessable}{5}
+\newcommand{\AuditNotAssessableInsufficient}{4}
+\newcommand{\AuditNotAssessableOutsideFramework}{1}
+
+% Threshold and sensitivity counts, all out of \AuditAssessable.
+\newcommand{\AuditBelowThresholdAtMedian}{1}
+\newcommand{\AuditAboveThroughout}{10}
+\newcommand{\AuditChangesWithinIQR}{1}
+\newcommand{\AuditBelowThroughout}{0}
+
+% Per-item outputs, out of \AuditEligible. `TaskMatched` is outputs for the
+% tasks that support the audited claim; `OtherTaskOnly` is a release that
+% does not cover them.
+\newcommand{\AuditPerItemTaskMatched}{0}
+\newcommand{\AuditPerItemOtherTaskOnly}{3}
+\newcommand{\AuditPerItemNone}{13}
+\newcommand{\AuditPerItemOtherTaskClaims}{R08, R15, R16}
+
+% Margin cross-tab, over the 16 eligible sources, reconciling the margin
+% taxonomy with the statement that ten of sixteen contain no number at all.
+% Rows: registered margin category. 1 = a prospective numerical decision
+% margin is declared; 2 = equivalence asserted with sufficient numerical
+% information to evaluate it; 3 = asserted without sufficient numerical
+% information. Columns: descriptive evidence form. Qual = qualitative
+% language only, no number anywhere in the qualifying claim; Retro = a
+% retrospective numerical description of an observed result.
+% \AuditXtabSufficientTotal is the 11 assessable sources plus R04, which
+% reports enough numbers but scores a generation metric. It is NOT the
+% withdrawn rev-2 count of twelve determinate claims, which was a
+% different set of the same size.
+\newcommand{\AuditXtabProspectiveQual}{0}
+\newcommand{\AuditXtabProspectiveRetro}{0}
+\newcommand{\AuditXtabProspectiveTotal}{0}
+\newcommand{\AuditXtabSufficientQual}{7}
+\newcommand{\AuditXtabSufficientRetro}{5}
+\newcommand{\AuditXtabSufficientTotal}{12}
+\newcommand{\AuditXtabInsufficientQual}{3}
+\newcommand{\AuditXtabInsufficientRetro}{1}
+\newcommand{\AuditXtabInsufficientTotal}{4}
+\newcommand{\AuditXtabQualTotal}{10}
+\newcommand{\AuditXtabRetroTotal}{6}
+\newcommand{\AuditXtabGrandTotal}{16}
+\newcommand{\AuditProspectiveNumericMargin}{0}
+
+% Named claims and the registered margin.
+\newcommand{\AuditMarginPP}{2}
+\newcommand{\AuditIneligibleClaim}{R10}
+\newcommand{\AuditOutsideFrameworkClaim}{R04}
+
+% The single imputation-sensitive claim. The percentage is a descriptive
+% fraction of correlated reference cells: not a probability, not a
+% confidence level, not a p-value.
+\newcommand{\AuditSensitiveClaim}{R01}
+\newcommand{\AuditSensitiveN}{1{,}838}
+\newcommand{\AuditSensitiveNReq}{2{,}010}
+\newcommand{\AuditSensitiveReversalD}{0.118915}
+\newcommand{\AuditSensitiveCellsBelow}{345}
+\newcommand{\AuditSensitiveCellsTotal}{792}
+\newcommand{\AuditSensitiveCellsPct}{43.6}
+
+% Provenance of the numbers above.
+\newcommand{\AuditVerdictsSha}{c85d6f8a5a25023389b27201a4165b79fbfdc6f274b89ca91e64182ab150082b}
+\newcommand{\AuditVerdictsShaShort}{c85d6f8a\ldots{}b150082b}
+
+% Per-claim values, addressed as \AuditVal{R01}{nreqMed}. Fields for an
+% assessable claim: n, tier, nreqQOne, nreqMed, nreqQThree, dstar, cls.
+% Fields for a non-assessable or ineligible claim: n, tier, kind, blocker.
+% An undefined pair expands to nothing, so asking an ineligible claim for
+% its classification silently yields empty; ask for `kind` instead.
+\newcommand{\AuditVal}[2]{\csname AuditData#1#2\endcsname}
+\expandafter\def\csname AuditDataR01cls\endcsname{changes classification within IQR}
+\expandafter\def\csname AuditDataR01dstar\endcsname{0.118915}
+\expandafter\def\csname AuditDataR01n\endcsname{1{,}838}
+\expandafter\def\csname AuditDataR01nreqMed\endcsname{2{,}010}
+\expandafter\def\csname AuditDataR01nreqQOne\endcsname{1{,}364}
+\expandafter\def\csname AuditDataR01nreqQThree\endcsname{4{,}328}
+\expandafter\def\csname AuditDataR01tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR02blocker\endcsname{no reported or imputable n, no baseline, no numeric delta}
+\expandafter\def\csname AuditDataR02kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR02n\endcsname{---}
+\expandafter\def\csname AuditDataR02tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR03cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR03dstar\endcsname{---}
+\expandafter\def\csname AuditDataR03n\endcsname{18{,}300}
+\expandafter\def\csname AuditDataR03nreqMed\endcsname{866}
+\expandafter\def\csname AuditDataR03nreqQOne\endcsname{619}
+\expandafter\def\csname AuditDataR03nreqQThree\endcsname{1{,}237}
+\expandafter\def\csname AuditDataR03tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR04blocker\endcsname{qualifying quote asserts negligible loss on COCO CIDEr, a generation metric with no per-item correct/incorrect state; V1/V2 are flip-model quantities that do not apply to it}
+\expandafter\def\csname AuditDataR04kind\endcsname{metric-incompatible}
+\expandafter\def\csname AuditDataR04n\endcsname{1{,}319}
+\expandafter\def\csname AuditDataR04tier\endcsname{family+bits+benchmark}
+\expandafter\def\csname AuditDataR05cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR05dstar\endcsname{0.908491}
+\expandafter\def\csname AuditDataR05n\endcsname{14{,}042}
+\expandafter\def\csname AuditDataR05nreqMed\endcsname{2{,}255}
+\expandafter\def\csname AuditDataR05nreqQOne\endcsname{1{,}525}
+\expandafter\def\csname AuditDataR05nreqQThree\endcsname{3{,}865}
+\expandafter\def\csname AuditDataR05tier\endcsname{bits+benchmark}
+\expandafter\def\csname AuditDataR06cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR06dstar\endcsname{---}
+\expandafter\def\csname AuditDataR06n\endcsname{18{,}904}
+\expandafter\def\csname AuditDataR06nreqMed\endcsname{1{,}841}
+\expandafter\def\csname AuditDataR06nreqQOne\endcsname{932}
+\expandafter\def\csname AuditDataR06nreqQThree\endcsname{6{,}046}
+\expandafter\def\csname AuditDataR06tier\endcsname{bits}
+\expandafter\def\csname AuditDataR07cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR07dstar\endcsname{0.802904}
+\expandafter\def\csname AuditDataR07n\endcsname{12{,}410}
+\expandafter\def\csname AuditDataR07nreqMed\endcsname{1{,}841}
+\expandafter\def\csname AuditDataR07nreqQOne\endcsname{932}
+\expandafter\def\csname AuditDataR07nreqQThree\endcsname{6{,}046}
+\expandafter\def\csname AuditDataR07tier\endcsname{bits}
+\expandafter\def\csname AuditDataR08cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR08dstar\endcsname{---}
+\expandafter\def\csname AuditDataR08n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR08nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR08nreqQOne\endcsname{371}
+\expandafter\def\csname AuditDataR08nreqQThree\endcsname{1{,}052}
+\expandafter\def\csname AuditDataR08tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR09cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR09dstar\endcsname{---}
+\expandafter\def\csname AuditDataR09n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR09nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR09nreqQOne\endcsname{433}
+\expandafter\def\csname AuditDataR09nreqQThree\endcsname{1{,}113}
+\expandafter\def\csname AuditDataR09tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR10blocker\endcsname{quoted claim appears in neither prose nor a table caption (\S{}3.1): the recorded exact\_quote appears nowhere in the source; 98.6\% is a table cell}
+\expandafter\def\csname AuditDataR10kind\endcsname{ineligible}
+\expandafter\def\csname AuditDataR10n\endcsname{28{,}659}
+\expandafter\def\csname AuditDataR10tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR11blocker\endcsname{no reported or imputable n, no baseline, no numeric delta}
+\expandafter\def\csname AuditDataR11kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR11n\endcsname{---}
+\expandafter\def\csname AuditDataR11tier\endcsname{bits}
+\expandafter\def\csname AuditDataR12cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR12dstar\endcsname{0.908491}
+\expandafter\def\csname AuditDataR12n\endcsname{14{,}042}
+\expandafter\def\csname AuditDataR12nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR12nreqQOne\endcsname{433}
+\expandafter\def\csname AuditDataR12nreqQThree\endcsname{1{,}113}
+\expandafter\def\csname AuditDataR12tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR13blocker\endcsname{no on-page baseline accuracy and no computable delta}
+\expandafter\def\csname AuditDataR13kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR13n\endcsname{250}
+\expandafter\def\csname AuditDataR13tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR14blocker\endcsname{no baseline accuracy stated (Figure 8 chart only)}
+\expandafter\def\csname AuditDataR14kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR14n\endcsname{728}
+\expandafter\def\csname AuditDataR14tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR15cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR15dstar\endcsname{---}
+\expandafter\def\csname AuditDataR15n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR15nreqMed\endcsname{866}
+\expandafter\def\csname AuditDataR15nreqQOne\endcsname{619}
+\expandafter\def\csname AuditDataR15nreqQThree\endcsname{1{,}237}
+\expandafter\def\csname AuditDataR15tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR16cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR16dstar\endcsname{---}
+\expandafter\def\csname AuditDataR16n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR16nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR16nreqQOne\endcsname{371}
+\expandafter\def\csname AuditDataR16nreqQThree\endcsname{1{,}052}
+\expandafter\def\csname AuditDataR16tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR17cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR17dstar\endcsname{---}
+\expandafter\def\csname AuditDataR17n\endcsname{28{,}659}
+\expandafter\def\csname AuditDataR17nreqMed\endcsname{2{,}081}
+\expandafter\def\csname AuditDataR17nreqQOne\endcsname{1{,}332}
+\expandafter\def\csname AuditDataR17nreqQThree\endcsname{3{,}644}
+\expandafter\def\csname AuditDataR17tier\endcsname{bits+benchmark}
+
