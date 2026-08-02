@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-07-31T18:46:24.425899+00:00",
-  "source_commit": "645ac6213fad5e908983fdda56776fe09ef708f4",
-  "source_tree": "07c442bad6fc795a349ca24dadebade4d7099b31",
+  "created_at": "2026-08-02T05:54:38.401364+00:00",
+  "source_commit": "b3fdfdee654daa21167680fbac9ae0f2e796ccb1",
+  "source_tree": "e9837fbc79e76b068b92ff47fc240ac3eb4d56ca",
   "branch": "main",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -37,8 +37,8 @@
     "pilot_eval/tasks.py": "9befb8061cd7f0dff198e593a4e84f58de4b94ca4b336ebb3622ea28312062ee",
     "pyproject.toml": "cd3349eca8a076b1aabfb7dac258e1de78094a1356913b99d1f29c6450ac37c3",
     "scripts/atlas_flip_analysis.py": "cde64181b159a91e65bb130ef4e210a07358060f5327897a76ec9c9d6bdebcab",
-    "scripts/audit_stats.py": "e7e2b417a6a96bdb6946fc63e3ff404f53b8b594b08f5251439ac7a3d95db296",
-    "scripts/audit_verdicts.py": "369bd06fc362902e21da2de3d998c4603d95b6b9879e271a6863495545b68cc0",
+    "scripts/audit_stats.py": "3920ce2ea8cf7d5eb8c43a4fcd7975decc3f4b0f821fb12703decff546f67f9b",
+    "scripts/audit_verdicts.py": "9c2076e53efa881704bc361ab7ecec46c11353e90e55c5e1bccf7f58c57f5acf",
     "scripts/build_quantized.py": "73fce25b619799a713e0c0090221c8c110b933028694270772ad73b040852c80",
     "scripts/certification_tables.py": "e540e83c25ac6d7797c2df694350e12f053632ed71ebe39c5dae092fded82fdb",
     "scripts/compare_mmlu_reference.py": "2e47f1e89bf77e0f6edaee87c685f399e77fbb2f39e2b816327c5f438f275c88",
@@ -89,5 +89,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "c7593b71a83ef6574fdf05f69387574b988767cd4036f20d31d3914dc07e388f"
+  "manifest_payload_sha256": "092bfd562b69e74121951cc788cb94ef4aa3340bca814c29c295a3cd19cd9058"
 }
