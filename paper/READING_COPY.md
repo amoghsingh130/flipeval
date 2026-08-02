@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-07-31T19:31:55Z from `paper/main.tex` at commit `d37aa1c`.**
+**Generated 2026-08-02T02:18:47Z from `paper/main.tex` at commit `9189aab`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -733,16 +733,35 @@ cannot be seen. Both revisions of our atlas are released.
 % Section: Audit of published near-lossless claims  -- COMPLETE DRAFT
 %
 % PRIMARY SOURCES for every number in this section:
-%   docs/AUDIT_VERDICTS_2026-07-20.md   (authoritative, computed 2026-07-20)
-%   results/audit_verdicts_rev2.csv          (per-claim, machine-readable)
+%   results/audit_verdicts_rev3.csv     (AUTHORITATIVE, per-claim, machine-readable;
+%                                        job 11591245, sha c85d6f8a...b150082b,
+%                                        single run, chmod 0444 -- never re-run)
 %   docs/audit_claim_table.csv          (frozen inputs, sha256 in the doc)
-%   docs/AUDIT_REGISTRATION_2026-07-15.md (frozen protocol, §§3-5)
+%   docs/AUDIT_REGISTRATION_2026-07-15.md (frozen protocol, §§3-5, + Amendment 2)
+%   docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md (full-text review of all 17)
+%
+% REV-3 SUPERSESSION, 2026-07-31. Amendment 2 (signed, commit ab279b2) is in
+% force. It (a) makes the registered UNIFORM 2 pp margin the primary yardstick
+% for every claim, (b) forbids describing any quantity derived from a source's
+% own reported results as that source's own/stated/declared margin, and (c)
+% reopens §§3.1-3.2 for eligibility only, excluding R10. Consequences for this
+% section, all carried below:
+%   K = 4 of 12 "underpowered for their own assertion"  ->  1 of 11 below the
+%     approximate planning threshold at 2 pp, and that one is imputation-
+%     sensitive, so 0 of 11 are below it throughout the atlas IQR.
+%   denominators 17 -> 16 eligible.
+%   the 2.0x-12.9x shortfall range is WITHDRAWN, not recomputed (§3 of
+%     docs/PAPER_REV3_CARRY_CHECKLIST_2026-07-31.md): ten of eleven claims have
+%     no shortfall at all at 2 pp, so there is no range to state.
+% docs/AUDIT_VERDICTS_2026-07-20.md is the SUPERSEDED record (rev-1 atlas AND
+% pre-Amendment-2 margins). Do not "restore" any value from it.
 %
 % SUPERSESSION NOTICE -- do not "fix" this section against the older doc.
 % docs/RESULTS_2026-07-15_ATLAS_AUDIT.md line 54 states "only 1 of 17 claims
 % has per-item outputs released". That line is SUPERSEDED by the 2026-07-20
 % verdicts document, which records 0 yes / 3 partial / 14 no. This paper uses
-% 0 of 17. The three "partial" sources are the ones the older line was
+% 0 of 16 (rev-3 denominator; it was 0 of 17 before the R10 eligibility
+% correction). The three "partial" sources are the ones the older line was
 % gesturing at.
 %
 % DISCREPANCY -- CLOSED 2026-07-26. THE FROZEN TABLE GOVERNS.
@@ -756,30 +775,24 @@ cannot be seen. Both revisions of our atlas are released.
 % doc; it is outside this paper's tree and is not edited here. No action is
 % outstanding for the paper.
 %
-% REV-2 POINTER CORRECTION, 2026-07-27. Every SOURCE comment in this tree that
-% cited results/audit_verdicts.csv now cites results/audit_verdicts_rev2.csv.
-% The TYPESET VALUES WERE ALREADY REV-2 AND DID NOT CHANGE; only the provenance
-% pointers were wrong, in the same way atlas.tex and certification.tex were
-% corrected on 2026-07-26. This was not cosmetic: rev-1 and rev-2 disagree on
-% the numbers this section prints -- Table~\ref{tab:audit-underpowered} gives
-% R06 81,780 and R07 139,134 (rev-2), where rev-1 has 77,282 and 131,482 -- so
-% the comments were instructing a future session to "correct" correct values
-% back to superseded ones. The same applies to the generation instruction in
-% sections/appendix_audit_table.tex, which is unrendered but is what that
-% appendix would be typeset from.
+% REV-2 POINTER CORRECTION, 2026-07-27, RETAINED AS HISTORY. Every SOURCE
+% comment in this tree that cited results/audit_verdicts.csv was repointed to
+% results/audit_verdicts_rev2.csv; the typeset values were already rev-2, so
+% only the provenance pointers had been wrong, and they were instructing future
+% sessions to "correct" correct values back to superseded rev-1 ones. That
+% hazard is why the rev-2 -> rev-3 repointing below was done comment by comment
+% rather than by a blind replacement.
 % Rev-1 -> rev-2 moved imputed_discordance (R01, R05, R06, R07, R11),
-% v1_mdd_*, and v2_required_n_*; NO verdict column moved, so K = 4 and J = 5
-% are unaffected. One value to watch: R01's paired MDD/margin ratio crosses 1.0
-% (0.984 -> 1.003), which is the margin-sensitivity discussed below.
+% v1_mdd_*, and v2_required_n_*; no verdict column moved. Rev-2 -> rev-3 is a
+% different kind of change: the yardstick itself moved (Amendment 2), so
+% verdicts DID move, and no rev-2 number in this section survives unchecked.
 % =====================================================================
 
 \section{An audit of published near-lossless claims}
 
-% RESOLVED to rev-2 (2026-07-21). K and J did NOT move under the rev-2
-% discordance imputation: K = 4 of 12, J = 5, uniform-2pp secondary 1 of 12,
-% identical to rev-1. No new verdict computation was triggered.
-% SOURCE: results/audit_verdicts_rev2.csv; delta in
-% docs/ATLAS_REV2_CORRECTION_2026-07-21.md section 8.
+% SOURCE: results/audit_verdicts_rev3.csv (job 11591245), computed once under
+% Amendment 2 over the frozen claim table (sha 842b9756...) and the rev-2 atlas
+% (sha b7cffc52...), both DECLARED on the command line, neither defaulted.
 \label{sec:audit}
 
 \subsection{What was audited, and what was not}
@@ -789,7 +802,9 @@ power computation was run, and the claim list itself was frozen separately befor
 any verdict was computed.\footnote{%
 % SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md (status line, §3.4);
 % docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table freeze commit
-% 715a7ce, sha256 842b9756...5af7b15).
+% 715a7ce, sha256 842b9756...5af7b15). That doc is superseded for VALUES and is
+% cited here only for the freeze provenance, which rev-3 reconfirms: the same
+% sha256 was declared on the rev-3 command line (job 11591245).
 Registration frozen at commit \texttt{b74fd58}; claim table frozen at commit
 \texttt{715a7ce} with its sha256 recorded in the verdicts document.}
 % TRIMMED 2026-07-27 (phase 4 trim, candidate 8). The trigger vocabulary is
@@ -930,17 +945,23 @@ results is described anywhere in this paper as that source's margin.
 
 The most actionable finding requires no statistics at all.
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"V3 -- reproducibility";
-% results/audit_verdicts_rev2.csv column v3_per_item_outputs (0 "yes", 3 "partial",
-% 14 "no"). Supersedes RESULTS_2026-07-15_ATLAS_AUDIT.md line 54.
+% SOURCE: results/audit_verdicts_rev3.csv column v3_per_item_outputs over the 16
+% ELIGIBLE rows: 0 "yes", 3 "partial" (R08, R15, R16), 13 "no". R10's row is
+% "no" and is excluded here, which is why the count is 13 and not 14.
+% Supersedes RESULTS_2026-07-15_ATLAS_AUDIT.md line 54.
+%
+% THE QUALIFIER IS LOAD-BEARING AND MUST STAY IN THE SAME SENTENCE. Three
+% sources DO release per-item outputs -- for other task suites. "None released
+% per-item outputs" is false without "task-matched"; see the carry checklist §15.
 \begin{quote}
-\textbf{0 of the 17 audited sources release the per-item outputs that a third
-party would need to rerun the paired comparison the claim asserts.}
-The tally is 0 \emph{yes}, 3 \emph{partial}, 14 \emph{no}.
+\textbf{0 of the 16 eligible sources release \emph{task-matched} per-item
+outputs}---the item-level results, for the tasks the equivalence claim is
+actually about, that a third party would need to rerun the paired comparison.
+The tally is 0 \emph{yes}, 3 \emph{partial}, 13 \emph{no}.
 \end{quote}
 
 The three partial cases---%
-% SOURCE: results/audit_verdicts_rev2.csv rows R08, R15, R16 (v3_per_item_outputs =
+% SOURCE: results/audit_verdicts_rev3.csv rows R08, R15, R16 (v3_per_item_outputs =
 % "partial", with the per-row `notes` column giving the suite mismatch).
 R08, R15 and R16, all Red~Hat AI model cards---are the closest the record comes
 to reproducibility, and they illustrate why the count is nonetheless zero: they
@@ -966,15 +987,25 @@ recommendation this paper makes.
 
 For each claim, at its reported (or registered-rule-imputed) sample size $n$,
 the frozen protocol computes three quantities.
-% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4; method restated in
-% docs/AUDIT_VERDICTS_2026-07-20.md §Method.
+% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4, as amended by Amendment 2
+% (signed 2026-07-31, commit ab279b2).
+% AMENDMENT 2, THE SHORT VERSION: the registration says "at the claim's own
+% margin WHEN IT STATES ONE". No source states one (§\ref{sec:audit:taxonomy}),
+% so the applicable margin is the registered uniform 2 pp everywhere. The
+% superseded implementation substituted each source's largest OBSERVED delta
+% and called it that source's margin, which inverted the direction of the
+% inference: an observed outcome was being used as a declared decision rule.
+Because no source declares a margin, \textbf{the applicable margin throughout is
+the uniform 2\,pp registered in advance}; a source's reported deltas are
+outcomes of its evaluation, not a decision rule it adopted, and are never used
+as one.
 
-\paragraph{V1 --- detection power.} The minimum detectable difference (MDD) at
-80\% power and two-sided $\alpha = 0.05$, under the paired-flip model. The
+\paragraph{V1 --- detection resolution.} The minimum detectable difference (MDD)
+at 80\% power and two-sided $\alpha = 0.05$, under the paired-flip model. The
 per-item accuracy difference is $d_i \in \{-1, 0, +1\}$; under the null of no
 true difference, $\mathrm{Var}(d) = p_d$, the discordance rate, so
-$\mathrm{sd} = \sqrt{p_d}$. We report the MDD and the ratio of the MDD to the
-margin the claim asserts is negligible.
+$\mathrm{sd} = \sqrt{p_d}$. We report the MDD and its ratio to the registered
+margin.
 
 \paragraph{V2 --- equivalence support.} The number of items required for TOST at
 the applicable margin,
@@ -983,10 +1014,17 @@ n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\ma
 \label{eq:tost-n}
 \end{equation}
 with $z_{1-\alpha}$ \emph{one-sided} ($1.6449$), because TOST rejects two
-one-sided nulls at level $\alpha$ each. A claim is labelled
-\emph{underpowered for its own assertion} iff its reported $n$ is below
-$n_{\mathrm{req}}$ at the applicable margin. The choice of one-sided $z$ is not
-cosmetic; see \S\ref{sec:prereg:choices}, interpretive choice~5.
+one-sided nulls at level $\alpha$ each. A claim is recorded as \emph{below the
+approximate planning threshold} iff its reported $n$ is below $n_{\mathrm{req}}$
+at the registered margin. The choice of one-sided $z$ is not cosmetic; see
+\S\ref{sec:prereg:choices}, interpretive choice~5.
+% WORDING RULE (Amendment 2 + carry checklist §8): this is a PROSPECTIVE
+% PLANNING quantity -- how many items an evaluation would have needed to be
+% designed to carry -- not a retrospective diagnosis that a completed study was
+% "underpowered". Do not reintroduce a definitive underpowered verdict here.
+Equation~\ref{eq:tost-n} answers a question asked \emph{before} an evaluation is
+run---how many items would it need?---so falling below it is a statement about
+how the evaluation was sized, not a diagnosis applied to its result.
 
 \paragraph{V3 --- reproducibility.} Binary, read from the frozen
 \texttt{per\_item\_outputs\_released} column and cross-checked against the
@@ -1005,127 +1043,222 @@ counts and the rule by which an unmatchable field descends.
 \paragraph{Robustness.} Every quantity is recomputed under the
 independent-binomial bound $\mathrm{sd} = \sqrt{2p(1-p)}$ and swept over 1\,pp
 and 3\,pp margins; a verdict that changes across the sweep is reported as
-\emph{margin-sensitive}.
+\emph{margin-sensitive}. Because $p_d$ is imputed rather than reported, each
+verdict is additionally recomputed at the first and third quartiles of the same
+atlas cells that supplied its median, and where the classification changes
+inside that interval we report the \emph{reversal point}: the discordance rate
+at which the reported $n$ exactly meets $n_{\mathrm{req}}$.
+% CHRONOLOGY DISCLOSURE, REQUIRED (carry checklist §8). The IQR recomputation
+% was added on 2026-07-31, AFTER the point-imputation result was seen. Saying so
+% is not optional and it must not be phrased so as to imply it was planned.
+This quartile sweep was added after the point-imputation results had been seen,
+and is reported as post-hoc sensitivity rather than as a registered analysis.
+% Monotonicity, not cell-counting, is what makes the interval claim valid:
+% n_req = ceil((z*sqrt(d)/m)^2) is strictly increasing in d, so Q1 and Q3
+% BRACKET the whole interval. Do not let this read as "we looked at the observed
+% cells and none of them flipped".
+Because $n_{\mathrm{req}}$ is increasing in $p_d$, the two quartiles bracket the
+whole interval: a claim above threshold at $Q_3$ is above it throughout, and a
+claim below threshold at $Q_1$ is below it throughout. The interval statement is
+therefore established at its endpoints, not inferred from the scatter of
+observed cells.
 
 \subsection{Results}
 \label{sec:audit:results}
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline; results/audit_verdicts_rev2.csv
-% columns verdict, indeterminate, indeterminate_kind.
-Of the 17 claims, 5 are \textbf{indeterminate}---their reporting does not
-support a verdict---leaving 12 determinate claims. Of those 12,
-\textbf{$K = 4$ are underpowered for their own assertion}.
+% SOURCE: results/audit_verdicts_rev3.csv columns eligible, indeterminate,
+% v2_underpowered_paired_2pp, robustness. Counts over the 16 ELIGIBLE rows.
+% DENOMINATOR LEDGER (carry checklist §9): 17 - 1 = 16; 11 + 5 = 16;
+% 0 + 1 + 10 = 11. Every one of these is checkable in the CSV.
+Of the 16 eligible claims, 5 are \textbf{not numerically assessable}---their
+reporting does not support a verdict under the registered framework---leaving 11
+assessable claims. Of those 11, \textbf{one falls below the approximate planning
+threshold} at the registered 2\,pp margin under the median discordance
+imputation, and that one claim's classification does not survive the sensitivity
+analysis.
 
+% SUPERSEDED TABLE, DO NOT RESTORE. This replaces tab:audit-underpowered, whose
+% four rows (R17, R07, R06, R15) were flagged at their own reported deltas and
+% are ALL robustly above the threshold at 2 pp. The label itself was a stale
+% claim, so it was renamed rather than recaptioned.
+% A one-row successor table naming only R01 was considered and REJECTED: a table
+% built around the single flag looks constructed to produce it. The main text
+% carries the three-way classification; all 11 rows are in the appendix.
 \begin{table}[t]
 \centering
-\caption{Determinate claims underpowered for their own assertion, at the margin
-the claim itself asserts is negligible. Shortfall is
-$n_{\mathrm{req}} / n_{\mathrm{reported}}$.}
-\label{tab:audit-underpowered}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", first table;
-% results/audit_verdicts_rev2.csv columns claimed_margin_pp, n,
-% v2_required_n_applicable, verdict.
-\begin{tabular}{llrrrr}
+\caption{Sensitivity classification of the 11 numerically assessable claims at
+the registered 2\,pp margin. Each claim's required sample size is recomputed at
+the first and third quartiles of the atlas cells that supplied its median
+discordance; because required $n$ increases monotonically in the discordance
+rate, the quartiles bracket the whole interval. Per-claim values are in
+Appendix~\ref{app:audit-table}.}
+\label{tab:audit-sensitivity}
+% SOURCE: results/audit_verdicts_rev3.csv column `robustness` over the 11
+% eligible determinate rows: "robustly above threshold" = 10,
+% "imputation-sensitive" = 1 (R01), "robustly below threshold" = 0.
+\begin{tabular}{lr}
 \toprule
-Claim & Source & Stated margin & Reported $n$ & Required $n$ & Shortfall \\
+Classification across the atlas-IQR interval & Claims \\
 \midrule
-R17 & Red~Hat Llama-3-8B W8A16   & 0.15\,pp & 28{,}659 & 369{,}856 & $12.9\times$ \\
-R07 & SparseGPT                  & 0.23\,pp & 12{,}410 & 139{,}134 & $11.2\times$ \\
-R06 & Wanda                      & 0.30\,pp & 18{,}904 &  81{,}780 & $ 4.3\times$ \\
-R15 & Red~Hat Llama-3.1-8B W8A8  & 0.20\,pp & 42{,}701 &  86{,}556 & $ 2.0\times$ \\
+Above the planning threshold throughout          & 10 \\
+Changes classification within the interval       &  1 \\
+Below the planning threshold throughout          &  0 \\
+\midrule
+\textbf{Total assessable}                        & \textbf{11} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:audit-underpowered} is best read as a statement about resolution
-rather than about error. R17 asserts parity within 0.15\,pp on an evaluation of
-28{,}659 items; certifying parity at that margin, given the discordance rate
-that comparable compressed models actually exhibit, would take roughly 370{,}000
-items. Nothing in that sentence says the model is degraded. It says the
-evaluation was not built to the resolution the sentence about it requires.
+% SOURCE: results/audit_verdicts_rev3.csv row R01: n=1838, imputed_discordance
+% 0.13, v2_required_n_paired_2pp 2010, discordance_p25 0.0882 -> 1364,
+% discordance_p75 0.2800 -> 4328, reversal_discordance 0.118915,
+% tier_cells_below_reversal 345, discordance_n_cells 792.
+% THE 43.6% IS DESCRIPTIVE. It is the share of reference cells lying below the
+% reversal point. It is NOT a posterior probability, NOT a confidence level and
+% NOT a p-value, and the atlas cells are correlated (shared model pairs,
+% benchmark families, sources and infrastructure), so they are not independent
+% draws from anything. Never attach an inferential reading to it.
+The single flagged claim is R01, the GPTQ paper, which reports $n = 1{,}838$
+against a requirement of $2{,}010$ items at the imputed discordance rate of
+$0.130$. The gap is one part in twelve, and it closes entirely if the imputed
+rate is a little lower: the classification reverses at a discordance rate of
+$0.1189$, and $345$ of the $792$ atlas cells supplying the imputation ($43.6\%$)
+lie below that point. Across the interquartile range of those cells the
+requirement moves from $1{,}364$ items to $4{,}328$, so R01 is adequately sized
+at the first quartile and undersized at the third. This is a
+\textbf{sensitivity-dependent planning flag, not a verdict}: the $43.6\%$ is a
+descriptive share of reference cells, not a probability that the claim is
+underpowered, and those cells share models, benchmarks and infrastructure and
+are not independent observations.
+
+No assessable claim falls below the threshold throughout the interval.
+Table~\ref{tab:audit-sensitivity} is therefore best read as a statement about
+resolution rather than about error: at the margin a reporting standard would
+plausibly impose, ten of these eleven evaluations were sized to carry the claim
+made on them, and the eleventh cannot be classified without committing to a
+discordance rate its authors never reported. Nothing here says any model is
+degraded.
 
 The same conclusion appears in the detection direction.
 
 \begin{table}[t]
 \centering
-\caption{Detection resolution (V1): how much coarser each evaluation is than the
-difference it pronounces negligible. The independent-binomial column is the same
-quantity computed without the paired-design benefit.}
+\caption{Detection resolution (V1) at the registered 2\,pp margin: the smallest
+difference each evaluation could have detected, and its ratio to that margin. A
+ratio below $1$ means the evaluation resolves differences finer than the margin.
+The independent-binomial columns are the same quantities computed without the
+paired-design benefit. Rows are the 11 assessable claims; the two italicised
+rows carry no verdict and are shown only for transparency.}
 \label{tab:audit-mdd}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Per-claim results", second table;
-% results/audit_verdicts_rev2.csv columns v1_mdd_pp_paired, claimed_margin_pp,
-% v1_mdd_over_margin_paired, v1_mdd_over_margin_independent.
-% R04 and R14 are italicised because they are INDETERMINATE: numbers computable,
-% retained for transparency, carrying no verdict and excluded from K.
+% SOURCE: results/audit_verdicts_rev3.csv columns v1_mdd_pp_paired and
+% v1_mdd_pp_independent; ratio columns are those values divided by the
+% REGISTERED 2 pp margin, replacing v1_mdd_over_margin_*, which divided by the
+% source's reported delta and are retired with Amendment 2.
+% The MDD values themselves are UNCHANGED from rev-2 -- MDD depends on n and the
+% imputed discordance, not on the margin. Only the denominators moved.
+% R04 and R14 are italicised because they are NOT ASSESSABLE: numbers
+% computable, retained for transparency, carrying no verdict.
 \begin{tabular}{lrrrr}
 \toprule
-Claim & MDD (paired) & Claimed margin & Ratio & Ratio (indep.\ binomial) \\
+      & \multicolumn{2}{c}{MDD} & \multicolumn{2}{c}{MDD / 2\,pp} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Claim & paired & indep.\ binomial & paired & indep.\ binomial \\
 \midrule
-R17 & 0.61\,pp & 0.15\,pp & $4.05\times$ & $7.25\times$ \\
-R07 & 0.87\,pp & 0.23\,pp & $3.77\times$ & $7.07\times$ \\
-R06 & 0.70\,pp & 0.30\,pp & $2.34\times$ & $4.52\times$ \\
-R15 & 0.32\,pp & 0.20\,pp & $1.60\times$ & $4.20\times$ \\
+R01 & 2.36\,pp & 3.62\,pp & $1.18\times$ & $1.81\times$ \\
+R05 & 0.90\,pp & 1.63\,pp & $0.45\times$ & $0.82\times$ \\
+R07 & 0.87\,pp & 1.63\,pp & $0.43\times$ & $0.81\times$ \\
+R06 & 0.70\,pp & 1.36\,pp & $0.35\times$ & $0.68\times$ \\
+R17 & 0.61\,pp & 1.09\,pp & $0.30\times$ & $0.54\times$ \\
+R12 & 0.52\,pp & 1.53\,pp & $0.26\times$ & $0.76\times$ \\
+R03 & 0.49\,pp & 1.38\,pp & $0.25\times$ & $0.69\times$ \\
+R15 & 0.32\,pp & 0.84\,pp & $0.16\times$ & $0.42\times$ \\
+R16 & 0.30\,pp & 0.69\,pp & $0.15\times$ & $0.35\times$ \\
+R09 & 0.30\,pp & 0.84\,pp & $0.15\times$ & $0.42\times$ \\
+R08 & 0.30\,pp & 0.84\,pp & $0.15\times$ & $0.42\times$ \\
 \midrule
-\textit{(R04)} & \textit{2.09\,pp} & \textit{0.30\,pp} & \textit{$6.97\times$} & \textit{$12.57\times$} \\
-\textit{(R14)} & \textit{2.27\,pp} & \textit{0.70\,pp} & \textit{$3.25\times$} & \textit{---\ (no baseline)} \\
+\textit{(R04)} & \textit{2.09\,pp} & \textit{3.77\,pp} & \textit{$1.05\times$} & \textit{$1.89\times$} \\
+\textit{(R14)} & \textit{2.27\,pp} & \textit{---} & \textit{$1.14\times$} & \textit{---\ (no baseline)} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Two features of Table~\ref{tab:audit-mdd} matter for how the audit should be
-read. First, the independent-binomial column is uniformly \emph{worse}, by
-roughly a factor of two: pairing is the generous modelling assumption, and these
-evaluations are underpowered even under it. Second, R04 and R14 are italicised
-because they carry no verdict; their numbers are computable and are retained in
-the released CSV for transparency, but they are excluded from $K$
+read. First, the independent-binomial columns are uniformly \emph{worse}, by
+roughly a factor of two: pairing is the generous modelling assumption, and the
+one evaluation that is coarser than the margin under pairing is coarser still
+without it. Second, R04 and R14 are italicised because they carry no verdict;
+their numbers are computable and are retained in the released CSV for
+transparency, but they are excluded from the assessable set
 (\S\ref{sec:audit:indeterminate}).
 
+The ordering also makes the audit's reach visible. Only R01's evaluation is
+coarser than the registered margin; the other ten resolve differences between
+a sixth and a half of it. \textbf{An audit at a 2\,pp margin is a weak test, and
+it should be understood as one}---the sources were not asked to meet a standard
+this permissive, because they were not asked to meet any stated standard at all.
+What the table shows is that ten evaluations would already satisfy a reporting
+requirement none of them was given.
+
 \paragraph{Two robustness notes.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Headline (secondary reading) and
-% §"Margin-sensitive (1 of 12 determinate)"; results/audit_verdicts_rev2.csv columns
-% verdict_at_registered_2pp and margin_sensitive.
-% CARE -- THE TWO "1 of 12" FIGURES BELOW ARE DIFFERENT FACTS. First: one
-% determinate claim is underpowered under the uniform 2 pp yardstick. Second:
-% one determinate claim's verdict is unstable across the 1 pp -> 3 pp sweep.
-% They happen to concern the same claim (R01) and MUST NEVER be merged into a
-% single sentence or read as one finding. This paragraph merges the two former
-% paragraphs (2026-07-26) but deliberately keeps the two facts in separate
-% sentences with the coincidence stated explicitly.
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 3). BOTH FINDINGS STAY HERE, in
-% separate sentences, because the comment above forbids merging them. What moved
-% to Appendix~\ref{app:audit:robustness} is the REASONING: why the own-margin
-% reading is primary, and why R04/R14 keep the margin_sensitive column without
-% being counted. Nothing was deleted.
-First, judging every claim against the uniform registered 2\,pp margin rather
-than the margin it states for itself gives \textbf{1 of 12 underpowered}. Second,
-and separately, exactly \textbf{1 of the 12 determinate claims is
-margin-sensitive}: R01's verdict flips across the 1\,pp\,$\to$\,3\,pp sweep,
-making it an artefact of margin choice rather than a robust finding. These are
-two distinct properties---a verdict under an alternative yardstick, and
-instability of a verdict across the sweep---that happen to coincide on one
-claim, and they must not be read as one finding.
+% SOURCE: results/audit_verdicts_rev3.csv columns margin_sensitive and
+% robustness, over the 11 eligible assessable rows.
+% CARE -- THE TWO FIGURES BELOW ARE DIFFERENT FACTS AND MUST NEVER BE MERGED
+% INTO ONE SENTENCE. First: the classification is unstable across the MARGIN
+% sweep (1 pp -> 3 pp), i.e. with respect to the yardstick. Second: it is
+% unstable across the IMPUTATION interval (atlas Q1 -> Q3), i.e. with respect to
+% an input the sources did not report. They happen to coincide on the same claim
+% (R01), which is a coincidence and not a single finding. The earlier version of
+% this paragraph contrasted the 2 pp reading with the "own margin" reading; that
+% contrast no longer exists, because Amendment 2 makes 2 pp the only reading.
+% TRIMMED 2026-07-27 (phase 4 trim, candidate 3). The REASONING moved to
+% Appendix~\ref{app:audit:robustness}; nothing was deleted.
+The one flagged claim is unstable in two independent directions, and the
+coincidence is worth separating. First, R01 is \textbf{margin-sensitive}: its
+classification flips across the registered 1\,pp\,$\to$\,3\,pp sweep, so it
+turns on where the yardstick is set. Second, and separately, it is
+\textbf{imputation-sensitive}: it flips across the interquartile range of the
+atlas cells supplying its discordance rate, so it also turns on a quantity its
+source never reported. No other assessable claim is sensitive in either
+direction. These are two distinct properties---instability with respect to the
+standard applied, and instability with respect to a missing input---that happen
+to land on the same claim, and they must not be read as one finding.
 Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 
-\subsection{Indeterminate claims}
+\subsection{Claims that cannot be assessed}
 \label{sec:audit:indeterminate}
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Indeterminate;
-% results/audit_verdicts_rev2.csv columns indeterminate, indeterminate_kind,
-% indeterminate_reason.
-$J = 5$ of the 17 claims are indeterminate, in two kinds.
+% SOURCE: results/audit_verdicts_rev3.csv columns indeterminate,
+% indeterminate_kind, indeterminate_reason, over the 16 eligible rows.
+% DENOMINATOR: 5 of 16, not of 17. R10 is eligible-excluded, not indeterminate.
+Five of the 16 eligible claims cannot be assessed numerically, in two kinds.
+Each is recorded with exactly one primary blocker.
 
 Insufficient reporting (4). A registered input is genuinely absent.
 R02 (LLM.int8()) and R11 (Meta's quantized-Llama blog) state no sample size, no
 baseline, and no numeric delta---their headline equivalence evidence exists only
 as a chart image. R13 (vLLM FP8 documentation) states $n = 250$ but shows no
-on-page baseline run at all. R14 (vLLM FP8 KV-cache blog) states a margin of
-0.7\,pp and permits $n$ to be imputed, but reports no baseline; its comparison
-lives in a figure.
+on-page baseline run at all. R14 (vLLM FP8 KV-cache blog) reports an observed
+0.7\,pp difference and permits $n$ to be imputed, but reports no baseline; its
+comparison lives in a figure.
+% R14 IS THE TRAP THIS PARAGRAPH EXISTS TO CLOSE (carry checklist §10). Its
+% imputed n = 728 sits just under the 742 that the 2 pp calculation would
+% require, so a reader who sees the numbers and not the blocker will assume it
+% was quietly dropped for being awkward. Say the number, then say why it does
+% not count. A regression test enforces the same thing in the toolkit: an
+% assessable = false row can never carry a threshold verdict.
+R14 deserves a word, because its numbers look assessable and are not. Its
+imputed sample size of $728$ falls just short of the $742$ the 2\,pp calculation
+would require, close enough that a reader might suspect it was set aside for
+being inconvenient. It is set aside because the missing baseline is a registered
+input: without it there is no paired comparison to size, and the $742$ is a
+requirement for a calculation that cannot be performed. The proximity is a
+coincidence with no bearing on the count.
 
-Metric-incompatible (1). R04 (AWQ) reports enough, but about a quantity
-the registered model cannot score; see below.
+Outside the registered calculation (1). R04 (AWQ) reports enough, but about a
+quantity our registered \emph{binary paired-outcome} model cannot score; see
+below.
 
-Every indeterminate claim retains whatever components its available inputs
+Every non-assessable claim retains whatever components its available inputs
 support, listed in the CSV column \texttt{determinate\_components} and reported
 as supplementary transparency only---never verdict-bearing. R13 retains V2 (the
 paired standard deviation depends on discordance, not on baseline accuracy);
@@ -1139,31 +1272,45 @@ pre-registered audit cannot evaluate them is precisely the reporting-standards
 problem this paper exists to address: the claim may well be true, but it has been
 placed beyond the reach of checking.
 
-\subsection{R04: metric incompatibility}
+\subsection{R04: outside the registered calculation}
 \label{sec:audit:r04}
 
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #3 and
-% §Indeterminate bullet for R04; results/audit_verdicts_rev2.csv row R04 columns
-% indeterminate_reason, notes, v2_required_n_paired_own_margin (50519 at
-% n = 1319 -> 38.3x).
-R04 is recorded because excluding it removed what would have been the largest
-number in Table~\ref{tab:audit-underpowered}. The AWQ paper's qualifying
-sentence---the one that meets the frozen §3 inclusion trigger---asserts
-negligible loss on \textbf{COCO CIDEr}, a generation metric that assigns a
-graded score to a caption and has no per-item correct/incorrect state; V1 and V2
-are flip-model quantities defined on $d_i \in \{-1,0,+1\}$ and do not apply to
-it, and there is no discordance rate to impute because there is no per-item
-accuracy state to be discordant about. The first pass nonetheless scored R04 on
-GSM8K, the source's own accuracy benchmark ($-0.30$\,pp at $n = 1{,}319$), and
-reported it as the table's largest shortfall at $38.3\times$. On review this was
+% SOURCE: results/audit_verdicts_rev3.csv row R04 columns indeterminate_kind,
+% indeterminate_reason, notes.
+% WORDING RULE (carry checklist §15): R04 is outside OUR REGISTERED BINARY
+% PAIRED-OUTCOME CALCULATION. Do NOT write "incompatible with a paired
+% framework" -- CIDEr supports paired resampling perfectly well; it is the
+% flip model, not pairing, that does not apply.
+R04 is recorded because excluding it removed what was, at the time, the audit's
+largest single number. The AWQ paper's qualifying sentence---the one that meets
+the frozen §3 inclusion trigger---asserts negligible loss on \textbf{COCO
+CIDEr}, a generation metric that assigns a graded score to a caption and has no
+per-item correct/incorrect state. V1 and V2 are flip-model quantities defined on
+$d_i \in \{-1,0,+1\}$, and there is no discordance rate to impute because there
+is no per-item accuracy state to be discordant about. This is a limitation of
+\emph{our registered calculation}, not of paired analysis: a graded metric
+supports paired resampling on the same items perfectly well, and a certificate
+for it would be a straightforward extension. It is simply not the model we
+registered.
+
+% HISTORY, PRE-AMENDMENT-2. The K = 5 -> K = 4 transition and the 38.3x figure
+% belong to the superseded own-margin reading (docs/AUDIT_VERDICTS_2026-07-20.md,
+% rev-1 atlas). Retained as a record of a ruling that cost the audit its biggest
+% number; explicitly NOT restated as a current result. Do not update these
+% numbers to rev-3 -- they are quoted as what was decided at the time.
+The first extraction pass nonetheless scored R04 on GSM8K, the source's own
+accuracy benchmark ($-0.30$\,pp at $n = 1{,}319$), and reported it as the
+audit's largest shortfall at $38.3\times$. On review this was
 overruled---computing a TOST requirement on GSM8K audits a sentence the source
-wrote about a different benchmark, in different and non-trigger language---taking
-the headline from $K = 5$, $J = 4$ to $K = 4$, $J = 5$ and removing the audit's
-biggest number. The GSM8K computation is retained in the released CSV as a
-labelled transparency column so a reader can see exactly what was set aside and
-why. \textbf{It is not claimed anywhere in this paper as an audit result.} An
-audit's currency is unimpeachability, and it is not spent on its own largest
-number.
+wrote about a different benchmark, in different and non-trigger language---which
+under the then-current rules moved the headline from $K = 5$ to $K = 4$ and
+removed the audit's biggest number. Those counts and that ratio are quoted as
+history: they were computed under the superseded reading that took each source's
+reported delta as its margin, and they are not current results. The GSM8K
+computation is retained in the released CSV as a labelled transparency column so
+a reader can see exactly what was set aside and why. \textbf{It is not claimed
+anywhere in this paper as an audit result.} An audit's currency is
+unimpeachability, and it is not spent on its own largest number.
 
 \subsection{What this section does and does not establish}
 
@@ -1171,11 +1318,22 @@ number.
 % findings (i)-(iv) from \S\ref{sec:audit:v3} and \S\ref{sec:audit:results}
 % verbatim; deleted as redundancy. The "Does not establish" half is what a
 % reader must not overread and is kept whole, as is the granularity caveat.
-The four findings above hold at the reported sample sizes and under the frozen
-protocol, and they are claims about evidence rather than about models. This
-section \textbf{does not establish}: that any audited model is degraded; that
-any audited claim is false; that the claims' authors reached a wrong
-conclusion. It also does not
+The findings above hold at the reported sample sizes and under the frozen
+protocol as amended, and they are claims about evidence rather than about
+models. This section \textbf{does not establish}: that any audited model is
+degraded; that any audited claim is false; that the claims' authors reached a
+wrong conclusion; or that any claim is underpowered in a sense that survives the
+sensitivity analysis---none is.
+% SCOPE RULE (carry checklist §8 and §15). Two overreadings to block explicitly:
+% (a) generalising 16 audited sources to a prevalence claim about the field,
+% (b) reading "robust" as anything wider than the atlas-IQR interval actually
+% swept. Both are cheap to write and expensive to retract.
+Nor does it establish a prevalence: 16 eligible sources within three frozen
+frames are not a sample from which the field's reporting practice can be
+estimated, and no proportion reported here should be read as one. Where a
+classification is called robust, that means only that it holds throughout the
+interquartile range of the atlas cells supplying its discordance rate---not
+across every plausible model of discordance. It also does not
 establish anything about sources outside the three frozen frames, and it
 operates at claim-level rather than claim\,$\times$\,benchmark granularity,
 because that is the granularity of the frozen claim table
