@@ -3,6 +3,23 @@
 Status: drafting, updated 2026-07-27. Solo author: Amogh Singh, Georgia Tech.
 Venue order: COLM 2027 (~March), ACL 2027, NeurIPS D&B 2027 (~May).
 
+> **⚠️ HISTORICAL PLANNING RECORD. DO NOT QUOTE ITS NUMBERS.**
+>
+> This file is not compiled into the paper and is not `\input` by `main.tex`. It
+> records what the paper was planned to argue as of the Status line above, and
+> several counts below have since been **withdrawn** by Amendment 2 to the audit
+> registration (signed 2026-07-31): the K count, the shortfall range, and the
+> pre-exclusion denominator of 17. They are deliberately left as written, because
+> editing them to current values would destroy the only record of what changed.
+>
+> **Current numbers live in `paper/audit_denominators.tex`**, generated from the
+> sealed `results/audit_verdicts_rev3.csv`. The venue line above is also stale:
+> the target is now an arXiv preprint followed by TMLR. See
+> `docs/ARXIV_TMLR_ROADMAP_2026-08-03.md`.
+>
+> `paper/tools/check_paper.py` lists this file as review-only for that reason, so
+> its stale hits are reported but do not fail the run.
+
 **Rules this outline enforces.**
 
 1. Every number in the paper is traceable to a committed file; each LaTeX
