@@ -1,9 +1,10 @@
 """Build the practitioner certification tables (ATLAS_MINING_REGISTRATION §5).
 
 For each benchmark family and equivalence margin, report the number of items an
-evaluation needs in order to certify equivalence via TOST at 95% confidence,
-evaluated at the empirical 25th/50th/75th percentiles of the discordance rates
-the atlas actually observed for that family. The independent-binomial column is
+evaluation needs in order to certify equivalence via TOST at one-sided
+alpha = 0.05, which corresponds to a 90% two-sided confidence interval and not a
+95% one, evaluated at the empirical 25th/50th/75th percentiles of the discordance
+rates the atlas actually observed for that family. The independent-binomial column is
 carried alongside as the naive comparison a practitioner would otherwise reach
 for -- the gap between the two columns is the argument for paired evaluation.
 

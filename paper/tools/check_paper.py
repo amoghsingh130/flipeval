@@ -343,6 +343,15 @@ SCOPE_ALLOWLIST = [
     ("paper/tools/README.md", "*",
      "documents the linter, so it quotes the forbidden tokens and the "
      "false-positive traps verbatim in order to explain them"),
+    ("paper/tools/gen_denominator_macros.py", "*",
+     "the generator's header quotes the retired counts to explain why every "
+     "count is generated rather than typed; naming the defect it exists to "
+     "prevent is the same construct already exempted for the linter itself"),
+    ("tests/test_golden_atlas_revision.py", "pointer-rev1-artifact",
+     "the golden test must name the rev-1 atlas in order to run it and prove "
+     "it yields 1,936; the superseded path is the fixture, not a stale "
+     "pointer. Scoped to this one rule so every other stale token in the file "
+     "is still caught"),
 ]
 
 # Downgraded to "review", never suppressed: these paths are reported in full but

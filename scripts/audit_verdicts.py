@@ -1,7 +1,9 @@
 """Compute the registered per-claim audit verdicts (AUDIT_REGISTRATION §4-5).
 
 Reads the frozen `docs/audit_claim_table.csv` (never written), imputes a
-discordance rate per claim from the atlas, and emits `results/audit_verdicts.csv`.
+discordance rate per claim from the atlas, and writes to the path given by the
+required `--output`. There is no default: naming one here is what let the rev-1
+atlas outlive its revision, so both `--atlas` and `--output` must be stated.
 
 The frozen claim table stores n, baseline accuracy and deltas as human-written
 prose ("imputed (PIQA validation set, standard n=1838)"), which no regex can
