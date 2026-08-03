@@ -78,12 +78,26 @@ def verify_manifest(root: Path, path: Path) -> list[str]:
     errors: list[str] = []
     if manifest.get("manifest_payload_sha256") != _payload_sha256(manifest):
         errors.append("manifest payload checksum mismatch")
-    for relative, expected in manifest.get("files", {}).items():
+    recorded = manifest.get("files", {})
+    for relative, expected in recorded.items():
         candidate = root / relative
         if not candidate.is_file():
             errors.append(f"missing frozen file: {relative}")
         elif _sha256(candidate) != expected:
             errors.append(f"frozen file changed: {relative}")
+    # Additions are a source-state change too. Verifying only the recorded set
+    # detects modification and deletion but is blind to a NEW file appearing in
+    # a fingerprinted tree, so a new grid-touching script under scripts/ would
+    # pass the fingerprint silently. build_manifest already enumerates the
+    # trees; verification has to enumerate them as well or the two disagree
+    # about what the fingerprint covers.
+    try:
+        present = {str(path.relative_to(root)) for path in _included_files(root)}
+    except FileNotFoundError as exc:
+        errors.append(str(exc))
+    else:
+        for relative in sorted(present - set(recorded)):
+            errors.append(f"unrecorded file in fingerprinted tree: {relative}")
     source_commit = str(manifest.get("source_commit", ""))
     if source_commit:
         result = subprocess.run(
