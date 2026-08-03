@@ -17,20 +17,31 @@ It now does (line 6: "SPOT-CHECK COMPLETED 2026-07-21"), and rev-2 has since
 passed its targeted second spot-check (14/14 cells, 126/126 fields, commit
 8b3e0de). So the condition that document set has been met.
 
+AUDIT FIGURES REVISED TO REV-3 ON 2026-08-03. Amendment 2 to the audit
+registration (signed 2026-07-31) withdrew five numbers this post carried. They
+are listed in the visible correction note below rather than deleted, and the
+audit section now reads from results/audit_verdicts_rev3.csv via the same
+generated denominators the paper uses. The atlas, churn and required-n figures
+are untouched by that amendment and remain rev-2.
+
 WHAT STILL BLOCKS PUBLICATION, as of this revision:
   1. Every link below is still a TODO placeholder. The links can only stop being
      TODOs when the repo and artifacts are made public, which is an unmade
      decision (coupled to the H3 read).
   2. Removing this banner is a decision for Amogh, not for any agent. That was
      true when the stamp went on and is still true now.
+  3. Amendment 3 (R09/R17 eligibility) is drafted and UNSIGNED. It reaches "no
+     change" to every count quoted here, so nothing below depends on it, but the
+     eligible population is not final until it is signed or declined.
 -->
 
 > # DO NOT PUBLISH — DRAFT
 >
-> **This post is blocked from publication.** Its numbers are current as of atlas
-> rev-2 and the spot-check condition that originally blocked it has been met —
-> but every link below is still a placeholder, and those resolve only when the
-> repo and artifacts are made public. That decision has not been taken.
+> **This post is blocked from publication.** Its atlas numbers are current as of
+> rev-2 and its audit numbers as of rev-3, and the spot-check condition that
+> originally blocked it has been met — but every link below is still a
+> placeholder, and those resolve only when the repo and artifacts are made
+> public. That decision has not been taken.
 
 ---
 
@@ -126,20 +137,29 @@ as many items got better as got worse.
 I also ran a preregistered audit of 17 published "near-lossless" compression
 claims — method papers, official quantized model cards, and inference-stack
 vendor documentation. The protocol was frozen before any number was computed.
+One of the 17 was later found not to meet the registered inclusion rule, because
+the sentence recorded for it appears in neither prose nor a table caption, so the
+tallies below are over the **16 eligible** sources.
 
-**0 of the 17 sources release the per-item outputs a third party would need to
-run the paired comparison the claim asserts.** The tally is 0 yes, 3 partial, 14
-no. The three partial cases are all Red Hat AI model cards, and they are the
-closest the field comes: they publish per-item outputs for Arena-Hard, OpenLLM
-v2 and HumanEval — but not for the OpenLLM v1 tasks the equivalence claim is
-actually about. The released artifacts and the asserted claim do not intersect.
+**Not one of the 16 declared an equivalence margin in advance.** "Near-lossless"
+and "negligible degradation" are the vocabulary; a number you could test against
+is not. That is the finding the rest of this section rests on, because without a
+declared margin there is nothing for a sample size to be adequate *for*.
+
+**0 of the 16 release the per-item outputs a third party would need to run the
+paired comparison the claim asserts, for the tasks the claim is about.** The
+tally is 0 task-matched, 3 for other tasks only, 13 none. The three partial cases
+are all Red Hat AI model cards, and they are the closest the field comes: they
+publish per-item outputs for Arena-Hard, OpenLLM v2 and HumanEval — but not for
+the OpenLLM v1 tasks the equivalence claim is actually about. The released
+artifacts and the asserted claim do not intersect.
 
 This is the finding I would most like fixed, because it is the cheapest to fix.
-Underpowered evaluation is repairable by evaluating more items. Irreproducible
-evaluation is not repairable downstream at all: with no per-item outputs, nobody
-outside the releasing organisation can run the paired test at any sample size,
-compute churn, or check the arithmetic. Per-item outputs for a few-thousand-item
-benchmark are a few megabytes.
+An evaluation too small to resolve a difference is repairable by evaluating more
+items. Irreproducible evaluation is not repairable downstream at all: with no
+per-item outputs, nobody outside the releasing organisation can run the paired
+test at any sample size, compute churn, or check the arithmetic. Per-item outputs
+for a few-thousand-item benchmark are a few megabytes.
 
 **To be explicit: no claim is being called false.** The audit measures whether
 the evaluation offered for a claim was large enough to have detected the
@@ -147,11 +167,22 @@ difference the claim calls negligible. A claim can be entirely correct and still
 be unsupported by the evidence published with it, and I expect several of these
 are. The problem is a missing reporting standard, not dishonesty.
 
-The audit also found that 4 of the 12 claims whose reporting permits a verdict
-are underpowered for their own assertion — their evaluations could not have
-resolved the margin they assert, by factors of 2.0× to 12.9× — and that 5 of the
-17 cannot be evaluated at all, because their equivalence evidence exists only as
-a chart image, or has no baseline run on the page. Details in the paper.
+The audit also asked, of the sources that report enough to be checked, whether
+the evaluation offered was large enough to resolve a 2-point difference, which is
+the margin the protocol registered in advance for every claim. **5 of the 16
+cannot be assessed at all**: four because their equivalence evidence exists only
+as a chart image or has no baseline run on the page, and one because it scores a
+generation metric that falls outside the registered binary paired-outcome
+calculation. Of the remaining 11, **one falls below the planning threshold**
+under the imputation the protocol specifies.
+
+That single flag is not a stable result, and I would rather say so than lead with
+it. The disagreement rate it depends on is imputed from comparable atlas cells,
+and across the interquartile range of those cells the classification moves: ten
+of the eleven stay above the threshold throughout, one changes classification
+inside the interval, and **none is below the threshold throughout**. The
+honest summary is that the reporting gaps are the finding, and the power result
+is a sensitivity-dependent flag rather than a verdict. Details in the paper.
 
 ## The practical part: how many items do you actually need?
 
@@ -199,8 +230,10 @@ have to measure churn.
 
 Margins are quadratic, so they are expensive: MMLU needs 962 items at ±3pp,
 2,164 at ±2pp, and 8,656 at ±1pp. If you want to claim parity within a tenth of
-a point — and several published claims do — the requirement is in the hundreds of
-thousands of items.
+a point, the requirement is in the hundreds of thousands of items. Several of the
+audited sources report observed differences that small and call them negligible,
+but reporting a difference of 0.15 points is not the same act as declaring a
+0.15-point margin, and the audit does not treat it as one.
 
 Full tables at 1, 2 and 3 points, for 11 benchmark families plus a pooled row,
 are in the release. TODO: link.
@@ -235,6 +268,39 @@ revisions of the atlas are published, and the delta between them is documented.
 I am leaving this paragraph in rather than quietly deleting the claim, because a
 post arguing that the field should make its evaluations recheckable should show
 what happens when someone rechecks mine.
+
+## Corrections
+
+**2026-08-03.** A signed amendment to the audit registration withdrew five
+numbers this post previously carried. I am listing them rather than editing them
+away, for the same reason the paragraph above stays in.
+
+The cause was one defect, not five. The audit had been giving each source a
+second verdict against a margin derived from that source's own reported
+difference. A reported difference is an outcome, not a decision rule agreed in
+advance, so those verdicts were answering a question no source had asked. The
+amendment retires that derivation and leaves the registered uniform 2-point
+margin as the only basis for a verdict.
+
+- **4 of the 12** determinate claims flagged as having too small an evaluation:
+  withdrawn. The current figure is 1 of 11 assessable claims below the planning
+  threshold, and that one does not survive the sensitivity interval.
+- The shortfall range **2.0× to 12.9×**: withdrawn, and deliberately not
+  recomputed, because it was a ratio against the derived margins the amendment
+  retires.
+- The phrase "the margin they assert": withdrawn. No audited source asserts a
+  margin, which is now reported as the finding it always was.
+- **5 of the 17** sources not assessable: superseded by 5 of the 16, after one
+  source was found not to meet the registered inclusion rule.
+- **0 of the 17** releasing per-item outputs: superseded by 0 of the 16, with the
+  wording tightened to per-item outputs *for the tasks the claim is about*, since
+  three sources release them for other task suites.
+
+None of the atlas, churn, identical-score or required-n figures in this post is
+affected by that amendment. The corrected audit numbers move the headline in the
+direction *unfavourable* to my argument, which is worth saying plainly: the
+strongest quantitative claim I had is gone, and what remains is a reporting
+finding rather than a power finding.
 
 ## Links
 
