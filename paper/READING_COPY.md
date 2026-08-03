@@ -1,11 +1,207 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-02T05:51:50Z from `paper/main.tex` at commit `2b2ff4a`.**
+**Generated 2026-08-03T06:24:39Z from `paper/main.tex` at commit `53bcf5f`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
 A reader's index is at the end.
 
+
+---
+
+## FILE: `paper/audit_denominators.tex`
+
+```latex
+% audit_denominators.tex -- GENERATED, DO NOT EDIT BY HAND.
+% Regenerate: python3 paper/tools/gen_denominator_macros.py --write
+% Validate:   python3 paper/tools/gen_denominator_macros.py --check
+%
+% Source: results/audit_verdicts_rev3.csv (sealed 0444, single run, job 11591245)
+% sha256: c85d6f8a5a25023389b27201a4165b79fbfdc6f274b89ca91e64182ab150082b
+% Identity cross-checked against docs/audit_claim_table.csv (FROZEN).
+% Margin: uniform 2 pp, registered. Planning size increasing in d, so the
+% Q1 and Q3 columns bracket the whole atlas-IQR interval by monotonicity.
+%
+% Denominators. `Eligible` passes the frozen 3.1 inclusion rule;
+% `Assessable` is eligible AND determinate and is the denominator of every
+% threshold count.
+
+\newcommand{\AuditFrozenCandidates}{17}
+\newcommand{\AuditIneligible}{1}
+\newcommand{\AuditEligible}{16}
+\newcommand{\AuditAssessable}{11}
+\newcommand{\AuditNotAssessable}{5}
+\newcommand{\AuditNotAssessableInsufficient}{4}
+\newcommand{\AuditNotAssessableOutsideFramework}{1}
+
+% Threshold and sensitivity counts, all out of \AuditAssessable.
+\newcommand{\AuditBelowThresholdAtMedian}{1}
+\newcommand{\AuditAboveThroughout}{10}
+\newcommand{\AuditChangesWithinIQR}{1}
+\newcommand{\AuditBelowThroughout}{0}
+
+% Per-item outputs, out of \AuditEligible. `TaskMatched` is outputs for the
+% tasks that support the audited claim; `OtherTaskOnly` is a release that
+% does not cover them.
+\newcommand{\AuditPerItemTaskMatched}{0}
+\newcommand{\AuditPerItemOtherTaskOnly}{3}
+\newcommand{\AuditPerItemNone}{13}
+\newcommand{\AuditPerItemOtherTaskClaims}{R08, R15, R16}
+
+% Margin cross-tab, over the 16 eligible sources, reconciling the margin
+% taxonomy with the statement that ten of sixteen contain no number at all.
+% Rows: registered margin category. 1 = a prospective numerical decision
+% margin is declared; 2 = equivalence asserted with sufficient numerical
+% information to evaluate it; 3 = asserted without sufficient numerical
+% information. Columns: descriptive evidence form. Qual = qualitative
+% language only, no number anywhere in the qualifying claim; Retro = a
+% retrospective numerical description of an observed result.
+% \AuditXtabSufficientTotal is the 11 assessable sources plus R04, which
+% reports enough numbers but scores a generation metric. It is NOT the
+% withdrawn rev-2 count of twelve determinate claims, which was a
+% different set of the same size.
+\newcommand{\AuditXtabProspectiveQual}{0}
+\newcommand{\AuditXtabProspectiveRetro}{0}
+\newcommand{\AuditXtabProspectiveTotal}{0}
+\newcommand{\AuditXtabSufficientQual}{7}
+\newcommand{\AuditXtabSufficientRetro}{5}
+\newcommand{\AuditXtabSufficientTotal}{12}
+\newcommand{\AuditXtabInsufficientQual}{3}
+\newcommand{\AuditXtabInsufficientRetro}{1}
+\newcommand{\AuditXtabInsufficientTotal}{4}
+\newcommand{\AuditXtabQualTotal}{10}
+\newcommand{\AuditXtabRetroTotal}{6}
+\newcommand{\AuditXtabGrandTotal}{16}
+\newcommand{\AuditProspectiveNumericMargin}{0}
+
+% Named claims and the registered margin.
+\newcommand{\AuditMarginPP}{2}
+\newcommand{\AuditIneligibleClaim}{R10}
+\newcommand{\AuditOutsideFrameworkClaim}{R04}
+
+% The single imputation-sensitive claim. The percentage is a descriptive
+% fraction of correlated reference cells: not a probability, not a
+% confidence level, not a p-value.
+\newcommand{\AuditSensitiveClaim}{R01}
+\newcommand{\AuditSensitiveN}{1{,}838}
+\newcommand{\AuditSensitiveNReq}{2{,}010}
+\newcommand{\AuditSensitiveReversalD}{0.118915}
+\newcommand{\AuditSensitiveCellsBelow}{345}
+\newcommand{\AuditSensitiveCellsTotal}{792}
+\newcommand{\AuditSensitiveCellsPct}{43.6}
+
+% Provenance of the numbers above.
+\newcommand{\AuditVerdictsSha}{c85d6f8a5a25023389b27201a4165b79fbfdc6f274b89ca91e64182ab150082b}
+\newcommand{\AuditVerdictsShaShort}{c85d6f8a\ldots{}b150082b}
+
+% Per-claim values, addressed as \AuditVal{R01}{nreqMed}. Fields for an
+% assessable claim: n, tier, nreqQOne, nreqMed, nreqQThree, dstar, cls.
+% Fields for a non-assessable or ineligible claim: n, tier, kind, blocker.
+% An undefined pair expands to nothing, so asking an ineligible claim for
+% its classification silently yields empty; ask for `kind` instead.
+\newcommand{\AuditVal}[2]{\csname AuditData#1#2\endcsname}
+\expandafter\def\csname AuditDataR01cls\endcsname{changes classification within IQR}
+\expandafter\def\csname AuditDataR01dstar\endcsname{0.118915}
+\expandafter\def\csname AuditDataR01n\endcsname{1{,}838}
+\expandafter\def\csname AuditDataR01nreqMed\endcsname{2{,}010}
+\expandafter\def\csname AuditDataR01nreqQOne\endcsname{1{,}364}
+\expandafter\def\csname AuditDataR01nreqQThree\endcsname{4{,}328}
+\expandafter\def\csname AuditDataR01tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR02blocker\endcsname{no reported or imputable n, no baseline, no numeric delta}
+\expandafter\def\csname AuditDataR02kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR02n\endcsname{---}
+\expandafter\def\csname AuditDataR02tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR03cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR03dstar\endcsname{---}
+\expandafter\def\csname AuditDataR03n\endcsname{18{,}300}
+\expandafter\def\csname AuditDataR03nreqMed\endcsname{866}
+\expandafter\def\csname AuditDataR03nreqQOne\endcsname{619}
+\expandafter\def\csname AuditDataR03nreqQThree\endcsname{1{,}237}
+\expandafter\def\csname AuditDataR03tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR04blocker\endcsname{qualifying quote asserts negligible loss on COCO CIDEr, a generation metric with no per-item correct/incorrect state; V1/V2 are flip-model quantities that do not apply to it}
+\expandafter\def\csname AuditDataR04kind\endcsname{metric-incompatible}
+\expandafter\def\csname AuditDataR04n\endcsname{1{,}319}
+\expandafter\def\csname AuditDataR04tier\endcsname{family+bits+benchmark}
+\expandafter\def\csname AuditDataR05cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR05dstar\endcsname{0.908491}
+\expandafter\def\csname AuditDataR05n\endcsname{14{,}042}
+\expandafter\def\csname AuditDataR05nreqMed\endcsname{2{,}255}
+\expandafter\def\csname AuditDataR05nreqQOne\endcsname{1{,}525}
+\expandafter\def\csname AuditDataR05nreqQThree\endcsname{3{,}865}
+\expandafter\def\csname AuditDataR05tier\endcsname{bits+benchmark}
+\expandafter\def\csname AuditDataR06cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR06dstar\endcsname{---}
+\expandafter\def\csname AuditDataR06n\endcsname{18{,}904}
+\expandafter\def\csname AuditDataR06nreqMed\endcsname{1{,}841}
+\expandafter\def\csname AuditDataR06nreqQOne\endcsname{932}
+\expandafter\def\csname AuditDataR06nreqQThree\endcsname{6{,}046}
+\expandafter\def\csname AuditDataR06tier\endcsname{bits}
+\expandafter\def\csname AuditDataR07cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR07dstar\endcsname{0.802904}
+\expandafter\def\csname AuditDataR07n\endcsname{12{,}410}
+\expandafter\def\csname AuditDataR07nreqMed\endcsname{1{,}841}
+\expandafter\def\csname AuditDataR07nreqQOne\endcsname{932}
+\expandafter\def\csname AuditDataR07nreqQThree\endcsname{6{,}046}
+\expandafter\def\csname AuditDataR07tier\endcsname{bits}
+\expandafter\def\csname AuditDataR08cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR08dstar\endcsname{---}
+\expandafter\def\csname AuditDataR08n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR08nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR08nreqQOne\endcsname{371}
+\expandafter\def\csname AuditDataR08nreqQThree\endcsname{1{,}052}
+\expandafter\def\csname AuditDataR08tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR09cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR09dstar\endcsname{---}
+\expandafter\def\csname AuditDataR09n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR09nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR09nreqQOne\endcsname{433}
+\expandafter\def\csname AuditDataR09nreqQThree\endcsname{1{,}113}
+\expandafter\def\csname AuditDataR09tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR10blocker\endcsname{quoted claim appears in neither prose nor a table caption (\S{}3.1): the recorded exact\_quote appears nowhere in the source; 98.6\% is a table cell}
+\expandafter\def\csname AuditDataR10kind\endcsname{ineligible}
+\expandafter\def\csname AuditDataR10n\endcsname{28{,}659}
+\expandafter\def\csname AuditDataR10tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR11blocker\endcsname{no reported or imputable n, no baseline, no numeric delta}
+\expandafter\def\csname AuditDataR11kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR11n\endcsname{---}
+\expandafter\def\csname AuditDataR11tier\endcsname{bits}
+\expandafter\def\csname AuditDataR12cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR12dstar\endcsname{0.908491}
+\expandafter\def\csname AuditDataR12n\endcsname{14{,}042}
+\expandafter\def\csname AuditDataR12nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR12nreqQOne\endcsname{433}
+\expandafter\def\csname AuditDataR12nreqQThree\endcsname{1{,}113}
+\expandafter\def\csname AuditDataR12tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR13blocker\endcsname{no on-page baseline accuracy and no computable delta}
+\expandafter\def\csname AuditDataR13kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR13n\endcsname{250}
+\expandafter\def\csname AuditDataR13tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR14blocker\endcsname{no baseline accuracy stated (Figure 8 chart only)}
+\expandafter\def\csname AuditDataR14kind\endcsname{insufficient reporting}
+\expandafter\def\csname AuditDataR14n\endcsname{728}
+\expandafter\def\csname AuditDataR14tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR15cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR15dstar\endcsname{---}
+\expandafter\def\csname AuditDataR15n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR15nreqMed\endcsname{866}
+\expandafter\def\csname AuditDataR15nreqQOne\endcsname{619}
+\expandafter\def\csname AuditDataR15nreqQThree\endcsname{1{,}237}
+\expandafter\def\csname AuditDataR15tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR16cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR16dstar\endcsname{---}
+\expandafter\def\csname AuditDataR16n\endcsname{42{,}701}
+\expandafter\def\csname AuditDataR16nreqMed\endcsname{742}
+\expandafter\def\csname AuditDataR16nreqQOne\endcsname{371}
+\expandafter\def\csname AuditDataR16nreqQThree\endcsname{1{,}052}
+\expandafter\def\csname AuditDataR16tier\endcsname{family+bits}
+\expandafter\def\csname AuditDataR17cls\endcsname{above throughout}
+\expandafter\def\csname AuditDataR17dstar\endcsname{---}
+\expandafter\def\csname AuditDataR17n\endcsname{28{,}659}
+\expandafter\def\csname AuditDataR17nreqMed\endcsname{2{,}081}
+\expandafter\def\csname AuditDataR17nreqQOne\endcsname{1{,}332}
+\expandafter\def\csname AuditDataR17nreqQThree\endcsname{3{,}644}
+\expandafter\def\csname AuditDataR17tier\endcsname{bits+benchmark}
+```
 
 ---
 
@@ -27,10 +223,15 @@ A reader's index is at the end.
 %  - The "every protocol was frozen" closing claim is dropped; the methods
 %    section establishes it, and asserting it in an abstract reads as a bid for
 %    credibility rather than a result.
-%  - Secondary figures dropped: the 2.0x-12.9x shortfall range, the 145-cell
-%    count with its 8.5%/7.2% pair, and the MMLU-2,164 / GPQA-749 comparison.
-%    All three remain in their result sections. The 5.3x, 12.7x, 4-of-12,
-%    5-of-17, 0-of-17 and 5-of-8 headlines are retained.
+%  - Secondary figures dropped: the shortfall range (since WITHDRAWN outright,
+%    not merely dropped from the abstract), the 145-cell count with its
+%    8.5%/7.2% pair, and the MMLU-2,164 / GPQA-749 comparison. The latter two
+%    remain in their result sections.
+%  - HEADLINE STATUS AT REV-3, correcting this note's own stale list: the 5.3x,
+%    12.7x and 5-of-8 headlines are retained. The 4-of-12 and 5-of-17 headlines
+%    are RETIRED, and 0-of-17 is superseded by 0 of 16 eligible sources with the
+%    task-matched qualifier. All audit counts here now come from
+%    paper/audit_denominators.tex; none is typed.
 %  - "The calibration seed alone reorders" -> what was observed (review 1.8).
 %  - Claims scoped to the registered frames (review 5).
 %
@@ -41,9 +242,9 @@ A reader's index is at the end.
 \begin{abstract}
 A fraction of a point of benchmark accuracy is the usual evidence that a
 compressed model is equivalent to its original. We show this quantity is least
-informative precisely when two models are most alike: a net delta is what
-survives cancellation between opposing per-item changes, and cancellation is
-most complete in the regime equivalence claims occupy.
+informative when two models are most alike: a net delta is what survives
+cancellation between opposing per-item changes, and cancellation is most
+complete in the regime equivalence claims occupy.
 
 % SOURCE: \S\ref{sec:audit:taxonomy}; \S\ref{sec:audit:v3};
 % \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
@@ -53,23 +254,27 @@ most complete in the regime equivalence claims occupy.
 % construction the amendment retires, since no source asserts one.
 % The threshold result is stated with its sensitivity in the same breath, and
 % scoped to the atlas-IQR interval; "robustly underpowered" is NOT claimed.
-In a preregistered audit of equivalence claims from three registered
-frames (method papers, official model cards and vendor documentation), 16 of 17
-frozen candidates are eligible. None states a prospective numerical equivalence
-margin, and none releases per-item outputs for the tasks its claim rests on;
-ten state no number at all. Five report too little to assess numerically. Among
-the remaining 11, at a uniform 2-percentage-point margin, ten stay above the
-planning threshold across the interquartile range of the imputed disagreement
-rate, and one changes classification within it. We
-audit evidential sufficiency, not truth: no claim is asserted false.
+In a preregistered audit of \AuditFrozenCandidates{} frozen equivalence claims
+from three registered frames (method papers, model cards, vendor documentation),
+\AuditEligible{} are eligible. None states a
+prospective numerical equivalence margin, and none releases
+\emph{task-matched} per-item outputs, though \AuditPerItemOtherTaskOnly{} release
+outputs for other tasks only; \AuditXtabQualTotal{} state no number at all, and
+\AuditNotAssessable{} report too little to assess numerically. Among the
+remaining \AuditAssessable{}, at a uniform
+\AuditMarginPP{}-percentage-point margin, \AuditAboveThroughout{} stay above the
+approximate planning threshold throughout the interquartile range of the imputed
+disagreement rate and \AuditChangesWithinIQR{} changes classification within it;
+\AuditBelowThroughout{} stay below throughout. We audit evidential sufficiency,
+not truth: no claim is called false.
 
 % SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:minigrid:churnratio} Result 1.
 Across an atlas of 1{,}707 paired model-by-task cells mined from public
-per-item evaluation dumps (3B--405B), per-item churn runs $5.3\times$ the net
+per-item evaluation dumps (3B--405B), churn runs $5.3\times$ the net
 accuracy delta; between two compression methods at one bit width the median is
 $12.7\times$. We supply the corresponding apparatus: equivalence testing at a
 declared margin, and certification tables giving the items an evaluation needs,
-computed from disagreement observed under compression rather than from
+computed from disagreement observed under compression, not from
 independent-binomial variance.
 
 % SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
@@ -80,8 +285,25 @@ samples across five seeds. Under the frozen eight-cell decision rule H3 is
 supported: changing the calibration draw was sufficient to reverse the observed
 method ordering in 5 of 8 confirmatory cells, so a single-calibration
 comparison of compression methods is unreliable. All per-item outputs,
-protocols and analysis code are released.
+protocols and code are released.
 \end{abstract}
+
+% =====================================================================
+% MEASUREMENT NOTE. The ARXIV ABSTRACT FIELD header above promises a
+% "measurement note at the end of this file"; it did not previously exist.
+%
+%   cd paper && python3 tools/measure_abstract.py abstract.tex
+%
+% Last measured 2026-08-02, rev-3 narrative pass: 1,903 / 1,920 characters,
+% margin 17, 281 words. MEASURE AFTER EVERY EDIT -- the margin has been under
+% 40 characters three times now, and the arXiv field truncates silently.
+%
+% The audit counts above are \Audit* macros from paper/audit_denominators.tex,
+% NOT typed digits. measure_abstract.py expands them before counting; without
+% that step every macro would have counted as zero characters and the
+% measurement would have read ~30 characters short. Do not "simplify" the
+% expander out of the tool, and do not replace a macro here with its value.
+% =====================================================================
 ```
 
 ---
@@ -133,26 +355,37 @@ instrument for closing it.
 
 % SOURCE: results/audit_verdicts_rev3.csv; \S\ref{sec:audit:taxonomy} and
 % \S\ref{sec:audit:results}.
-% Numbers kept here: 17 candidates, 16 eligible, 5 not assessable, 11
-% assessable, 10/1/0 sensitivity, 0 of 16 task-matched outputs. The worked
-% examples and the MDD ratios live only in \S\ref{sec:audit:results}.
+% Every count in this paragraph is a macro from paper/audit_denominators.tex.
+% Do not type one back in: candidates, eligible, not-assessable, assessable and
+% the 10/1/0 sensitivity split all come from the sealed rev-3 verdict CSV. The
+% worked examples and the MDD ratios live only in \S\ref{sec:audit:results}.
 % THE 2.0x-12.9x SHORTFALL RANGE IS WITHDRAWN, NOT RECOMPUTED. It divided by
 % margins no source declared. At the registered 2 pp margin ten of the eleven
 % assessable claims have no shortfall at all, so there is no range. Do not
 % reintroduce this sentence with new numbers in it.
-We enumerate 17 equivalence claims from three registered sampling frames:
-method papers, official quantized model cards, and inference-stack vendor
-documentation. One is ruled ineligible against the registered inclusion rule,
-leaving 16. Not one of the 16 declares a numerical tolerance in advance, and not
-one releases per-item outputs for the tasks its claim rests on, so no equivalence
-claim in the sample can be checked against a standard its author set or rerun by
-a reader. Five cannot be assessed numerically at all from what they report. Of
-the remaining 11, ten were sized to carry the claim made on them at a uniform
-2\,pp margin, and the eleventh cannot be classified without committing to a
-discordance rate its source never reported
-(\S\ref{sec:audit:taxonomy}, \S\ref{sec:audit:results}). No claim is described
-as false: the audited property is the evidential sufficiency of the reported
-evaluation, not the truth of the underlying equivalence.
+% TASK-MATCHED IS LOAD-BEARING AND STAYS IN THE SAME SENTENCE AS THE COUNT:
+% R08, R15 and R16 do release per-item outputs, for other task suites. Dropping
+% the qualifier makes the sentence false (\S\ref{sec:audit:v3}).
+We enumerate \AuditFrozenCandidates{} equivalence claims from three registered
+sampling frames: method papers, official quantized model cards, and
+inference-stack vendor documentation. \AuditIneligible{} of them,
+\AuditIneligibleClaim{}, is ruled ineligible against the registered inclusion
+rule, leaving \AuditEligible{}. Not one of the
+\AuditEligible{} declares a numerical tolerance in advance, and not one releases
+\emph{task-matched} per-item outputs, those covering the tasks its claim rests
+on; \AuditPerItemOtherTaskOnly{} release outputs for other tasks only. So no
+equivalence claim in the sample can be checked against a standard its author set
+or rerun by a reader. A further \AuditNotAssessable{} cannot be assessed
+numerically at all from what they report. Of the remaining \AuditAssessable{},
+\AuditAboveThroughout{} stay above the approximate planning threshold at a
+uniform \AuditMarginPP{}\,pp margin throughout the interquartile range of the
+imputed discordance rate, and \AuditChangesWithinIQR{} changes classification
+within that interval; \AuditBelowThroughout{} stay below the threshold
+throughout it (\S\ref{sec:audit:taxonomy}, \S\ref{sec:audit:results}). No claim
+is described as false: the audited property is the evidential sufficiency of the
+reported evaluation, not the truth of the underlying equivalence, and the
+prevalences above describe this audited sample of \AuditEligible{} eligible
+sources rather than the literature at large.
 
 Equivalence is a certification problem, so we compute certification
 tables, giving the number of items an evaluation needs to certify a compressed
@@ -831,17 +1064,20 @@ meeting the criterion is audited; there is no discretionary sub-selection.
 % REV-3 2026-07-31: the frozen table still holds 17; one is ruled ineligible in
 % \S\ref{sec:audit:taxonomy} by the inclusion rule registered here. Both numbers
 % are load-bearing and must not be collapsed into one.
-The frozen table contains 17 candidate claims: 7 method papers, 7 official model
-cards or blogs, and 3 vendor documents. One is subsequently ruled ineligible
-against this same criterion (\S\ref{sec:audit:taxonomy}), leaving \textbf{16}
-eligible sources; every count in this section is over those 16.
+The frozen table contains \AuditFrozenCandidates{} candidate claims: 7 method
+papers, 7 official model cards or blogs, and 3 vendor documents. One is
+subsequently ruled ineligible against this same criterion
+(\S\ref{sec:audit:taxonomy}), leaving \textbf{\AuditEligible{}} eligible
+sources; every count in this section is over those \AuditEligible{}.
 % ADDED 2026-07-31. The body previously said only "extracted twice by mutually
 % blind passes" and never said by WHAT. That the passes were language-model
 % agent sessions was disclosed only inside the reproduced registration
 % (Amendment 1) in the appendix, which is not where a reader looks for it.
 Each claim's fields were extracted by \textbf{two blinded automated extraction
 passes} (separate language-model agent sessions, the second given no access to
-the first pass's output), with source content hashes recorded, followed by
+the first pass's output), with source content hashes recorded for 16 of the 17
+(R13's was left empty, and the provenance consequence is stated in
+\S\ref{sec:artifacts}), followed by
 \textbf{human reconciliation} of every disagreement before the verdict stage
 (\S\ref{sec:prereg}). Separate sessions prevent the second pass from copying the
 first; they do not make the two passes statistically independent, because both
@@ -888,11 +1124,13 @@ source: the sentence had been composed from a table cell. The registered
 inclusion rule requires the assertion to appear in prose or a table caption, and
 it appears in neither, so that claim (R10) is excluded from the eligible
 population by applying the rule as registered. The correction moves the eligible
-denominator from 17 to \textbf{16}. It changes neither the number of claims below
-the planning threshold nor the per-item-outputs result, and the excluded row
-remains in the released claim table and the certification appendix.
+denominator from \AuditFrozenCandidates{} to \textbf{\AuditEligible{}}. It
+changes neither the number of claims below the planning threshold nor the
+per-item-outputs result, and the excluded row remains in the released claim
+table and the certification appendix.
 
-Across the 16 eligible sources we distinguish two independent properties: what
+Across the \AuditEligible{} eligible sources we distinguish two independent
+properties: what
 form the source's evidence takes, and whether the reported information suffices
 to assess it numerically at all.
 
@@ -947,6 +1185,106 @@ Everything below therefore uses the margin registered in advance
 (\S\ref{sec:audit:rules}), and no quantity derived from a source's own reported
 results is described anywhere in this paper as that source's margin.
 
+\subsection{Where the claim is written}
+\label{sec:audit:locus}
+
+% ADDED 2026-08-03. SOURCE: docs/AUDIT_SELF_RECHECK_2026-08-02.md §§3-4.
+% Author re-verification under decision 4 (C+D) of the 2026-08-02 handoff,
+% scoped to R01/R10/R09/R17 and extended to the other three vendor cards only
+% for the prose/table locus question below.
+%
+% THE COUNTS 3/2/1 AND THE SIX-CARD DENOMINATOR ARE HAND-TYPED. They are not yet
+% emitted by paper/tools/gen_denominator_macros.py, which is another session's
+% active file. Macro-ise them there before this section is final; do not add a
+% second generator.
+%
+% DO NOT restate this as a defect count. The finding is that the locus VARIES
+% with the evidence held constant; a tally of "3 cards are deficient" invites
+% the reading that the other three are fine, which is not the claim.
+The preceding taxonomy asks what form a source's assertion takes. A second
+question turns out to matter as much: \emph{where in the document the assertion
+is written}, and whether it is written in words at all.
+
+Six of the eligible sources are quantized-model cards from a single publisher.
+They run the same benchmark suite, present the same results table with the same
+recovery column, declare no margin, and release no task-matched per-item
+outputs. The evidence behind them is, for present purposes, identical. What
+differs is where each one puts its equivalence claim.
+
+\begin{table}[t]
+\centering
+\caption{Where the equivalence claim is written, across six model cards from one
+publisher with the underlying evidence held constant. Every card reports the
+same recovery column; the tiers differ only in whether, and where, the card
+states the comparison in words.}
+\label{tab:audit-locus}
+% SOURCE: docs/AUDIT_SELF_RECHECK_2026-08-02.md §4.1, controlled prose-vs-cell
+% sweep over the six archived cards. Tier assignment is from the archived
+% source text, not from the frozen exact_quote field.
+\begin{tabular}{llc}
+\toprule
+Locus of the claim & Form it takes in the card & Cards \\
+\midrule
+Prose assertion      & states recovery percentages outright & 3 \\
+Prose juxtaposition  & states two scores, characterises neither & 2 \\
+Table cell only      & no comparative sentence anywhere & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three cards assert recovery in prose. Two report the quantized and the
+unquantized score in adjacent clauses and stop, characterising the gap neither
+as small nor as acceptable. One makes no comparative statement in prose at all:
+its claim exists solely as a recovery figure in a table cell, under a column
+header, with no caption. That last card is the excluded one
+(\AuditIneligibleClaim{}), and the exclusion is now legible as the endpoint of a
+gradient rather than an isolated extraction defect.
+
+\paragraph{This is a selection effect, and it applies to this audit.} The
+registered inclusion rule requires the assertion to appear in prose or a table
+caption. That rule is reasonable, and it is the same rule any comparable audit
+would need. It is also keyed to a property that varies independently of the
+evidence. A reader encountering all six cards would take all six as
+near-lossless claims; an inclusion rule keyed to prose vocabulary captures the
+first tier cleanly, must exercise judgement on the second, and cannot see the
+third. The claims do not become weaker as the locus moves from sentence to
+cell. They stop being written down.
+
+The consequence is that \textbf{\AuditFrozenCandidates{} is a floor on the
+population, not a census of it}, and the shortfall is not random: it is
+concentrated in exactly the sources that state their claims least explicitly.
+This bounds what the counts in this section can mean. It does not weaken them,
+since every reported quantity is computed over the sources that were captured,
+but it does mean the true rate of unbounded equivalence claims in this
+literature is understated here rather than overstated.
+
+\paragraph{The boundary cases were kept.} The two prose-juxtaposition cards
+carry no trigger vocabulary in their prose; the recovery figures that would
+qualify them appear only as table cells, which is the position that excluded
+\AuditIneligibleClaim{}. They were retained in the eligible population, and the
+judgement is recorded rather than buried: a bare juxtaposition of two scores
+differing by less than a point, in a document whose purpose is to offer the
+quantized model as a substitute for the unquantized one, is an equivalence
+assertion in substance even where it is not one in vocabulary. Excluding them
+instead would have moved the eligible denominator to 14 and the assessable count
+to 9 without changing which claims fall below the planning threshold, and it
+would have moved the headline proportion in the direction favourable to this
+paper's thesis. The conservative choice is to keep them and report the
+ambiguity, which is what this subsection does.
+
+% DISCLOSURE, LOAD-BEARING. This locus review was a second automated pass by the
+% same class of tool that produced the record it checked. It is NOT independent
+% verification and must never be described as dual coding or inter-rater
+% agreement anywhere in this paper. See docs/AUDIT_SELF_RECHECK_2026-08-02.md §1
+% and AUDIT_REGISTRATION §3.3.
+The locus review reported here is author re-verification against the archived
+sources, not independent verification by a second coder; the project has no
+second human, and Appendix~\ref{app:extraction} states what that does and does
+not license. Every archived source, its content hash, and the retrieval script
+needed to reproduce these locations are released with the paper, so the
+classification in Table~\ref{tab:audit-locus} is checkable by any reader without
+re-fetching anything.
+
 \subsection{Availability of per-item outputs}
 \label{sec:audit:v3}
 
@@ -961,10 +1299,12 @@ The most actionable finding requires no statistics at all.
 % sources DO release per-item outputs -- for other task suites. "None released
 % per-item outputs" is false without "task-matched"; see the carry checklist §15.
 \begin{quote}
-\textbf{0 of the 16 eligible sources release \emph{task-matched} per-item
-outputs}, meaning the item-level results, for the tasks the equivalence claim is
-actually about, that a third party would need to rerun the paired comparison.
-The tally is 0 \emph{yes}, 3 \emph{partial}, 13 \emph{no}.
+\textbf{\AuditPerItemTaskMatched{} of the \AuditEligible{} eligible sources
+release \emph{task-matched} per-item outputs}, meaning the item-level results,
+for the tasks the equivalence claim is actually about, that a third party would
+need to rerun the paired comparison. The tally is \AuditPerItemTaskMatched{}
+\emph{yes}, \AuditPerItemOtherTaskOnly{} \emph{partial}
+(\AuditPerItemOtherTaskClaims{}), \AuditPerItemNone{} \emph{no}.
 \end{quote}
 
 The three partial cases,%
@@ -1021,7 +1361,11 @@ n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\ma
 \label{eq:tost-n}
 \end{equation}
 with $z_{1-\alpha}$ \emph{one-sided} ($1.6449$), because TOST rejects two
-one-sided nulls at level $\alpha$ each. A claim is recorded as \emph{below the
+one-sided nulls at level $\alpha$ each. At $\alpha=.05$ per bound this is
+operationally the requirement that a \textbf{90\% two-sided} confidence
+interval fall inside $\pm m$, not a 95\% one; the corresponding detection
+quantity V1 above is the one that takes the two-sided $z$.
+A claim is recorded as \emph{below the
 approximate planning threshold} iff its reported $n$ is below $n_{\mathrm{req}}$
 at the registered margin. The choice of one-sided $z$ is not cosmetic; see
 \S\ref{sec:prereg:choices}, interpretive choice~5.
@@ -1077,12 +1421,13 @@ observed cells.
 % v2_underpowered_paired_2pp, robustness. Counts over the 16 ELIGIBLE rows.
 % DENOMINATOR LEDGER (carry checklist §9): 17 - 1 = 16; 11 + 5 = 16;
 % 0 + 1 + 10 = 11. Every one of these is checkable in the CSV.
-Of the 16 eligible claims, 5 are \textbf{not numerically assessable}: their
-reporting does not support a verdict under the registered framework, leaving 11
-assessable claims. Of those 11, \textbf{one falls below the approximate planning
-threshold} at the registered 2\,pp margin under the median discordance
-imputation, and that one claim's classification does not survive the sensitivity
-analysis.
+Of the \AuditEligible{} eligible claims, \AuditNotAssessable{} are \textbf{not
+numerically assessable}: their reporting does not support a verdict under the
+registered framework, leaving \AuditAssessable{} assessable claims. Of those
+\AuditAssessable{}, \textbf{\AuditBelowThresholdAtMedian{} falls below the
+approximate planning threshold} at the registered \AuditMarginPP{}\,pp margin
+under the median discordance imputation, and that one claim's classification
+does not survive the sensitivity analysis.
 
 % SUPERSEDED TABLE, DO NOT RESTORE. This replaces tab:audit-underpowered, whose
 % four rows (R17, R07, R06, R15) were flagged at their own reported deltas and
@@ -1356,9 +1701,16 @@ because that is the granularity of the frozen claim table
 % Section: Certification tables  -- COMPLETE DRAFT
 %
 % PRIMARY SOURCES for every number in this section:
-%   docs/CERTIFICATION_TABLES_2026-07-20.md  (authoritative narrative)
-%   results/certification_tables_rev2.csv    (machine-readable, 3 margins/family)
+%   results/certification_tables_rev2.csv    (AUTHORITATIVE, 3 margins/family)
 %   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §5 (registered metric set)
+%   docs/CERTIFICATION_TABLES_2026-07-20.md  (narrative and rationale only)
+%
+% PRECEDENCE, SET 2026-08-02. The rev-2 CSV outranks the 2026-07-20 narrative
+% document wherever they differ. That document was written against the REV-1
+% atlas population and its numeric provenance is superseded: it derives
+% "analysable cells 1,155 (1,254 non-excluded - 99 probe)", where the rev-2
+% analysis population is 1,707. Its ARGUMENTS are still the source for this
+% section's prose; its NUMBERS are not. Do not restore it as the authority.
 %
 % DISCREPANCY -- CLOSED 2026-07-26 as a wording mismatch, not a data mismatch.
 % docs/CERTIFICATION_TABLES_2026-07-20.md line 4 describes the artifact as
@@ -1464,11 +1816,14 @@ percentiles of the discordance rates the atlas observes for that family. The
 naive column is the same requirement computed by treating the two runs as
 independent samples. Eleven benchmark families plus the pooled row.}
 \label{tab:certification}
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"The table at the registered
-% 2 pp margin"; every cell cross-checked against results/certification_tables.csv
+% SOURCE: every cell cross-checked against results/certification_tables_rev2.csv
 % rows with margin_pp = 2.0 (columns n_atlas_cells, discordance_p25/median/p75,
 % required_n_p25/median/p75, required_n_independent_binomial,
-% paired_advantage_at_median).
+% paired_advantage_at_median). The layout follows
+% docs/CERTIFICATION_TABLES_2026-07-20.md §"The table at the registered 2 pp
+% margin", a REV-1 narrative whose numbers are superseded by the rev-2 CSV.
+% REPOINTED 2026-08-02: the cross-check pointer named the unsuffixed rev-1 CSV,
+% which is not the file these cells were checked against.
 \begin{tabular}{lrccrr}
 \toprule
 Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
@@ -1536,12 +1891,17 @@ MMLU) both need more items \emph{and} gain less from pairing.
 The ordering in Table~\ref{tab:certification} is not the intuitive one, and this
 is the section's main conceptual point.
 
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md, closing paragraph of
-% §"Why the naive column is in the table"; results/certification_tables.csv,
-% mmlu vs gpqa at margin_pp = 2.0. Baseline accuracies in the next paragraph are
-% results/certification_tables.csv column median_baseline_accuracy: gpqa 0.3734,
-% mmlu 0.39. Discordances are column discordance_median: mmlu 0.13733,
-% gpqa 0.048397.
+% SOURCE: results/certification_tables_rev2.csv, mmlu vs gpqa at
+% margin_pp = 2.0; the narrative argument is docs/CERTIFICATION_TABLES_
+% 2026-07-20.md §"Why the naive column is in the table" (REV-1 narrative:
+% its population and required-n figures are superseded, its reasoning is not).
+% Baseline accuracies in the next paragraph are results/certification_tables_
+% rev2.csv column median_baseline_accuracy: gpqa 0.3734, mmlu 0.39.
+% Discordances are column discordance_median: mmlu 0.13733, gpqa 0.048397.
+% REPOINTED 2026-08-02: these three pointers named the unsuffixed rev-1 CSV
+% while the prose below already carried the REV-2 value (2,164; rev-1 was
+% 2,123). A stale pointer under a corrected number is the harder defect to
+% see, because the visible text is right.
 MMLU needs about \textbf{2{,}164} items at a 2\,pp margin. GPQA needs
 \textbf{749}. GPQA is by any ordinary account the harder benchmark, and its median
 baseline accuracy in the atlas is 0.373 against MMLU's 0.390, on a task designed
@@ -1561,8 +1921,10 @@ certification tables are empirical rather than analytic.
 \subsection{Scope and caveats}
 \label{sec:cert:caveats}
 
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats", all five
-% bullets, plus results/certification_tables_rev2.csv column n_atlas_cells.
+% SOURCE: results/certification_tables_rev2.csv column n_atlas_cells for every
+% count; the five caveats themselves are from
+% docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats", a REV-1
+% narrative cited for its caveats only, its population figures superseded.
 % PROSE-IFIED 2026-07-26 from a five-item list. All five caveats survive as
 % content, in order: (1) <4-cell families omitted, (2) the two thin rows,
 % (3) family aggregation mixes two variation sources, (4) the 99 probe cells,
@@ -1708,9 +2070,17 @@ quietly absorbed.
 \subsection{The analysis population}
 \label{sec:atlas:population}
 
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §Provenance ("analysable cells
-% 1,155 (1,254 non-excluded - 99 probe)"); docs/IDENTICAL_SCORE_CHURN_2026-07-21.md
-% §Population; docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 6.
+% SOURCE: results/atlas_cells_summary_rev2.csv (the 1,707-cell probe-excluded
+% analysis population, S1 = 1,398 / S2 = 309); docs/ATLAS_REV2_CORRECTION_
+% 2026-07-21.md §Verification; docs/ATLAS_MINING_REGISTRATION_2026-07-15.md
+% §§1, 6.
+% REPOINTED 2026-08-02. This cited docs/CERTIFICATION_TABLES_2026-07-20.md
+% §Provenance and its rev-1 arithmetic, "analysable cells 1,155 (1,254
+% non-excluded - 99 probe)", as the source for the 1,707 four lines below. That
+% document is the REV-1 narrative and its population figures are superseded by
+% the rev-2 correction; a provenance comment that points a current number at a
+% superseded source is the defect, even though the prose itself was already
+% right. The rev-2 CSV is now the source of record.
 Every statistic in the remainder of this section, in the certification tables of
 \S\ref{sec:certification}, and in the discordance imputation of
 \S\ref{sec:audit:rules} uses a single population: the \textbf{1{,}707} cells that
@@ -2855,33 +3225,46 @@ discriminant behaviour and nothing else.
 %
 % REWRITTEN 2026-07-27. Was "Five artifacts are released", listing the atlas
 % first and omitting the per-item outputs entirely. The per-item outputs are
-% not a sixth list item: \S\ref{sec:audit} reports 0 of 17 sources release them
-% and \S\ref{sec:conclusion}'s fifth line asks the field to, so this section is
-% where the paper's own recommendation is either met or not. Named first, with
-% the relationship stated rather than implied.
+% not a sixth list item: \S\ref{sec:audit} reports that no ELIGIBLE source
+% releases task-matched per-item outputs and \S\ref{sec:conclusion}'s fifth line
+% asks the field to, so this section is where the paper's own recommendation is
+% either met or not. Named first, with the relationship stated rather than
+% implied. ("0 of 17" here was the rev-1/rev-2 denominator and is superseded by
+% \AuditPerItemTaskMatched of \AuditEligible; see audit_denominators.tex.)
 %
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
 % exists.
+%
+% RULE, ADDED 2026-08-02: docs/audit_sources_20260731.tar.gz is a PRIVATE
+% working copy. It must never be described here, or anywhere else in the paper,
+% as released, shipped, published, mirrored or downloadable. The paragraph
+% "The audited sources are identified, not redistributed" below is the only
+% place the corpus is described, so any future edit that promotes the tarball
+% has to pass through it.
 % =====================================================================
 
 \section{Artifacts}
 \label{sec:artifacts}
 
 \textbf{Six artifacts are released, and the first is the one this paper's own
-audit found nobody publishes.}
+audit found nobody publishes for the tasks their claims are about.}
 
 \paragraph{Per-item outputs.} \textbf{88 cell JSONL files}: one row per
 evaluation item, for every model $\times$ method $\times$ seed $\times$ task in
 the controlled experiment, carrying the per-item correctness state that the
-paired test consumes. Section~\ref{sec:audit:v3} reports that \textbf{0 of the
-17 audited sources release these} for the tasks their own equivalence claim
-covers, and the fifth line of the reporting standard in
-Section~\ref{sec:conclusion} asks the field to. Withholding ours would leave
-that recommendation untestable against the paper making it, so every controlled
-result reported here can be recomputed from item level upward by a reader who
-downloads the release.
-% SOURCE for 0 of 17: \S\ref{sec:audit:v3}; results/audit_verdicts_rev2.csv
-% column v3_per_item_outputs (0 yes, 3 partial, 14 no).
+paired test consumes. Section~\ref{sec:audit:v3} reports that
+\textbf{\AuditPerItemTaskMatched{} of the \AuditEligible{} eligible sources
+release \emph{task-matched} per-item outputs}, those covering the tasks their own
+equivalence claim is about, and that \AuditPerItemOtherTaskOnly{}
+(\AuditPerItemOtherTaskClaims{}) release outputs for other tasks only; the fifth
+line of the reporting standard in Section~\ref{sec:conclusion} asks the field to
+close that gap. Withholding ours would leave that recommendation untestable
+against the paper making it, so every controlled result reported here can be
+recomputed from item level upward by a reader who downloads the release.
+% SOURCE: \S\ref{sec:audit:v3}; results/audit_verdicts_rev3.csv column
+% v3_per_item_outputs over the 16 ELIGIBLE rows (0 yes, 3 partial, 13 no).
+% Counts come from \Audit* macros, not typed here. The rev-2 pointer and its
+% "14 no" tally were the pre-R10-exclusion denominator and are superseded.
 
 They ship in \textbf{both forms, deliberately}. The extracted files are directly
 loadable; the \textbf{two sealed run archives}, the mini-grid and the escalation
@@ -2900,8 +3283,61 @@ margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum detectable
 difference, required-$n$, and the certification-table generator
 (\textbf{Apache-2.0}; everything else is \textbf{CC-BY-4.0}). The \textbf{audit
 artifacts} are the frozen 17-claim table with source content hashes and the
-per-claim verdict CSV, with every robustness and transparency column. The
-\textbf{certification tables} ship twelve rows per margin at 1, 2 and 3\,pp.
+per-claim verdict CSV, with every robustness and transparency column, plus the
+source manifest and retrieval script described below; the captured source text
+itself is not among them. The \textbf{certification tables} ship twelve rows per
+margin at 1, 2 and 3\,pp.
+
+% ADDED 2026-08-02. Final rev-3 checklist §8: "audit redistribution licenses
+% before publishing archived copies of papers, model cards, or web pages" and
+% "if redistribution is not permitted, publish URLs, version identifiers,
+% hashes, retrieval scripts, manifests, and compliant excerpts; keep full
+% captures private". Option A, chosen by Amogh 2026-08-02.
+% SOURCE, licensing: redistribution review of 2026-08-02, recorded in
+% docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §10. Four sources with no
+% third-party republication grant (R11 Meta AI blog, R12 NVIDIA TensorRT-LLM
+% doc, R13 and R14 vLLM pages) plus the arXiv default licence over R01-R07.
+% SOURCE, provenance: docs/audit_sources_manifest.tsv status column (15 MATCH,
+% R11 MISMATCH, R13 NO-BASELINE) and scripts/fetch_audit_sources.py, whose
+% UNSTABLE map lists R11 and R12. Offline run 2026-08-02 over the private
+% archive: 17 verified, 0 drifted, 0 expected-drift, 0 unverifiable, 0 failed.
+% DO NOT write "no source permits redistribution" or any general statement of
+% what is lawful. What is claimed here is what was checked and what it found.
+\paragraph{The audited sources are identified, not redistributed.} The audit
+reads 17 sources in full, and \textbf{their full-text captures are in no
+release}. A redistribution review conducted on 2026-08-02 examined the terms
+attached to each source before any copy was published. It found four sources,
+the Meta AI blog post, the NVIDIA TensorRT-LLM documentation page and two vLLM
+pages, carrying no grant that would permit a third party to republish their
+text, and it found the seven method papers under arXiv's default licence, which
+authorises arXiv to distribute them rather than authorising us to. Publishing
+the corpus was therefore never an option that was open to us, and the working
+archive of it is kept private.
+
+What ships instead is what makes the corpus rebuildable and checkable: the
+source URL and pinned version identifier for every claim, a SHA-256 for every
+captured file, the per-file manifest
+\texttt{docs/\allowbreak{}audit\_sources\_\allowbreak{}manifest.tsv} carrying
+both digests and a per-row provenance status, and
+\texttt{scripts/\allowbreak{}fetch\_\allowbreak{}audit\_sources.py}, a
+standard-library script that re-fetches each source by the retrieval method
+recorded for it and compares the result against the recorded digest. Quoted text
+appears in this paper as short excerpts with their locations. A reader who runs
+the script obtains each source from its own publisher, which is where it is
+offered for reading.
+
+\textbf{Two of the seventeen bound what a digest can establish, and the manifest
+records that per row rather than averaging it away.} R11 is served with
+per-response content: two fetches made seconds apart returned different bytes,
+so the digest recorded for it was never a valid fingerprint of the page, and the
+retrieval script reports it as expected drift rather than as a verification
+failure. R13 does carry a digest for the archived capture, so a re-fetch can be
+checked against that capture; what is absent is any digest recorded \emph{before}
+the capture was made, so the capture itself was never corroborated against an
+independent earlier record. Provenance for these two is documentary rather than
+cryptographic, neither is described anywhere in this paper as hash-verified, and
+the other fifteen reproduced their recorded digests exactly when re-fetched on
+2026-07-31.
 
 \paragraph{Reproduction package.} Registrations and their dated amendments,
 signed decision records, configs, the container image SHA-256 and build recipe,
@@ -2968,12 +3404,25 @@ computed over the atlas describe the evidence the field circulates, not the
 behaviour of quantization in general.
 
 \paragraph{Discordance is imputed for audited claims.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
+% SOURCE: results/audit_verdicts_rev3.csv column discordance_match_tier;
+% \S\ref{sec:audit:rules}.
+% REV-1 SURVIVOR, CORRECTED 2026-08-02. This read "Two claims fall through to
+% the global tier", which is rev-1 imputation behaviour: rev-1 descended to a
+% global tier, rev-3 does not, and no rev-3 claim matches there. The coarsest
+% tier any claim reaches is bit width alone. The per-claim tier is released, so
+% the sentence now points at that column instead of restating a count. This is
+% the same failure mode as the 1,155/1,254 population figures -- prose written
+% against rev-1 tables that a later revision replaced.
 No audited source reports a per-item disagreement rate, so the audit imputes one
-from the nearest atlas tier, using the median of the first non-empty tier. Two
-claims fall through to the global tier and one matches at the most specific tier;
-the match tier is released per claim, and the independent-binomial robustness
-column bounds the effect of the imputation in the conservative direction.
+from the nearest atlas tier, using the median of the first non-empty tier. The
+tiers actually reached run from the most specific, matching model family, bit
+width and benchmark together, down to bit width alone; the match tier and the
+number of atlas cells behind it are released per claim, and the
+independent-binomial robustness column bounds the effect of the imputation in
+the conservative direction. A claim matched at a coarse tier rests on a wider
+and less similar set of cells, and Appendix~\ref{app:audit:imputation} names the
+weakest such match in the table explicitly rather than averaging the concern
+away.
 
 \paragraph{Family aggregation in the certification tables.}
 % SOURCE: results/certification_tables_rev2.csv column n_atlas_cells
@@ -2992,10 +3441,17 @@ rather than per claim\,$\times$\,benchmark, because operating at a finer
 granularity would require inventing rows the freeze does not contain.
 
 \paragraph{Audit scope.}
+% SCOPE RULE (final rev-3 checklist §5): the counts are prevalences IN THIS
+% SAMPLE. Do not restate them as estimates of how often the field as a whole
+% fails to declare a margin or release outputs; the frames were chosen for
+% auditability, not drawn at random from the literature.
 The three frames fix the population; sources outside them are not audited, and
 claims discovered after the table freeze would form a separately reported
-post-freeze stratum. The audit measures evidential sufficiency only, and says
-nothing about whether an audited model is in fact equivalent.
+post-freeze stratum. Every proportion reported here describes this audited
+sample of \AuditEligible{} eligible sources and is not an estimate of prevalence
+in the compression literature, which the three frames were never drawn to
+represent. The audit measures evidential sufficiency only, and says nothing
+about whether an audited model is in fact equivalent.
 
 \paragraph{Experimental scope.}
 % SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 4;
@@ -3053,8 +3509,10 @@ All benchmarks are English and predominantly multiple-choice or short-answer,
 with per-item correctness defined by the original harness. Float-scored
 generation tasks are outside the flip model entirely, and 33 atlas cells were
 excluded for exactly this reason, so nothing here applies to quality claims
-about open-ended generation, including the CIDEr-style metric that made one
-audited claim unscoreable (\S\ref{sec:audit:r04}).
+about open-ended generation, including the CIDEr-style metric that put
+\AuditOutsideFrameworkClaim{} outside our registered binary paired-outcome
+calculation (\S\ref{sec:audit:r04}). That is a limit of the flip model we
+registered, not of paired analysis, which handles graded metrics perfectly well.
 
 \paragraph{Status of the atlas numbers.}
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7 (the original
@@ -3095,16 +3553,25 @@ revisions is reported rather than absorbed
 \section{Conclusion: a reporting standard for compression claims}
 \label{sec:conclusion}
 
+% Counts are \Audit* macros from paper/audit_denominators.tex. The
+% task-matched qualifier and the three other-task releases stay in the same
+% sentence as the zero: without them the claim is false (\S\ref{sec:audit:v3}).
 The claim ``near-lossless'' is cheap to write and expensive to support. This
 paper measured the gap, and what the measurement mostly found was absence rather
-than error. Across \textbf{16 eligible sources, none declares a prospective
-numerical equivalence margin and none releases per-item outputs for the tasks
-its claim rests on}; five cannot be assessed at all from what they report. Of
-the eleven that can, ten were sized to carry their claim at a uniform
-2\,pp margin and one cannot be classified without committing to a discordance
-rate its source never reported. The apparatus that closes the gap is equivalence
-certification at a declared margin, with sample-size tables computed from
-observed churn rather than assumed variance.
+than error. Across \textbf{\AuditEligible{} eligible sources, none declares a
+prospective numerical equivalence margin and none releases \emph{task-matched}
+per-item outputs}, though \AuditPerItemOtherTaskOnly{} release outputs for other
+tasks only; \AuditNotAssessable{} cannot be assessed at all from what they
+report. Of the \AuditAssessable{} that can, \AuditAboveThroughout{} stay above
+the approximate planning threshold at a uniform \AuditMarginPP{}\,pp margin
+throughout the interquartile range of the imputed discordance rate, and
+\AuditChangesWithinIQR{} cannot be classified without committing to a discordance
+rate its source never reported; \AuditBelowThroughout{} stay below the threshold
+throughout that interval. These are prevalences in this audited sample of
+\AuditEligible{} eligible sources, not estimates for the literature. The
+apparatus that closes the gap is equivalence certification at a declared margin,
+with sample-size tables computed from observed churn rather than assumed
+variance.
 
 % Sequential certification was a full section in earlier drafts. It is a
 % registered-but-unrun component and a results-free section reads as padding, so
@@ -3138,8 +3605,9 @@ We propose five lines that a model card or method paper can adopt directly.
   gives the count your benchmark family requires at your margin; say which
   column you are in and what you actually ran.
   \item \textbf{Release per-item outputs.} A few megabytes converts an assertion
-  into something a third party can check. No source we audited did this for the
-  tasks its own claim covers.
+  into something a third party can check. No eligible source we audited did this
+  for the tasks its own claim covers, and the \AuditPerItemOtherTaskOnly{} that
+  publish item-level results publish them for other suites.
 \end{enumerate}
 
 % CLOSED 2026-07-27. The \TODO's precondition -- all eight registered cells
@@ -3512,8 +3980,11 @@ gsm8k & 24 & 0.040 / 0.077 / 0.198 & 275 / \textbf{527} / 1{,}364 & 1{,}188 & $2
 % RELOCATED 2026-07-27 (phase 4 trim, candidate 6) from
 % sections/certification.tex §"Scope and caveats", caveats 2, 3 and 4, moved
 % VERBATIM in content. Caveats 1 and 5 remain in the body.
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats";
-% results/certification_tables_rev2.csv column n_atlas_cells.
+% SOURCE: results/certification_tables_rev2.csv column n_atlas_cells (the cell
+% counts below are all rev-2). The caveat list itself comes from
+% docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats", a REV-1
+% narrative whose population figures are superseded; it is cited for the
+% caveats, not for any count.
 
 \paragraph{Cell counts behind each family.} Rev-2 moved
 \texttt{arc\_challenge} to 17 cells, \texttt{gsm8k} to 24, \texttt{hellaswag}
@@ -3739,8 +4210,14 @@ in the released CSV as a labelled transparency column so that the set-aside
 quantity is inspectable rather than deleted.
 
 \paragraph{Choice 5: TOST uses the one-sided $z$.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #5;
-% docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
+% SOURCE: scripts/audit_stats.py::required_n_for_tost (Z_ONE_SIDED) and
+% ::minimum_detectable_delta (two-sided), which are the implementation of
+% record; \S\ref{sec:cert:method}. The rationale was first written up in
+% docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #5 and
+% docs/CERTIFICATION_TABLES_2026-07-20.md §Method, both REV-1 narratives whose
+% numeric provenance is superseded; the z-choice argument they make is not
+% population-dependent and is unaffected, but they are not the source for any
+% number here.
 The project's own helper, \texttt{flipeval.required\_n\_for\_effect}, uses the
 two-sided $z_{1-\alpha/2}$. That is correct for \emph{detection} and wrong for
 TOST, which rejects two one-sided nulls at level $\alpha$ each. Reusing the
@@ -3849,10 +4326,23 @@ slightly (0.1327 $\to$ 0.1375) and S1 median $|$net delta$|$ rises
 rises sharply from 17.5\% to 26.5\%, because the recovered pairs are larger-$n$
 cells, which resolve more differences. Every S2 field is identical across revisions.
 
-The headline verdicts did not move. $K = 4$ of 12 determinate claims
-underpowered for their own assertion and $J = 5$ indeterminate, identical to
-rev-1 under the rev-2 discordance imputation, with the uniform-2\,pp secondary
-reading unchanged at 1 of 12. No new verdict computation was triggered. In the
+% HISTORY, PRE-AMENDMENT-2, AND SUPERSEDED. This paragraph reports what the
+% rev-1 -> rev-2 population change did to the headline AS IT THEN STOOD. Both
+% the count and the "underpowered for their own assertion" construction are
+% retired by Amendment 2 and are quoted here as the superseded reading, never
+% asserted. The current result is \AuditBelowThresholdAtMedian of
+% \AuditAssessable at the registered uniform margin; see \S\ref{sec:audit:results}.
+% Do NOT update these figures to rev-3 -- the point of the paragraph is that the
+% rev-2 population change moved nothing, which is a statement about rev-2.
+The headline verdicts did not move under the rev-2 population change. On the
+own-margin reading then in force, since superseded by Amendment~2, the audit
+stood at $K = 4$ of 12 determinate claims and $J = 5$ indeterminate, identical
+to rev-1 under the rev-2 discordance imputation, with the uniform-2\,pp
+secondary reading unchanged at 1 of 12. Those counts are quoted as the state of
+the analysis at that date and are not current results: the eligible denominator
+later changed with R10's exclusion, and the own-margin reading was withdrawn
+outright. What survives is the finding that enlarging the atlas moved no
+verdict. No new verdict computation was triggered. In the
 certification tables no family entered or left, and \texttt{bbh}, \texttt{gpqa},
 \texttt{ifeval}, \texttt{math}, \texttt{mmlu\_pro} and \texttt{musr} are
 unchanged in both cell count and required $n$; the families that moved are
@@ -3917,7 +4407,11 @@ control, but are recorded per cell and disclosed.
 \label{app:atlas:exclusions}
 
 % SOURCE: results/atlas_cells_summary_rev2.csv, reason column;
-% results/atlas_exclusions.csv.
+% results/atlas_exclusions_rev2.csv.
+% REPOINTED 2026-08-02: the unsuffixed results/atlas_exclusions.csv is the
+% superseded rev-1 exclusion table. The rev-2 file is the one these counts were
+% read from, and the rev-1 name is a prefix of it, which is why the stale
+% pointer survived alongside a correct rev-2 pointer on the line above.
 % POPULATION NOTE: these figures (and only these) use the 1,807 count, which is
 % the analysed set BEFORE the 99 disclosed probe cells and the float-scored
 % remainder are removed to reach the 1,707 analysis population of §5.3.
@@ -4165,6 +4659,22 @@ paths, charge account, usernames, cluster hostnames) were replaced with
 placeholders before publication; no accuracy, hash, count, seed, timestamp, job
 ID or decision value was altered, and the sealed archives were not rewritten, so
 their recorded checksums still verify.
+% ADDED 2026-08-02. Final rev-3 checklist §8, Option A. Keep this consistent
+% with sections/artifacts.tex; that paragraph is the primary statement and this
+% is the datasheet's licensing entry for the same decision.
+\textbf{(*) The 17 audited sources are not redistributed.} A redistribution
+review on 2026-08-02 found four of them with no third-party republication grant
+and the seven method papers under arXiv's default licence, which authorises
+arXiv rather than us to distribute them, so the release carries source URLs,
+pinned version identifiers, per-file SHA-256 digests, the manifest and a
+retrieval script in place of the captured text, and the full-text captures are
+kept private (\S\ref{sec:artifacts}). \textbf{(*) Two sources carry provenance
+limits no digest can close}: R11's page is generated per response, so its
+recorded digest was never a valid fingerprint, and R13 has a digest for the
+archived capture but none recorded before it, so that capture was never
+corroborated against an earlier record. Both are recorded per row in the
+manifest's status column and reported by the retrieval script rather than
+smoothed into a pass rate.
 
 \paragraph{Revision history.} Both revisions are published and the delta is
 reported. Rev-1 carried a population defect found by an independent spot-check
@@ -4754,20 +5264,21 @@ Sections in reading order (numbered as the compiled paper numbers them; front ma
 
 | # | Section | File |
 |---|---|---|
+| 1 | paper/audit_denominators.tex | `paper/audit_denominators.tex` |
 | — | Abstract | `paper/abstract.tex` |
-| 1 | Introduction | `paper/sections/introduction.tex` |
-| 2 | Related work and positioning | `paper/sections/related_work.tex` |
-| 3 | Preregistration, freezes, and analyst degrees of freedom | `paper/sections/preregistration.tex` |
-| 4 | An audit of published near-lossless claims | `paper/sections/audit.tex` |
-| 5 | Certification tables: how many items an equivalence claim needs | `paper/sections/certification.tex` |
-| 6 | An atlas of the public record of compression evaluation | `paper/sections/atlas.tex` |
-| 7 | Does the calibration seed reorder compression methods? | `paper/sections/minigrid.tex` |
+| 2 | Introduction | `paper/sections/introduction.tex` |
+| 3 | Related work and positioning | `paper/sections/related_work.tex` |
+| 4 | Preregistration, freezes, and analyst degrees of freedom | `paper/sections/preregistration.tex` |
+| 5 | An audit of published near-lossless claims | `paper/sections/audit.tex` |
+| 6 | Certification tables: how many items an equivalence claim needs | `paper/sections/certification.tex` |
+| 7 | An atlas of the public record of compression evaluation | `paper/sections/atlas.tex` |
+| 8 | Does the calibration seed reorder compression methods? | `paper/sections/minigrid.tex` |
 | ↳ | (subsection) The mechanical escalation screen | `paper/sections/minigrid_escalation.tex` |
-| 8 | Exploratory scoring-pipeline sensitivity | `paper/sections/harness_sensitivity.tex` |
-| 9 | Discriminant validity | `paper/sections/discriminant.tex` |
-| 10 | Artifacts | `paper/sections/artifacts.tex` |
-| 11 | Limitations | `paper/sections/limitations.tex` |
-| 12 | Conclusion: a reporting standard for compression claims | `paper/sections/conclusion.tex` |
+| 9 | Exploratory scoring-pipeline sensitivity | `paper/sections/harness_sensitivity.tex` |
+| 10 | Discriminant validity | `paper/sections/discriminant.tex` |
+| 11 | Artifacts | `paper/sections/artifacts.tex` |
+| 12 | Limitations | `paper/sections/limitations.tex` |
+| 13 | Conclusion: a reporting standard for compression claims | `paper/sections/conclusion.tex` |
 | App. | Full audit table | `paper/sections/appendix_audit_table.tex` |
 | App. | Preregistration detail | `paper/sections/appendix_prereg_detail.tex` |
 | App. | Atlas construction detail | `paper/sections/appendix_atlas_detail.tex` |
