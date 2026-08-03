@@ -364,14 +364,25 @@ def test_generated_and_planning_contexts():
 # 6. End to end over the real tree.
 # --------------------------------------------------------------------------
 
-def test_real_tree_scan_finds_files_and_no_rule_is_dead():
-    """Guards the two ways a whole-tree scan quietly becomes a no-op: an empty
-    file list, and a rule that matches nothing anywhere."""
-    all_hits, n_files = cp.check_stale_claims(cp.ROOT)
+def test_real_tree_scan_does_not_collapse():
+    """Guards the way a whole-tree scan quietly becomes a no-op: an empty file
+    list.
+
+    This deliberately does NOT assert that every rule fires somewhere in the
+    real tree. That assertion was here and was removed during integration,
+    because it makes the suite depend on the defects surviving: it passes only
+    while stale claims remain, and it fails at the moment the last instance of
+    some rule is repaired. That inverts the point of the linter, and it would
+    have meant the final prose fix could not land without also editing this
+    test.
+
+    Rule liveness is proved instead against fixed samples, by
+    test_every_rule_has_a_sample and test_every_rule_fires_on_its_sample. Those
+    catch a mistyped or dead pattern just as well and cannot rot as the tree is
+    cleaned.
+    """
+    _, n_files = cp.check_stale_claims(cp.ROOT)
     assert n_files > 100, "scan scope collapsed to %d files" % n_files
-    fired = {h["rule"] for h in all_hits}
-    dead = {k for k, _, _, _ in cp.STALE_RULES} - fired
-    assert not dead, "rules matched nothing over the whole tree: %s" % sorted(dead)
 
 
 def test_scan_scope_covers_every_required_tree():
