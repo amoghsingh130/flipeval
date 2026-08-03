@@ -104,6 +104,15 @@
 \fi
 \date{Draft \today}
 
+% Audit denominators and per-claim values, GENERATED from the sealed rev-3
+% verdict CSV by paper/tools/gen_denominator_macros.py. Loaded in the preamble
+% so every section can consume \AuditEligible, \AuditAssessable, the
+% \AuditXtab* cross-tab and \AuditVal{Rnn}{field} instead of typing a count.
+% NEVER hand-type an audit count in a section: that is exactly how the retired
+% "4 of 12" headline outlived the verdicts that produced it, and it is
+% withdrawn. Regenerate this file, do not edit it.
+\input{audit_denominators}
+
 \begin{document}
 \maketitle
 

@@ -7,16 +7,25 @@
 \section{Conclusion: a reporting standard for compression claims}
 \label{sec:conclusion}
 
+% Counts are \Audit* macros from paper/audit_denominators.tex. The
+% task-matched qualifier and the three other-task releases stay in the same
+% sentence as the zero: without them the claim is false (\S\ref{sec:audit:v3}).
 The claim ``near-lossless'' is cheap to write and expensive to support. This
 paper measured the gap, and what the measurement mostly found was absence rather
-than error. Across \textbf{16 eligible sources, none declares a prospective
-numerical equivalence margin and none releases per-item outputs for the tasks
-its claim rests on}; five cannot be assessed at all from what they report. Of
-the eleven that can, ten were sized to carry their claim at a uniform
-2\,pp margin and one cannot be classified without committing to a discordance
-rate its source never reported. The apparatus that closes the gap is equivalence
-certification at a declared margin, with sample-size tables computed from
-observed churn rather than assumed variance.
+than error. Across \textbf{\AuditEligible{} eligible sources, none declares a
+prospective numerical equivalence margin and none releases \emph{task-matched}
+per-item outputs}, though \AuditPerItemOtherTaskOnly{} release outputs for other
+tasks only; \AuditNotAssessable{} cannot be assessed at all from what they
+report. Of the \AuditAssessable{} that can, \AuditAboveThroughout{} stay above
+the approximate planning threshold at a uniform \AuditMarginPP{}\,pp margin
+throughout the interquartile range of the imputed discordance rate, and
+\AuditChangesWithinIQR{} cannot be classified without committing to a discordance
+rate its source never reported; \AuditBelowThroughout{} stay below the threshold
+throughout that interval. These are prevalences in this audited sample of
+\AuditEligible{} eligible sources, not estimates for the literature. The
+apparatus that closes the gap is equivalence certification at a declared margin,
+with sample-size tables computed from observed churn rather than assumed
+variance.
 
 % Sequential certification was a full section in earlier drafts. It is a
 % registered-but-unrun component and a results-free section reads as padding, so
@@ -50,8 +59,9 @@ We propose five lines that a model card or method paper can adopt directly.
   gives the count your benchmark family requires at your margin; say which
   column you are in and what you actually ran.
   \item \textbf{Release per-item outputs.} A few megabytes converts an assertion
-  into something a third party can check. No source we audited did this for the
-  tasks its own claim covers.
+  into something a third party can check. No eligible source we audited did this
+  for the tasks its own claim covers, and the \AuditPerItemOtherTaskOnly{} that
+  publish item-level results publish them for other suites.
 \end{enumerate}
 
 % CLOSED 2026-07-27. The \TODO's precondition -- all eight registered cells

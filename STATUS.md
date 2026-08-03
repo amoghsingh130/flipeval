@@ -16,11 +16,15 @@ Updated: 2026-07-16
 - New-component registrations frozen 2026-07-15 (commit b74fd58): mini-grid
   scope/escalation, atlas mining, audit; audit §3.3 amended to blind
   fresh-session independence (d6e02dd).
-- Atlas flip analysis complete over the frozen 59-pair manifest: 1,254
-  analyzed cells (906 S1 + 348 S2). Audit dual extraction complete and the
-  claim table frozen at 17 claims. Results, caveats, and provenance:
-  `docs/RESULTS_2026-07-15_ATLAS_AUDIT.md`. Verdict math and headline
-  aggregates remain unrun.
+- Atlas flip analysis complete over the frozen 59-pair manifest, at the time
+  1,254 analyzed cells (906 S1 + 348 S2), a rev-1 figure since superseded by
+  the 2026-07-21 rev-2 correction, which recovered dropped pairs and gives
+  1,807 analyzed and 1,707 probe-excluded analysis cells (S1 1,398 / S2 309);
+  see `docs/ATLAS_REV2_CORRECTION_2026-07-21.md`. Audit dual extraction
+  complete and the claim table frozen at 17 candidate claims, of which 16 are
+  eligible under the frozen §3.1 inclusion rule as applied in rev-3. Results,
+  caveats, and provenance: `docs/RESULTS_2026-07-15_ATLAS_AUDIT.md`. Verdict
+  math and headline aggregates remain unrun as of this entry.
 - Local suite: `53 passed, 1 skipped` (atlas pipeline added 10 tests).
 
 ## 2026-07-15 validator and preflight hardening

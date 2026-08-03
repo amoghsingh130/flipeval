@@ -189,8 +189,14 @@ in the released CSV as a labelled transparency column so that the set-aside
 quantity is inspectable rather than deleted.
 
 \paragraph{Choice 5: TOST uses the one-sided $z$.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #5;
-% docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
+% SOURCE: scripts/audit_stats.py::required_n_for_tost (Z_ONE_SIDED) and
+% ::minimum_detectable_delta (two-sided), which are the implementation of
+% record; \S\ref{sec:cert:method}. The rationale was first written up in
+% docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #5 and
+% docs/CERTIFICATION_TABLES_2026-07-20.md §Method, both REV-1 narratives whose
+% numeric provenance is superseded; the z-choice argument they make is not
+% population-dependent and is unaffected, but they are not the source for any
+% number here.
 The project's own helper, \texttt{flipeval.required\_n\_for\_effect}, uses the
 two-sided $z_{1-\alpha/2}$. That is correct for \emph{detection} and wrong for
 TOST, which rejects two one-sided nulls at level $\alpha$ each. Reusing the
@@ -299,10 +305,23 @@ slightly (0.1327 $\to$ 0.1375) and S1 median $|$net delta$|$ rises
 rises sharply from 17.5\% to 26.5\%, because the recovered pairs are larger-$n$
 cells, which resolve more differences. Every S2 field is identical across revisions.
 
-The headline verdicts did not move. $K = 4$ of 12 determinate claims
-underpowered for their own assertion and $J = 5$ indeterminate, identical to
-rev-1 under the rev-2 discordance imputation, with the uniform-2\,pp secondary
-reading unchanged at 1 of 12. No new verdict computation was triggered. In the
+% HISTORY, PRE-AMENDMENT-2, AND SUPERSEDED. This paragraph reports what the
+% rev-1 -> rev-2 population change did to the headline AS IT THEN STOOD. Both
+% the count and the "underpowered for their own assertion" construction are
+% retired by Amendment 2 and are quoted here as the superseded reading, never
+% asserted. The current result is \AuditBelowThresholdAtMedian of
+% \AuditAssessable at the registered uniform margin; see \S\ref{sec:audit:results}.
+% Do NOT update these figures to rev-3 -- the point of the paragraph is that the
+% rev-2 population change moved nothing, which is a statement about rev-2.
+The headline verdicts did not move under the rev-2 population change. On the
+own-margin reading then in force, since superseded by Amendment~2, the audit
+stood at $K = 4$ of 12 determinate claims and $J = 5$ indeterminate, identical
+to rev-1 under the rev-2 discordance imputation, with the uniform-2\,pp
+secondary reading unchanged at 1 of 12. Those counts are quoted as the state of
+the analysis at that date and are not current results: the eligible denominator
+later changed with R10's exclusion, and the own-margin reading was withdrawn
+outright. What survives is the finding that enlarging the atlas moved no
+verdict. No new verdict computation was triggered. In the
 certification tables no family entered or left, and \texttt{bbh}, \texttt{gpqa},
 \texttt{ifeval}, \texttt{math}, \texttt{mmlu\_pro} and \texttt{musr} are
 unchanged in both cell count and required $n$; the families that moved are

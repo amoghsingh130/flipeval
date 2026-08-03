@@ -15,12 +15,25 @@ computed over the atlas describe the evidence the field circulates, not the
 behaviour of quantization in general.
 
 \paragraph{Discordance is imputed for audited claims.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §Method, imputation-tier table.
+% SOURCE: results/audit_verdicts_rev3.csv column discordance_match_tier;
+% \S\ref{sec:audit:rules}.
+% REV-1 SURVIVOR, CORRECTED 2026-08-02. This read "Two claims fall through to
+% the global tier", which is rev-1 imputation behaviour: rev-1 descended to a
+% global tier, rev-3 does not, and no rev-3 claim matches there. The coarsest
+% tier any claim reaches is bit width alone. The per-claim tier is released, so
+% the sentence now points at that column instead of restating a count. This is
+% the same failure mode as the 1,155/1,254 population figures -- prose written
+% against rev-1 tables that a later revision replaced.
 No audited source reports a per-item disagreement rate, so the audit imputes one
-from the nearest atlas tier, using the median of the first non-empty tier. Two
-claims fall through to the global tier and one matches at the most specific tier;
-the match tier is released per claim, and the independent-binomial robustness
-column bounds the effect of the imputation in the conservative direction.
+from the nearest atlas tier, using the median of the first non-empty tier. The
+tiers actually reached run from the most specific, matching model family, bit
+width and benchmark together, down to bit width alone; the match tier and the
+number of atlas cells behind it are released per claim, and the
+independent-binomial robustness column bounds the effect of the imputation in
+the conservative direction. A claim matched at a coarse tier rests on a wider
+and less similar set of cells, and Appendix~\ref{app:audit:imputation} names the
+weakest such match in the table explicitly rather than averaging the concern
+away.
 
 \paragraph{Family aggregation in the certification tables.}
 % SOURCE: results/certification_tables_rev2.csv column n_atlas_cells
@@ -39,10 +52,17 @@ rather than per claim\,$\times$\,benchmark, because operating at a finer
 granularity would require inventing rows the freeze does not contain.
 
 \paragraph{Audit scope.}
+% SCOPE RULE (final rev-3 checklist §5): the counts are prevalences IN THIS
+% SAMPLE. Do not restate them as estimates of how often the field as a whole
+% fails to declare a margin or release outputs; the frames were chosen for
+% auditability, not drawn at random from the literature.
 The three frames fix the population; sources outside them are not audited, and
 claims discovered after the table freeze would form a separately reported
-post-freeze stratum. The audit measures evidential sufficiency only, and says
-nothing about whether an audited model is in fact equivalent.
+post-freeze stratum. Every proportion reported here describes this audited
+sample of \AuditEligible{} eligible sources and is not an estimate of prevalence
+in the compression literature, which the three frames were never drawn to
+represent. The audit measures evidential sufficiency only, and says nothing
+about whether an audited model is in fact equivalent.
 
 \paragraph{Experimental scope.}
 % SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 4;
@@ -100,8 +120,10 @@ All benchmarks are English and predominantly multiple-choice or short-answer,
 with per-item correctness defined by the original harness. Float-scored
 generation tasks are outside the flip model entirely, and 33 atlas cells were
 excluded for exactly this reason, so nothing here applies to quality claims
-about open-ended generation, including the CIDEr-style metric that made one
-audited claim unscoreable (\S\ref{sec:audit:r04}).
+about open-ended generation, including the CIDEr-style metric that put
+\AuditOutsideFrameworkClaim{} outside our registered binary paired-outcome
+calculation (\S\ref{sec:audit:r04}). That is a limit of the flip model we
+registered, not of paired analysis, which handles graded metrics perfectly well.
 
 \paragraph{Status of the atlas numbers.}
 % SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7 (the original

@@ -93,10 +93,11 @@ meeting the criterion is audited; there is no discretionary sub-selection.
 % REV-3 2026-07-31: the frozen table still holds 17; one is ruled ineligible in
 % \S\ref{sec:audit:taxonomy} by the inclusion rule registered here. Both numbers
 % are load-bearing and must not be collapsed into one.
-The frozen table contains 17 candidate claims: 7 method papers, 7 official model
-cards or blogs, and 3 vendor documents. One is subsequently ruled ineligible
-against this same criterion (\S\ref{sec:audit:taxonomy}), leaving \textbf{16}
-eligible sources; every count in this section is over those 16.
+The frozen table contains \AuditFrozenCandidates{} candidate claims: 7 method
+papers, 7 official model cards or blogs, and 3 vendor documents. One is
+subsequently ruled ineligible against this same criterion
+(\S\ref{sec:audit:taxonomy}), leaving \textbf{\AuditEligible{}} eligible
+sources; every count in this section is over those \AuditEligible{}.
 % ADDED 2026-07-31. The body previously said only "extracted twice by mutually
 % blind passes" and never said by WHAT. That the passes were language-model
 % agent sessions was disclosed only inside the reproduced registration
@@ -152,11 +153,13 @@ source: the sentence had been composed from a table cell. The registered
 inclusion rule requires the assertion to appear in prose or a table caption, and
 it appears in neither, so that claim (R10) is excluded from the eligible
 population by applying the rule as registered. The correction moves the eligible
-denominator from 17 to \textbf{16}. It changes neither the number of claims below
-the planning threshold nor the per-item-outputs result, and the excluded row
-remains in the released claim table and the certification appendix.
+denominator from \AuditFrozenCandidates{} to \textbf{\AuditEligible{}}. It
+changes neither the number of claims below the planning threshold nor the
+per-item-outputs result, and the excluded row remains in the released claim
+table and the certification appendix.
 
-Across the 16 eligible sources we distinguish two independent properties: what
+Across the \AuditEligible{} eligible sources we distinguish two independent
+properties: what
 form the source's evidence takes, and whether the reported information suffices
 to assess it numerically at all.
 
@@ -225,10 +228,12 @@ The most actionable finding requires no statistics at all.
 % sources DO release per-item outputs -- for other task suites. "None released
 % per-item outputs" is false without "task-matched"; see the carry checklist §15.
 \begin{quote}
-\textbf{0 of the 16 eligible sources release \emph{task-matched} per-item
-outputs}, meaning the item-level results, for the tasks the equivalence claim is
-actually about, that a third party would need to rerun the paired comparison.
-The tally is 0 \emph{yes}, 3 \emph{partial}, 13 \emph{no}.
+\textbf{\AuditPerItemTaskMatched{} of the \AuditEligible{} eligible sources
+release \emph{task-matched} per-item outputs}, meaning the item-level results,
+for the tasks the equivalence claim is actually about, that a third party would
+need to rerun the paired comparison. The tally is \AuditPerItemTaskMatched{}
+\emph{yes}, \AuditPerItemOtherTaskOnly{} \emph{partial}
+(\AuditPerItemOtherTaskClaims{}), \AuditPerItemNone{} \emph{no}.
 \end{quote}
 
 The three partial cases,%
@@ -285,7 +290,11 @@ n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\ma
 \label{eq:tost-n}
 \end{equation}
 with $z_{1-\alpha}$ \emph{one-sided} ($1.6449$), because TOST rejects two
-one-sided nulls at level $\alpha$ each. A claim is recorded as \emph{below the
+one-sided nulls at level $\alpha$ each. At $\alpha=.05$ per bound this is
+operationally the requirement that a \textbf{90\% two-sided} confidence
+interval fall inside $\pm m$, not a 95\% one; the corresponding detection
+quantity V1 above is the one that takes the two-sided $z$.
+A claim is recorded as \emph{below the
 approximate planning threshold} iff its reported $n$ is below $n_{\mathrm{req}}$
 at the registered margin. The choice of one-sided $z$ is not cosmetic; see
 \S\ref{sec:prereg:choices}, interpretive choice~5.
@@ -341,12 +350,13 @@ observed cells.
 % v2_underpowered_paired_2pp, robustness. Counts over the 16 ELIGIBLE rows.
 % DENOMINATOR LEDGER (carry checklist §9): 17 - 1 = 16; 11 + 5 = 16;
 % 0 + 1 + 10 = 11. Every one of these is checkable in the CSV.
-Of the 16 eligible claims, 5 are \textbf{not numerically assessable}: their
-reporting does not support a verdict under the registered framework, leaving 11
-assessable claims. Of those 11, \textbf{one falls below the approximate planning
-threshold} at the registered 2\,pp margin under the median discordance
-imputation, and that one claim's classification does not survive the sensitivity
-analysis.
+Of the \AuditEligible{} eligible claims, \AuditNotAssessable{} are \textbf{not
+numerically assessable}: their reporting does not support a verdict under the
+registered framework, leaving \AuditAssessable{} assessable claims. Of those
+\AuditAssessable{}, \textbf{\AuditBelowThresholdAtMedian{} falls below the
+approximate planning threshold} at the registered \AuditMarginPP{}\,pp margin
+under the median discordance imputation, and that one claim's classification
+does not survive the sensitivity analysis.
 
 % SUPERSEDED TABLE, DO NOT RESTORE. This replaces tab:audit-underpowered, whose
 % four rows (R17, R07, R06, R15) were flagged at their own reported deltas and

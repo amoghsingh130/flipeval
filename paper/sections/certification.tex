@@ -2,9 +2,16 @@
 % Section: Certification tables  -- COMPLETE DRAFT
 %
 % PRIMARY SOURCES for every number in this section:
-%   docs/CERTIFICATION_TABLES_2026-07-20.md  (authoritative narrative)
-%   results/certification_tables_rev2.csv    (machine-readable, 3 margins/family)
+%   results/certification_tables_rev2.csv    (AUTHORITATIVE, 3 margins/family)
 %   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §5 (registered metric set)
+%   docs/CERTIFICATION_TABLES_2026-07-20.md  (narrative and rationale only)
+%
+% PRECEDENCE, SET 2026-08-02. The rev-2 CSV outranks the 2026-07-20 narrative
+% document wherever they differ. That document was written against the REV-1
+% atlas population and its numeric provenance is superseded: it derives
+% "analysable cells 1,155 (1,254 non-excluded - 99 probe)", where the rev-2
+% analysis population is 1,707. Its ARGUMENTS are still the source for this
+% section's prose; its NUMBERS are not. Do not restore it as the authority.
 %
 % DISCREPANCY -- CLOSED 2026-07-26 as a wording mismatch, not a data mismatch.
 % docs/CERTIFICATION_TABLES_2026-07-20.md line 4 describes the artifact as
@@ -110,11 +117,14 @@ percentiles of the discordance rates the atlas observes for that family. The
 naive column is the same requirement computed by treating the two runs as
 independent samples. Eleven benchmark families plus the pooled row.}
 \label{tab:certification}
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"The table at the registered
-% 2 pp margin"; every cell cross-checked against results/certification_tables.csv
+% SOURCE: every cell cross-checked against results/certification_tables_rev2.csv
 % rows with margin_pp = 2.0 (columns n_atlas_cells, discordance_p25/median/p75,
 % required_n_p25/median/p75, required_n_independent_binomial,
-% paired_advantage_at_median).
+% paired_advantage_at_median). The layout follows
+% docs/CERTIFICATION_TABLES_2026-07-20.md §"The table at the registered 2 pp
+% margin", a REV-1 narrative whose numbers are superseded by the rev-2 CSV.
+% REPOINTED 2026-08-02: the cross-check pointer named the unsuffixed rev-1 CSV,
+% which is not the file these cells were checked against.
 \begin{tabular}{lrccrr}
 \toprule
 Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
@@ -182,12 +192,17 @@ MMLU) both need more items \emph{and} gain less from pairing.
 The ordering in Table~\ref{tab:certification} is not the intuitive one, and this
 is the section's main conceptual point.
 
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md, closing paragraph of
-% §"Why the naive column is in the table"; results/certification_tables.csv,
-% mmlu vs gpqa at margin_pp = 2.0. Baseline accuracies in the next paragraph are
-% results/certification_tables.csv column median_baseline_accuracy: gpqa 0.3734,
-% mmlu 0.39. Discordances are column discordance_median: mmlu 0.13733,
-% gpqa 0.048397.
+% SOURCE: results/certification_tables_rev2.csv, mmlu vs gpqa at
+% margin_pp = 2.0; the narrative argument is docs/CERTIFICATION_TABLES_
+% 2026-07-20.md §"Why the naive column is in the table" (REV-1 narrative:
+% its population and required-n figures are superseded, its reasoning is not).
+% Baseline accuracies in the next paragraph are results/certification_tables_
+% rev2.csv column median_baseline_accuracy: gpqa 0.3734, mmlu 0.39.
+% Discordances are column discordance_median: mmlu 0.13733, gpqa 0.048397.
+% REPOINTED 2026-08-02: these three pointers named the unsuffixed rev-1 CSV
+% while the prose below already carried the REV-2 value (2,164; rev-1 was
+% 2,123). A stale pointer under a corrected number is the harder defect to
+% see, because the visible text is right.
 MMLU needs about \textbf{2{,}164} items at a 2\,pp margin. GPQA needs
 \textbf{749}. GPQA is by any ordinary account the harder benchmark, and its median
 baseline accuracy in the atlas is 0.373 against MMLU's 0.390, on a task designed
@@ -207,8 +222,10 @@ certification tables are empirical rather than analytic.
 \subsection{Scope and caveats}
 \label{sec:cert:caveats}
 
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats", all five
-% bullets, plus results/certification_tables_rev2.csv column n_atlas_cells.
+% SOURCE: results/certification_tables_rev2.csv column n_atlas_cells for every
+% count; the five caveats themselves are from
+% docs/CERTIFICATION_TABLES_2026-07-20.md §"Scope and caveats", a REV-1
+% narrative cited for its caveats only, its population figures superseded.
 % PROSE-IFIED 2026-07-26 from a five-item list. All five caveats survive as
 % content, in order: (1) <4-cell families omitted, (2) the two thin rows,
 % (3) family aggregation mixes two variation sources, (4) the 99 probe cells,

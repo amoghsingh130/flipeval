@@ -13,10 +13,15 @@
 %  - The "every protocol was frozen" closing claim is dropped; the methods
 %    section establishes it, and asserting it in an abstract reads as a bid for
 %    credibility rather than a result.
-%  - Secondary figures dropped: the 2.0x-12.9x shortfall range, the 145-cell
-%    count with its 8.5%/7.2% pair, and the MMLU-2,164 / GPQA-749 comparison.
-%    All three remain in their result sections. The 5.3x, 12.7x, 4-of-12,
-%    5-of-17, 0-of-17 and 5-of-8 headlines are retained.
+%  - Secondary figures dropped: the shortfall range (since WITHDRAWN outright,
+%    not merely dropped from the abstract), the 145-cell count with its
+%    8.5%/7.2% pair, and the MMLU-2,164 / GPQA-749 comparison. The latter two
+%    remain in their result sections.
+%  - HEADLINE STATUS AT REV-3, correcting this note's own stale list: the 5.3x,
+%    12.7x and 5-of-8 headlines are retained. The 4-of-12 and 5-of-17 headlines
+%    are RETIRED, and 0-of-17 is superseded by 0 of 16 eligible sources with the
+%    task-matched qualifier. All audit counts here now come from
+%    paper/audit_denominators.tex; none is typed.
 %  - "The calibration seed alone reorders" -> what was observed (review 1.8).
 %  - Claims scoped to the registered frames (review 5).
 %
@@ -27,9 +32,9 @@
 \begin{abstract}
 A fraction of a point of benchmark accuracy is the usual evidence that a
 compressed model is equivalent to its original. We show this quantity is least
-informative precisely when two models are most alike: a net delta is what
-survives cancellation between opposing per-item changes, and cancellation is
-most complete in the regime equivalence claims occupy.
+informative when two models are most alike: a net delta is what survives
+cancellation between opposing per-item changes, and cancellation is most
+complete in the regime equivalence claims occupy.
 
 % SOURCE: \S\ref{sec:audit:taxonomy}; \S\ref{sec:audit:v3};
 % \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
@@ -39,23 +44,27 @@ most complete in the regime equivalence claims occupy.
 % construction the amendment retires, since no source asserts one.
 % The threshold result is stated with its sensitivity in the same breath, and
 % scoped to the atlas-IQR interval; "robustly underpowered" is NOT claimed.
-In a preregistered audit of equivalence claims from three registered
-frames (method papers, official model cards and vendor documentation), 16 of 17
-frozen candidates are eligible. None states a prospective numerical equivalence
-margin, and none releases per-item outputs for the tasks its claim rests on;
-ten state no number at all. Five report too little to assess numerically. Among
-the remaining 11, at a uniform 2-percentage-point margin, ten stay above the
-planning threshold across the interquartile range of the imputed disagreement
-rate, and one changes classification within it. We
-audit evidential sufficiency, not truth: no claim is asserted false.
+In a preregistered audit of \AuditFrozenCandidates{} frozen equivalence claims
+from three registered frames (method papers, model cards, vendor documentation),
+\AuditEligible{} are eligible. None states a
+prospective numerical equivalence margin, and none releases
+\emph{task-matched} per-item outputs, though \AuditPerItemOtherTaskOnly{} release
+outputs for other tasks only; \AuditXtabQualTotal{} state no number at all, and
+\AuditNotAssessable{} report too little to assess numerically. Among the
+remaining \AuditAssessable{}, at a uniform
+\AuditMarginPP{}-percentage-point margin, \AuditAboveThroughout{} stay above the
+approximate planning threshold throughout the interquartile range of the imputed
+disagreement rate and \AuditChangesWithinIQR{} changes classification within it;
+\AuditBelowThroughout{} stay below throughout. We audit evidential sufficiency,
+not truth: no claim is called false.
 
 % SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:minigrid:churnratio} Result 1.
 Across an atlas of 1{,}707 paired model-by-task cells mined from public
-per-item evaluation dumps (3B--405B), per-item churn runs $5.3\times$ the net
+per-item evaluation dumps (3B--405B), churn runs $5.3\times$ the net
 accuracy delta; between two compression methods at one bit width the median is
 $12.7\times$. We supply the corresponding apparatus: equivalence testing at a
 declared margin, and certification tables giving the items an evaluation needs,
-computed from disagreement observed under compression rather than from
+computed from disagreement observed under compression, not from
 independent-binomial variance.
 
 % SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
@@ -66,5 +75,22 @@ samples across five seeds. Under the frozen eight-cell decision rule H3 is
 supported: changing the calibration draw was sufficient to reverse the observed
 method ordering in 5 of 8 confirmatory cells, so a single-calibration
 comparison of compression methods is unreliable. All per-item outputs,
-protocols and analysis code are released.
+protocols and code are released.
 \end{abstract}
+
+% =====================================================================
+% MEASUREMENT NOTE. The ARXIV ABSTRACT FIELD header above promises a
+% "measurement note at the end of this file"; it did not previously exist.
+%
+%   cd paper && python3 tools/measure_abstract.py abstract.tex
+%
+% Last measured 2026-08-02, rev-3 narrative pass: 1,903 / 1,920 characters,
+% margin 17, 281 words. MEASURE AFTER EVERY EDIT -- the margin has been under
+% 40 characters three times now, and the arXiv field truncates silently.
+%
+% The audit counts above are \Audit* macros from paper/audit_denominators.tex,
+% NOT typed digits. measure_abstract.py expands them before counting; without
+% that step every macro would have counted as zero characters and the
+% measurement would have read ~30 characters short. Do not "simplify" the
+% expander out of the tool, and do not replace a macro here with its value.
+% =====================================================================

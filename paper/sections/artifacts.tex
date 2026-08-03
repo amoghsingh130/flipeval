@@ -6,10 +6,12 @@
 %
 % REWRITTEN 2026-07-27. Was "Five artifacts are released", listing the atlas
 % first and omitting the per-item outputs entirely. The per-item outputs are
-% not a sixth list item: \S\ref{sec:audit} reports 0 of 17 sources release them
-% and \S\ref{sec:conclusion}'s fifth line asks the field to, so this section is
-% where the paper's own recommendation is either met or not. Named first, with
-% the relationship stated rather than implied.
+% not a sixth list item: \S\ref{sec:audit} reports that no ELIGIBLE source
+% releases task-matched per-item outputs and \S\ref{sec:conclusion}'s fifth line
+% asks the field to, so this section is where the paper's own recommendation is
+% either met or not. Named first, with the relationship stated rather than
+% implied. ("0 of 17" here was the rev-1/rev-2 denominator and is superseded by
+% \AuditPerItemTaskMatched of \AuditEligible; see audit_denominators.tex.)
 %
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
 % exists.
@@ -26,20 +28,24 @@
 \label{sec:artifacts}
 
 \textbf{Six artifacts are released, and the first is the one this paper's own
-audit found nobody publishes.}
+audit found nobody publishes for the tasks their claims are about.}
 
 \paragraph{Per-item outputs.} \textbf{88 cell JSONL files}: one row per
 evaluation item, for every model $\times$ method $\times$ seed $\times$ task in
 the controlled experiment, carrying the per-item correctness state that the
-paired test consumes. Section~\ref{sec:audit:v3} reports that \textbf{0 of the
-17 audited sources release these} for the tasks their own equivalence claim
-covers, and the fifth line of the reporting standard in
-Section~\ref{sec:conclusion} asks the field to. Withholding ours would leave
-that recommendation untestable against the paper making it, so every controlled
-result reported here can be recomputed from item level upward by a reader who
-downloads the release.
-% SOURCE for 0 of 17: \S\ref{sec:audit:v3}; results/audit_verdicts_rev2.csv
-% column v3_per_item_outputs (0 yes, 3 partial, 14 no).
+paired test consumes. Section~\ref{sec:audit:v3} reports that
+\textbf{\AuditPerItemTaskMatched{} of the \AuditEligible{} eligible sources
+release \emph{task-matched} per-item outputs}, those covering the tasks their own
+equivalence claim is about, and that \AuditPerItemOtherTaskOnly{}
+(\AuditPerItemOtherTaskClaims{}) release outputs for other tasks only; the fifth
+line of the reporting standard in Section~\ref{sec:conclusion} asks the field to
+close that gap. Withholding ours would leave that recommendation untestable
+against the paper making it, so every controlled result reported here can be
+recomputed from item level upward by a reader who downloads the release.
+% SOURCE: \S\ref{sec:audit:v3}; results/audit_verdicts_rev3.csv column
+% v3_per_item_outputs over the 16 ELIGIBLE rows (0 yes, 3 partial, 13 no).
+% Counts come from \Audit* macros, not typed here. The rev-2 pointer and its
+% "14 no" tally were the pre-R10-exclusion denominator and are superseded.
 
 They ship in \textbf{both forms, deliberately}. The extracted files are directly
 loadable; the \textbf{two sealed run archives}, the mini-grid and the escalation

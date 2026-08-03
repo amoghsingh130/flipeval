@@ -42,26 +42,37 @@ instrument for closing it.
 
 % SOURCE: results/audit_verdicts_rev3.csv; \S\ref{sec:audit:taxonomy} and
 % \S\ref{sec:audit:results}.
-% Numbers kept here: 17 candidates, 16 eligible, 5 not assessable, 11
-% assessable, 10/1/0 sensitivity, 0 of 16 task-matched outputs. The worked
-% examples and the MDD ratios live only in \S\ref{sec:audit:results}.
+% Every count in this paragraph is a macro from paper/audit_denominators.tex.
+% Do not type one back in: candidates, eligible, not-assessable, assessable and
+% the 10/1/0 sensitivity split all come from the sealed rev-3 verdict CSV. The
+% worked examples and the MDD ratios live only in \S\ref{sec:audit:results}.
 % THE 2.0x-12.9x SHORTFALL RANGE IS WITHDRAWN, NOT RECOMPUTED. It divided by
 % margins no source declared. At the registered 2 pp margin ten of the eleven
 % assessable claims have no shortfall at all, so there is no range. Do not
 % reintroduce this sentence with new numbers in it.
-We enumerate 17 equivalence claims from three registered sampling frames:
-method papers, official quantized model cards, and inference-stack vendor
-documentation. One is ruled ineligible against the registered inclusion rule,
-leaving 16. Not one of the 16 declares a numerical tolerance in advance, and not
-one releases per-item outputs for the tasks its claim rests on, so no equivalence
-claim in the sample can be checked against a standard its author set or rerun by
-a reader. Five cannot be assessed numerically at all from what they report. Of
-the remaining 11, ten were sized to carry the claim made on them at a uniform
-2\,pp margin, and the eleventh cannot be classified without committing to a
-discordance rate its source never reported
-(\S\ref{sec:audit:taxonomy}, \S\ref{sec:audit:results}). No claim is described
-as false: the audited property is the evidential sufficiency of the reported
-evaluation, not the truth of the underlying equivalence.
+% TASK-MATCHED IS LOAD-BEARING AND STAYS IN THE SAME SENTENCE AS THE COUNT:
+% R08, R15 and R16 do release per-item outputs, for other task suites. Dropping
+% the qualifier makes the sentence false (\S\ref{sec:audit:v3}).
+We enumerate \AuditFrozenCandidates{} equivalence claims from three registered
+sampling frames: method papers, official quantized model cards, and
+inference-stack vendor documentation. \AuditIneligible{} of them,
+\AuditIneligibleClaim{}, is ruled ineligible against the registered inclusion
+rule, leaving \AuditEligible{}. Not one of the
+\AuditEligible{} declares a numerical tolerance in advance, and not one releases
+\emph{task-matched} per-item outputs, those covering the tasks its claim rests
+on; \AuditPerItemOtherTaskOnly{} release outputs for other tasks only. So no
+equivalence claim in the sample can be checked against a standard its author set
+or rerun by a reader. A further \AuditNotAssessable{} cannot be assessed
+numerically at all from what they report. Of the remaining \AuditAssessable{},
+\AuditAboveThroughout{} stay above the approximate planning threshold at a
+uniform \AuditMarginPP{}\,pp margin throughout the interquartile range of the
+imputed discordance rate, and \AuditChangesWithinIQR{} changes classification
+within that interval; \AuditBelowThroughout{} stay below the threshold
+throughout it (\S\ref{sec:audit:taxonomy}, \S\ref{sec:audit:results}). No claim
+is described as false: the audited property is the evidential sufficiency of the
+reported evaluation, not the truth of the underlying equivalence, and the
+prevalences above describe this audited sample of \AuditEligible{} eligible
+sources rather than the literature at large.
 
 Equivalence is a certification problem, so we compute certification
 tables, giving the number of items an evaluation needs to certify a compressed
