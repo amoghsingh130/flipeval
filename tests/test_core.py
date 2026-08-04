@@ -145,5 +145,38 @@ def test_two_level_draw_resamples_repeated_seed_occurrences_independently():
     assert item_draws[1].tolist() == [2, 2, 1]
 
 
+def test_public_api_surface():
+    """Pin the top-level export list.
+
+    Nothing previously asserted what `flipeval` exports, so a name could be
+    dropped from __all__ and every other test would still pass. The two
+    planning helpers in particular are the ones a reader arriving from the
+    paper imports by name, and they were reachable only as flipeval.core
+    until this was pinned.
+    """
+    import flipeval
+    from flipeval import core
+
+    assert set(flipeval.__all__) == {
+        "ComparisonResult",
+        "HierarchicalBootstrapResult",
+        "PerSeedBootstrapResult",
+        "RankStabilityResult",
+        "compare",
+        "minimum_detectable_difference",
+        "paired_seed_bootstrap",
+        "rank_stability",
+        "required_n_for_effect",
+    }
+    for name in flipeval.__all__:
+        assert getattr(flipeval, name) is getattr(core, name), name
+
+    # Deliberately not exported: compare() already surfaces TOST through
+    # ComparisonResult, and this takes deltas rather than records. If it is ever
+    # promoted, that is a decision to make explicitly, not by drift.
+    assert not hasattr(flipeval, "tost_equivalence")
+    assert callable(core.tost_equivalence)
+
+
 def deepcopy_records(records):
     return [dict(record) for record in records]

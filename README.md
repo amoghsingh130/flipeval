@@ -99,6 +99,8 @@ it. Everything below is importable, stable, and covered by the test suite.
 | `compare` | function | Pairwise baseline-vs-method comparison. Returns `ComparisonResult`. |
 | `rank_stability` | function | Bootstrap rank-flip rate across two or more methods. Returns `RankStabilityResult`. |
 | `paired_seed_bootstrap` | function | Two-level (seed, item) bootstrap for two methods across matched calibration seeds. Returns `HierarchicalBootstrapResult`. |
+| `required_n_for_effect` | function | Items needed to resolve a given effect, from observed paired deltas. Returns `int` or `None`. |
+| `minimum_detectable_difference` | function | Smallest effect resolvable at the given n, alpha and power. Returns `float`. |
 | `ComparisonResult` | dataclass | Frozen result record, see fields below. |
 | `RankStabilityResult` | dataclass | `methods`, `n_common_items`, `full_sample_winner`, `rank_flip_rate`, `deltas`. |
 | `PerSeedBootstrapResult` | dataclass | Per-seed slice of the hierarchical result. |
@@ -127,30 +129,30 @@ tost_equivalent                True if equivalent at the declared margin
 tost_p_low, tost_p_high        the two one-sided test p-values
 ```
 
-### Planning helpers (`from flipeval.core import ...`)
+### Planning helpers
 
 These take an array of per-item paired deltas and answer the "how many items do
-I need" question:
+I need" question. Both are exported at the top level:
 
 ```python
 import numpy as np
-from flipeval.core import (
-    minimum_detectable_difference,
-    required_n_for_effect,
-    tost_equivalence,
-)
+from flipeval import minimum_detectable_difference, required_n_for_effect
 
 deltas = np.array([...])  # per-item (method_correct - baseline_correct), in {-1, 0, 1}
 
-minimum_detectable_difference(deltas, alpha=0.05, power=0.80)   # -> float
-required_n_for_effect(deltas, effect=0.02, alpha=0.05, power=0.80)  # -> int | None
-tost_equivalence(deltas, margin=0.02, alpha=0.05)               # -> dict
+minimum_detectable_difference(deltas, alpha=0.05, power=0.80)        # -> float
+required_n_for_effect(deltas, effect=0.02, alpha=0.05, power=0.80)   # -> int | None
 ```
 
 Because the variance is estimated from the observed paired deltas rather than
 assumed binomial, `required_n_for_effect` returns substantially different
 numbers from a standard unpaired power calculator. That difference is the
 point.
+
+A lower-level `tost_equivalence(deltas, margin=0.02, alpha=0.05)` is available
+as `flipeval.core.tost_equivalence`. It is not exported at the top level because
+`compare()` already surfaces the same test through `ComparisonResult`, and
+unlike `compare()` it takes deltas rather than records.
 
 ### I/O helpers (`from flipeval.io import ...`)
 
@@ -161,9 +163,9 @@ records = read_jsonl("gptq.mmlu.jsonl")
 records = from_lm_eval_harness("samples.json")
 ```
 
-Note: the planning helpers and I/O helpers are importable from their submodules
-but are not re-exported at the top level, so `from flipeval import read_jsonl`
-will fail. Use `flipeval.io` and `flipeval.core` as shown.
+These stay in `flipeval.io` rather than at the top level, so
+`from flipeval import read_jsonl` will fail. Import them from the submodule as
+shown.
 
 ## Input format
 
