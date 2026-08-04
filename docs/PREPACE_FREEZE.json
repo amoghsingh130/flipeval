@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-04T22:11:44.956694+00:00",
-  "source_commit": "9bac0c56bdf3d4252b5ff6166cb4989fe40bbcd2",
-  "source_tree": "c4f7310c44c66dbad54b7c4a5ae61a45d1c16e39",
+  "created_at": "2026-08-04T22:18:07.903157+00:00",
+  "source_commit": "8aafe22824caca1ebe7529442120904ca92d0218",
+  "source_tree": "d95b86568cf6f752857e1df46bcdbccbe072de66",
   "branch": "main",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
     "PREREGISTRATION.md": "9d7b1a5a691d1b703f7588910a327e748d060c6238c672cc5e2e9702cf8d5115",
-    "README.md": "906489bf8e80240d6fbcb1878630859a837bbba4aaa34c07a2e2981b6b87c4e2",
+    "README.md": "c6329e51ac0dd5f325c2035f9f108a247e661a94c736f663f39b8a3832cc69a5",
     "STATUS.md": "19b0bee876a278847bc62dd387798d49978cc1e803115a6da82cdf9275702ce1",
     "configs/kaggle_qwen_1p5b.yaml": "9b012e690b86747393ceb0c17ef91ef33803e69c447812543a763af9e40e4659",
     "configs/kaggle_qwen_public_quantized.yaml": "73c53f17c018d9fa278c467f4dc4803fd4585aaf58f8d4765bedaf9bfe07383d",
@@ -23,7 +23,7 @@
     "docs/PACE_RUNBOOK.md": "440a22dfd6b0c0e94dcecefef711663054a15e865e31a8c5fdb34a3913e52739",
     "docs/WIKITEXT2_PREFLIGHT_2026-07-13.json": "8b4c107a590df148398685fc36414fa3b1dfc9edefbbbc2b9357de82ffb7dbf8",
     "docs/WIKITEXT2_PROTOCOL_BLOCKER.md": "80665ee1311eefa90b7bdca673e381beba26b777d78f985178cdf3d69f1f9f3e",
-    "flipeval/__init__.py": "7ff709482707d2ce81ab9ee58d7f7e1db8c0c719f8ad4f6d3b9965300319217f",
+    "flipeval/__init__.py": "17c43ad120fa325af78859d81e84022ff71018e2dabba7f692183ce7faef352f",
     "flipeval/__main__.py": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
     "flipeval/cli.py": "2683c8ed4461194a55b6071b0a12776ffb98d7a4353e4da0d306a5d2edc080de",
     "flipeval/core.py": "ed7029c571af187806ecf9da862adff9cd15a8e7562bb9d825739ba4a2420912",
@@ -78,7 +78,7 @@
     "tests/test_build_quantized.py": "50b5857a99502b30087007bc15b30825f21bc13497a1f502efe0af98129e43d9",
     "tests/test_check_paper_stale.py": "d1e11679e04e2dbcaae2acd717acf2617a91f08574ea9b4552022a6573a0ca0c",
     "tests/test_compare_mmlu_reference.py": "887b9539311e16bed12c9886da6a3e5675bb4a03a21a28b3f2b5e2ad7de7271a",
-    "tests/test_core.py": "3a7bbabf822bc89c08db5b4d49e4c5d9c2347e24105a0d796c671847d9d6e6b5",
+    "tests/test_core.py": "42b33120a60f530ec46c967fbd90b2b27db72d23f460c5ae956643e6e3c6ff0b",
     "tests/test_escalation_config.py": "1dadd3e596a6e6ac8b2af2397bf5c8f9c773bb6e71f0ce566e740c25acf22405",
     "tests/test_expected_grid.py": "4239d32d9d4b667a6d6680fd22be857d24023fe79054a9f42a68a55cdaea4ccc",
     "tests/test_freeze_prepace.py": "21308060ad3342f05477480b433248bf70d13c17d88adfff7b831dca24979499",
@@ -95,5 +95,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "fa4358cb18f78dbd8d9e4d0f7d35bcb63f494780d64bb6e128e078ed62229799"
+  "manifest_payload_sha256": "cb4ac4a7d5b5e4f7e4f21263badebf304978ad4a5a86ecb7b437e54a2b7a6847"
 }
