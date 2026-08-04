@@ -1,0 +1,68 @@
+# Old-to-new commit hash mapping for the removal of
+# docs/audit_sources_20260731.tar.gz from git history.
+#
+# Computed 2026-08-04 by git filter-branch --index-filter on a throwaway
+# clone. NOT YET APPLIED to the working repository. Applying it requires
+# the signed amendment drafted in AUDIT_AMENDMENT4_DRAFT_2026-08-04.md.
+#
+# Verified on the preview: 251 commits before and after, author/email/date/
+# message identical for every commit, and the only tree difference across
+# the whole range is the removed tarball.
+#
+# 987377a (tag v1.0.0) is an ANCESTOR of cc357db and is NOT in this table:
+# the release tag and its Zenodo archive are outside the rewrite.
+old_sha	new_sha	old_short	new_short	subject
+cc357db3cd0628c7f4f348c867ed2dbc2cfa6ef7	4529e3a2d9dca99d341ff90e3bb81813ed3afb10	cc357db	4529e3a	Archive and verify all 17 audit sources; full-text margin sweep
+bb455284a915f28ad8c7b94cabb59983c84a359b	ed92ae84ab9482173c7988e9787d318b7d2426cd	bb45528	ed92ae8	Amend draft for eligibility correction; add power-flag sensitivity
+ab279b2ad3dc017bb307298b226c64b6f9bc2a4b	c382b0122c5c28259da669b08f2bda976c139227	ab279b2	c382b01	Sign and append Amendment 2 to the audit registration
+de5539f4c136bfd0eb8f68467e7247cd0aac3163	ff6e4b1dd708e50b07943dc66a3ff1a485893422	de5539f	ff6e4b1	Implement Amendment 2 in the verdict path
+f1261ea6548c50e3b2ab035a1daf97ad6efe09d2	5d7d513a0824af756ecd9dfaaa6d9162a82cf4e9	f1261ea	5d7d513	Refresh source-state freeze after Amendment 2 implementation
+682185dec8fd602d25b3b7c953e9fcfe47565f8a	4b54df23cd53f0270307878ebc3f13e1713ddaf5	682185d	4b54df2	Remove rev-1 atlas defaults from both analysis entry points
+9821c1d55fc3f40272cf864fdfcf503e4ca43382	32be80a73533a1ec295a65e7660b01bc66bd991d	9821c1d	32be80a	Refresh freeze after removing the rev-1 atlas defaults
+645ac6213fad5e908983fdda56776fe09ef708f4	da9b844cbbc409ca2a9f29439a7c7cee12365298	645ac62	da9b844	Recompute audit verdicts under Amendment 2 (rev-3, single run)
+c7e115592d2198a0ce43b1faf40f422f487353be	b8425ec25abb1b9f6d33b227531bef1c9b2650f3	c7e1155	b8425ec	Refresh freeze after adding run_audit_verdicts.sbatch
+f6c4f56ec3038a58ac2680db7dc1bc483178cd3d	21046b3583584baacad747791242d43004432764	f6c4f56	21046b3	Checklist for carrying rev-3 verdicts through the paper
+9d502e01ccf3a27001f9050b244c544418d42523	58e342755a18ba923cb387554cd391396874341d	9d502e0	58e3427	Fold advisor safeguards into the rev-3 carry checklist
+d37aa1c9ddb937cd0df46a5ac11b6822b0384c7e	335a11401a335245c2e1bd2cc34dbe39f541a759	d37aa1c	335a114	Carry rev-3 into the audit taxonomy and the abstract
+d81b7c0b1f7ac48de3324916ba7597e1f1443e4b	3685201a4d9ffde24876a5d72ea188c15f91d7fd	d81b7c0	3685201	Regenerate READING_COPY.md at d37aa1c
+9189aabc32345c92fce3536657292fc7a9194a5a	177817997f714cae1ee96500a5c8ed6f883e8be8	9189aab	1778179	Carry rev-3 through the audit section
+a205c31490ce8c56e811412e32c3961ebf8edb79	6afc5b1dee75b1d751cf190f4bbd0d9dc2da9861	a205c31	6afc5b1	Regenerate READING_COPY.md at 9189aab
+1137964a513ce116bc3594994ae4dcb6b497f404	350772a713e5c60cc68ec54afe5022c884d34fce	1137964	350772a	Withdraw the shortfall range; clear em dashes; resync the registrations appendix
+c6c937e14279ea12c850878c02e6def86a2c638b	dba16273142346aa362b8dd4fd117cbef53f82d9	c6c937e	dba1627	Regenerate READING_COPY.md at 1137964
+2b2ff4a9b3a9adb05db6f03f4bae4375da07f66f	12eb896035edb2a275cae172eaf9cc8948c9f50f	2b2ff4a	12eb896	Regenerate the audit appendix tables from rev-3
+896431beecd358a7852237e9d5ba372b074b455f	7d3501773c124ab891542c447f3ca80af048383a	896431b	7d35017	Regenerate READING_COPY.md at 2b2ff4a
+b3fdfdee654daa21167680fbac9ae0f2e796ccb1	099e2a2b7fdcdc768d24870dc15af47a0085d814	b3fdfde	099e2a2	Correct two comments that describe rev-1 imputation behaviour
+0549e1f3d24754ab4adf864039a60c7ad6642344	129c646bc8e88571347d06c907d6b8ec40f2a4a6	0549e1f	129c646	Refresh freeze after the imputation comment corrections
+5adf2fb02e1575ac9a3472c6ba6e71032a68dc20	1eee319c87c4b8939e50be47402584da6628b01a	5adf2fb	1eee319	Add a retrieval script for the audited sources
+2e9c41108fb1b10c25e03af0c559c2d7248e03be	c2eda0b79f97062c8cb146fa379864edfb135f4f	2e9c411	c2eda0b	Refresh freeze after adding fetch_audit_sources.py
+546a1f653777765a41a617d9eabe501c7c4a9b5b	9923f243ddddf478fa9ffabafc59b7bb6c3ea22b	546a1f6	9923f24	Session handoff for 2026-08-02
+152361ea8c630417b4badf6003e96a70cf556bf8	f9d899487a9aaf770e016dcbc528b7f36116a637	152361e	f9d8994	Add the authoritative final rev-3 checklist, supplied by Amogh
+377a686a36d883e3ca96132c513a6530ce1f2bea	ff191f3bd71c2f16ba2da49ce7f19d31c47bdcec	377a686	ff191f3	Sync AGENTS.md to CLAUDE.md: the in-image gate expectation was stale at 201
+c4e6595875548c94e7ca3fbde0055ef16b522238	3c4d56cb97e2ef9ac0eecb5a447d2624772c83d3	c4e6595	3c4d56c	Add the rev-3 execution ledger
+a332f01cefd913134e5705f002664b00b1fd8b67	c735a863087c981977ac34f1edcc88f27fb5f0df	a332f01	c735a86	Generate the rev-3 denominator ledger and make R14 executable
+20a3b72d65eb4d2d09a459b17805a1015820a787	004f5d3db251ff96483a6e85ca8e3b8166ddddb8	20a3b72	004f5d3	Option A paperwork: the audited sources are identified, not redistributed
+7a62b2743a1bcfa2ce11dcaca6770322492edad8	16a08042f8145a489c2cbb3de11a24e07443d38b	7a62b27	16a0804	Stale-claim and stale-pointer linter in check_paper.py
+667a2518ac4a564af2c52e9c5ab8583bd388e57a	943eb29748035692f053f6e77d21575c85380ac0	667a251	943eb29	Make the source fingerprint fail on an added file, not only a changed one
+4e47b446ac3df644e4616bcd94e4428801bc6a2c	382dda353abe5131c1216a2203eddd832507be02	4e47b44	382dda3	Add the atlas-revision golden test and the d* boundary coverage
+af9ffd1c5341964745337707ee48d1f5f217efb2	cdb3239070e9d17649a2a97cd6c44cd49b8eef13	af9ffd1	cdb3239	Stop the linter suite from depending on the defects surviving
+241713aab38cec30ec4c86f0904d154855289148	b12dbc6406ff0a8c93f9a2e8057c87fcd9a8894e	241713a	b12dbc6	Wire the rev-3 denominator macros through the manuscript narrative
+02305046c180bb5048267106eaefbab45b66bc23	db764a117c43e614530df58d0570d1048722c0db	0230504	db764a1	Correct two stale docstrings and close two linter allowlist gaps
+16389cb6621d3b3732fd290b78a9ec7954af9fe2	965e9431e22d68e066526fadbbef30176df26a8b	16389cb	965e943	Update the in-image gate expectation to 297 after this session's tests
+53bcf5f53eff8abdab9b75a81c6a8bc9adcb7be0	7d47207cc779697892383e02121ca245a045e3a9	53bcf5f	7d47207	Record where each equivalence claim is written, and what that costs
+a216cf73d1631ad8cce20b3384137da50c04f0a4	f877e2f2912f8aa988243b8279130e03997bd1d4	a216cf7	f877e2f	Regenerate READING_COPY.md at 53bcf5f
+38f2a0fcd9c2ddb4eb9a1b5c87a1a48064d1d641	68e9b347e9069454fd0a72776897df2f5a329cc3	38f2a0f	68e9b34	Session handoff for 2026-08-03
+2857cd06f275894f2b2830ff64d6ce05c970e47f	46fcf871a502489768c5be950e49ae578543d699	2857cd0	46fcf87	Draft Amendment 3 for signature: R09 and R17 remain eligible
+caa87a473f89b235168379d3a4e9820c1ed46e13	524beb5052c50a99fe708d3d83822c3151117a25	caa87a4	524beb5	Roadmap from here to arXiv and TMLR, with verified completion status
+c5eca1ef60f3404691fadb0e773bff43369c76da	b657be22136fc3bb123d60c60a5ac2ad3ab4403e	c5eca1e	b657be2	Bring the blog draft's audit numbers to rev-3 and record the withdrawals
+4df969c76d484ac94585b0f0af76a1f382c984ec	043c09433154b84b47d4c61e095aaad42f37794d	4df969c	043c094	Mark OUTLINE.md as the planning record it is, and stop the linter failing on it
+adaf2632da71b815bcb8ed45f9982effef974f84	bf1de764a2ab3972003ef86d5f1c4606d5dd6666	adaf263	bf1de76	Redraft Amendment 3's Determination: the rule is silent, so the tie breaks against the author
+0ca1b2ad428bd9d74aafe2aba6c0fb61a99f6364	a43b3254197f3d571903f05cda6ba871f51845ca	0ca1b2a	a43b325	Amendment 3 SIGNED and appended: R09 and R17 remain eligible
+115bdbb4e03b88e36c2972300e13c387ad4d3a9e	28616cc9d02e74801c49d1ac8da2775a86111771	115bdbb	28616cc	Regenerate READING_COPY.md at 0ca1b2a
+633cfe3dc3b9885b5c2395c887dd87d269939a44	4505773022af22216388dff39f4cb6ca521acb57	633cfe3	4505773	Correct the roadmap: three items were carried as open and are done
+b8fb84d1cf5d6a554ff1a973cb180b58a6adc3bb	68bad8e2998f791347a1ae98461ea617325e1301	b8fb84d	68bad8e	Ignore paper build bundles under docs/ rather than committing them
+e0cf37d24b22f9202d40c9c7c83af3ab8ca73d2f	f212ff97420d5ef03f17fd823dac1e48e05138cb	e0cf37d	f212ff9	Ignore agent worktree checkouts so the source fingerprint can be refreshed
+faa4f38cc809ec7b7643edcd87adeab12f6bebae	a5381d911273575c016737389e077649a23f0d39	faa4f38	a5381d9	Refresh the source fingerprint, eight commits behind since 2e9c411
+9bac0c56bdf3d4252b5ff6166cb4989fe40bbcd2	5ed3ef9763723d2f3a759262e13492f058ad53cb	9bac0c5	5ed3ef9	Rewrite the README as project documentation, not a usage note
+bcc1afcf827c05574aee81271f8e3e74407f3256	0ad025b4c9047d16411d9facdfa8374c3309b2b7	bcc1afc	0ad025b	Refresh freeze after the README rewrite
+8aafe22824caca1ebe7529442120904ca92d0218	4a8a83f1143f06271d779d36b75dd7e9205fa329	8aafe22	4a8a83f	Export the two planning helpers at the top level
+83d2b6cbe10c5f120b3c3ccc6dee2c8fbaab389e	350e0747d15efd7114d9502c65abe154208a6886	83d2b6c	350e074	Refresh freeze after the top-level export change
