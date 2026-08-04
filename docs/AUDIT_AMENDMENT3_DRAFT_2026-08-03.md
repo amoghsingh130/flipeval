@@ -1,11 +1,20 @@
-# Audit Registration, Amendment 3 (DRAFT, UNSIGNED)
+# Audit Registration, Amendment 3 (SIGNED, APPENDED — DRAFTING RECORD ONLY)
+
+> **✅ SIGNED by Amogh Singh, 2026-08-03**, on the verbatim instruction "sign it
+> and append". Part 1 was appended byte-identically to
+> `docs/AUDIT_REGISTRATION_2026-07-15.md` under "Dated Amendments" (lines
+> 230-345), verified to have changed **0 lines above the append point**, in the
+> same commit that regenerated `paper/sections/appendix_registrations.tex`.
+>
+> **THE OPERATIVE TEXT IS THE REGISTRATION, NOT THIS FILE.** This is now a
+> drafting record, retained for the provenance of the wording and for Part 2's
+> review notes. Amending Amendment 3 means a new dated amendment, never an edit
+> here. Editing Part 1 below would silently desynchronise it from the frozen
+> document and from the appendix that reproduces it.
 
 Drafted by Claude Code, 2026-08-03, at Amogh's direction, following the
 precedent of `docs/AUDIT_AMENDMENT2_DRAFT_2026-07-31.md`. Under `CLAUDE.md`,
-amendments to frozen protocols are written by the human. **This file is a draft
-for review only. Nothing in it takes effect until Amogh signs it and Part 1 is
-appended to `docs/AUDIT_REGISTRATION_2026-07-15.md` under its "Dated Amendments"
-heading.**
+amendments to frozen protocols are written by the human.
 
 Direction chosen by Amogh, 2026-08-03: **R09 and R17 remain eligible.** The
 alternative was quantified before the choice was made and is recorded in Part 1
@@ -133,7 +142,7 @@ leaves every published count where it stood and declines the change that would
 have improved the headline proportion. The superseded and the current readings
 of §3.1 as applied to R09 and R17 are both recorded above.
 
-*Signed.* Amogh Singh, 2026-08-03.
+*Signed.* Amogh Singh, 2026-08-03. Drafted by Claude Code at `2857cd0`; its *Determination* was redrafted at `adaf263`, after the distinction it rests on was verified directly against the sealed source archive, to concede that §3.1 is silent at this boundary rather than to assert that it is satisfied. Appended on the verbatim instruction "sign it and append".
 
 ---
 
