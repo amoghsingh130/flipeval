@@ -343,3 +343,69 @@ have improved the headline proportion. The superseded and the current readings
 of §3.1 as applied to R09 and R17 are both recorded above.
 
 *Signed.* Amogh Singh, 2026-08-03. Drafted by Claude Code at `2857cd0`; its *Determination* was redrafted at `adaf263`, after the distinction it rests on was verified directly against the sealed source archive, to concede that §3.1 is silent at this boundary rather than to assert that it is satisfied. Appended on the verbatim instruction "sign it and append".
+
+**2026-08-04 — Amendment 4 (provenance remap; no protocol change).**
+
+*Occasion.* `docs/audit_sources_20260731.tar.gz`, holding the full-text captures
+of all seventeen audited sources, entered the repository at `cc357db` and was
+never deleted, so every commit from there to HEAD carries it. `origin` is a
+public GitHub repository, so pushing any commit in that range publishes the
+corpus. That contradicts the redistribution review of 2026-08-02, which found
+four of the seventeen carry no grant permitting a third party to republish their
+text, and the seven method papers sitting under arXiv's default licence, which
+authorises arXiv to distribute them rather than authorising us to. It also
+contradicts `README.md`, which states the captures are not redistributed. The
+repository has therefore been unpushable since 2026-08-02, and the resolution of
+record was to leave it so.
+
+*Finding.* Removing the blob rewrites 54 commits. `bb45528` is one of them, and
+Amendment 2 cites it in its own signature line above. The rewrite was computed
+on a throwaway clone and verified there before this amendment was drafted: 251
+commits before and after with nothing pruned, author, email, date and subject
+byte-identical for every commit, and the only tree difference across the entire
+range the removed tarball. `19d485c`, also cited in that signature line, is an
+ancestor of `cc357db` and does not change. `987377a`, tag `v1.0.0`, is likewise
+an ancestor, so the release tag and its Zenodo archive lie outside the rewrite.
+The private sealed copy hashes
+`a912a1e7af0efd58459dcf57ade84be96cfea8337147a13d336dacfdb9240259`, identical to
+the blob in git, so removal loses nothing.
+
+*Determination.* **The tarball is removed from the repository's history, and
+`bb45528` is superseded by `ed92ae8` on the record rather than in the text.**
+The corpus remains identified and digest-checkable: the `.sha256` and
+`docs/audit_sources_manifest.tsv` are retained, and
+`scripts/fetch_audit_sources.py` rebuilds it from each publisher. The signature
+line of Amendment 2 is to be read as citing `ed92ae8` wherever it cites
+`bb45528`, and the full mapping at
+`docs/audit_source_tarball_hash_map_20260804.tsv` governs any other stale
+identifier. **The original text of Amendment 2 is not edited.** The superseded
+identifier stays exactly as signed, because correcting it in place would leave a
+record reading as though the chain never broke, and that it broke is what this
+amendment exists to preserve.
+
+*The alternative, and its direction.* The alternative was abandoning the rewrite
+and never pushing, which was the resolution of record from 2026-08-02. It is
+rejected because it makes the repository permanently unpublishable, and the
+artifact link in a submitted paper cannot point at a repository that does not
+exist. The cost of the rewrite is borne once and is documented in the mapping
+file; the cost of not pushing recurs indefinitely. What the rewrite concedes is
+that it is irreversible once pushed, and that 54 commit hashes cited anywhere
+outside the mapping file go stale without warning.
+
+*Quantities unchanged.* No inclusion rule, eligibility rule, verdict rule,
+indeterminacy rule, discordance imputation, denominator or count is reopened.
+The eligible population remains 16. Amendments 1, 2 and 3 remain in force in
+full, and every published number stands.
+
+*Scope.* This amendment records a change to commit identifiers and to what the
+repository distributes. It changes no analysis and no audited property.
+
+*Decision context.* **Results were inspected before this decision.** The rev-3
+verdicts were computed on 2026-07-31, the locus classification on 2026-08-02,
+and Amendment 3 was signed on 2026-08-03; all were known at signature. This
+amendment changes no analysis, no count and no verdict, so there is no outcome
+for that knowledge to have biased. It is recorded because the standing
+requirement applies to every amendment to a frozen protocol, not only to those
+that could move a number.
+
+*Signed.* Amogh Singh, 2026-08-04. Drafted by Claude Code at `df1615b` after the rewrite was computed and verified on a throwaway clone; its *Determination* and *Decision context* were completed on the verbatim instruction "i read the draft, fill in the two sections as approved and append". The rewrite itself was not applied at the time of signature.

@@ -1,11 +1,27 @@
-# Amendment 4 to `docs/AUDIT_REGISTRATION_2026-07-15.md` — DRAFT, UNSIGNED
+# Audit Registration, Amendment 4 (SIGNED, APPENDED — DRAFTING RECORD ONLY)
 
-**Status: DRAFT. Not appended to the frozen registration. Not signed.**
+> **✅ SIGNED by Amogh Singh, 2026-08-04**, on the verbatim instruction "i read
+> the draft, fill in the two sections as approved and append". Appended to
+> `docs/AUDIT_REGISTRATION_2026-07-15.md` under "Dated Amendments" (lines
+> 346-411), verified to have changed **0 lines above the append point**.
+>
+> **THE OPERATIVE TEXT IS THE REGISTRATION, NOT THIS FILE.** This is now a
+> drafting record, retained for the provenance of the wording. Amending
+> Amendment 4 means a new dated amendment, never an edit here. Editing below
+> would silently desynchronise this file from the frozen document and from the
+> appendix that reproduces it.
+>
+> The appended text is reorganised into the frozen file's run-in heading style
+> (*Occasion.*, *Finding.*, *Determination.*, …) to match Amendments 2 and 3.
+> The substance is the same; where the two differ in wording, the registration
+> governs.
 
 Drafted by Claude Code, 2026-08-04, at the author's instruction to "deal with
-the tarball". It is reproduced here for review; only Amogh may append it to the
-frozen file, and only Amogh may sign it. Nothing in the rewrite it describes has
-been applied. `main` is untouched and nothing has been pushed.
+the tarball", following the precedent of
+`docs/AUDIT_AMENDMENT3_DRAFT_2026-08-03.md`.
+
+**The rewrite this amendment authorises had NOT been applied at the time of
+signature.** `main` was untouched and nothing had been pushed.
 
 ---
 
@@ -94,16 +110,58 @@ The rewrite was performed on a throwaway clone, never on the working repository:
   locally at tag `pre-source-tarball-removal-20260802` and at a fresh tag to be
   cut immediately before the rewrite is applied.
 
-## Decision context
-
-**To be completed by the author before signing.** State whether results were
-inspected before this decision, per the standing requirement on every amendment
-to a frozen protocol.
-
 ## Determination
 
-**To be written by the author.**
+**The tarball is removed from the repository's history, and `bb45528` is
+superseded by `ed92ae8` on the record rather than in the text.**
+
+Three things follow, and the third is the one that matters.
+
+First, `docs/audit_sources_20260731.tar.gz` is removed from every tree in the
+range `cc357db..HEAD`. The corpus remains identified and digest-checkable:
+`docs/audit_sources_20260731.tar.gz.sha256` and
+`docs/audit_sources_manifest.tsv` are retained, and
+`scripts/fetch_audit_sources.py` rebuilds the corpus from each publisher. This
+is Option A carried through to the artifact it was always meant to reach, not a
+new policy.
+
+Second, the signature line of Amendment 2 is to be read as citing `ed92ae8`
+wherever it cites `bb45528`, and the full 54-row mapping at
+`docs/audit_source_tarball_hash_map_20260804.tsv` governs any other stale
+identifier.
+
+Third, **the original text of Amendment 2 is not edited.** The superseded
+identifier stays exactly as signed. Correcting it in place would leave a record
+that reads as though the chain never broke, and the fact that it broke is the
+thing this amendment exists to preserve. A provenance chain that repairs itself
+silently is worth less than one that carries its own repair.
+
+*What this concedes.* The rewrite is irreversible once pushed, and 54 commit
+hashes cited anywhere outside the mapping file become stale without warning. The
+alternative considered was abandoning the rewrite and never pushing, which was
+the resolution of record from 2026-08-02. It is rejected here because it makes
+the repository permanently unpublishable, and the artifact link in a submitted
+paper cannot point at a repository that does not exist. The cost of the rewrite
+is borne once and is documented; the cost of not pushing recurs indefinitely.
+
+*Quantities unchanged.* No inclusion rule, eligibility rule, verdict rule,
+indeterminacy rule, discordance imputation, denominator or count is reopened.
+The eligible population remains 16. Amendments 1, 2 and 3 remain in force in
+full. Every published number stands.
+
+## Decision context
+
+**Results were inspected before this decision.** The rev-3 verdicts were
+computed on 2026-07-31, the locus classification on 2026-08-02, and Amendment 3
+was signed on 2026-08-03; all were known at signature. This amendment changes no
+analysis, no count and no verdict, so there is no outcome for that knowledge to
+have biased. It is recorded because the standing requirement applies to every
+amendment to a frozen protocol, not only to those that could move a number.
 
 ---
 
-*Signed.* **UNSIGNED — awaiting Amogh Singh.**
+*Signed.* Amogh Singh, 2026-08-04. Drafted by Claude Code at `df1615b` after the
+rewrite was computed and verified on a throwaway clone; its *Determination* and
+*Decision context* were completed on the verbatim instruction "i read the draft,
+fill in the two sections as approved and append". The rewrite itself was not
+applied at the time of signature.
