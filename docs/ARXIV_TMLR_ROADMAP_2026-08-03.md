@@ -31,6 +31,10 @@ Verified by running the gates, not by reading the previous checklists.
 | **v1.0.0 artifact** | Published, immutable, Zenodo version DOI `10.5281/zenodo.21708923`, HF dataset live at 209/209. |
 | **Option A source paperwork** | Landed at `20a3b72`: the audited sources are identified, not redistributed. |
 | **Anonymous build switch** | `\ifanon` present in `paper/main.tex` and exercised by `check_paper.py`. |
+| **Amendment 3** | **Signed and appended 2026-08-03** (`0ca1b2a`). Part 1 byte-identical at registration lines 230-345, append-only proved by diffing the first 228 lines against a pre-append snapshot, and `appendix_registrations.tex` regenerated in the same commit. R09 and R17 remain eligible; no count moves. |
+| **TOST wording (rev-3 §3)** | **Done at `6589d89`, 2026-07-31**, and wrongly carried as open. Every site reads "one-sided $\alpha=.05$ (a 90\% two-sided interval)": `audit.tex:392-395`, `certification.tex:66,114`, all three appendix captions. The three surviving "95\%" strings are correct: the corrected sentence itself, the dated correction comment at `certification.tex:59-62`, and the frozen registration's bootstrap CIs. The **code was always right**, which is why the fix was wording-only: `audit_stats.py` required-n uses `ppf(1-alpha)` at lines 93 and 263 while the detection path at line 79 correctly uses `alpha/2`; `flipeval/core.py::tost_equivalence` runs two one-sided t-tests each at `alpha`. `appendix_prereg_detail.tex:191-206` documents the choice and the ~27\% inflation it avoids. |
+| **Nonzero true deltas, the substantive half** | **Done at `6589d89`.** `certification.tex:87-98` states that Eq. `nreq` is a planning size at an assumed true difference of zero, that under a true $\delta$ the quantity TOST must resolve is $m-|\delta|$ so the requirement grows without bound as $|\delta| \to m$, and that every reported $n_{\mathrm{req}}$ is therefore a **lower bound**. This also discharges "distinguish prospective planning from retrospective diagnosis". |
+| **Required-n hand derivation** | **Done.** `tests/test_audit_stats.py::test_tost_required_n_uses_one_sided_alpha_and_scales_inversely_with_margin_squared` derives $(1.6449+0.8416)^2 \times 0.04/0.0004 = 618.2 \to 619$ by hand and asserts it, plus the margin-squared scaling. |
 
 ### Partly done
 
@@ -50,11 +54,7 @@ Verified by running the gates, not by reading the previous checklists.
   `scripts/freeze_prepace.py`) and 5 unrecorded test files.
 - Stale-claim linter is **red**: 18 live hits, 7 in the published blog post and
   11 in `paper/OUTLINE.md`.
-- Amendment 3 drafted, **unsigned**.
 - No rev-3 tag, no release manifest, no recorded rev-2 atlas provenance block.
-- TOST wording correction (one-sided alpha 0.05 is a 90 percent two-sided
-  interval, not 95) still unapplied.
-- Independent validation of the required-sample-size calculation not done.
 - arXiv and TMLR packages not started.
 - **No LaTeX anywhere reachable.** Confirmed 2026-08-03: no `pdflatex`,
   `latexmk`, `xelatex` or `tectonic` on the login node, and no TeX Live module
@@ -85,28 +85,41 @@ until the paper can be typeset.
       Do not edit its numbers: it is a dated record of what was planned.
 - [ ] Confirm `check_paper.py` reports `STALE_CLAIM: OK` afterwards.
 
-### Phase 1: close the open registrations and the fingerprint
+### Phase 1: close the fingerprint
 
-- [ ] **Sign Amendment 3** (`docs/AUDIT_AMENDMENT3_DRAFT_2026-08-03.md`), or
-      decide against it in writing. Amogh only.
-- [ ] On signing: append Part 1 byte-identically under "Dated Amendments" in
-      `docs/AUDIT_REGISTRATION_2026-07-15.md`, verify no line above it changed,
-      and **regenerate `paper/sections/appendix_registrations.tex` in the same
-      commit**. That gate failed silently for days after Amendment 2 for exactly
-      this reason.
+Two items, both smaller than the 2026-08-02 checklist implies. **Amendment 3, the
+TOST correction and the nonzero-delta statement were all found already done on
+2026-08-03**; see the table in Part I for the evidence. The rev-3 checklist and
+`REV3_EXECUTION_LEDGER_2026-08-02.md` are stale on all three and should not be
+trusted for status without re-verifying against the tree.
+
 - [ ] **Green the source fingerprint.** Establish which of the 5 changed files
-      are intended, run the in-image suite once for the 5 unrecorded test files,
-      update the expected count in `CLAUDE.md` in the same commit, then
-      `python3 scripts/freeze_prepace.py` and commit the refreshed freeze.
-- [ ] Run `sbatch scripts/slurm/run_tests.sbatch` and record the
-      `IN_IMAGE_PYTEST_SUMMARY:` line and log path. Current expectation is 297
-      passed, 0 skipped. Any skip is a gate failure.
-- [ ] **Apply the TOST correction.** One-sided alpha 0.05 corresponds to a 90
-      percent two-sided confidence interval. This is a substantive statistical
-      correction, not a wording preference, and it has been unassigned since
-      2026-08-02.
-- [ ] **Independently validate `n_req`** against a hand derivation or a second
-      implementation, including nonzero true deltas. Record the check.
+      are intended (`README.md`, `STATUS.md`, `scripts/audit_verdicts.py`,
+      `scripts/certification_tables.py`, `scripts/freeze_prepace.py`), then
+      `python3 scripts/freeze_prepace.py` and commit the refreshed freeze. The 5
+      unrecorded test files are another session's, landed before its freeze
+      refresh; they are legitimate and simply need recording.
+- [ ] **One consolidated in-image gate**, not several.
+      `sbatch -A $ACCOUNT -q inferno -p cpu-small scripts/slurm/run_tests.sbatch`.
+      Current expectation 297 passed, 0 skipped; **any skip is a gate failure**.
+      Whichever session adds a test updates the count in `CLAUDE.md` in the same
+      commit.
+- [ ] **Close the one real `n_req` gap: the $m-|\delta|$ relation is asserted and
+      unverified.** `certification.tex:93-96` tells the reader that under a true
+      difference the requirement scales with $m-|\delta|$ and grows without bound
+      as $|\delta| \to m$. Nothing checks it. Every other part of that
+      calculation is pinned (hand derivation at 619, margin-squared scaling,
+      rev-1 1,936 vs rev-2 2,010 golden, `d^*` boundaries), and the analytic sd
+      is cross-checked against `flipeval`'s independent array-based
+      implementation, **but that cross-check covers MDD, not required-n**. So the
+      residue is narrow and worth one test: assert the nonzero-delta behaviour
+      the paper claims, and cross-check `required_n_for_tost` against a second
+      implementation the way the MDD already is. This project has been bitten
+      five times by a checker nobody controlled; an unverified analytic assertion
+      in the manuscript is the same shape.
+- [ ] Bundle that test with the fingerprint work so it costs **one** SLURM round
+      trip and **one** count update, per the coordination decision in
+      `REV3_EXECUTION_LEDGER_2026-08-02.md`.
 
 ### Phase 2: get a machine that can typeset (the critical path)
 
@@ -231,11 +244,29 @@ Do this after phase 3, when you can see the paper, and before packaging.
   default grid.
 - **A scheduler control is in force only when independently observed.**
 
+## Status note, 2026-08-03
+
+Phase 0 is **complete**: the blog draft's five withdrawn numbers are corrected
+and recorded in a dated Corrections section (`c5eca1e`), and `OUTLINE.md` is
+marked as the planning record it is (`4df969c`). `STALE_CLAIM` and `PAPER_CHECK`
+are both green.
+
+Phase 1 is **most of the way done and was never as large as the 2026-08-02
+checklist said**. Amendment 3 is signed and appended, the TOST correction landed
+on 2026-07-31, and the nonzero-delta assumption is stated in the manuscript.
+
+**Lesson worth keeping.** Three items were carried as open for two days because
+the checklist said so and nobody re-read the tree. Status in
+`PAPER_REV3_FINAL_CHECKLIST_2026-08-02.md` and `REV3_EXECUTION_LEDGER_2026-08-02.md`
+is now demonstrably unreliable; treat both as definitions of *what correctness
+means*, never as a record of *what is done*. Re-verify against the sources, which
+is cheap, before spending a session on something already finished.
+
 ## What I would do next, in order
 
-1. The blog correction. It is the only public falsehood and it is independent of
-   every blocker.
-2. Sign or decline Amendment 3, since it is a single decision that unblocks the
-   registration record.
-3. Get TeX running. Everything from phase 3 onward is dead until it exists, and
-   the first typeset will surface work that is not yet on any list.
+1. **Get TeX running.** It is now the only thing standing between the current
+   state and a submittable paper. Everything from phase 3 onward is dead until it
+   exists, and the first typeset will surface work that is not yet on any list.
+2. The fingerprint plus the one `n_req` test, bundled into a single gate run.
+3. The J2C figure in phase 4, which is the highest-leverage remaining addition to
+   the argument.
