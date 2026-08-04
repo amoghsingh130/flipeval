@@ -67,3 +67,11 @@ Cont-Labelerr-auditing/
 # needs a history rewrite that would invalidate a signature's provenance chain.
 # Regenerate the bundle instead; it takes seconds.
 docs/*.zip
+
+# Agent worktree checkouts (`.claude/worktrees/agent-*`). These are real
+# registered git worktrees -- `git worktree list` shows them -- so their
+# metadata already lives in .git/worktrees and the checkouts themselves must
+# never be tracked. Untracked they also blocked `scripts/freeze_prepace.py`,
+# which refuses any worktree that `git status --porcelain` reports as dirty,
+# so a stale agent checkout made the source fingerprint unrefreshable.
+.claude/worktrees/
