@@ -50,3 +50,20 @@ Cont-Labelerr-auditing/
 !results/h3_eight_cell/*.json
 !results/minigrid_supporting/
 !results/minigrid_supporting/*.json
+
+# Build bundles for external typesetting (Overleaf and the like). These are
+# DERIVED from paper/*.tex and paper/references.bib, which are already
+# versioned, so committing one stores a second copy of the paper that goes stale
+# the moment any section changes.
+#
+# It is also a linter blind spot. check_paper.py's SCAN_EXTS covers .tex and
+# .md, never .zip, so a withdrawn number sealed inside an archive rides past a
+# green STALE_CLAIM invisibly. The one thing worse than a stale claim is a stale
+# claim no gate can see.
+#
+# And it is how the current push blocker was created: docs/audit_sources_*.tar.gz
+# entered at cc357db, every commit since carries the blob, and bb45528 sits in
+# that range and is cited in the signed, frozen Amendment 2. Removing it now
+# needs a history rewrite that would invalidate a signature's provenance chain.
+# Regenerate the bundle instead; it takes seconds.
+docs/*.zip
