@@ -36,24 +36,56 @@ R17, contain no §3.1 trigger vocabulary anywhere in their prose. In each, the
 recovery percentage that would satisfy the trigger list exists only as a table
 cell, beneath a column header, and none of the three files contains a table
 caption element of any kind. R08, R15 and R16 are unaffected: each states a
-recovery percentage in prose at or above the registered threshold of 98. R09 and
-R17 therefore occupy the same structural position that excluded R10.
+recovery percentage in prose at or above the registered threshold of 98. With
+respect to those recovery figures R09 and R17 occupy the same structural position
+that excluded R10, which is what makes their eligibility a live question. They
+differ from R10 in another respect, addressed below.
 
-*Determination.* **R09 and R17 remain in the eligible population.** They are
-distinguished from R10 on a ground internal to §3.1 rather than by any new
-criterion. R10 contains no comparative sentence at all: there is no prose
-assertion to construe, permissively or otherwise, and the recorded quotation was
-composed from tabular data. R09 and R17 each contain a comparative sentence in
-prose which states both the compressed and the uncompressed score explicitly,
-and the difference so stated is 0.35 pp and 0.15 pp respectively, each below one
-percentage point. §3.1's trigger list admits "an explicit ≤1 pp delta framed as
-parity", and in a document whose stated purpose is to offer the quantized model
-in place of the unquantized one, a bare juxtaposition of two scores under a point
-apart is an assertion of parity in substance. The judgement is that the framing
-requirement is met by the document's function where it is not met by its
-vocabulary. **This is an interpretation of the registered rule, not an extension
-of it**, and it is recorded here because the same rule was applied strictly to
-R10 and a reader is entitled to see why the two outcomes differ.
+*Determination.* **R09 and R17 remain in the eligible population.** The ground
+for retaining them is that §3.1 does not decide the case, not that it decides the
+case in their favour.
+
+§3.1 admits a claim on "an explicit ≤1 pp delta framed as parity". That trigger
+has two limbs, and R09 and R17 satisfy the first without satisfying the second.
+Each card contains exactly one comparative sentence in prose, and it states both
+the compressed and the uncompressed score: 73.44 against 73.79 for R09 and 68.69
+against 68.54 for R17, differences of 0.35 pp and 0.15 pp. A delta below one
+percentage point is therefore explicit on the face of the prose. Neither sentence
+characterises that difference. "Whereas" is a neutral contrastive, no trigger term
+appears in the prose of either card, and the recovery figures that would qualify
+outright, 99.52% and 99.8%, exist only as table cells beneath a `<th>Recovery`
+header in files carrying no table caption element at all. The registration does
+not say what follows when a source supplies the quantity and withholds the
+characterisation. **That is a gap in a rule §3 declares to be mechanical, and it
+was not anticipated when the protocol was frozen on 2026-07-15.**
+
+**R10 is excluded on a ground that does not depend on how that gap is resolved.**
+Its card contains no comparative sentence of any kind: the strings "whereas",
+"unquantized", "baseline" and "compared" do not occur anywhere in it, its
+evaluation section is a single table with no accompanying prose, and the sentence
+recorded for it in the frozen claim table was composed from tabular data and
+appears nowhere in the source. R10 therefore fails the first limb as well as the
+second, and its exclusion under Amendment 2 stands under the strict and the
+permissive reading alike. The difference in outcome between R10 and these two
+rests on a difference between the documents, not on this determination. Verified
+against the sealed source archive `a912a1e7…40259` on 2026-08-03, by a route
+independent of the vocabulary sweep recorded in
+`docs/AUDIT_SELF_RECHECK_2026-08-02.md` §4.1.
+
+Two resolutions of the gap were therefore available, and both are defensible. The
+strict reading requires both limbs and excludes R09 and R17. The permissive
+reading treats an explicit sub-point delta, stated in prose in a document whose
+function is to offer the compressed model in place of the uncompressed one, as an
+assertion of negligible difference in substance, and retains them. **The tie is
+broken against the interest of this audit.** The strict reading shrinks the
+eligible and assessable populations and raises the proportion of assessable claims
+falling below the planning threshold; the permissive reading leaves every
+published count exactly where it stands. Where a frozen rule is genuinely silent
+and the author is choosing after having seen results, the only choice a reader can
+credit without also having to credit the author is the one that cannot improve the
+author's own finding. **This is an interpretation of a registered rule that is
+silent, not an extension of a rule that speaks**, and it is recorded here so that
+a reader sees the reasoning rather than inferring it from a denominator.
 
 *Quantities unchanged.* The eligible population remains 16 and the numerically
 assessable population remains 11. No verdict, no threshold classification, no
@@ -114,10 +146,29 @@ two further claims, even to reach "no change", falls outside that authorisation.
 Leaving it unrecorded would also leave the asymmetry with R10 discoverable but
 unexplained, which is worse than either answer.
 
-**The load-bearing sentence** is the R10 distinction: no comparative sentence
-exists in R10, so there is nothing to construe. If a reviewer rejects that
-distinction, the fallback is not to reverse this amendment but to report both
-readings, since the strict reading changes no verdict and only the denominators.
+**The Determination was rewritten on 2026-08-03, and the argument it makes is
+different.** The first draft claimed §3.1's "framed as parity" requirement was
+*met*, by the document's function where not by its vocabulary. That was the
+weakest sentence in the amendment: §3 is titled "Claim inclusion and extraction
+(mechanical)", and importing a document's purpose into a mechanical rule is
+exactly the judgement that section exists to exclude, so it invited a reviewer to
+disagree about the rule and take the denominators with them. The current text
+concedes the rule is *silent* at this boundary and breaks the tie against the
+author's own interest. Same outcome, and it no longer depends on winning an
+argument about what §3.1 covers. **Do not revert it to the stronger claim.**
+
+**The load-bearing fact** is now that R10 has no comparative sentence of any kind,
+so it fails the trigger's first limb too and its exclusion is robust to whichever
+reading is taken. That was asserted in the first draft and **has since been
+verified** against the sealed archive (hash `a912a1e7…40259`, matching the value
+recorded in `docs/AUDIT_SELF_RECHECK_2026-08-02.md`): R10 is a later Red Hat
+template, dated 04/16/2025, whose evaluation section is a bare table, and the
+strings "whereas", "unquantized", "baseline" and "compared" occur zero times in
+the file. R09 and R17 are the older Neural Magic template and both carry the
+"achieves an average score of X ... whereas the unquantized model achieves Y"
+sentence. The self-recheck had established only that R10's *recorded quote* was
+absent; it never checked whether R10 had a comparative sentence of its own, so
+this claim was unverified when the first draft was written.
 
 **What to check before signing.**
 
@@ -128,6 +179,9 @@ readings, since the strict reading changes no verdict and only the denominators.
 3. The verification-status paragraph must survive editing intact. It is the
    clause that prevents the whole self-recheck being read as independent
    verification.
+4. The Determination must keep conceding that the rule is silent. If that
+   concession is edited out, the amendment reverts to arguing a contestable
+   reading of §3.1, and the denominators ride on it again.
 
 **On appending.** Part 1 only, byte-identically, under "Dated Amendments" in
 `docs/AUDIT_REGISTRATION_2026-07-15.md`, with the append verified to have changed
