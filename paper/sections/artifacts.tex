@@ -18,65 +18,54 @@
 % reporting, the not-hash-verified statement, and the fifteen clean re-fetches)
 % were carried across in the same commit, so nothing was lost.
 %
+% COMPRESSED AGAIN 2026-08-05 (flagship narrative, §6 target 0.50 page).
+% MOVED TO Appendix~\ref{app:artifacts:released} IN THE SAME COMMIT, NOTHING
+% DELETED:
+%   - the per-artifact detail (both-forms release of the per-item outputs and
+%     the sealed run archives; the atlas's exclusion table and 59-pair manifest;
+%     the flipeval function list; the audit artifacts' robustness and
+%     transparency columns; the twelve rows per margin at 1, 2 and 3 pp; the
+%     reproduction package's contents and the 28 recorded catches)
+%   - the named four non-granting sources, the manifest and script filenames,
+%     the short-excerpt/own-publisher sentence, and the R11/R13 pointer
+%   - the \harnessissue sentence, moved with its "do not upgrade this wording"
+%     comment to Appendix~\ref{app:artifacts:maintenance}
+% The two \paragraph microheadings were removed under §9 rule 4; the passages
+% they headed survive as body paragraphs and as appendix text.
+%
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
 % exists.
 %
-% RULE, ADDED 2026-08-02: docs/audit_sources_20260731.tar.gz is a PRIVATE
-% working copy. It must never be described here, or anywhere else in the paper,
-% as released, shipped, published, mirrored or downloadable. The paragraph
-% "The audited sources are identified, not redistributed" below is the only
-% place the corpus is described, so any future edit that promotes the tarball
-% has to pass through it.
+% RULE, ADDED 2026-08-02, REPOINTED 2026-08-05: docs/audit_sources_20260731.tar.gz
+% is a PRIVATE working copy. It must never be described here, or anywhere else
+% in the paper, as released, shipped, published, mirrored or downloadable. The
+% sentence beginning "The audit reads 17 sources in full" below is the only
+% place in this file where the corpus is described, so any future edit that
+% promotes the tarball has to pass through it.
 % =====================================================================
 
 \section{Artifacts}
 \label{sec:artifacts}
 
-\textbf{Six artifacts are released, and the first is the one this paper's own
-audit found nobody publishes for the tasks their claims are about.}
 % SOURCE: \S\ref{sec:audit:v3}; results/audit_verdicts_rev3.csv column
 % v3_per_item_outputs over the 16 ELIGIBLE rows (0 yes, 3 partial, 13 no).
 % Counts come from \Audit* macros, not typed here.
-The \textbf{per-item outputs} are 88 cell JSONL files, one row per evaluation
-item, for every model $\times$ method $\times$ seed $\times$ task in the
-controlled experiment, carrying the per-item correctness state that the paired
-test consumes. Section~\ref{sec:audit:v3} reports that
-\AuditPerItemTaskMatched{} of the \AuditEligible{} eligible sources release
-\emph{task-matched} per-item outputs, those covering the tasks their own
-equivalence claim is about, and that \AuditPerItemOtherTaskOnly{}
-(\AuditPerItemOtherTaskClaims{}) release outputs for other tasks only; the fifth
-line of the reporting standard in Section~\ref{sec:conclusion} asks the field to
-close that gap. Withholding ours would leave that recommendation untestable
-against the paper making it. They ship in both forms deliberately: the extracted
-files are directly loadable, and the two sealed run archives carry the same
-bytes with a per-file SHA-256 manifest and an archive checksum recorded when the
-runs completed, so the loadable copy can be checked against the record made at
-run time instead of trusted.
+% "task-matched" must stay in the same sentence as the zero, or the sentence is
+% false: three eligible sources do release per-item outputs, for other tasks.
+Six artifacts are released, the first being the one this paper's own audit found
+nobody publishes: the per-item outputs, 88 cell JSONL files spanning every cell
+of the controlled experiment.
+Section~\ref{sec:audit:v3} reports that \AuditPerItemTaskMatched{} of the
+\AuditEligible{} eligible sources release \emph{task-matched} per-item outputs,
+and Section~\ref{sec:conclusion} asks the field to close that gap. The other
+five are the flip atlas, the \texttt{flipeval} package (Apache-2.0; everything
+else CC-BY-4.0), the frozen 17-claim audit table and its verdict CSV, the
+certification tables, and the reproduction package.
 
-The other five. The \textbf{flip atlas} gives per-cell paired
-statistics for every enumerated pair-task cell, with the exclusion table and the
-frozen 59-pair manifest. \texttt{flipeval} is the analysis
-package: flip rates, the churn family, exact McNemar, TOST at a declared
-margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum detectable
-difference, required-$n$, and the certification-table generator
-(Apache-2.0; everything else is CC-BY-4.0). The audit
-artifacts are the frozen 17-claim table with source content hashes and the
-per-claim verdict CSV, with every robustness and transparency column, plus the
-source manifest and retrieval script described below; the captured source text
-itself is not among them. The certification tables ship twelve rows per
-margin at 1, 2 and 3\,pp. The reproduction package holds registrations and their
-dated amendments, signed decision records, configs, the container image SHA-256
-and build recipe, scheduler scripts, per-run manifests, the source-state freeze
-fingerprints, and the campaign incident log, which is included on purpose: a
-pipeline with 28 recorded catches is better evidence that it was verified than
-one presenting a clean surface. Appendix~\ref{app:artifacts-detail} holds the
-datasheet, metadata and maintenance statements.
-
-% ADDED 2026-08-02. Final rev-3 checklist §8: "audit redistribution licenses
-% before publishing archived copies of papers, model cards, or web pages" and
-% "if redistribution is not permitted, publish URLs, version identifiers,
-% hashes, retrieval scripts, manifests, and compliant excerpts; keep full
-% captures private". Option A, chosen by the author 2026-08-02.
+% ADDED 2026-08-02. Final rev-3 checklist §8, Option A, chosen by the author
+% 2026-08-02: "if redistribution is not permitted, publish URLs, version
+% identifiers, hashes, retrieval scripts, manifests, and compliant excerpts;
+% keep full captures private".
 % SOURCE, licensing: redistribution review of 2026-08-02, recorded in
 % docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §10. Four sources with no
 % third-party republication grant (R11 Meta AI blog, R12 NVIDIA TensorRT-LLM
@@ -88,29 +77,13 @@ datasheet, metadata and maintenance statements.
 % DO NOT write "no source permits redistribution" or any general statement of
 % what is lawful. What is claimed here is what was checked and what it found.
 % PROTECTED PASSAGE: "their full-text captures are in no release" is verbatim.
-\paragraph{The audited sources are identified, not redistributed.} The audit
-reads 17 sources in full, and \textbf{their full-text captures are in no
-release}. A redistribution review conducted on 2026-08-02 examined the terms
-attached to each source before any copy was published. It found four sources,
-the Meta AI blog post, the NVIDIA TensorRT-LLM documentation page and two vLLM
-pages, carrying no grant that would permit a third party to republish their
-text, and it found the seven method papers under arXiv's default licence, which
-authorises arXiv to distribute them rather than authorising us to. Publishing
-the corpus was therefore never an option that was open to us, and the working
-archive of it is kept private. What ships instead is what makes the corpus
-rebuildable and checkable: the source URL and pinned version identifier for
-every claim, a SHA-256 for every captured file, the per-file manifest
-\texttt{docs/\allowbreak{}audit\_sources\_\allowbreak{}manifest.tsv} carrying
-both digests and a per-row provenance status, and
-\texttt{scripts/\allowbreak{}fetch\_\allowbreak{}audit\_sources.py}, a
-standard-library script that re-fetches each source by the retrieval method
-recorded for it and compares the result against the recorded digest. Quoted text
-appears in this paper as short excerpts with their locations, and a reader who
-runs the script obtains each source from its own publisher. Two of the
-seventeen, R11 and R13, bound what a digest can establish at all; the manifest
-records that per row, neither is described anywhere in this paper as
-hash-verified, and Appendix~\ref{app:artifacts:datasheet} states what each limit
-is.
+The audit reads 17 sources in full, and \textbf{their full-text captures are in
+no release}: a redistribution review conducted on 2026-08-02 found four of them
+carrying no grant permitting a third party to republish their text, and the
+seven method papers under arXiv's default licence, which authorises arXiv rather
+than us, so the working archive is kept private. What ships in its place is each
+source's URL and pinned version identifier, a SHA-256 per captured file, the
+manifest and a retrieval script (Appendix~\ref{app:artifacts:released}).
 
 % RESOLVED 2026-07-30. All four identifiers now exist and are stated, routed
 % through main.tex macros so the blind build suppresses them from one switch.
@@ -118,21 +91,10 @@ is.
 % concept split was read from the Zenodo record API (doi vs conceptdoi -- they
 % differ only in the final digit), and the dataset's public, ungated state and
 % cc-by-4.0 metadata from an unauthenticated client.
-%
-% The harness sentence is deliberately SMALL. There is no pull request. What
-% exists is a comment on an open issue (2026-07-21, followed up 2026-07-24) and
-% no maintainer reply. "Submitted", "contributed" and "upstream patch" would all
-% be false. Do not upgrade this wording without re-running that search.
 % ANONYMITY 2026-07-31: every identifier below goes through a macro defined in
 % main.tex. Do not write a URL, DOI or issue number directly into this paragraph.
-\paragraph{Availability.} The archived release is canonical:
-\textbf{\versiondoi}, which resolves to the frozen \textbf{v1.0.0} state this
-paper describes. The concept DOI \conceptdoi{} resolves to whichever version is
-latest and is deliberately \emph{not} the citation here, because the numbers
-reported above belong to one frozen state. The analysis package is at \repourl,
-tag \texttt{v1.0.0}, and a copy of the data is mirrored for convenience at
-\dataseturl; the mirror is a secondary link, provided because the per-item files
-are directly loadable there, and the DOI remains the citable record. The
-paired-comparison layer described here has been \textbf{proposed} to the
-\texttt{lm-evaluation-harness} maintainers, in a comment on \harnessissue; no
-integration has been merged, and none should be inferred.
+The archived release is canonical: \textbf{\versiondoi}, which resolves to the
+frozen v1.0.0 state this paper describes and not to the latest one. The package
+is at \repourl, tag \texttt{v1.0.0}, and the data is mirrored at \dataseturl.
+Appendix~\ref{app:artifacts-detail} describes every artifact in full, with the
+datasheet, licensing findings, metadata and maintenance statement.

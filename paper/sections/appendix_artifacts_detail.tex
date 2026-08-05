@@ -18,6 +18,82 @@
 \section{Artifact detail}
 \label{app:artifacts-detail}
 
+\subsection{The six released artifacts}
+\label{app:artifacts:released}
+
+% RELOCATED 2026-08-05 (flagship narrative, §6 target for sections/artifacts.tex)
+% from sections/artifacts.tex. The per-artifact descriptions and the detail of
+% the redistribution review are moved here whole; the body keeps a one-sentence
+% summary of each and a pointer to this subsection. NOTHING WAS DELETED.
+% SOURCE for the per-item counts: \S\ref{sec:audit:v3};
+% results/audit_verdicts_rev3.csv column v3_per_item_outputs over the 16
+% ELIGIBLE rows (0 yes, 3 partial, 13 no). Counts come from \Audit* macros.
+The \textbf{per-item outputs} are 88 cell JSONL files, one row per evaluation
+item, for every model $\times$ method $\times$ seed $\times$ task in the
+controlled experiment, carrying the per-item correctness state that the paired
+test consumes. \S\ref{sec:audit:v3} reports that \AuditPerItemTaskMatched{} of
+the \AuditEligible{} eligible sources release \emph{task-matched} per-item
+outputs, those covering the tasks their own equivalence claim is about, and that
+\AuditPerItemOtherTaskOnly{} (\AuditPerItemOtherTaskClaims{}) release outputs for
+other tasks only; the fifth line of the reporting standard in
+\S\ref{sec:conclusion} asks the field to close that gap, and withholding ours
+would leave that recommendation untestable against the paper making it. They
+ship in both forms deliberately: the extracted files are directly loadable, and
+the two sealed run archives carry the same bytes with a per-file SHA-256
+manifest and an archive checksum recorded when the runs completed, so the
+loadable copy can be checked against the record made at run time instead of
+trusted.
+
+The \textbf{flip atlas} gives per-cell paired statistics for every enumerated
+pair-task cell, with the exclusion table and the frozen 59-pair manifest.
+\texttt{flipeval} is the analysis package: flip rates, the churn family, exact
+McNemar, TOST at a declared margin, bootstrap intervals, item-bootstrap
+rank-flip rates, minimum detectable difference, required-$n$, and the
+certification-table generator (Apache-2.0; everything else is CC-BY-4.0). The
+audit artifacts are the frozen 17-claim table with source content hashes and the
+per-claim verdict CSV, with every robustness and transparency column, plus the
+source manifest and retrieval script described below; the captured source text
+itself is not among them. The certification tables ship twelve rows per margin
+at 1, 2 and 3\,pp. The reproduction package holds registrations and their dated
+amendments, signed decision records, configs, the container image SHA-256 and
+build recipe, scheduler scripts, per-run manifests, the source-state freeze
+fingerprints, and the campaign incident log, which is included on purpose: a
+pipeline with 28 recorded catches is better evidence that it was verified than
+one presenting a clean surface.
+
+% RELOCATED 2026-08-05 from sections/artifacts.tex, where a one-sentence summary
+% of the review's finding remains. Option A, chosen by the author 2026-08-02.
+% SOURCE, licensing: redistribution review of 2026-08-02, recorded in
+% docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §10. Four sources with no
+% third-party republication grant (R11 Meta AI blog, R12 NVIDIA TensorRT-LLM
+% doc, R13 and R14 vLLM pages) plus the arXiv default licence over R01-R07.
+% SOURCE, provenance: docs/audit_sources_manifest.tsv status column (15 MATCH,
+% R11 MISMATCH, R13 NO-BASELINE) and scripts/fetch_audit_sources.py, whose
+% UNSTABLE map lists R11 and R12. Offline run 2026-08-02 over the private
+% archive: 17 verified, 0 drifted, 0 expected-drift, 0 unverifiable, 0 failed.
+% DO NOT write "no source permits redistribution" or any general statement of
+% what is lawful. What is claimed here is what was checked and what it found.
+The redistribution review of 2026-08-02 examined the terms attached to each
+audited source before any copy was published. It found four sources, the Meta AI
+blog post, the NVIDIA TensorRT-LLM documentation page and two vLLM pages,
+carrying no grant that would permit a third party to republish their text, and
+it found the seven method papers under arXiv's default licence, which authorises
+arXiv to distribute them rather than authorising us to. Publishing the corpus was
+therefore never an option that was open to us, and the working archive of it is
+kept private. What ships instead is what makes the corpus rebuildable and
+checkable: the source URL and pinned version identifier for every claim, a
+SHA-256 for every captured file, the per-file manifest
+\texttt{docs/\allowbreak{}audit\_sources\_\allowbreak{}manifest.tsv} carrying
+both digests and a per-row provenance status, and
+\texttt{scripts/\allowbreak{}fetch\_\allowbreak{}audit\_sources.py}, a
+standard-library script that re-fetches each source by the retrieval method
+recorded for it and compares the result against the recorded digest. Quoted text
+appears in this paper as short excerpts with their locations, and a reader who
+runs the script obtains each source from its own publisher. Two of the
+seventeen, R11 and R13, bound what a digest can establish at all; the manifest
+records that per row, neither is described anywhere in this paper as
+hash-verified, and \S\ref{app:artifacts:datasheet} states what each limit is.
+
 \subsection{Datasheet}
 \label{app:artifacts:datasheet}
 
@@ -154,3 +230,15 @@ replacement. \textbf{Adding atlas pairs requires a dated amendment to the atlas
 registration}, not a silent extension. The frozen pair manifest is what makes
 the population auditable, so growing it quietly would remove the property the
 artifact exists to demonstrate.
+
+% RELOCATED 2026-08-05 from sections/artifacts.tex, moved verbatim with the
+% comment that governs it.
+% The harness sentence is deliberately SMALL. There is no pull request. What
+% exists is a comment on an open issue (2026-07-21, followed up 2026-07-24) and
+% no maintainer reply. "Submitted", "contributed" and "upstream patch" would all
+% be false. Do not upgrade this wording without re-running that search.
+% ANONYMITY 2026-07-31: the issue identifier goes through a macro defined in
+% main.tex. Do not write a URL, DOI or issue number directly into this paragraph.
+The paired-comparison layer described in \S\ref{sec:artifacts} has been
+\textbf{proposed} to the \texttt{lm-evaluation-harness} maintainers, in a comment
+on \harnessissue; no integration has been merged, and none should be inferred.
