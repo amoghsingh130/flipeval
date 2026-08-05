@@ -124,7 +124,16 @@ denominator.
 
 % SOURCE: Table~\ref{tab:atlas-strata} (results/atlas_cells_summary_rev2.csv,
 % the 1,707-cell analysis population), as the ratio of the two medians:
-%   S1 0.138 / 0.026 = 5.3077 ; S2 0.048 / 0.009 = 5.3333.
+%   S1 0.137 / 0.026 = 5.2692 ; S2 0.048 / 0.009 = 5.3333.
+% ROUNDING CORRECTED 2026-08-05 (Wave 3 defect D8,
+% docs/WAVE3_ADVERSARIAL_REVIEW_2026-08-05.md §1). The S1 numerator read 0.138
+% and the quotient 5.3077. The S1 median accuracy-state churn over the analysis
+% population (excluded_or_skipped false, contains_disclosed_probe_cell false,
+% n=1,398) is 0.137452, which rounds to 0.137, not 0.138. Every other cell of
+% tab:atlas-strata reproduces exactly. Unrounded the two strata give 5.2232 and
+% 5.1936; the ratio-of-rounded-medians reading used here gives 5.2692 and
+% 5.3333. Both readings still put the two strata at the same multiple to two
+% significant figures, which is the claim this section makes.
 % REV-1 SURVIVOR, CORRECTED 2026-07-27. This read "roughly five to six times"
 % and cited docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1's "Reading" bullet, which
 % sits under the REV-1 strata table (S1 = 846 cells). At rev-2 both strata land
@@ -148,14 +157,15 @@ variance term in Equations~\eqref{eq:sds}--\eqref{eq:nreq}, so a compressed mode
 whose net delta looks reassuringly small can still be sitting on the noisiest
 possible evidence base for the claim that it is unchanged.
 
-% SOURCE: Table~\ref{tab:atlas-strata}. Median churn 0.138 -> 0.048 is a factor
-% of 2.875; median |net delta| 0.026 -> 0.009 is a factor of 2.889; the two move
+% SOURCE: Table~\ref{tab:atlas-strata}. Median churn 0.137 -> 0.048 is a factor
+% of 2.854; median |net delta| 0.026 -> 0.009 is a factor of 2.889; the two move
 % together, which is why the ratio is preserved to two significant figures.
+% Numerator and factor corrected 2026-08-05 with defect D8 above.
 The ratio is preserved across a generational change in method. The two strata
 differ by nearly a factor of three in how much behaviour they disturb, with
-median churn falling from $0.138$ in S1 to $0.048$ in S2, and by almost exactly
+median churn falling from $0.137$ in S1 to $0.048$ in S2, and by almost exactly
 the same factor in the net delta they report, $0.026$ to $0.009$, so the
-understatement ratio barely moves: 5.31 in S1 and 5.33 in S2. Two generations of
+understatement ratio barely moves: 5.27 in S1 and 5.33 in S2. Two generations of
 compression method, one of them three times gentler than the other, hide the
 disturbance they do cause by the same multiple. Better methods have made the
 difference smaller \emph{without making the evidence for equivalence any more
@@ -174,7 +184,7 @@ Percentages are within-stratum shares of cells.}
  & S1 (v1 archive; TheBloke-era GPTQ etc.) & S2 (Neural Magic W4A16/INT8/FP8, 8B--405B) \\
 \midrule
 Cells                                & 1{,}398        & 309 \\
-Median accuracy-state churn          & 0.138          & 0.048 \\
+Median accuracy-state churn          & 0.137          & 0.048 \\
 Median $|$net accuracy delta$|$      & 0.026          & 0.009 \\
 TOST-equivalent at 2\,pp             & 68 (4.9\%)     & 53 (17.2\%) \\
 Exact McNemar $p < 0.05$             & 371 (26.5\%)   & 19 (6.1\%) \\
@@ -296,7 +306,7 @@ inheritance that is itself part of the finding.
 
 % A REV-1 SURVIVOR died with the deleted "Supports" half of this closer in the
 % 2026-07-27 pass: it read "five to six times", rev-1's ratio, where rev-2 gives
-% 5.31 (S1) / 5.33 (S2).
+% 5.27 (S1) / 5.33 (S2). S1 corrected from 5.31 on 2026-08-05, defect D8.
 The findings above are claimed at the population each was measured on and no
 wider. This section does not support any statement about quantization methods in
 general, about models or methods absent from the two sources, or about causal

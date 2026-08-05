@@ -100,16 +100,19 @@ released.
 %
 %   cd paper && python3 tools/measure_abstract.py abstract.tex
 %
-% Last MEASURED 2026-08-02, rev-3 narrative pass: 1,903 / 1,920 characters,
+% Last MEASURED 2026-08-05, Wave 3, on the flagship rewrite above:
+%   ABSTRACT_CHARS 1864 / 1920  margin=56  words=281
+% The 2026-08-05 rewrite was budgeted by hand at "roughly 1,860, margin near 60"
+% by a session with no shell; the measurement confirms that estimate. The
+% previous measurement was 2026-08-02, rev-3 narrative pass: 1,903 / 1,920,
 % margin 17, 281 words.
 %
-% NOT MEASURED for the 2026-08-05 flagship rewrite above: that session had no
-% shell and could not run the tool. The rewrite was budgeted by hand against the
-% 2026-08-02 measurement and is estimated at roughly 1,860 characters, i.e. a
-% margin near 60, deliberately larger than 17 because a hand estimate is not a
-% measurement. RUN THE TOOL BEFORE SUBMITTING. If the real figure leaves room,
-% the $12.7\times$ controlled churn ratio is the first thing to restore, in the
-% mini-grid sentence.
+% THE 56-CHARACTER MARGIN IS A LIVE DECISION, NOT SPARE ROOM. The
+% $12.7\times$ controlled churn ratio is the first thing to restore if it is
+% spent, in the mini-grid sentence. It is left out for now because 56 characters
+% is the whole safety margin against a field that truncates silently, and
+% $12.7\times$ still has three homes (introduction, mini-grid Result 1,
+% conclusion).
 %
 % MEASURE AFTER EVERY EDIT -- the margin has been under 40 characters three
 % times now, and the arXiv field truncates silently.
