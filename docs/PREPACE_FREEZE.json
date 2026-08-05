@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-07T02:07:13.638705+00:00",
-  "source_commit": "a774a025e68edca29bbba565a1f5a721b812dae8",
-  "source_tree": "b6005fbb3acd643d628acc2f7489d029bdeb6550",
-  "branch": "main",
+  "created_at": "2026-08-05T03:56:35.055645+00:00",
+  "source_commit": "764076f9640cbdf10506d644ec81b5dbc83373da",
+  "source_tree": "7c6bbdeff0bc8ce65c234142802de792047e9a7f",
+  "branch": "flagship-narrative",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
     "PREREGISTRATION.md": "9d7b1a5a691d1b703f7588910a327e748d060c6238c672cc5e2e9702cf8d5115",
@@ -47,6 +47,7 @@
     "scripts/freeze_prepace.py": "94f5abb98daa42d4d39ed889d5e8c5834164205e6b4046b9bb1852b716b2d12d",
     "scripts/kaggle_bootstrap.py": "c18c3528d281e3ab97a0e9dff3c5b1101afb06b4d41abae31536ed00d2e5c1fe",
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
+    "scripts/make_figure1.py": "c2c02fbbeaa1f71dd6f8b62e9a7713b72065da210089acbed198b00c20098825",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
     "scripts/slurm/build_image.sbatch": "628272db01c755674c77be34d0728856f0dfe874425dd1baaa425d41dd5a6d61",
@@ -81,6 +82,7 @@
     "tests/test_core.py": "42b33120a60f530ec46c967fbd90b2b27db72d23f460c5ae956643e6e3c6ff0b",
     "tests/test_escalation_config.py": "1dadd3e596a6e6ac8b2af2397bf5c8f9c773bb6e71f0ce566e740c25acf22405",
     "tests/test_expected_grid.py": "4239d32d9d4b667a6d6680fd22be857d24023fe79054a9f42a68a55cdaea4ccc",
+    "tests/test_figure1.py": "f78e25a101d420062c009f4cb0534aebb0d5c237ee9b7e2937d82bf81e4cdf77",
     "tests/test_freeze_prepace.py": "21308060ad3342f05477480b433248bf70d13c17d88adfff7b831dca24979499",
     "tests/test_golden.py": "0a386ff15be16876bbb9f6f9e929639714c0ec853ed3760ea0bdbf57d2d50ea7",
     "tests/test_golden_atlas_revision.py": "7fa28ad9987b0c6fcf33966089f2ece028138ecf720561b9db690c21cfd62e00",
@@ -95,5 +97,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "29e6ee5786b40c2923896800a04a5b19c78a9231e31e8176e3b24b5c8f0f5ae7"
+  "manifest_payload_sha256": "82a606c57c6007f4aaf9fc06b1833f06283bc9e29973fd52258462219b01da04"
 }
