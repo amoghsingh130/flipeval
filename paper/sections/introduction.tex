@@ -144,8 +144,8 @@ Equivalence is a certification problem, so we compute certification tables
 giving the number of items an evaluation needs to certify a compressed model
 within $\pm m$ points of its baseline, from the per-item disagreement rates
 observed under compression, not from independent-binomial variance. The paired
-correction is large, and the requirement is set by churn and not by task
-difficulty, which defeats the natural intuition (\S\ref{sec:certification}).
+correction is large, and the requirement is set by churn rather than by task
+difficulty (\S\ref{sec:certification}).
 Per-item flips as a diagnostic for compressed models are due to
 \citet{dutta2024flips}, and calibration-\emph{data} effects on quantization
 quality are due to \citet{williamsaletras2024}; we claim neither. Our
@@ -163,12 +163,11 @@ margin, TOST, and required-$n$ tables.
 All of this assumes the evaluation itself holds still, and a small exploratory
 study indicates it does not: on one fixed FP16 model, changing the
 answer-extraction filter moved reported GSM8K accuracy from $0.232$ to $0.566$
-with not one token of model output changed. That is a scoring decision and not a
-modelling one, it is larger than every compression effect reported here, and it
-is one model on one task that licenses no confirmatory reading
-(\S\ref{sec:sensitivity}). All protocols were frozen before the analyses they
-govern (\S\ref{sec:prereg}), deviations are dated amendments, and the analyst
-decisions that moved the headline are reported with the direction they moved it.
-Every artifact behind these numbers is archived at \versiondoi{} and itemised in
-\S\ref{sec:artifacts}; the limits of the whole exercise are in
-\S\ref{sec:limitations}.
+without changing one token of model output. That is a scoring decision, not a
+modelling one, and it is larger than every compression effect reported here; it
+is also one model on one task and licenses no confirmatory reading
+(\S\ref{sec:sensitivity}). Protocols were frozen before the analyses they
+govern and deviations are dated amendments (\S\ref{sec:prereg}), the analyst
+decisions that moved the headline are reported with the direction they moved it,
+and every artifact is archived at \versiondoi{} (\S\ref{sec:artifacts}). The
+limits of the exercise are in \S\ref{sec:limitations}.

@@ -82,14 +82,11 @@ in reported accuracy is not a paired quantity at all, no per-item analysis of it
 is possible, and this is invisible to anyone reading only the aggregate
 leaderboard numbers.
 
-An earlier revision of this work overstated the exclusion counts behind that
-observation. Rev-1 of the atlas reported 643
-exclusions as float-scored and 132 as empty joins, and attributed both to
-upstream reporting practice. An independent spot-check established that most of
-those cells were in fact readable and that our own parser could not see them;
-the rev-2 figures above are what survives once that defect is fixed. The episode
-is documented in \S\ref{sec:prereg-spotcheck}, and the retraction is recorded,
-not quietly absorbed.
+An earlier revision overstated the exclusion counts behind that observation,
+reporting 643 float-scored and 132 empty-join exclusions and attributing both to
+upstream reporting practice. A spot-check established that most of those cells
+were readable and that our own parser could not see them; the figures above are
+what survives once that defect is fixed (\S\ref{sec:prereg-spotcheck}).
 
 % SOURCE: results/atlas_cells_summary_rev2.csv (the 1,707-cell probe-excluded
 % analysis population, S1 = 1,398 / S2 = 309); docs/ATLAS_REV2_CORRECTION_
@@ -113,11 +110,10 @@ Every statistic in the remainder of this section, in the certification tables of
 are neither excluded nor part of a disclosed feasibility probe
 (S1 = 1{,}398, S2 = 309), spanning base models from 1.3B to 405B parameters. The
 99 probe cells span the two pairs whose results were known before the
-registration was written; the registration requires them to appear in the atlas
-but not in any headline aggregate, and they are tiny hand-built sanity pairs
-($n$ as low as 10, discordance up to 0.9) that would distort any quartile. The
-1{,}807 figure above is pipeline accounting and is never used as an analysis
-denominator.
+registration was written; the registration requires them in the atlas but not in
+any headline aggregate, and they are tiny hand-built sanity pairs that would
+distort any quartile (Appendix~\ref{app:atlas-detail}). The 1{,}807 figure above
+is pipeline accounting and is never used as an analysis denominator.
 
 \subsection{Net delta versus per-item churn}
 \label{sec:atlas:netgross}
@@ -264,17 +260,15 @@ individual items.
 The mechanism is concrete in the most extreme such cell
 (Table~\ref{tab:identical-extreme}, Appendix~\ref{app:atlas:extreme}): a 2023-era
 community GPTQ of a 7B base model on one MMLU subject, where exactly 17.17\% of
-items broke and exactly 17.17\% healed. Because the two rates are equal, the net
-delta is exactly zero and the exact McNemar test returns $p = 1.0$, and it is
-\emph{right} to: there is no evidence of a directional difference between the two
-models. Meanwhile a third of the answers changed. A model card reporting this
-cell would truthfully write ``no change in accuracy''; a user who had memorised
-the baseline's outputs would find one item in three behaving differently. The
-caveats belong in the same breath: at $n = 198$ symmetric flip counts are easier
-to hit by chance, and this is an S1 cell from the noisier stratum. It
-illustrates the mechanism, not a typical magnitude, and the finding worth
-carrying away is the 145 cells and their 7.20\% median churn, not this one
-cell's 34\%.
+items broke and exactly 17.17\% healed. The rates being equal, the net delta is
+exactly zero and the exact McNemar test returns $p = 1.0$, correctly: there is no
+evidence of a directional difference. Meanwhile a third of the answers changed. A
+model card would truthfully write ``no change in accuracy'' for a cell where one
+item in three behaves differently. The caveats belong in the same breath: at
+$n = 198$ symmetric flip counts are easier to hit by chance, and this is an S1
+cell from the noisier stratum. It illustrates the mechanism, not a typical
+magnitude; the finding to carry away is the 145 cells and their 7.20\% median
+churn, not this cell's 34\%.
 
 \subsection{Population caveats}
 \label{sec:atlas:caveats}
