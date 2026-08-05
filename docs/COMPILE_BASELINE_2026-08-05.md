@@ -139,3 +139,52 @@ The D8 correction from earlier today does render correctly: the table shows
 Priorities 3 and 4 asked for a compile after each relocation and real page
 counts rather than estimates. Both are now possible. No page claim in this
 project needs to be an estimate again.
+
+---
+
+# Final state this session, after the fixes
+
+Re-measured from a clean build at commit `7d50cf5`.
+
+| quantity | baseline (`18b2db1`) | now | |
+|---|---|---|---|
+| Total PDF | 96 | **95** | |
+| Main content before references | 1 to 35 | **1 to 35** | unchanged |
+| References | 36 to 38 | 36 to 38 | |
+| Appendices | 39 to 96 | 39 to 95 | |
+| **Figure 1 page** | **87** | **3** | fixed |
+| Overfull hbox, count | 58 | 57 | |
+| Overfull hbox, worst | 244.40pt | **191.48pt** | `tab:atlas-strata` fixed |
+| Underfull hbox | 11 | 11 | |
+| Overfull vbox | 0 | 1 | new, see below |
+| Undefined refs / cites | 0 / 0 | 0 / 0 | |
+
+Non-LaTeX gates, all green:
+
+```
+PAPER_CHECK: OK -- 0 dangling refs, 105 labels, 165 refs
+STALE_CLAIM: OK
+REGISTRATIONS_VERBATIM: OK -- 7,103 words across 4 documents
+gen_denominator_macros --check: OK on all three layers
+  INPUT_DIGEST OK, audit_verdicts_rev3.csv sha256 matches
+ABSTRACT_CHARS 1864 / 1920, margin 56, 281 words
+freeze_prepace --verify: passed
+in-image pytest, job 11695867: 325 passed, 0 skipped
+prose em dashes: 0
+paper/figures/fig1_values.json: byte-identical across all three regenerations
+```
+
+**The body did not shrink.** Relocation 1 moved 208 words and a table out of the
+body and the reference boundary did not move off page 35. The body's page count
+is not currently word-limited at the margin; float placement absorbs small
+changes. Relocations 2 to 6 are still required and should be measured the same
+way after each, now that measuring is possible.
+
+**One new defect introduced by the fixes:** an overfull `\vbox` appeared where
+there was none. It is not attributed in the log to a source file. Worth
+identifying before the next relocation.
+
+**Priority 3 status:** relocation 1 of 6 complete (harness-sensitivity detail).
+Relocations 2 to 6 not started: mini-grid escalation chronology, extended
+preregistration process, extended related work, audit source-level narrative,
+full supporting tables.
