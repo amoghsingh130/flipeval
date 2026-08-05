@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-05T20:04:19.500657+00:00",
-  "source_commit": "b7d11443edd2be41351484fc8408f40774aab83d",
-  "source_tree": "b9f3ede0b425b0e2358b495e49291d5715d4fb55",
+  "created_at": "2026-08-05T21:16:44.806880+00:00",
+  "source_commit": "b55fe8fc7037c5f0e1c681a54058b4d4a05aa785",
+  "source_tree": "532fa9da95c066eb795ce701beded9c0b599ac64",
   "branch": "flagship-narrative",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
     "PREREGISTRATION.md": "9d7b1a5a691d1b703f7588910a327e748d060c6238c672cc5e2e9702cf8d5115",
-    "README.md": "c6329e51ac0dd5f325c2035f9f108a247e661a94c736f663f39b8a3832cc69a5",
+    "README.md": "17f0464c4f992ac628b6c17e59604400d5da4b9198d06533881cf61033c8054d",
     "STATUS.md": "19b0bee876a278847bc62dd387798d49978cc1e803115a6da82cdf9275702ce1",
     "configs/kaggle_qwen_1p5b.yaml": "9b012e690b86747393ceb0c17ef91ef33803e69c447812543a763af9e40e4659",
     "configs/kaggle_qwen_public_quantized.yaml": "73c53f17c018d9fa278c467f4dc4803fd4585aaf58f8d4765bedaf9bfe07383d",
@@ -97,5 +97,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "b5374bee54fa90a75313b24b740478d2af77044c240030ef235e4cbd1ceb5515"
+  "manifest_payload_sha256": "aa2b4964fc307a8ebe02b7824fea2405da5be7c5b04454c83e6c9339540dc854"
 }
