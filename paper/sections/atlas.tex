@@ -170,14 +170,22 @@ scales down in lockstep with the quantity being claimed small.
 
 \begin{table}[t]
 \centering
-\caption{The two atlas strata, on the 1{,}707-cell analysis population.
-Percentages are within-stratum shares of cells.}
+% WIDTH FIX 2026-08-05. The stratum descriptions used to be the column headers,
+% which made this tabular 244pt too wide: the whole S2 column rendered off the
+% right edge of the page and no S2 value was visible to a reader of the PDF
+% (docs/COMPILE_BASELINE_2026-08-05.md). They are prose, so they belong in the
+% caption. No value changed.
+\caption{The two atlas strata, on the 1{,}707-cell analysis population. S1 is
+the Open LLM Leaderboard v1 archive of community quantizations of 2023-era base
+models, TheBloke-era GPTQ and similar; S2 is the Neural Magic / Red~Hat
+W4A16, INT8 and FP8 releases from 8B to 405B. Percentages are within-stratum
+shares of cells.}
 \label{tab:atlas-strata}
 % SOURCE: results/atlas_cells_summary_rev2.csv, grouped by source.
 % Population: 1,707 (S1 1,398 + S2 309) -- NOT the 1,807 figure.
 \begin{tabular}{lrr}
 \toprule
- & S1 (v1 archive; TheBloke-era GPTQ etc.) & S2 (Neural Magic W4A16/INT8/FP8, 8B--405B) \\
+ & S1 & S2 \\
 \midrule
 Cells                                & 1{,}398        & 309 \\
 Median accuracy-state churn          & 0.137          & 0.048 \\

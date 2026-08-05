@@ -263,7 +263,7 @@ def emit_tikz(data: dict) -> str:
     out: list[str] = [PREAMBLE]
     a = out.append
 
-    a(r"\begin{figure}[t]")
+    a(r"\begin{figure}[!t]")
     a(r"\centering")
     a(r"\begin{tikzpicture}[")
     a(r"  x=1cm, y=1cm, line width=0.5pt,")
@@ -317,33 +317,40 @@ def emit_tikz(data: dict) -> str:
     # about 0.95cm of text to draw and a panel border at 6.00. They crossed it.
     # The axis is the only thing here that can give, and shortening it does not
     # distort anything: it is a full 0-to-100 axis either way.
-    axw = 3.90
+    axw = 3.50
+    # Bars start clear of the row labels. F2 (2026-08-05, first render): the
+    # bars began at 0.95 and "GPTQ" is about 0.80cm wide from 0.18, so the bar
+    # was drawn over the Q and the label read "GPT".
+    barx = 1.32
     a(rf"\node[panel, minimum width={pw}cm, minimum height={ph}cm, "
       rf"anchor=south west] at ({lx},{ty}) {{}};")
     a(rf"\node[ttl] at ({lx + 0.18},{ty + ph - 0.30}) "
       r"{A\quad The aggregate view};")
     a(rf"\node[lbl, font=\scriptsize\itshape, text width={pw - 0.5}cm] "
       rf"at ({lx + 0.18},{ty + ph - 0.78}) "
-      r"{Two 4-bit methods, same model, same items.};")
+      r"{Two 4-bit methods, one model, one item set.};")
     for idx, (name, acc) in enumerate((("GPTQ", acc_g), ("AWQ", acc_a))):
         yy = ty + 1.72 - idx * 0.62
         a(rf"\node[lbl] at ({lx + 0.18},{yy + 0.16}) {{{name}}};")
-        a(rf"\draw[fill=frule!12, draw=frule!35] ({lx + 0.95},{yy}) "
-          rf"rectangle ({lx + 0.95 + axw},{yy + 0.32});")
-        a(rf"\draw[fill=fneutral, draw=none] ({lx + 0.95},{yy}) "
-          rf"rectangle ({lx + 0.95 + axw * acc / 100.0},{yy + 0.32});")
-        a(rf"\node[num, anchor=west] at ({lx + 0.95 + axw + 0.08},{yy + 0.16}) "
+        a(rf"\draw[fill=frule!12, draw=frule!35] ({lx + barx},{yy}) "
+          rf"rectangle ({lx + barx + axw},{yy + 0.32});")
+        a(rf"\draw[fill=fneutral, draw=none] ({lx + barx},{yy}) "
+          rf"rectangle ({lx + barx + axw * acc / 100.0},{yy + 0.32});")
+        a(rf"\node[num, anchor=west] at ({lx + barx + axw + 0.08},{yy + 0.16}) "
           rf"{{{fmt(acc, 2)}\%}};")
         fits_in_panel(f"panel A {name} accuracy label",
-                      lx + 0.95 + axw + 0.08, W_ACC_LABEL, lx)
-    a(rf"\draw[frule!55, line width=0.4pt] ({lx + 0.95},{ty + 0.72}) -- "
-      rf"({lx + 0.95},{ty + 0.60}) -- ({lx + 0.95 + axw},{ty + 0.60}) -- "
-      rf"({lx + 0.95 + axw},{ty + 0.72});")
+                      lx + barx + axw + 0.08, W_ACC_LABEL, lx)
+    a(rf"\draw[frule!55, line width=0.4pt] ({lx + barx},{ty + 0.72}) -- "
+      rf"({lx + barx},{ty + 0.60}) -- ({lx + barx + axw},{ty + 0.60}) -- "
+      rf"({lx + barx + axw},{ty + 0.72});")
     a(rf"\node[font=\scriptsize, anchor=north] "
-      rf"at ({lx + 0.95 + axw / 2},{ty + 0.58}) "
+      rf"at ({lx + barx + axw / 2},{ty + 0.58}) "
       rf"{{0 to 100\% accuracy, $n={fmt(v['n_items'], 0)}$ per seed}};")
+    # F3 (2026-08-05, first render): this sat at ty + 1.06, which is inside the
+    # AWQ bar row at ty + 1.10, so the two overprinted. It moves above the bars,
+    # under the subtitle, where the panel is empty.
     a(rf"\node[font=\scriptsize\bfseries, anchor=west] "
-      rf"at ({lx + 0.18},{ty + 1.06}) "
+      rf"at ({lx + 0.18},{ty + 2.38}) "
       rf"{{Gap: {fmt(abs(gap_pp), 2)} pp}};")
 
     # ---------------- Panel B: paired decomposition ----------------------
@@ -360,7 +367,10 @@ def emit_tikz(data: dict) -> str:
       r"{Every item, going from GPTQ to AWQ.};")
     # A 100-item bar split into break / heal / unchanged.
     bw = 5.2
-    byy = ty + 1.98
+    # Raised from ty + 1.98 on 2026-08-05 to buy vertical room for the two
+    # callouts that replaced the in-bar labels; the lowest line now clears the
+    # panel floor by about 0.31cm.
+    byy = ty + 2.25
     a(rf"\draw[fill=fharm, draw=none] ({rx + 0.4},{byy}) "
       rf"rectangle ({rx + 0.4 + bw * harm / 100.0},{byy + 0.42});")
     a(rf"\draw[fill=fben, draw=none] ({rx + 0.4 + bw * harm / 100.0},{byy}) "
@@ -369,15 +379,9 @@ def emit_tikz(data: dict) -> str:
       rf"({rx + 0.4 + bw * (harm + ben) / 100.0},{byy}) "
       rf"rectangle ({rx + 0.4 + bw},{byy + 0.42});")
     a(rf"\draw[draw=frule!45] ({rx + 0.4},{byy}) rectangle ({rx + 0.4 + bw},{byy + 0.42});")
-    a(rf"\node[font=\scriptsize, anchor=east, text=white] "
-      rf"at ({rx + 0.4 + bw * harm / 100.0 - 0.06},{byy + 0.21}) "
-      rf"{{{fmt(harm, 2)}\%}};")
     a(rf"\node[font=\scriptsize, anchor=west] "
       rf"at ({rx + 0.4 + bw * (harm + ben) / 100.0 + 0.08},{byy + 0.21}) "
       rf"{{{fmt(100 - churn, 2)}\% unchanged}};")
-    a(rf"\node[font=\scriptsize, anchor=south] "
-      rf"at ({rx + 0.4 + bw * (harm + ben / 2) / 100.0},{byy + 0.46}) "
-      rf"{{{fmt(ben, 2)}\%}};")
     # The colour key sits directly under the bar it explains.
     # G2 (2026-08-05): this was at byy + 0.92, i.e. ABOVE the bar, which put it
     # at y=9.05 against the panel subtitle at y=9.12. Both are anchor=west, so
@@ -385,20 +389,28 @@ def emit_tikz(data: dict) -> str:
     # was that the subtitle's y came from the panel top and the key's came from
     # the bar, so nothing kept them apart. Below the bar there is real room, and
     # a key next to the thing it labels is better anyway.
-    a(rf"\node[lbl] at ({rx + 0.4},{byy - 0.30}) "
-      r"{\textcolor{fharm}{$\blacksquare$} correct $\to$ wrong \quad "
-      r"\textcolor{fben}{$\blacksquare$} wrong $\to$ correct};")
-    # The two derived quantities, stated as arithmetic. Shifted down with the
-    # key; the lowest line lands at byy - 1.57 = 6.56 against a panel floor of
-    # 6.15, so it keeps about 0.27cm of clearance.
-    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 0.75}) "
+    # F5/F6 (2026-08-05, first render). The harmful rate used to be set INSIDE
+    # its own segment in white, anchored east. That segment is 9.12% of 5.2cm =
+    # 0.47cm and the label needs about 0.9cm, so "9.12" was drawn off the left
+    # end of the bar over the panel background in white ink and vanished; only
+    # the "%" landed on the dark fill. The beneficial rate sat above the bar,
+    # detached, level with the subtitle. Both now read as callouts under the
+    # bar, in the segment's own colour, which also makes the separate key
+    # redundant: the numbers and the key are the same two lines.
+    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 0.28}) "
+      rf"{{\textcolor{{fharm}}{{$\blacksquare$}} {fmt(harm, 2)}\% "
+      r"correct $\to$ wrong};")
+    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 0.66}) "
+      rf"{{\textcolor{{fben}}{{$\blacksquare$}} {fmt(ben, 2)}\% "
+      r"wrong $\to$ correct};")
+    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 1.06}) "
       rf"{{net delta $= {fmt(ben, 2)} - {fmt(harm, 2)} = "
       rf"{fmt(ben - harm, 2)}$ pp}};")
     a(rf"\node[lbl, anchor=west, font=\scriptsize\bfseries] "
-      rf"at ({rx + 0.4},{byy - 1.17}) "
+      rf"at ({rx + 0.4},{byy - 1.44}) "
       rf"{{churn $= {fmt(ben, 2)} + {fmt(harm, 2)} = "
       rf"{fmt(churn, 2)}$\%}};")
-    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 1.57}) "
+    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 1.80}) "
       rf"{{{fmt(answer, 2)}\% of answers change in all}};")
 
     # ---------------- Panel C: certification resolution ------------------
@@ -411,23 +423,28 @@ def emit_tikz(data: dict) -> str:
     a(rf"\node[lbl, font=\scriptsize\itshape, text width={pw - 0.5}cm] "
       rf"at ({lx + 0.18},{by + ph - 0.78}) "
       rf"{{Planning requirement at a declared $\pm{fmt(MARGIN_PP, 0)}$ pp margin.}};")
-    cw = 3.9
+    cw = 2.98
+    # F7 (2026-08-05, first render): the bars began at 1.55 and "items
+    # required" is about 1.35cm wide from 0.18, so the bar overprinted its own
+    # label and it read "items req".
+    cbarx = 2.28
     for idx, (name, val, col) in enumerate((
             ("items run", act, "fneutral"),
             ("items required", req, "fharm"))):
-        yy = by + 1.72 - idx * 0.62
+        yy = by + 2.05 - idx * 0.62
         a(rf"\node[lbl] at ({lx + 0.18},{yy + 0.16}) {{{name}}};")
-        a(rf"\draw[fill={col}, draw=none] ({lx + 1.55},{yy}) "
-          rf"rectangle ({lx + 1.55 + cw * val / req},{yy + 0.32});")
-        a(rf"\node[num] at ({lx + 1.55 + cw * val / req + 0.08},{yy + 0.16}) "
+        a(rf"\draw[fill={col}, draw=none] ({lx + cbarx},{yy}) "
+          rf"rectangle ({lx + cbarx + cw * val / req},{yy + 0.32});")
+        a(rf"\node[num] at ({lx + cbarx + cw * val / req + 0.08},{yy + 0.16}) "
           rf"{{{fmt(val, 0)}}};")
+    # F8 (2026-08-05, first render): a five-line prose block used to sit here
+    # and ran off the bottom of the panel, over the atlas strip below it. The
+    # caption already carries that sentence in full, so the panel keeps only
+    # the qualification that must not be read off the bars alone.
     a(rf"\node[lbl, text width={pw - 0.45}cm, anchor=north west] "
-      rf"at ({lx + 0.18},{by + 1.02}) "
-      rf"{{At the observed disagreement rate of {fmt(v['discordance'] * 100, 2)}\%, "
-      rf"certifying at $\pm{fmt(MARGIN_PP, 0)}$ pp needs {fmt(req, 0)} items. "
-      rf"This is a planning requirement at an assumed true difference of zero, "
-      rf"so the evaluation cannot support an equivalence claim at that margin. "
-      rf"It is not evidence that the methods differ.}};")
+      rf"at ({lx + 0.18},{by + 1.22}) "
+      rf"{{Observed disagreement {fmt(v['discordance'] * 100, 2)}\%. A planning "
+      rf"requirement, not evidence the methods differ.}};")
 
     # ---------------- Panel D: calibration-seed instability --------------
     deltas = [d * 100 for d in v["seed_deltas_gptq_minus_awq"]]
@@ -436,11 +453,16 @@ def emit_tikz(data: dict) -> str:
     a(rf"\node[panel, minimum width={pw}cm, minimum height={ph}cm, "
       rf"anchor=south west] at ({rx},{by}) {{}};")
     a(rf"\node[ttl] at ({rx + 0.18},{by + ph - 0.30}) "
-      r"{D\quad Change only the calibration draw};")
+      r"{D\quad The calibration draw alone};")
     a(rf"\node[lbl, font=\scriptsize\itshape, text width={pw - 0.5}cm] "
       rf"at ({rx + 0.18},{by + ph - 0.78}) "
-      r"{GPTQ minus AWQ, one bar per calibration seed.};")
-    zero_y = by + 1.62
+      r"{GPTQ minus AWQ, per calibration seed.};")
+    # F9 (2026-08-05, first render). The bars sat at by + 1.62 and a three-line
+    # sentence was placed at by + 0.80, which put it through the seed labels at
+    # by + 0.90 and through the all-cells strip at by + 0.30. Three sets of text
+    # overprinted. The bars move up, the sentence is dropped because the caption
+    # states it in full, and the strip gets the space back.
+    zero_y = by + 1.95
     span = max(abs(d) for d in deltas)
     unit = 0.52 / span
     a(rf"\draw[frule!70, line width=0.5pt] ({rx + 0.35},{zero_y}) -- "
@@ -455,13 +477,8 @@ def emit_tikz(data: dict) -> str:
         a(rf"\node[font=\scriptsize, anchor={anchor}] "
           rf"at ({cx},{zero_y + delta * unit + (0.04 if delta > 0 else -0.04)}) "
           rf"{{{fmt(delta, 1)}}};")
-        a(rf"\node[font=\scriptsize, anchor=north] at ({cx},{zero_y - 0.72}) "
+        a(rf"\node[font=\scriptsize, anchor=north] at ({cx},{zero_y - 0.95}) "
           rf"{{s{label}}};")
-    a(rf"\node[lbl, text width={pw - 0.45}cm, anchor=north west] "
-      rf"at ({rx + 0.18},{by + 0.80}) "
-      rf"{{The sign changes: on one calibration draw AWQ wins, on the others "
-      rf"GPTQ does. Across the {cells_n} registered cells the winner reverses "
-      rf"in \textbf{{{flips_n} of {cells_n}}}.}};")
     # All eight cells, so this one cannot read as the whole evidence base.
     #
     # G1 (2026-08-05). The key used to be emitted at sx + 1.02 + 8*0.55 - 0.18,
@@ -471,25 +488,25 @@ def emit_tikz(data: dict) -> str:
     # box with the key sitting in the right margin. The pitch is now derived
     # from the space the key actually needs, and fits_in_panel() checks it.
     sx = rx + 0.30
-    dot_x0 = sx + 1.05           # first dot, clear of the "all cells:" label
+    dot_x0 = sx + 1.28           # first dot, clear of the "all cells:" label
     key_gap = 0.20               # dot centre to key left edge
     n_dots = len(v["all_cells"])
     # Solve for the pitch that leaves the key inside the panel, then round down
     # to a tidy value. 0.36 keeps the circled marker clear of its neighbours
     # (radius 0.16 against a 0.36 pitch) while leaving the key about 0.3cm.
-    dot_pitch = 0.36
-    a(rf"\node[font=\scriptsize, anchor=west] at ({sx},{by + 0.30}) "
+    dot_pitch = 0.34
+    a(rf"\node[font=\scriptsize, anchor=west] at ({sx},{by + 0.40}) "
       r"{all cells:};")
     for idx, cell in enumerate(v["all_cells"]):
         cx = dot_x0 + idx * dot_pitch
         mark = r"$\bullet$" if cell["winner_flip"] else r"$\circ$"
         col = "fharm" if cell["winner_flip"] else "frule!55"
         this = cell["model"] == CELL_MODEL and cell["task"] == CELL_TASK
-        a(rf"\node[font=\scriptsize, text={col}] at ({cx},{by + 0.30}) {{{mark}}};")
+        a(rf"\node[font=\scriptsize, text={col}] at ({cx},{by + 0.40}) {{{mark}}};")
         if this:
-            a(rf"\draw[frule!60, line width=0.4pt] ({cx},{by + 0.30}) circle (0.16);")
+            a(rf"\draw[frule!60, line width=0.4pt] ({cx},{by + 0.40}) circle (0.16);")
     key_x = dot_x0 + (n_dots - 1) * dot_pitch + key_gap
-    a(rf"\node[font=\scriptsize, anchor=west] at ({key_x},{by + 0.30}) "
+    a(rf"\node[font=\scriptsize, anchor=west] at ({key_x},{by + 0.40}) "
       r"{\ \ $\bullet$ reversed};")
     fits_in_panel("panel D reversed key", key_x, W_PANELD_KEY, rx)
 
@@ -534,21 +551,16 @@ def caption(data: dict) -> str:
         r"\caption{\textbf{Near-equal aggregate accuracy does not certify "
         r"interchangeable behavior.} One registered cell: Qwen2.5-7B on GSM8K, "
         r"4-bit GPTQ against 4-bit AWQ, paired on byte-identical calibration "
-        r"samples across five seeds. (A)~The two methods differ by "
-        + fmt(abs(v["gap_gptq_minus_awq"]) * 100, 2) + r"~pp of aggregate "
-        r"accuracy. (B)~The same items disagree far more than that: "
-        + fmt(v["harmful"] * 100, 2) + r"\% of items go from correct to wrong "
-        r"and " + fmt(v["beneficial"] * 100, 2) + r"\% from wrong to correct, "
-        r"so the aggregate gap is the small difference between two large "
-        r"opposing quantities whose sum is " + fmt(v["churn"] * 100, 2) +
-        r"\%. (C)~At the observed disagreement rate, certifying equivalence at "
-        r"a declared $\pm" + fmt(data["margin_pp"], 0) + r"$~pp margin would "
-        r"need " + fmt(v["required_n"], 0) + r" items against the " +
-        fmt(v["n_items"], 0) + r" run. That is a planning requirement computed "
-        r"at an assumed true difference of zero: it says the evaluation cannot "
-        r"support the claim, not that the methods differ. (D)~The sign of the "
-        r"difference changes with the calibration draw alone, and across the "
-        r"eight registered cells the winner reverses in " +
+        r"samples across five seeds. (A)~and~(B)~The aggregate gap of "
+        + fmt(abs(v["gap_gptq_minus_awq"]) * 100, 2) + r"~pp is the small "
+        r"difference between two large opposing quantities summing to " +
+        fmt(v["churn"] * 100, 2) +
+        r"\%. (C)~The item count needed to certify equivalence at a declared "
+        r"$\pm" + fmt(data["margin_pp"], 0) + r"$~pp margin is a planning "
+        r"requirement computed at an assumed true difference of zero: it says "
+        r"the evaluation cannot support the claim, not that the methods "
+        r"differ. (D)~The sign changes with the calibration draw alone, and "
+        r"across the eight registered cells the winner reverses in " +
         str(v["n_cells_winner_flip"]) + r" of " + str(v["n_cells_total"]) +
         r". \textbf{Scope.} This cell is an illustrative example chosen because "
         r"it is legible, and it is the most extreme of the eight: its "
