@@ -146,6 +146,11 @@ seed-wise spread of method $m$; the range/gap criterion holds when
 $\max(\mathrm{range}_{\mathrm{GPTQ}},\mathrm{range}_{\mathrm{AWQ}}) \geq
 \mathrm{gap}$. Values reproduce the signed decision record.}
 \label{tab:h3-eightcell}
+% WIDTH FIX 2026-08-05: this table overhung the right margin by 33pt. TeX emits
+% no overfull warning for it because the tabular sits inside \centering, so it
+% was found by measuring ink position per page rather than from the log.
+\setlength{\tabcolsep}{4pt}
+\small
 \begin{tabular}{llrrrll}
 \toprule
 Model & Task & $\mathrm{gap}$ & $\mathrm{range}_{\mathrm{GPTQ}}$ & $\mathrm{range}_{\mathrm{AWQ}}$ & Flip & Range/gap \\
@@ -159,8 +164,13 @@ Qwen2.5-7B   & GSM8K & 0.005800 & 0.048000 & 0.035000 & \textbf{TRUE}  & \textbf
 Llama-3.1-8B & MMLU  & 0.017163 & 0.040023 & 0.025495 & \textbf{TRUE}  & \textbf{TRUE} \\
 Llama-3.1-8B & GSM8K & 0.013200 & 0.033000 & 0.026000 & \textbf{TRUE}  & \textbf{TRUE} \\
 \midrule
-\multicolumn{7}{l}{Winner flip in 5 of 8 (threshold $\geq 3$: met)\quad$\cdot$\quad Range/gap in 7 of 8 (threshold $\geq 4$: met)} \\
-\multicolumn{7}{l}{$\max\mathrm{range} < 0.5\,\mathrm{gap}$ in 1 of 8 (disconfirm threshold $\geq 6$: not met)\quad$\cdot$\quad exact ties: 0 of 40} \\
+% WIDTH FIX 2026-08-05: both summary rows spanned all seven columns on one line
+% and reached 31pt into the right margin. One statement per row now. Every count
+% and threshold is unchanged.
+\multicolumn{7}{l}{Winner flip in 5 of 8 (threshold $\geq 3$: met)} \\
+\multicolumn{7}{l}{Range/gap in 7 of 8 (threshold $\geq 4$: met)} \\
+\multicolumn{7}{l}{$\max\mathrm{range} < 0.5\,\mathrm{gap}$ in 1 of 8 (disconfirm threshold $\geq 6$: not met)} \\
+\multicolumn{7}{l}{Exact ties: 0 of 40} \\
 \bottomrule
 \end{tabular}
 \end{table}

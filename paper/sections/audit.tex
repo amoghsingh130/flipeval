@@ -176,7 +176,8 @@ evaluation ran. That column is empty.}
 % which ran 133pt past the measure. Fixed-width centred header columns wrap the
 % phrases instead. No cell value changed, and the empty prospective column that
 % is this table's whole evidential point is untouched.
-\begin{tabular}{l>{\centering\arraybackslash}p{2.3cm}>{\centering\arraybackslash}p{2.5cm}>{\centering\arraybackslash}p{2.3cm}}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{l>{\centering\arraybackslash}p{2.2cm}>{\centering\arraybackslash}p{2.4cm}>{\centering\arraybackslash}p{2.2cm}}
 \toprule
  & Prospective numerical decision margin & Retrospective numerical description of a result & Qualitative language only, no number \\
 \midrule
@@ -383,7 +384,7 @@ run, namely how many items it would need, so falling below it is a statement abo
 how the evaluation was sized, not a diagnosis applied to its result.
 
 \emph{V3, reproducibility.} Binary, read from the frozen
-\texttt{per\_item\_outputs\_released} column and cross-checked against the
+\texttt{per\_item\allowbreak\_outputs\allowbreak\_released} column and cross-checked against the
 extraction reconciliation memo.
 
 % RELOCATED 2026-07-27 (phase 4 trim, candidate 1). The tier-by-tier match
