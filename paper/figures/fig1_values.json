@@ -1,0 +1,227 @@
+{
+  "cell": "qwen25-7b/gsm8k",
+  "figure": "fig1_cancellation",
+  "generator": "scripts/make_figure1.py",
+  "margin_pp": 2.0,
+  "values": {
+    "acc_awq": {
+      "key": "full_sample_accuracies.awq",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 0.7370000000000001
+    },
+    "acc_gptq": {
+      "key": "full_sample_accuracies.gptq",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 0.7428
+    },
+    "all_cells": {
+      "key": "cells[].{model,task,gap,winner_flip}",
+      "source": "results/h3_eight_cell/h3_eight_cell_summary.json",
+      "value": [
+        {
+          "gap": 0.012291696339552849,
+          "model": "qwen25-1p5b",
+          "task": "mmlu",
+          "winner_flip": true
+        },
+        {
+          "gap": 0.09680000000000005,
+          "model": "qwen25-1p5b",
+          "task": "gsm8k",
+          "winner_flip": false
+        },
+        {
+          "gap": 0.030921521150833242,
+          "model": "llama32-3b",
+          "task": "mmlu",
+          "winner_flip": false
+        },
+        {
+          "gap": 0.017799999999999927,
+          "model": "llama32-3b",
+          "task": "gsm8k",
+          "winner_flip": true
+        },
+        {
+          "gap": 0.0062669135450791336,
+          "model": "qwen25-7b",
+          "task": "mmlu",
+          "winner_flip": false
+        },
+        {
+          "gap": 0.005799999999999916,
+          "model": "qwen25-7b",
+          "task": "gsm8k",
+          "winner_flip": true
+        },
+        {
+          "gap": 0.017162797322318735,
+          "model": "llama31-8b",
+          "task": "mmlu",
+          "winner_flip": true
+        },
+        {
+          "gap": 0.01319999999999999,
+          "model": "llama31-8b",
+          "task": "gsm8k",
+          "winner_flip": true
+        }
+      ]
+    },
+    "alpha": {
+      "key": "ALPHA",
+      "source": "scripts/audit_stats.py",
+      "value": 0.05
+    },
+    "answer_churn": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.total_answer_churn",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.2866
+    },
+    "atlas_cells": {
+      "key": "analysable_cells",
+      "source": "results/identical_score_churn_rev2.csv",
+      "value": 1707
+    },
+    "atlas_median_abs_net": {
+      "key": "median abs net_accuracy_delta over the analysis population",
+      "source": "results/atlas_cells_summary_rev2.csv",
+      "value": 0.0222222222222222
+    },
+    "atlas_median_churn": {
+      "key": "median accuracy_state_churn over the analysis population",
+      "source": "results/atlas_cells_summary_rev2.csv",
+      "value": 0.12
+    },
+    "atlas_pooled_ratio": {
+      "key": "ratio of the two pooled medians, unrounded",
+      "source": "results/atlas_cells_summary_rev2.csv",
+      "value": 5.400000000000006
+    },
+    "atlas_zero_delta": {
+      "key": "zero_delta_cells",
+      "source": "results/identical_score_churn_rev2.csv",
+      "value": 145
+    },
+    "atlas_zero_delta_nonzero_churn": {
+      "key": "zero_delta_nonzero_churn_cells",
+      "source": "results/identical_score_churn_rev2.csv",
+      "value": 128
+    },
+    "beneficial": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.beneficial_flip_rate",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.0854
+    },
+    "cell_churn_ratio": {
+      "key": "slot4 cell_mean churn / abs(net) for qwen25-7b/gsm8k",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 30.448275862068943
+    },
+    "cell_ratio_rank_of": {
+      "key": "rank of this cell among the eight ratios; True = maximum",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": [
+        8,
+        true
+      ]
+    },
+    "churn": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.accuracy_state_churn",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.1766
+    },
+    "discordance": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.accuracy_state_churn",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.1766
+    },
+    "gap_gptq_minus_awq": {
+      "key": "full_sample_accuracy_delta",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 0.005799999999999916
+    },
+    "h3_verdict": {
+      "key": "verdict",
+      "source": "results/h3_eight_cell/h3_eight_cell_summary.json",
+      "value": "SUPPORTED"
+    },
+    "harmful": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.harmful_flip_rate",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.09119999999999999
+    },
+    "median_churn_ratio": {
+      "key": "median over slot4 cell_mean churn / abs(net)",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 12.708035410282587
+    },
+    "n_cells_total": {
+      "key": "len(cells)",
+      "source": "results/h3_eight_cell/h3_eight_cell_summary.json",
+      "value": 8
+    },
+    "n_cells_winner_flip": {
+      "key": "n_cells_winner_flip",
+      "source": "results/h3_eight_cell/h3_eight_cell_summary.json",
+      "value": 5
+    },
+    "n_items": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.n",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 1000
+    },
+    "net_awq_minus_gptq": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.net_accuracy_delta",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": -0.005800000000000005
+    },
+    "paired_sd": {
+      "key": "paired_flip_sd(discordance)",
+      "source": "scripts/audit_stats.py",
+      "value": 0.42023802778901387
+    },
+    "power": {
+      "key": "POWER",
+      "source": "scripts/audit_stats.py",
+      "value": 0.8
+    },
+    "required_n": {
+      "key": "required_n_for_tost(paired_flip_sd(d), 0.02)",
+      "source": "scripts/audit_stats.py",
+      "value": 2730
+    },
+    "reversal_discordance": {
+      "key": "reversal_discordance(n, 0.02)",
+      "source": "scripts/audit_stats.py",
+      "value": 0.06469814754457597
+    },
+    "seed_deltas_gptq_minus_awq": {
+      "key": "per_seed.<seed>.accuracy_delta",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": [
+        0.02200000000000002,
+        0.016000000000000014,
+        -0.02300000000000002,
+        0.0020000000000000018,
+        0.01200000000000001
+      ]
+    },
+    "seed_labels": {
+      "key": "seed_labels",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    "step5_paired_sd": {
+      "key": "step5_resolution_POST_HOC.cells.qwen25-7b/gsm8k.paired_sd",
+      "source": "results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.42023802778901387
+    }
+  }
+}
