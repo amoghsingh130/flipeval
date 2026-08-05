@@ -22,6 +22,11 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{natbib}
 \usepackage{amsthm}
+% Figure 1 is generated TikZ (paper/figures/fig1_cancellation.tex, emitted by
+% scripts/make_figure1.py). It is \input from the introduction, and it needs
+% both of these.
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
 
 % Numbered empirical results. Added 2026-07-27 so that the churn-ratio finding
 % of \S\ref{sec:minigrid} is a citable numbered result rather than a table
@@ -153,19 +158,38 @@
 
 \input{abstract}
 
+% BODY ORDER, SET 2026-08-04 (flagship narrative restructure). The body runs
+% mechanism, scale, gap, consequence, solution:
+%   1 introduction (with Figure 1)   -- mechanism, and a map of the rest
+%   2 related work                   -- context
+%   3 certification + preregistration -- what an equivalence claim has to show
+%   4 atlas                          -- cancellation at scale
+%   5 audit                          -- what published claims actually report
+%   6 mini-grid                      -- worse where practitioners choose
+%   7 sensitivity, artifacts, limitations, conclusion
+%
+% THE ATLAS NOW PRECEDES THE AUDIT. That is not cosmetic: the audit's
+% discordance imputation (\S\ref{sec:audit:rules}) is DEFINED over the atlas
+% population, and under the old order it was consumed two sections before it was
+% introduced. Do not reorder these two back.
+%
+% sections/preregistration.tex is no longer a \section: it opens at \subsection
+% level and is folded into the certification section, which is why it is input
+% immediately after it. sections/sequential was removed 2026-07-26 (a
+% results-free \section with no registration document); restore only when the
+% dated registration exists under docs/ AND the component has run.
+% sections/discriminant.tex was deleted 2026-08-04 and folded into
+% \S\ref{sec:minigrid:resolution}, with its pilot at app:minigrid:pilot.
+% sections/minigrid_escalation.tex was deleted 2026-08-04 and moved whole into
+% the mini-grid appendix at app:escalation.
 \input{sections/introduction}
 \input{sections/related_work}
-\input{sections/preregistration}
-\input{sections/audit}
 \input{sections/certification}
+\input{sections/preregistration}
 \input{sections/atlas}
-% sections/sequential removed 2026-07-26: a results-free \section with no
-% registration document. Reduced to one sentence in the conclusion and one
-% clause in related_work; restore only when the dated registration exists under
-% docs/ AND the component has run.
+\input{sections/audit}
 \input{sections/minigrid}
 \input{sections/harness_sensitivity}
-\input{sections/discriminant}
 \input{sections/artifacts}
 \input{sections/limitations}
 \input{sections/conclusion}
@@ -177,13 +201,27 @@
 \bibliography{references}
 
 \appendix
-\input{sections/appendix_audit_table}
-% Detail relocated from the main text on 2026-07-26 (structural trim). Nothing
-% was deleted in the move; each file names its source section at the top.
+% APPENDIX ORDER, SET 2026-08-04: A through I, following the body's own order,
+% with the generated verbatim registrations last. Detail relocated from the main
+% text carries a header naming its source section; nothing was deleted in any
+% move.
+% A -- added 2026-08-04: the calibration-sensitivity reconciliation.
+\input{sections/appendix_related_detail}
+% B -- relocated from the main text on 2026-07-26 and extended 2026-08-04 with
+% the freeze timeline, the inspection discipline and the registered H3 rule.
 \input{sections/appendix_prereg_detail}
-% Added 2026-07-27 (phase 4 trim, candidate 4): atlas construction detail.
+% C -- the full audit table, plus the audit method detail and the two tables
+% relocated from the body on 2026-08-04.
+\input{sections/appendix_audit_table}
+% D -- added 2026-07-27 (phase 4 trim, candidate 4): atlas construction detail.
 \input{sections/appendix_atlas_detail}
+% E -- added 2026-08-04: the escalation screen, the three supporting tables, the
+% per-seed differences, the post-hoc resolution table, the deferred analyses and
+% the earlier pilot.
+\input{sections/appendix_minigrid_detail}
+% F
 \input{sections/appendix_harness_detail}
+% G
 \input{sections/appendix_artifacts_detail}
 % Added 2026-07-31: extraction provenance, inter-pass agreement, and the AI-use
 % statement. Previously the paper never said the claim extraction was done by

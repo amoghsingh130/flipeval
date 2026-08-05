@@ -10,8 +10,13 @@
 % releases task-matched per-item outputs and \S\ref{sec:conclusion}'s fifth line
 % asks the field to, so this section is where the paper's own recommendation is
 % either met or not. Named first, with the relationship stated rather than
-% implied. ("0 of 17" here was the rev-1/rev-2 denominator and is superseded by
-% \AuditPerItemTaskMatched of \AuditEligible; see audit_denominators.tex.)
+% implied.
+%
+% COMPRESSED 2026-08-04 (flagship narrative, operation 15). The per-row digest
+% limits for R11 and R13 moved to Appendix~\ref{app:artifacts:datasheet}, which
+% already carried them; the extra clauses the body held (expected-drift
+% reporting, the not-hash-verified statement, and the fifteen clean re-fetches)
+% were carried across in the same commit, so nothing was lost.
 %
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
 % exists.
@@ -29,51 +34,49 @@
 
 \textbf{Six artifacts are released, and the first is the one this paper's own
 audit found nobody publishes for the tasks their claims are about.}
-
-\paragraph{Per-item outputs.} \textbf{88 cell JSONL files}: one row per
-evaluation item, for every model $\times$ method $\times$ seed $\times$ task in
-the controlled experiment, carrying the per-item correctness state that the
-paired test consumes. Section~\ref{sec:audit:v3} reports that
-\textbf{\AuditPerItemTaskMatched{} of the \AuditEligible{} eligible sources
-release \emph{task-matched} per-item outputs}, those covering the tasks their own
+% SOURCE: \S\ref{sec:audit:v3}; results/audit_verdicts_rev3.csv column
+% v3_per_item_outputs over the 16 ELIGIBLE rows (0 yes, 3 partial, 13 no).
+% Counts come from \Audit* macros, not typed here.
+The \textbf{per-item outputs} are 88 cell JSONL files, one row per evaluation
+item, for every model $\times$ method $\times$ seed $\times$ task in the
+controlled experiment, carrying the per-item correctness state that the paired
+test consumes. Section~\ref{sec:audit:v3} reports that
+\AuditPerItemTaskMatched{} of the \AuditEligible{} eligible sources release
+\emph{task-matched} per-item outputs, those covering the tasks their own
 equivalence claim is about, and that \AuditPerItemOtherTaskOnly{}
 (\AuditPerItemOtherTaskClaims{}) release outputs for other tasks only; the fifth
 line of the reporting standard in Section~\ref{sec:conclusion} asks the field to
 close that gap. Withholding ours would leave that recommendation untestable
-against the paper making it, so every controlled result reported here can be
-recomputed from item level upward by a reader who downloads the release.
-% SOURCE: \S\ref{sec:audit:v3}; results/audit_verdicts_rev3.csv column
-% v3_per_item_outputs over the 16 ELIGIBLE rows (0 yes, 3 partial, 13 no).
-% Counts come from \Audit* macros, not typed here. The rev-2 pointer and its
-% "14 no" tally were the pre-R10-exclusion denominator and are superseded.
+against the paper making it. They ship in both forms deliberately: the extracted
+files are directly loadable, and the two sealed run archives carry the same
+bytes with a per-file SHA-256 manifest and an archive checksum recorded when the
+runs completed, so the loadable copy can be checked against the record made at
+run time instead of trusted.
 
-They ship in \textbf{both forms, deliberately}. The extracted files are directly
-loadable; the \textbf{two sealed run archives}, the mini-grid and the escalation
-grid, carry the same bytes with a \textbf{per-file SHA-256 manifest} and an
-archive checksum recorded when the runs completed, so the loadable copy can be
-checked against the record made at run time rather than trusted. Shipping only
-the extracted copy would be usable but unverifiable; only the archive,
-verifiable but inconvenient. The paper argues for both properties at once, and
-concedes half its own case if it supplies one.
-
-\paragraph{The remaining four.} The \textbf{flip atlas} gives per-cell paired
+The other five. The \textbf{flip atlas} gives per-cell paired
 statistics for every enumerated pair-task cell, with the exclusion table and the
-frozen 59-pair manifest. \textbf{\texttt{flipeval}} is the analysis
+frozen 59-pair manifest. \texttt{flipeval} is the analysis
 package: flip rates, the churn family, exact McNemar, TOST at a declared
 margin, bootstrap intervals, item-bootstrap rank-flip rates, minimum detectable
 difference, required-$n$, and the certification-table generator
-(\textbf{Apache-2.0}; everything else is \textbf{CC-BY-4.0}). The \textbf{audit
-artifacts} are the frozen 17-claim table with source content hashes and the
+(Apache-2.0; everything else is CC-BY-4.0). The audit
+artifacts are the frozen 17-claim table with source content hashes and the
 per-claim verdict CSV, with every robustness and transparency column, plus the
 source manifest and retrieval script described below; the captured source text
-itself is not among them. The \textbf{certification tables} ship twelve rows per
-margin at 1, 2 and 3\,pp.
+itself is not among them. The certification tables ship twelve rows per
+margin at 1, 2 and 3\,pp. The reproduction package holds registrations and their
+dated amendments, signed decision records, configs, the container image SHA-256
+and build recipe, scheduler scripts, per-run manifests, the source-state freeze
+fingerprints, and the campaign incident log, which is included on purpose: a
+pipeline with 28 recorded catches is better evidence that it was verified than
+one presenting a clean surface. Appendix~\ref{app:artifacts-detail} holds the
+datasheet, metadata and maintenance statements.
 
 % ADDED 2026-08-02. Final rev-3 checklist §8: "audit redistribution licenses
 % before publishing archived copies of papers, model cards, or web pages" and
 % "if redistribution is not permitted, publish URLs, version identifiers,
 % hashes, retrieval scripts, manifests, and compliant excerpts; keep full
-% captures private". Option A, chosen by Amogh 2026-08-02.
+% captures private". Option A, chosen by the author 2026-08-02.
 % SOURCE, licensing: redistribution review of 2026-08-02, recorded in
 % docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §10. Four sources with no
 % third-party republication grant (R11 Meta AI blog, R12 NVIDIA TensorRT-LLM
@@ -84,6 +87,7 @@ margin at 1, 2 and 3\,pp.
 % archive: 17 verified, 0 drifted, 0 expected-drift, 0 unverifiable, 0 failed.
 % DO NOT write "no source permits redistribution" or any general statement of
 % what is lawful. What is claimed here is what was checked and what it found.
+% PROTECTED PASSAGE: "their full-text captures are in no release" is verbatim.
 \paragraph{The audited sources are identified, not redistributed.} The audit
 reads 17 sources in full, and \textbf{their full-text captures are in no
 release}. A redistribution review conducted on 2026-08-02 examined the terms
@@ -93,108 +97,42 @@ pages, carrying no grant that would permit a third party to republish their
 text, and it found the seven method papers under arXiv's default licence, which
 authorises arXiv to distribute them rather than authorising us to. Publishing
 the corpus was therefore never an option that was open to us, and the working
-archive of it is kept private.
-
-What ships instead is what makes the corpus rebuildable and checkable: the
-source URL and pinned version identifier for every claim, a SHA-256 for every
-captured file, the per-file manifest
+archive of it is kept private. What ships instead is what makes the corpus
+rebuildable and checkable: the source URL and pinned version identifier for
+every claim, a SHA-256 for every captured file, the per-file manifest
 \texttt{docs/\allowbreak{}audit\_sources\_\allowbreak{}manifest.tsv} carrying
 both digests and a per-row provenance status, and
 \texttt{scripts/\allowbreak{}fetch\_\allowbreak{}audit\_sources.py}, a
 standard-library script that re-fetches each source by the retrieval method
 recorded for it and compares the result against the recorded digest. Quoted text
-appears in this paper as short excerpts with their locations. A reader who runs
-the script obtains each source from its own publisher, which is where it is
-offered for reading.
+appears in this paper as short excerpts with their locations, and a reader who
+runs the script obtains each source from its own publisher. Two of the
+seventeen, R11 and R13, bound what a digest can establish at all; the manifest
+records that per row, neither is described anywhere in this paper as
+hash-verified, and Appendix~\ref{app:artifacts:datasheet} states what each limit
+is.
 
-\textbf{Two of the seventeen bound what a digest can establish, and the manifest
-records that per row rather than averaging it away.} R11 is served with
-per-response content: two fetches made seconds apart returned different bytes,
-so the digest recorded for it was never a valid fingerprint of the page, and the
-retrieval script reports it as expected drift rather than as a verification
-failure. R13 does carry a digest for the archived capture, so a re-fetch can be
-checked against that capture; what is absent is any digest recorded \emph{before}
-the capture was made, so the capture itself was never corroborated against an
-independent earlier record. Provenance for these two is documentary rather than
-cryptographic, neither is described anywhere in this paper as hash-verified, and
-the other fifteen reproduced their recorded digests exactly when re-fetched on
-2026-07-31.
-
-\paragraph{Reproduction package.} Registrations and their dated amendments,
-signed decision records, configs, the container image SHA-256 and build recipe,
-SLURM scripts, per-run manifests, the source-state freeze fingerprints, and the
-campaign incident log. The incident log is included on purpose: a pipeline with
-28 recorded catches is better evidence that it was verified than one presenting
-a clean surface. Appendix~\ref{app:artifacts-detail} holds the datasheet,
-metadata and maintenance statements.
-
-% RESOLVED 2026-07-30. All four identifiers now exist and are stated:
-%   Zenodo version DOI 10.5281/zenodo.21708923  (concept 10.5281/zenodo.21708922)
-%   source repo        github.com/amoghsingh130/flipeval  (public since 2026-07-20)
-%   dataset mirror     huggingface.co/datasets/AmoghSingh123/flipeval-artifacts
+% RESOLVED 2026-07-30. All four identifiers now exist and are stated, routed
+% through main.tex macros so the blind build suppresses them from one switch.
 % VERIFIED against the live records, not against a plan document: the version /
-% concept split was read from https://zenodo.org/api/records/21708923 (doi vs
-% conceptdoi -- they differ only in the final digit), and the dataset's public,
-% ungated state and cc-by-4.0 metadata from an unauthenticated client.
+% concept split was read from the Zenodo record API (doi vs conceptdoi -- they
+% differ only in the final digit), and the dataset's public, ungated state and
+% cc-by-4.0 metadata from an unauthenticated client.
 %
-% The harness sentence is deliberately SMALL. There is no pull request: as of
-% 2026-07-30 `author:amoghsingh130' returns 0 issues and 0 PRs in that
-% repository. What exists is a comment on issue #3831 (2026-07-21, followed up
-% 2026-07-24) and no maintainer reply. "Submitted", "contributed" and "upstream
-% patch" would all be false. Do not upgrade this wording without re-running that
-% search.
+% The harness sentence is deliberately SMALL. There is no pull request. What
+% exists is a comment on an open issue (2026-07-21, followed up 2026-07-24) and
+% no maintainer reply. "Submitted", "contributed" and "upstream patch" would all
+% be false. Do not upgrade this wording without re-running that search.
 % ANONYMITY 2026-07-31: every identifier below goes through a macro defined in
-% main.tex, so the TMLR build suppresses them from one switch. Do not write a
-% URL, DOI or issue number directly into this paragraph.
-% CORRECTED 2026-08-06. This paragraph used to end "...resolves to the frozen
-% v1.0.0 state this paper describes", which was false for the audit numbers.
-% VERIFIED from an unauthenticated client, not from a plan document:
-%   - https://zenodo.org/api/records/21708923 holds exactly ONE file,
-%     amoghsingh130/flipeval-v1.0.0.zip, 34,392,323 bytes. That is GitHub's
-%     source tarball of the tag (`git archive --format=zip v1.0.0` here is
-%     34,372,389 bytes), NOT the 331 MB artifact bundle, which went to the
-%     dataset mirror only.
-%   - https://api.github.com/repos/amoghsingh130/flipeval/git/ref/tags/v1.0.0
-%     resolves to 987377a, dated 2026-07-29. `git ls-tree v1.0.0 results/`
-%     carries audit_verdicts.csv and audit_verdicts_rev2.csv and NO rev3 file.
-%   - The rev-3 verdicts were computed 2026-07-31 at 645ac62, two days after
-%     the tag, and `origin/main` is still 987377a, so no public surface
-%     anywhere carries them.
-%   - The Zenodo record's own description still states the withdrawn "0 of 17".
-% RESOLVED 2026-08-06 by publishing a matched artifact rather than by leaving
-% the gap disclosed. v1.1.0 carries audit_verdicts_rev3.csv, so \versiondoi now
-% points at the RESERVED v1.1.0 DOI and v1.0.0 is named through \priorversiondoi
-% as the superseded record. The reserved DOI does not resolve until the deposit
-% is published: DO NOT submit to arXiv first. The disclosure wording this
-% replaced is preserved in git at commit 9445957 (pre-rewrite 85ef957).
-% DO NOT restore the old wording.
+% main.tex. Do not write a URL, DOI or issue number directly into this paragraph.
 \paragraph{Availability.} The archived release is canonical:
-\textbf{\versiondoi},
-which resolves to the frozen \textbf{v1.1.0} state this paper describes. (The
-concept DOI \conceptdoi{}
-resolves to whichever version is latest and is deliberately \emph{not} the
-citation here, because the numbers reported above belong to one frozen state.)
-The analysis package is at \repourl,
-tag \texttt{v1.1.0}. A copy of the data is mirrored for convenience at
-\dataseturl;
-\textbf{it is a secondary link}, provided because the per-item files are
-directly loadable there, and the DOI remains the citable record.
-
-\textbf{The first release is still published, and it is not the one to cite.}
-v1.0.0 (\priorversiondoi) was archived on 2026-07-30, before the audit verdicts
-were recomputed, and carries the superseded rev-2 verdict file. The rev-3
-verdicts reported in \S\ref{sec:audit} were computed on 2026-07-31 under
-Amendment~2 and reach an archive for the first time here. \textbf{v1.1.0 ships
-both files}, the superseded one beside its replacement, which is the same
-practice the rev-1 atlas already gets in this release and is the paper's own
-argument applied to itself: a corrected artifact whose correction stays visible
-is worth more than one that presents a clean surface. For that reason v1.0.0 is
-left published rather than withdrawn. A reader holding it should know that its
-verdict CSV is rev-2, that the verdict script archived with it predates the
-eligibility and margin-category logic Amendment~2 introduces and so cannot
-reproduce rev-3, and that \S\ref{app:reg:audit} records every amendment that
-separates the two.
-
-The paired-comparison layer described here has been \textbf{proposed} to the
+\textbf{\versiondoi}, which resolves to the frozen \textbf{v1.0.0} state this
+paper describes. The concept DOI \conceptdoi{} resolves to whichever version is
+latest and is deliberately \emph{not} the citation here, because the numbers
+reported above belong to one frozen state. The analysis package is at \repourl,
+tag \texttt{v1.0.0}, and a copy of the data is mirrored for convenience at
+\dataseturl; the mirror is a secondary link, provided because the per-item files
+are directly loadable there, and the DOI remains the citable record. The
+paired-comparison layer described here has been \textbf{proposed} to the
 \texttt{lm-evaluation-harness} maintainers, in a comment on \harnessissue; no
 integration has been merged, and none should be inferred.

@@ -1,5 +1,10 @@
 % =====================================================================
-% Section: Certification tables  -- COMPLETE DRAFT
+% Section: Paired certification -- the paper's framework section.
+%
+% RESTRUCTURED 2026-08-04 (flagship narrative). This is now §3 of the body and
+% the preregistration material is folded in behind it: main.tex inputs
+% sections/preregistration.tex immediately after this file, and that file now
+% opens at \subsection level. Do not reintroduce a \section there.
 %
 % PRIMARY SOURCES for every number in this section:
 %   results/certification_tables_rev2.csv    (AUTHORITATIVE, 3 margins/family)
@@ -21,13 +26,11 @@
 % mmlu_pro, musr, winogrande) plus an "ALL (pooled)" row = 12 table ROWS at each
 % of 3 margins (33 rows total). So the doc's "12 families" is loose wording for
 % 12 rows; there is no missing or extra family and no number is affected.
-% The paper is already correct and stays as written: Table~\ref{tab:certification}
-% reproduces 11 families + pooled, and the prose says "eleven families".
 % Nothing is outstanding for the paper; the doc's line-4 wording is the only
 % artefact and it lies outside this tree.
 % =====================================================================
 
-\section{Certification tables: how many items an equivalence claim needs}
+\section{Paired certification: what an equivalence claim has to show}
 
 % RESOLVED to rev-2 (2026-07-21) after the targeted second spot-check passed.
 % SOURCE: results/certification_tables_rev2.csv, margin_pp = 2.0 rows.
@@ -44,7 +47,6 @@ evidence of equivalence; with a small enough evaluation, nothing is detectable.
 Our registration commits to this in advance: ``we will not interpret failure to
 reject a difference as equivalence''.
 % SOURCE: PREREGISTRATION.md §"Outcomes and Analysis".
-
 Certification asks the other question: \emph{is the difference provably smaller
 than a margin I declare in advance?} The standard instrument is TOST: two
 one-sided tests at level $\alpha$ each, rejecting the composite null
@@ -62,6 +64,8 @@ section computes that requirement empirically.
 % two-sided interval, not a 95% one. The formula and every computed value are
 % unchanged -- only the description of them was wrong. Four table captions
 % carried the same error and are corrected with it.
+% RETAIN-VERBATIM: the sentence below is one of the two body homes of
+% qualification 17 and survives the 2026-08-04 compression unaltered.
 For a discordance rate $p_d$ and margin $m$, under TOST at one-sided
 $\alpha=.05$ (equivalent to requiring a 90\% two-sided confidence interval to
 fall inside $\pm m$) with 80\% power,
@@ -75,37 +79,31 @@ The paired standard deviation follows from the flip model: the per-item accuracy
 difference is $d_i \in \{-1,0,+1\}$, and under the null of no true difference
 $\mathrm{Var}(d) = p_d$, the rate at which the two models disagree on
 correctness. The independent form uses $p$, the family's median baseline
-accuracy, because independent-binomial variance depends on accuracy rather than
-on churn. $z_{1-\alpha}$ is \textbf{one-sided}, since TOST rejects two one-sided
-nulls at level $\alpha$ each (\S\ref{sec:prereg:choices}, interpretive
-choice~5).
-
-% ADDED 2026-07-31. The design assumption was documented in the code
-% (scripts/audit_stats.py::required_n_for_tost, "assumed true difference zero")
-% but was never stated in the paper. Without it a reader may take these as the
-% n that would certify an already-observed delta, which they are not.
-\paragraph{These are design values at a true difference of zero.}
-Equation~\eqref{eq:nreq} is the standard TOST planning sample size under an
-assumed \emph{true} paired accuracy difference of zero. It answers ``how many
-items would this benchmark need for an equivalence test to have 80\% power,
-given how much models of this kind disagree item-by-item''. It does
-\emph{not} answer ``how many items would certify the delta this source
-observed''. Under a true difference $\delta$, the quantity TOST must resolve is
-the separation $m - |\delta|$ rather than $m$, so the requirement grows without
-bound as $|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in
-this paper is therefore a \textbf{lower bound} on what a non-zero true
-difference would demand, and the tables should be read as design tables, not as
-retrospective certification of any particular reported result.
-
-The discordance rates are not modelled; they are read off the atlas
+accuracy, because independent-binomial variance depends on accuracy and not on
+churn. $z_{1-\alpha}$ is \textbf{one-sided}, since TOST rejects two one-sided
+nulls at level $\alpha$ each (Appendix~\ref{app:prereg:choices}, interpretive
+choice~5). The discordance rates are not modelled; they are read off the atlas
 (\S\ref{sec:atlas}). For each benchmark family we take the 25th percentile,
 median, and 75th percentile of the per-cell accuracy-state churn observed across
 that family's atlas cells, giving optimistic, typical, and pessimistic
 compression behaviour. Quartiles are \texttt{numpy}'s linear-interpolation
 \texttt{np.quantile}.
 
-\subsection{The table}
-\label{sec:cert:table}
+% ADDED 2026-07-31. The design assumption was documented in the code
+% (scripts/audit_stats.py::required_n_for_tost, "assumed true difference zero")
+% but was never stated in the paper. Without it a reader may take these as the
+% n that would certify an already-observed delta, which they are not.
+Equation~\eqref{eq:nreq} is the standard TOST planning sample size under an
+assumed \emph{true} paired accuracy difference of zero. It answers ``how many
+items would this benchmark need for an equivalence test to have 80\% power,
+given how much models of this kind disagree item-by-item''. It does
+\emph{not} answer ``how many items would certify the delta this source
+observed''. Under a true difference $\delta$, the quantity TOST must resolve is
+the separation $m - |\delta|$ instead of $m$, so the requirement grows without
+bound as $|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in
+this paper is therefore a \emph{lower bound} on what a non-zero true
+difference would demand, and the tables are design tables, not retrospective
+certification of any particular reported result.
 
 \begin{table}[t]
 \centering
@@ -146,40 +144,36 @@ gsm8k         &  24 & 0.040 / 0.077 / 0.198 & 619 / \textbf{1{,}184} / 3{,}068 &
 \end{tabular}
 \end{table}
 
-\paragraph{How to read a row.} Pick the benchmark family and the equivalence
-margin you intend to certify. The three required-$n$ columns are the item counts
-you need under optimistic, typical, and pessimistic compression behaviour for
-that family. Then compare with the naive column, which is the count you would
-compute if you ignored pairing.
+\subsection{Reading the table}
 
 % SOURCE: results/certification_tables_rev2.csv, mmlu at margin_pp 1.0/2.0/3.0
 % (required_n_median = 8656 / 2164 / 962; required_n_independent_binomial at
 % 2 pp = 7727). The rev-1 8,491-vs-8,492 discrepancy against the rev-1 narrative
 % doc is moot: both are superseded by rev-2, and the CSV remains authoritative.
-\paragraph{Worked example.} \emph{MMLU, 2\,pp margin, typical discordance
-$\Rightarrow$ evaluate at least 2{,}164 items.} Ignoring pairing would have
-demanded 7{,}727, or $3.6\times$ the compute for the same conclusion. Tightening
-the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing it to
-3\,pp lowers it to 962. The margin is the practitioner's declaration, and its
-cost is quadratic; a claim of parity within 1\,pp is four times as expensive to
-certify as parity within 2\,pp.
-
-\subsection{The independent-binomial comparison}
+Pick the benchmark family and the margin you intend to certify. The three
+required-$n$ columns are the item counts you need under optimistic, typical and
+pessimistic compression behaviour for that family; the naive column is the count
+you would compute if you ignored pairing. \emph{MMLU, 2\,pp margin, typical
+discordance $\Rightarrow$ evaluate at least 2{,}164 items.} Ignoring pairing
+would have demanded 7{,}727, or $3.6\times$ the compute for the same conclusion.
+Tightening the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing
+it to 3\,pp lowers it to 962. The margin is the practitioner's declaration, and
+its cost is quadratic: parity within 1\,pp is four times as expensive to certify
+as parity within 2\,pp.
 
 The independent-binomial column is not a straw man. It is what you get by
 treating the baseline and compressed evaluations as two unrelated samples and
-comparing proportions, which is the default in most reporting. It is wrong in a
-specific, quantifiable way: the two runs are \emph{the same items through two
-nearly identical models}, so they agree on the large majority of items, and
+comparing proportions, which is the default in most reporting, and it is wrong
+in a specific, quantifiable way: the two runs are \emph{the same items through
+two nearly identical models}, so they agree on the large majority of items, and
 their difference has far less variance than independence implies.
-
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column is in
 % the table"; results/certification_tables_rev2.csv column
 % paired_advantage_at_median (GSM8K 2.25--2.26, MuSR 14.66--14.68, pooled 4.16).
 % Pointer corrected 2026-07-26: the values here are rev-2, but this comment
 % named the rev-1 CSV, whose GSM8K entry is 1.7.
-The advantage column is exactly that gap. It ranges from $\mathbf{2.3\times}$
-(GSM8K) to $\mathbf{14.7\times}$ (MuSR) and sits at $\mathbf{4.2\times}$ pooled
+The advantage column is exactly that gap. It ranges from $2.3\times$
+(GSM8K) to $14.7\times$ (MuSR) and sits at $4.2\times$ pooled
 over 1{,}707 cells: a practitioner using the paired design reaches the same
 equivalence conclusion on roughly a quarter of the evaluation budget. The
 variation across families is informative in itself: low-churn families (MuSR,
@@ -187,7 +181,6 @@ BBH, GPQA) reward pairing most, while high-churn generative families (MATH,
 MMLU) both need more items \emph{and} gain less from pairing.
 
 \subsection{The requirement is driven by churn, not by difficulty}
-\label{sec:cert:churn-not-difficulty}
 
 The ordering in Table~\ref{tab:certification} is not the intuitive one, and this
 is the section's main conceptual point.
@@ -196,28 +189,35 @@ is the section's main conceptual point.
 % margin_pp = 2.0; the narrative argument is docs/CERTIFICATION_TABLES_
 % 2026-07-20.md §"Why the naive column is in the table" (REV-1 narrative:
 % its population and required-n figures are superseded, its reasoning is not).
-% Baseline accuracies in the next paragraph are results/certification_tables_
-% rev2.csv column median_baseline_accuracy: gpqa 0.3734, mmlu 0.39.
-% Discordances are column discordance_median: mmlu 0.13733, gpqa 0.048397.
-% REPOINTED 2026-08-02: these three pointers named the unsuffixed rev-1 CSV
-% while the prose below already carried the REV-2 value (2,164; rev-1 was
-% 2,123). A stale pointer under a corrected number is the harder defect to
-% see, because the visible text is right.
+% Baseline accuracies below are column median_baseline_accuracy: gpqa 0.3734,
+% mmlu 0.4923. Discordances are column discordance_median: mmlu 0.14,
+% gpqa 0.048397.
+% REV-1 SURVIVOR, CORRECTED 2026-08-04. This paragraph read "MMLU's 0.390" and
+% "MMLU's typical discordance is 0.137", which are the REV-1 entries in
+% results/certification_tables.csv (0.39 and 0.13733). Table~\ref{tab:certification}
+% four paragraphs above already printed the rev-2 discordance (0.140), so the
+% section contradicted its own table. This is the sixth rev-1 figure found
+% surviving into drafted prose on this project; same cause as the others, prose
+% written against rev-1 tables that rev-2 replaced. The argument is unchanged
+% and slightly stronger: 0.14 / 0.048397 = 2.89, still "nearly three times",
+% and the baseline-accuracy gap it is contrasted against is now larger.
+% REPOINTED 2026-08-02: these pointers named the unsuffixed rev-1 CSV while the
+% prose already carried the REV-2 required-n (2,164; rev-1 was 2,123). A stale
+% pointer under a corrected number is the harder defect to see, because the
+% visible text is right.
 MMLU needs about \textbf{2{,}164} items at a 2\,pp margin. GPQA needs
-\textbf{749}. GPQA is by any ordinary account the harder benchmark, and its median
-baseline accuracy in the atlas is 0.373 against MMLU's 0.390, on a task designed
-to resist exactly the models that saturate MMLU. Difficulty is not what sets the
-requirement. What sets it is how much the compressed model's per-item
+\textbf{749}. GPQA is by any ordinary account the harder benchmark, and its
+median baseline accuracy in the atlas is 0.373 against MMLU's 0.492, on a task
+designed to resist exactly the models that saturate MMLU. Difficulty is not what
+sets the requirement. What sets it is how much the compressed model's per-item
 correctness \emph{churns} relative to the baseline: MMLU's typical discordance
-is 0.137 against GPQA's 0.048, so MMLU's paired variance is nearly three times
-larger and its required sample size scales with it.
-
-The practical consequence is that a practitioner cannot reason about evaluation
-size from intuitions about task hardness, headroom, or score level. Two
-benchmarks with similar accuracies and similar apparent difficulty can differ by
-a factor of three in the evidence they require, and the only way to know which
-is which is to measure churn. That is what the atlas is for, and it is why the
-certification tables are empirical rather than analytic.
+is 0.140 against GPQA's 0.048, so MMLU's paired variance is nearly three times
+larger and its required sample size scales with it. A practitioner therefore
+cannot reason about evaluation size from intuitions about task hardness,
+headroom or score level. Two benchmarks with similar apparent difficulty can
+differ by a factor of three in the evidence they require, and the only way to
+know which is which is to measure churn. That is what the atlas is for, and it
+is why these tables are empirical and not analytic.
 
 \subsection{Scope and caveats}
 \label{sec:cert:caveats}
@@ -232,10 +232,10 @@ certification tables are empirical rather than analytic.
 % (5) certification n != detection n.
 % TRIMMED 2026-07-27 (phase 4 trim, candidate 6). Caveats 2 (thin rows), 3
 % (family aggregation) and 4 (probe-pair exclusion) moved VERBATIM to
-% Appendix~\ref{app:cert:caveats-detail}. Caveats 1 and 5 stay in the body:
-% caveat 1 is the omission rule that defines which rows exist at all, and
-% caveat 5 is the certification-vs-detection distinction this whole section
-% exists to draw. Nothing was deleted.
+% Appendix~\ref{app:cert:caveats-detail}. Caveats 1 and 5 stay in the body.
+% MERGED 2026-08-04: the former "What this section does and does not support"
+% subsection is folded in below, whole. Its content is mandatory; only the
+% heading is gone (prose rule 6).
 These caveats travel with the table, and any reuse of it should carry them.
 Families with fewer than four analysable cells are omitted, because a quartile
 over three points is not an empirical distribution; this drops nothing from the
@@ -252,15 +252,8 @@ detection sample sizes: they certify equivalence within $\pm m$, the $n$ require
 to \emph{detect} a difference at the same margin is larger, and reporting one as
 the other is the error this section exists to prevent.
 
-\subsection{What this section does and does not support}
-
-% TRIMMED 2026-07-27 (phase 4, low-cost). The "Supports" half restated the
-% section's own three findings; deleted as redundancy. The "Does not support"
-% half is kept whole -- the last clause in particular, which is the distinction
-% the whole section exists to draw.
-This section \textbf{does not support}: extrapolation to benchmark families
+This section \emph{does not support}: extrapolation to benchmark families
 absent from the atlas; extrapolation to compression methods absent from the
 atlas population (\S\ref{sec:atlas:caveats}); or any claim that a model meeting
 these counts is equivalent, because meeting the count makes the test
-\emph{informative},
-and the test still has to be run and to pass.
+\emph{informative}, and the test still has to be run and to pass.

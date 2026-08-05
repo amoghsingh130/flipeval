@@ -1,0 +1,344 @@
+% =====================================================================
+% Appendix: Controlled-experiment detail.
+% CREATED 2026-08-04 (flagship narrative restructure, operations 2, 3, 9, 10,
+% 12 and 13). Content moved from sections/minigrid_escalation.tex (whole file),
+% sections/minigrid.tex (tab:h3-ds, the three supporting tables,
+% tab:h3-resolution and the deferred-analyses subsection) and
+% sections/discriminant.tex (the public-checkpoint pilot).
+% NOTHING WAS DELETED IN THE MOVE. Every table keeps every column, every
+% caption keeps every qualification, and each % SOURCE comment travels with the
+% content it documents.
+%
+% LABEL CHANGES made in the same commit, with every pointing site repaired:
+%   sec:minigrid:escalation -> app:escalation
+%   tab:h3-variance / tab:h3-bootstrap / tab:h3-flips -> tab:h3-supporting
+%     (one float, three panels; no column dropped, no table shrunk)
+%   tab:h3-ds, tab:h3-resolution, tab:minigrid-escalation keep their labels.
+%
+% HARD RULES INHERITED FROM THE DONOR FILES:
+%  - The escalation screen states NO H3 outcome. It is a screening rule.
+%  - The registration forbids collapsing seed-level SD into item-level SE; they
+%    stay separate variance components in panel (a).
+%  - The resolution analysis is POST-HOC and is labelled as such at every
+%    appearance.
+%  - The pilot is exploratory and its caveats travel with it.
+% =====================================================================
+
+\section{Controlled experiment: supporting detail}
+\label{app:minigrid-detail}
+
+\subsection{The mechanical escalation screen}
+\label{app:escalation}
+
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md (SIGNED decision
+% record); results/minigrid_escalation/escalation_summary.json.
+The four executed cells, $\{$Qwen2.5-1.5B-Instruct, Llama-3.2-3B-Instruct$\}
+\times\{$MMLU, GSM8K$\}$, 4-bit GPTQ against 4-bit AWQ at seeds
+$\{0,1,2,3,4\}$, with GPTQ and AWQ receiving byte-identical calibration samples
+at each seed (\S\ref{sec:minigrid}), feed a pre-committed screen that decides
+only one thing: whether the deferred 7B/8B cells are built. The screen is
+mechanical and was frozen with the mini-grid registration before any of these
+accuracies existed.
+
+\paragraph{The rule, quoted verbatim (mini-grid registration \S3, frozen
+2026-07-15).}
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md, "The rule, quoted"
+% block, reproducing docs/MINIGRID_REGISTRATION_2026-07-15.md §3 verbatim.
+\begin{quote}
+Compute, per the frozen algebra of \texttt{PREREGISTRATION.md}, for each of the
+4 cells at 4-bit: winner flips across seeds (ties counted separately, per the
+registered tie rule) and the range/gap criterion
+$\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}}) \geq
+\mathrm{gap}$.
+
+\emph{Escalate} to the deferred 7B/8B seed cells iff: winner flips occur in
+\textbf{at least 1 of the 4 cells}, \textbf{or} the range/gap criterion holds in
+\textbf{at least 2 of the 4 cells}.
+
+If neither condition holds, the 7B/8B cells are not built, and no other result
+(3-bit, other benchmarks, atlas findings) can substitute to trigger escalation.
+\end{quote}
+
+The winner-flip, $\mathrm{gap}$ and $\mathrm{range}_m$ definitions are the frozen
+algebra recapped in \S\ref{sec:minigrid}: a winner flip needs two registered
+seeds with opposite-signed, both-nonzero $d_s$, and exact ties are reported
+separately and never count as flips.
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md (frozen algebra quote);
+% PREREGISTRATION.md §"H3 Decision Rule".
+
+\paragraph{Per-cell screen.}
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md, "Per-cell registered
+% quantities" and "Mechanical application of §3"; cross-checked against
+% results/minigrid_escalation/escalation_summary.json fields winner_flip, gap,
+% max_range, range_gap_holds per cell. NO per-seed accuracy is reproduced here.
+Table~\ref{tab:minigrid-escalation} states each cell's outcome exactly as the
+signed decision record does. $\mathrm{gap}$ is the absolute mean method
+difference and $\max\mathrm{range}$ is
+$\max(\mathrm{range}_{\mathrm{GPTQ}},\mathrm{range}_{\mathrm{AWQ}})$; the
+range/gap criterion holds when the latter is at least the former. No cell
+contained an exact tie.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The mechanical escalation screen over the four completed mini-grid
+cells. Outcomes are reproduced verbatim from the signed decision record; the
+per-seed accuracies that produce them are not restated here. ``Winner flip''
+and ``range/gap holds'' are the two \S3 predicates; the counts beneath drive the
+decision.}
+\label{tab:minigrid-escalation}
+\begin{tabular}{llrrl}
+\toprule
+Cell & Winner flip & $\mathrm{gap}$ & $\max\mathrm{range}$ & Range/gap holds \\
+\midrule
+Qwen2.5-1.5B / MMLU  & \textbf{TRUE}  & 0.012292 & 0.040521 & \textbf{TRUE} \\
+Qwen2.5-1.5B / GSM8K & FALSE          & 0.096800 & 0.033000 & FALSE \\
+Llama-3.2-3B / MMLU  & FALSE          & 0.030922 & 0.063809 & \textbf{TRUE} \\
+Llama-3.2-3B / GSM8K & \textbf{TRUE}  & 0.017800 & 0.034000 & \textbf{TRUE} \\
+\midrule
+\multicolumn{5}{l}{Winner flip in \textbf{2 of 4} cells (threshold $\geq 1$: met)\quad$\cdot$\quad Range/gap holds in \textbf{3 of 4} cells (threshold $\geq 2$: met)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Outcome.}
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md, "Mechanical
+% application of §3" (2/4, 3/4) and "Decision" (ESCALATE = TRUE);
+% results/minigrid_escalation/escalation_summary.json (n_cells_winner_flip 2,
+% n_cells_range_gap 3, escalate true). Signature: signed Amogh Singh 2026-07-23.
+A winner flip occurs in \textbf{2 of 4} cells (Qwen2.5-1.5B/MMLU and
+Llama-3.2-3B/GSM8K), clearing the ``$\geq 1$'' branch, and the range/gap
+criterion holds in \textbf{3 of 4} cells, clearing the ``$\geq 2$'' branch. Both
+branches of the disjunction are independently satisfied, so the screen fires:
+\textbf{escalation is triggered}, and the record was signed on 2026-07-23,
+authorizing construction and evaluation of the deferred 7B/8B seed cells
+(Qwen2.5-7B-Instruct, Llama-3.1-8B-Instruct $\times$ MMLU, GSM8K).
+
+\paragraph{The screen ran on sealed cells.}
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md header (validator
+% 11375247, 409/409, passed:true; first inspection authorized 2026-07-23) and
+% "Provenance" (gates re-derived under Amendment 3,
+% docs/MINIGRID_FP16_GATE_DERIVATION_2026-07-21.md, committed bd565bd).
+The four cells stayed sealed, with no accuracy read by anyone, until the registered
+validator passed over the complete 44-JSONL expected set (job \texttt{11375247},
+409/409 checks), which is the first mini-grid accuracy inspection the
+registration permits. The FP16 gate failure that preceded the run was resolved
+\emph{before} any inspection, the gates being re-derived under Amendment~3
+(committed \texttt{bd565bd}), so the screen fired on a grid whose reference
+gates were already settled rather than tuned to its result.
+
+\paragraph{This screen is not the H3 verdict.}
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md, "Decision" paragraph
+% ("No H3 verdict is stated here ... the confirmatory rule is defined over all
+% eight cells"); docs/MINIGRID_REGISTRATION_2026-07-15.md §4.
+Escalation is a screening decision about \emph{which cells to build}, not a
+conclusion about H3. The confirmatory verdict is the frozen
+Supported/Disconfirmed/Inconclusive rule applied once, mechanically, over all
+eight cells, this grid plus the 7B/8B cells, and it is defined only when all
+eight exist. None of the 7B/8B cells existed when the screen fired, so no verdict
+follows from it. That the screen fired says the registered rule judged these four
+cells to warrant the confirmatory eight; it said nothing, in either direction,
+about what the eight-cell rule would return. The verdict it authorized the
+construction of is reported in \S\ref{sec:minigrid:verdict}, and the four cells
+above enter it unchanged: re-deriving them inside the eight-cell analysis
+reproduced every quantity in Table~\ref{tab:minigrid-escalation} exactly, to the
+six decimals published here, which is a regression test of the analysis code
+against a signed known answer rather than a restatement of it.
+% SOURCE: docs/H3_EIGHT_CELL_DECISION_2026-07-26.md, "Precondition 2 -- known-
+% answer regression": KNOWN_ANSWER: PASS (4/4 cells reproduce the signed values
+% exactly), covering winner flips, range/gap verdicts, tie sets and all four
+% quantities per cell.
+
+\subsection{Per-seed differences behind the winner-flip column}
+\label{app:minigrid:ds}
+
+% SOURCE: docs/H3_EIGHT_CELL_DECISION_2026-07-26.md, "Per-cell registered
+% quantities" (all eight cells). Values are read from that record at the six
+% decimals it publishes.
+Table~\ref{tab:h3-ds} gives the per-seed differences $d_s$ behind the
+winner-flip column of Table~\ref{tab:h3-eightcell}, so every flip determination
+is checkable by inspection of sign.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Per-seed differences $d_s = \mathrm{acc}_{\mathrm{GPTQ},s} -
+\mathrm{acc}_{\mathrm{AWQ},s}$ on byte-identical calibration samples. A winner
+flip is two seeds of opposite, nonzero sign; the five cells with a flip are
+those whose row is not sign-constant. No entry is zero, which is the 0-of-40 tie
+count stated in \S\ref{sec:minigrid:verdict}.}
+\label{tab:h3-ds}
+\begin{tabular}{llrrrrr}
+\toprule
+Model & Task & $d_0$ & $d_1$ & $d_2$ & $d_3$ & $d_4$ \\
+\midrule
+Qwen2.5-1.5B & MMLU  & $-0.029127$ & $-0.014029$ & $+0.012463$ & $-0.027631$ & $-0.003133$ \\
+Qwen2.5-1.5B & GSM8K & $-0.111000$ & $-0.098000$ & $-0.080000$ & $-0.088000$ & $-0.107000$ \\
+Llama-3.2-3B & MMLU  & $-0.008973$ & $-0.090514$ & $-0.023287$ & $-0.015026$ & $-0.016807$ \\
+Llama-3.2-3B & GSM8K & $+0.021000$ & $+0.015000$ & $-0.005000$ & $+0.023000$ & $+0.035000$ \\
+Qwen2.5-7B   & MMLU  & $+0.006694$ & $+0.009400$ & $+0.001638$ & $+0.001496$ & $+0.012107$ \\
+Qwen2.5-7B   & GSM8K & $+0.022000$ & $+0.016000$ & $-0.023000$ & $+0.002000$ & $+0.012000$ \\
+Llama-3.1-8B & MMLU  & $-0.016237$ & $-0.026777$ & $-0.047215$ & $+0.018302$ & $-0.013887$ \\
+Llama-3.1-8B & GSM8K & $+0.023000$ & $-0.015000$ & $-0.004000$ & $-0.036000$ & $-0.034000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The three registered supporting analyses}
+\label{app:minigrid:supporting}
+
+% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, slots 2, 3 and 4.
+% RELOCATED 2026-08-04: these were three separate body floats
+% (tab:h3-variance, tab:h3-bootstrap, tab:h3-flips). They are now three panels
+% of one float. No column was dropped and no font was reduced; the three tables
+% were already \small in the body and remain \small here.
+The three analyses were run once per cell at the registered parameters
+(2{,}000 bootstrap replicates, RNG seed 0) as part of the same job that produced
+the verdict, and \S\ref{sec:minigrid:supporting} reads them. None of them
+modifies the verdict, and none can.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The three registered supporting analyses over the eight confirmatory
+cells. \textbf{(a)}~Variance components, reported separately as registered: SD
+is across the five calibration seeds, SE is the item-level standard error within
+a cell, and MMLU cells run at $n = 14{,}042$ against GSM8K's $n = 1{,}000$,
+which is what drives the SE columns. \textbf{(b)}~Two-level paired bootstrap,
+2{,}000 replicates at RNG seed 0, both registered; tie replicates are reported
+separately and are included in the rank-flip denominator, per the registered
+convention, and the final column repeats the registered winner-flip outcome,
+which is a different question and not a consistency check.
+\textbf{(c)}~Flip statistics, GPTQ against AWQ, means over the five paired
+seeds: net delta is
+$\mathrm{acc}_{\mathrm{AWQ}} - \mathrm{acc}_{\mathrm{GPTQ}}$, harmful and
+beneficial are the two directions of correctness change, accuracy-state churn is
+their sum, and total answer churn adds items that change answer without changing
+correctness state.}
+\label{tab:h3-supporting}
+
+\textbf{(a) Variance components, kept separate}\par\medskip
+\begin{tabular}{llrrrr}
+\toprule
+& & \multicolumn{2}{c}{Seed-level SD} & \multicolumn{2}{c}{Item-level SE} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Model & Task & GPTQ & AWQ & GPTQ & AWQ \\
+\midrule
+Qwen2.5-1.5B & MMLU  & 0.019130 & 0.006897 & 0.004215 & 0.004212 \\
+Qwen2.5-1.5B & GSM8K & 0.006340 & 0.015116 & 0.015796 & 0.015658 \\
+Llama-3.2-3B & MMLU  & 0.024925 & 0.011157 & 0.004214 & 0.004216 \\
+Llama-3.2-3B & GSM8K & 0.004615 & 0.012300 & 0.015154 & 0.015308 \\
+Qwen2.5-7B   & MMLU  & 0.006224 & 0.004537 & 0.003983 & 0.004002 \\
+Qwen2.5-7B   & GSM8K & 0.019267 & 0.014195 & 0.013815 & 0.013922 \\
+Llama-3.1-8B & MMLU  & 0.015100 & 0.010520 & 0.004183 & 0.004163 \\
+Llama-3.1-8B & GSM8K & 0.014307 & 0.010654 & 0.013874 & 0.013640 \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\textbf{(b) Two-level paired bootstrap}\par\medskip
+\begin{tabular}{llrlrll}
+\toprule
+Model & Task & Rank-flip rate & Replicates & Tie rate & Ties & Winner flip \\
+\midrule
+Qwen2.5-1.5B & MMLU  & 0.0445 & 89 / 2000  & 0.0005 & 1 / 2000  & \textbf{TRUE} \\
+Qwen2.5-1.5B & GSM8K & 0.0000 & 0 / 2000   & 0.0000 & 0 / 2000  & FALSE \\
+Llama-3.2-3B & MMLU  & 0.0000 & 0 / 2000   & 0.0000 & 0 / 2000  & FALSE \\
+Llama-3.2-3B & GSM8K & 0.0220 & 44 / 2000  & 0.0000 & 0 / 2000  & \textbf{TRUE} \\
+Qwen2.5-7B   & MMLU  & 0.0025 & 5 / 2000   & 0.0000 & 0 / 2000  & FALSE \\
+Qwen2.5-7B   & GSM8K & 0.2575 & 515 / 2000 & 0.0100 & 20 / 2000 & \textbf{TRUE} \\
+Llama-3.1-8B & MMLU  & 0.0405 & 81 / 2000  & 0.0000 & 0 / 2000  & \textbf{TRUE} \\
+Llama-3.1-8B & GSM8K & 0.1260 & 252 / 2000 & 0.0030 & 6 / 2000  & \textbf{TRUE} \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\textbf{(c) Flip statistics, GPTQ against AWQ}\par\medskip
+% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, slot 4 table.
+% base = GPTQ, method = AWQ, so net delta = acc_AWQ - acc_GPTQ (= -d_s in the
+% decision record's sign convention). Churn quantities are direction-symmetric.
+% Metrics from flipeval.core.compute_pair_metrics -- the same function behind
+% the atlas population of \S\ref{sec:atlas}.
+\begin{tabular}{llrrrrrr}
+\toprule
+Model & Task & Net $\Delta$ & Harmful & Benef. & Churn & Wrong$\to$wrong & Answer churn \\
+\midrule
+Qwen2.5-1.5B & MMLU  & $+0.012292$ & 0.087965 & 0.100256 & 0.188221 & 0.091924 & 0.280145 \\
+Qwen2.5-1.5B & GSM8K & $+0.096800$ & 0.098600 & 0.195400 & 0.294000 & 0.273800 & 0.567800 \\
+Llama-3.2-3B & MMLU  & $+0.030922$ & 0.078465 & 0.109386 & 0.187851 & 0.098049 & 0.285899 \\
+Llama-3.2-3B & GSM8K & $-0.017800$ & 0.113200 & 0.095400 & 0.208600 & 0.155800 & 0.364400 \\
+Qwen2.5-7B   & MMLU  & $-0.006267$ & 0.059393 & 0.053126 & 0.112520 & 0.045250 & 0.157770 \\
+Qwen2.5-7B   & GSM8K & $-0.005800$ & 0.091200 & 0.085400 & 0.176600 & 0.110000 & 0.286600 \\
+Llama-3.1-8B & MMLU  & $+0.017163$ & 0.081270 & 0.098433 & 0.179704 & 0.090956 & 0.270659 \\
+Llama-3.1-8B & GSM8K & $+0.013200$ & 0.083800 & 0.097000 & 0.180800 & 0.096400 & 0.277200 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Panel~(c) applies the atlas metrics of \S\ref{sec:atlas} to the controlled
+cells, computed by the same function over the same definitions, so the two
+populations can be read against each other. Here the contrast is \emph{method
+against method at one bit width}, where the atlas contrast is quantized against
+FP16.
+
+\subsection{Post-hoc resolution analysis}
+\label{app:minigrid:resolution}
+
+% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, "Step 5 -- resolution
+% analysis (POST-HOC)" table.
+\begin{table}[t]
+\centering
+\small
+\caption{Post-hoc resolution analysis, read by \S\ref{sec:minigrid:resolution}.
+Ranges of the two ratios across the four cells of each task. $p_d$ is computed
+per cell from panel~(c) of Table~\ref{tab:h3-supporting} and is \emph{not} the
+harness study's $\bar{Q}$, which is a quantized-against-FP16 contrast on a
+different pair. This quantity was not registered; it was requested after the
+eight-cell verdict was computed and signed, it tests no hypothesis, and it
+modifies no verdict.}
+\label{tab:h3-resolution}
+\begin{tabular}{lrr}
+\toprule
+Task & $\max\mathrm{range}$ in paired SE & $\mathrm{gap}$ in paired SE \\
+\midrule
+MMLU ($n = 14{,}042$) & 5.53 -- 17.45 & 2.21 -- 8.45 \\
+GSM8K ($n = 1{,}000$) & 1.92 -- 3.61  & 0.44 -- 5.65 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Deferred registered analyses}
+\label{app:minigrid:deferred}
+
+% SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §4.3; PREREGISTRATION.md
+% §"Experimental Grid" and the 2026-07-20 Decision Point A amendment.
+The registered secondary analyses remain deferred with the rest of the main
+grid: the 3-bit dose-response check, ARC-Challenge, HellaSwag, and the
+WikiText-2 calibration-distribution contrast on Qwen2.5-1.5B-Instruct. The
+last of these is governed by a dated amendment that defines a WikiText-2
+``document'' as a reconstructed article, after a preflight found that
+0 of 36{,}718 raw rows reach the registered 2{,}048-token length while 425 of
+629 reconstructed articles do; the amendment records that no accuracy result had
+been inspected when it was taken. None of these analyses can substitute for a
+confirmatory cell.
+
+\subsection{The earlier public-checkpoint pilot}
+\label{app:minigrid:pilot}
+
+% RELOCATED 2026-08-04 from sections/discriminant.tex, which is deleted. The
+% discriminant argument now lives in \S\ref{sec:minigrid:resolution}, where the
+% figures it reads are reported; the pilot is historical corroboration and its
+% caveats travel with it unchanged.
+% SOURCE: results/PILOT_RESULTS.md (archive
+% pilot_outputs_20260711T000427Z.tar.gz, sha256 a72ff2fd...898a72ecb8).
+The project's earlier public-checkpoint pilot shows the same discriminant
+behaviour under worse conditions, and adds the case the eight cells lack, a
+positive detection: MMLU with a public GPTQ checkpoint at $n = 400$ gave
+$-4.25$\,pp at exact McNemar $p = 0.036$, while GSM8K at $n = 200$ gave
+$p = 0.672$ and $p = 0.880$ on churn of $0.250$ and $0.220$, two correct
+declinations where detection would have needed 4{,}923 and 17{,}347 items.
+\emph{The smaller evaluation is the one that detected nothing.} Its caveats
+bound it entirely (raw-text prompts with no chat template, an unpinned Kaggle
+image modified in place, two public checkpoints with fixed or undocumented
+calibration so it cannot test H3, and wide intervals at $n = 400$ and $200$),
+and it is exploratory evidence for discriminant behaviour and nothing else.

@@ -9,28 +9,29 @@
 % was read from and the date it was read. The sweep's search record --
 % databases, dates, queries, screened counts -- is in
 % docs/related_work_checklist.md §"Sweep Record".
+%
+% COMPRESSED 2026-08-04 (flagship narrative restructure, operation 1 and the
+% §6 per-section target). The Paglieri reconciliation subsection moved WHOLE to
+% sections/appendix_related_detail.tex (app:reconcile); nothing in it was
+% deleted. The six subsection headings were dropped: at this length they were
+% most of the section. Every citation that was here is still here.
+%
+% THE NO-PRIORITY-CLAIM SENTENCE AND ITS SOURCE COMMENT ARE UNTOUCHED AND MUST
+% STAY VERBATIM -- it is a dated, author-affirmed statement about precedence.
 % =====================================================================
 
 \section{Related work and positioning}
 \label{sec:related}
 
-\subsection{Per-item behaviour under compression}
-
 \citet{dutta2024flips} show that compressed models can match baseline aggregate
 accuracy while flipping many individual answers, and propose flips and KL
 divergence as complementary metrics. \textbf{The flips metric is theirs, and we
-do not claim it.} What we add is (i) the same decomposition measured across the
-public record at scale rather than in a controlled study
-(\S\ref{sec:atlas}), (ii) the use of the observed flip-rate distribution as the
-\emph{variance model} for equivalence certification
-(\S\ref{sec:certification}), and (iii) the audit that follows from it
+do not claim it.} What we add is the same decomposition measured across the
+public record at scale (\S\ref{sec:atlas}), the use of the observed flip-rate
+distribution as the \emph{variance model} for equivalence certification
+(\S\ref{sec:certification}), and the audit that follows from it
 (\S\ref{sec:audit}).
 
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 7). The churn<->CA algebraic
-% identity and the layer-level detail were dropped; the interconvertibility is
-% asserted, which is what the positioning needs.
-% THE NO-PRIORITY-CLAIM SENTENCE AND ITS SOURCE COMMENT ARE UNTOUCHED AND MUST
-% STAY VERBATIM -- it is a dated, author-affirmed statement about precedence.
 Concurrent work reaches the same premise independently.
 \citet{rababah2026illusion}, posted two days before our preregistration froze
 and unknown to us until the prior-art sweep of 2026-07-24, define
@@ -49,10 +50,9 @@ posting.
 % reviewed and affirmed by the author 2026-07-24.
 What they do not supply, and what the rest of this paper is, is the machinery
 that turns the shared premise into a decision: equivalence testing at a declared
-margin, required-$n$, a preregistered test of whether the calibration seed
-reorders two methods, and an audit of published claims.
-
-Two further concurrent studies measure per-item change on adjacent objects.
+margin, required-$n$, a test of whether the calibration seed reorders two
+methods, and an audit of published claims. Two further concurrent studies
+measure per-item change on adjacent objects.
 % SOURCE: docs/PRIOR_ART_CONCURRENT_2026-07-24.md §§3-4, both verified against
 % the raw arXiv HTML rendering.
 \citet{cacioli2026beyondmean} adapts the clinical Reliable Change Index to
@@ -63,120 +63,35 @@ decomposition over community-published quantized checkpoints, and find
 that KL-divergence proxies lose their ranking signal in precisely the
 near-baseline region our certification tables adjudicate.
 
-\subsection{Calibration sensitivity in post-training quantization}
-
 \citet{williamsaletras2024} establish that the calibration \emph{data} affects
 quantized model quality, finding substantial variation in downstream task
 performance across calibration sets. \textbf{Calibration-data effects are
-theirs.} Our registered question is orthogonal and finer-grained: holding the
+theirs.} Our question is orthogonal and finer-grained: holding the
 calibration corpus fixed, does the calibration \emph{sample seed} change the
 \emph{ranking} of two methods? The design pairs GPTQ seed $s$ and AWQ seed $s$ on
 byte-identical calibration samples, so a seed-level ranking difference is
-attributable to method-by-calibration interaction rather than to the two methods
-seeing different data (\S\ref{sec:minigrid}).
+attributable to method-by-calibration interaction and not to the two methods
+seeing different data (\S\ref{sec:minigrid}). The sweep found no prior work that
+varies a calibration \emph{seed} with the corpus held fixed and asks whether the
+resulting instability reorders two methods. The nearest antecedents vary the
+calibration set itself and disagree with each other about how much that matters:
+\citet{williamsaletras2024} find the effect substantial, and
+\citet{paglieri2024outliers} find it diminishing on modern models, with
+Mistral~7B close to immune. That disagreement is the strongest available
+objection to this paper, since a field insensitive to the calibration set would
+seem unlikely to reorder on the seed. Appendix~\ref{app:reconcile} answers it at
+length: both results hold at once, because neither design measures the
+\emph{gap between} two methods, which is the quantity a practitioner choosing
+between them depends on, and our own eight cells show a seed-induced range at
+least as large as that gap in 7 of 8.
 
-The sweep found no prior work that varies a calibration \emph{seed} with the
-corpus held fixed and asks whether the resulting instability reorders two
-methods. The nearest antecedents vary the calibration set itself, and they
-disagree with each other about how much that matters, which is the subject of
-\S\ref{sec:related:reconcile}.
-
-\subsection{Prior findings on calibration sensitivity}
-\label{sec:related:reconcile}
-
-\textbf{The two most direct antecedents of this paper reach opposite
-conclusions about the same knob.} \citet{williamsaletras2024} find
-\emph{substantial} variation in downstream task performance across calibration
-sets, explicitly contrasting their result with prior work that suggested greater
-robustness. \citet{paglieri2024outliers} find the effect \emph{diminishing}:
-where the older OPT models degrade badly and vary with the calibration set,
-Llama-2 7B, Llama-3 8B, Command-R 35B and Mistral 7B are robust, with Mistral 7B
-close to immune, and they argue the field should stop building its quantization
-literature around outlier preservation. Both are careful studies of calibration
-sensitivity, published within a year of each other, pointing in opposite
-directions.
-
-The second of these is also the strongest available objection to this paper,
-and it is the one a reader is most likely to arrive already holding: if modern
-models are insensitive to the calibration set, why would the calibration seed
-reorder anything?
-
-Our answer is that both results hold at once, and that the disagreement between
-them is a symptom of measuring the wrong thing for the question the field
-actually asks. Three differences do the work, and our own numbers show why.
-
-\paragraph{The intervention is different, and ours is strictly finer.} Both
-antecedents vary the calibration \emph{data}. \citet{paglieri2024outliers} do it
-across sets differing in quality, content and language: a
-RedPajama sample, calibration drawn from uniformly random ASCII punctuation and
-whitespace, task-specific sets from ARC-Challenge and PiQA, and multilingual
-sets from FLORES+. We hold the corpus fixed and vary only the sample seed, an
-intervention they do not make. A finding that swapping the corpus for random
-punctuation barely moves accuracy does not entail that redrawing the sample
-leaves the \emph{ordering} of two methods intact; the two questions are not
-nested in the direction the objection needs.
-
-\paragraph{The unit of analysis is different.} \citet{paglieri2024outliers}
-study one method at a time, reporting GPTQ W4A16, AWQ W4A16, SmoothQuant W8A8
-and a naive W8A8 baseline in separate result sections, and they report no
-head-to-head ranking between methods and no ranking flips. Our unit of analysis
-is the \emph{gap between} two methods at the same bit width, a quantity neither
-antecedent's design measures.
-
-\paragraph{Individual robustness plus a small method gap implies ranking
-instability.} This is the reconciliation proper, and it is not a rhetorical
-move: it is what \S\ref{sec:minigrid} measures. Each method is individually
-stable in absolute accuracy, much as they report, and the seed-induced range is
-at least as large as the mean GPTQ--AWQ gap in 7 of our 8 confirmatory cells.
-% SOURCE: docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED), "Mechanical
-% application of the rule": range/gap holds in 7 of 8. Wording follows that
-% record's own "at least as large as"; do not tighten it to "smaller than".
-Those two facts together \emph{are} ranking instability. We are not
-contradicting their robustness finding; we are showing it has a consequence they
-did not test for. A field that reads ``calibration choice barely moves accuracy''
-as licence to compare two methods from one calibration run each has drawn the
-wrong inference from a correct result.
-
-\paragraph{The magnitude question, answered honestly.} Robustness claims are
-claims about size, so the reconciliation has to be quantitative. The figures
-that follow come from a \emph{post-hoc} resolution analysis, prompted by this
-very paper and labelled as such wherever it appears (\S\ref{sec:minigrid}); it
-is descriptive and modifies no verdict. On MMLU our seed-induced ranges run 5.5
-to 17.5 paired standard errors, a spread no robustness claim reaches, and one
-the benchmark resolves comfortably at $n = 14{,}042$.
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, step 5 table,
-% max_range/SE column, MMLU rows: 11.07, 17.45, 5.53, 11.19.
-On GSM8K at $n = 1{,}000$ the same ranges run roughly two standard errors, and
-we say so rather than averaging the two tasks together: that arm of the
-experiment does not resolve the effect it was built to measure
-(\S\ref{sec:minigrid:resolution}, \S\ref{sec:limitations}).
-% SOURCE: same table, GSM8K rows: 1.92, 2.35, 3.61, 2.45.
-
-\paragraph{What the disagreement was about.} Read this way, the two antecedents
-are not really in conflict. \citet{williamsaletras2024} and
-\citet{paglieri2024outliers} both measure how much a \emph{single} method's
-absolute accuracy moves when the calibration data changes, and they disagree
-about the size of that movement on the model generations each studied. Neither
-measures what a practitioner comparing two methods actually depends on, namely that the
-\emph{ordering} survives, and a quantity nobody measured is one the field has no
-basis to assume stable. Our design does not settle their disagreement. It shows
-that settling it would not have answered the question either way.
-
-\subsection{Losslessness, defined and achieved versus audited}
-
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 2). The enumeration of the three
-% losslessness notions and the gamma^2 variance law was dropped; the positioning
-% -- which is what this subsection is for -- is kept whole, including the
-% complementarity statement.
 \citet{helcig2026slq} occupy the phrase this paper is about. They formalise
 notions of losslessness for quantized LLMs (task-lossless and the stricter
 distribution-lossless), propose the Expected Acceptance Rate as an interpretable
 fidelity metric, and ship SLQ, a method that reaches those targets at low bit
-widths.
-
-Their question and ours are different, and the difference is the whole of
-\S\ref{sec:certification}. \emph{They define losslessness and build a method to
-achieve it.} \emph{We audit whether existing published claims of losslessness
+widths. Their question and ours are different, and the difference is the whole
+of \S\ref{sec:certification}. \emph{They define losslessness and build a method
+to achieve it.} \emph{We audit whether existing published claims of losslessness
 have the evidence to support them, and compute how many items it would take to
 certify one.} Their paper contains no equivalence test at a declared margin, no
 power or required-$n$ computation, and no audit of others' claims; ours contains
@@ -185,8 +100,6 @@ needs to know how large an evaluation must be before the accuracy half of a
 losslessness claim means anything, and that number is what our certification
 tables supply.
 
-\subsection{Statistics for language-model evaluation}
-
 The closest existing work is \citet{llmaccuracystats2026}, which brings
 one-sided McNemar \emph{detection} to LLM accuracy comparisons and ships it in
 the evaluation harness the field already uses. We agree with its diagnosis and
@@ -194,18 +107,16 @@ differ in the question asked. Detection asks whether there is evidence of a
 difference; a non-significant result is not equivalence, and at the sample sizes
 in \S\ref{sec:audit} it is frequently just an absence of resolution. Our deltas
 are: (i) TOST certification at a \emph{declared} margin;
-(ii) required-$n$ certification tables computed from empirical churn rather than
+(ii) required-$n$ certification tables computed from empirical churn instead of
 % SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
 % (GSM8K 2.25--2.26, MuSR 14.66--14.68). REV-2: the low end was 1.7 under rev-1;
-% corrected 2026-07-26 with the abstract, introduction and §5.
+% corrected 2026-07-26 with the abstract, introduction and the certification §.
 from independent-binomial variance, with the $2.3$--$14.7\times$ correction that
 implies; and (iii) the audit of published claims, which is the
 empirical case that the distinction matters in practice. An anytime-valid
 sequential extension, using confidence sequences that let a practitioner stop as
 soon as the model is certified, is registered and in progress; it reports no results
 here and is not claimed as a contribution of this paper.
-
-\subsection{Reporting-standards audits}
 
 The constructive-audit genre is well established: \citet{dodge2019showyourwork}
 on reporting the compute and search behind reported numbers, and
@@ -219,16 +130,14 @@ bibliometric audit of which models the evaluation literature actually tests, and
 \citet{thomas2026prereg} propose preregistering an analysis against a model not
 yet released, so that the configuration cannot be tuned against the outcome.
 
-\subsection{Compression methods audited}
-
-The audited claims span the two dominant post-training families. Weight-only
-quantization is represented by GPTQ \citep{gptq2022}, AWQ \citep{awq2023} and
-SqueezeLLM \citep{squeezellm2023}; weight-and-activation quantization by
-LLM.int8() \citep{llmint82022} and SmoothQuant \citep{smoothquant2022};
-one-shot pruning by SparseGPT \citep{sparsegpt2023} and Wanda
+The audited claims span the two dominant post-training families: weight-only
+quantization, represented by GPTQ \citep{gptq2022}, AWQ \citep{awq2023} and
+SqueezeLLM \citep{squeezellm2023}; weight-and-activation quantization, by
+LLM.int8() \citep{llmint82022} and SmoothQuant \citep{smoothquant2022}; and
+one-shot pruning, by SparseGPT \citep{sparsegpt2023} and Wanda
 \citep{wanda2023}. We audit the equivalence \emph{language} these papers use
 and the evidence offered for it, not the methods themselves, and the audit's
-verdicts are about reporting practice rather than about whether a method works.
+verdicts are about reporting practice, not about whether a method works.
 Two of the most aggressive methods in the set are also the most restrained in
 what they assert: SpinQuant \citep{spinquant2024} and QuIP\#
 \citep{quipsharp2024} report their accuracy deltas without equivalence

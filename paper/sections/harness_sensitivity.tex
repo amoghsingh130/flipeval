@@ -1,12 +1,19 @@
 % =====================================================================
-% Section: Harness-defaults sensitivity study  -- COMPLETE DRAFT
+% Section: Harness-defaults sensitivity study.
 %
 % TRIMMED 2026-07-26. The "two live defects" motivation, the design /
 % pre-named-ratio subsection (with the two-phase Qbar deferral and the declined
 % early-inspection amendment), the full condition-B narrative and the MMLU
 % C==D collapse argument moved VERBATIM to
 % sections/appendix_harness_detail.tex. Nothing was deleted in the move.
-% BOTH RESULT TABLES STAY HERE -- they are the deliverable.
+%
+% RESTRUCTURED 2026-08-04 (flagship narrative, operations 11 and 15):
+%   tab:sensitivity-gsm8k + tab:sensitivity-mmlu -> ONE float, tab:sensitivity.
+%     Same seven columns, every row kept, both denominators and both reference
+%     accuracies carried in group headers. No column dropped, no font reduced.
+%   The Bronder cross-domain paragraph moved VERBATIM to
+%     Appendix~\ref{app:sensitivity:bronder}.
+% BOTH RESULT ROWSETS STAY HERE -- they are the deliverable.
 %
 % PRIMARY SOURCES for every number in this section:
 %   docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md  (FROZEN protocol)
@@ -46,117 +53,88 @@ GSM8K accuracy $0.232 \to 0.566$ with not one token of model output changed
 % "C_cond and Qbar always reported beside it", undefined-if-zero rule);
 % docs/HARNESS_SENSITIVITY_QBAR_2026-07-23.md (Qbar(mmlu)=0.199000,
 % Qbar(gsm8k)=0.287000); results/harness_sensitivity/qbar_qwen25-1p5b.json.
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 5). The full construction of R and
-% its two-phase Qbar deferral are already stated in
-% Appendix~\ref{app:sensitivity:design}; the body keeps the definition, both
-% denominator values and the reporting rule, which is what the tables need.
 The headline statistic, fixed before any run, is
 $R_{\mathrm{cond}} = C_{\mathrm{cond}}/\bar{Q}$: churn between the reference
 configuration and a condition on the fixed FP16 model, over the mean churn of
 the ten Qwen2.5-1.5B quantized variants against that model's FP16 cell on the
-same items, giving $\bar{Q}(\text{MMLU}) = \mathbf{0.199}$ and
-$\bar{Q}(\text{GSM8K}) = \mathbf{0.287}$. So $R$ asks directly how a
-configuration change compares with swapping in a quantized model. The
-registration forbids printing the ratio without both inputs, and both appear in
-every row below.
+same items, giving $\bar{Q}(\text{MMLU}) = 0.199$ and
+$\bar{Q}(\text{GSM8K}) = 0.287$. So $R$ asks directly how a
+configuration change compares with swapping in a quantized model. The protocol
+forbids printing the ratio without both inputs, and both appear in every row of
+Table~\ref{tab:sensitivity}.
 
 % SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K table
-% (n=200, REF acc 0.5750, Qbar 0.287); every cell cross-checked against
+% (n=200, REF acc 0.5750, Qbar 0.287) and MMLU table (n=400, REF acc 0.4150,
+% Qbar 0.199; C==D acc 0.4600, net +0.0450, C_cond 0.2100 (84/400), dir 33/51,
+% R 1.055); every cell cross-checked against
 % results/harness_sensitivity/sensitivity_results_qwen25-1p5b.json
-% per_task.gsm8k.conditions (acc_cond, net_acc_delta, C_cond,
+% per_task.{gsm8k,mmlu}.conditions (acc_cond, net_acc_delta, C_cond,
 % correctness_changed, answer_churn, dir_correct_to_incorrect,
 % dir_incorrect_to_correct, R_cond).
+% C and D are byte-identical for MMLU (registration §3.3); the argument is at
+% app:sensitivity:mmlu-collapse.
 \begin{table}[t]
 \centering
 \small
-\caption{GSM8K configuration sensitivity on FP16 Qwen2.5-1.5B, $n=200$,
-reference accuracy $0.575$, against the quantization denominator
-$\bar{Q}=0.287$. $C_{\mathrm{cond}}$ is correctness-state churn versus the
-reference; $R=C_{\mathrm{cond}}/\bar{Q}$ is reported only with both inputs in
-view. The $\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column splits churned
-items by direction so churn is never read as net degradation.}
-\label{tab:sensitivity-gsm8k}
+\caption{Configuration sensitivity on FP16 Qwen2.5-1.5B, against the
+quantization denominator $\bar{Q}$ for each task. $C_{\mathrm{cond}}$ is
+correctness-state churn versus the reference; $R=C_{\mathrm{cond}}/\bar{Q}$ is
+reported only with both inputs in view. The
+$\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column splits churned items by
+direction so churn is never read as net degradation. Conditions~C and~D are
+byte-identical for MMLU and are reported once as $C\equiv D$ (registration
+\S3.3).}
+\label{tab:sensitivity}
 \begin{tabular}{llrrrrr}
 \toprule
 Cond & Configuration vs.\ reference & Acc & Net $\Delta$ & $C_{\mathrm{cond}}$ & c$\to$i / i$\to$c & $R=C_{\mathrm{cond}}/\bar{Q}$ \\
 \midrule
+\multicolumn{7}{l}{\emph{GSM8K}, $n=200$, reference accuracy $0.575$, $\bar{Q}=0.287$} \\
 A & exemplars as separate turns   & 0.515 & $-0.060$ & \textbf{0.240} & 30 / 18 & \textbf{0.836} $=0.240/0.287$ \\
 B & \texttt{strict-match} rescore & 0.120 & $-0.455$ & \textbf{0.455} & 91 / 0  & \textbf{1.585} $=0.455/0.287$ \\
 C & chat template off, 3-shot     & 0.475 & $-0.100$ & \textbf{0.320} & 42 / 22 & \textbf{1.115} $=0.320/0.287$ \\
 D & stock defaults (chat off, 5-shot) & 0.495 & $-0.080$ & \textbf{0.300} & 38 / 22 & \textbf{1.045} $=0.300/0.287$ \\
+\midrule
+\multicolumn{7}{l}{\emph{MMLU}, $n=400$, reference accuracy $0.415$, $\bar{Q}=0.199$} \\
+$C\equiv D$ & chat template off, zero-shot & 0.460 & $\mathbf{+0.045}$ & \textbf{0.210} & 33 / 51 & \textbf{1.055} $=0.210/0.199$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 5). The per-condition R values are
-% in the table one line above; restating all four in prose was redundant.
-Table~\ref{tab:sensitivity-gsm8k} reads directly against the denominator. Three
-of the four GSM8K conditions (turning the chat template off, accepting every
-stock default at once, and switching the extraction filter) have $R \geq 1$:
-each moves a fixed model's per-item correctness by \emph{as much as or more
-than} swapping in one of ten quantized variants moves it. Only condition~A, the
-multiturn exemplar placement, stays below the quantization scale ($R=0.836$).
-The net accuracy deltas understate the movement in every case, because they net
-directional churn that the
+Three of the four GSM8K conditions (turning the chat template off, accepting
+every stock default at once, and switching the extraction filter) have
+$R \geq 1$: each moves a fixed model's per-item correctness by \emph{as much as
+or more than} swapping in one of ten quantized variants moves it. Only
+condition~A, the multiturn exemplar placement, stays below the quantization
+scale. The net accuracy deltas understate the movement in every case, because
+they net directional churn that the
 $\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column keeps separate.
-% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K table (R values
-% 0.836/1.585/1.115/1.045; net deltas -0.060/-0.455/-0.100/-0.080).
 Condition~B is sharpest because it holds the generations fixed: the stock task
 applies both filters to the same outputs, so B is a rescore of \emph{identical}
 generations at zero GPU cost, and its $91/0$ split means \texttt{strict-match}
 accepts a strict subset of what \texttt{flexible-extract} accepts here
 (Appendix~\ref{app:sensitivity:condB}).
 
-% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, MMLU table (n=400,
-% REF acc 0.4150, Qbar 0.199; C==D acc 0.4600, net +0.0450, C_cond 0.2100
-% (84/400), dir 33/51, R 1.055); results JSON per_task.mmlu.conditions.C_equiv_D.
-% C and D are byte-identical for MMLU (registration §3.3); the argument is at
-% app:sensitivity:mmlu-collapse.
-\begin{table}[t]
-\centering
-\small
-\caption{MMLU configuration sensitivity on FP16 Qwen2.5-1.5B, $n=400$,
-reference accuracy $0.415$, against $\bar{Q}=0.199$. Conditions~C and~D are
-byte-identical for MMLU and are reported once as $C\equiv D$ (registration
-\S3.3).}
-\label{tab:sensitivity-mmlu}
-\begin{tabular}{llrrrrr}
-\toprule
-Cond & Configuration vs.\ reference & Acc & Net $\Delta$ & $C_{\mathrm{cond}}$ & c$\to$i / i$\to$c & $R=C_{\mathrm{cond}}/\bar{Q}$ \\
-\midrule
-$C\equiv D$ & chat template off, zero-shot & 0.460 & $\mathbf{+0.045}$ & \textbf{0.210} & 33 / 51 & \textbf{1.055} $=0.210/0.199$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 The MMLU cell makes a point the net delta hides. Turning the chat template off
 \emph{raises} reported accuracy by $+4.5$\,pp ($0.415 \to 0.460$), with a
-directional split of $33/51$, meaning more items recovered than lost.
-% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, MMLU row (net +0.0450,
-% dir 33/51).
-So the harness default is not uniformly worse than the reference: on MMLU it is
-better, on GSM8K worse, and either way \emph{different}. The churn behind the
-$+4.5$\,pp is $C_{C\equiv D}=0.210$ ($84$ of $400$ items), giving $R=1.055$, again
-on the quantization scale. The movement is real, signed differently on the two
-tasks, and of a kind compression papers do not report: the setting that almost
-never appears in a model card is precisely the one silently moving the number a
-``near-lossless'' claim rests on.
+directional split of $33/51$, meaning more items recovered than lost. The
+harness default is therefore not uniformly worse than the reference: on MMLU it
+is better, on GSM8K worse, and either way \emph{different}. The churn behind the
+$+4.5$\,pp is $0.210$ ($84$ of $400$ items), giving $R=1.055$, again on the
+quantization scale. The movement is real, signed differently on the two tasks,
+and of a kind compression papers do not report: the setting that almost never
+appears in a model card is precisely the one silently moving the number a
+``near-lossless'' claim rests on. Holding the system fixed and varying the
+instrument is not specific to compression, and
+Appendix~\ref{app:sensitivity:bronder} records the same design and the same
+conclusion on a different object.
 
-\paragraph{The same move, in another domain.} Holding the system fixed and
-varying the instrument is not specific to compression.
-\citet{bronder2026instrument} do it for language-model \emph{honesty}
-evaluation: with the player model held fixed, four instrument
-choices (outcome grammar, criterion disclosure, budget rendering and register
-presence) substantially changed what the evaluation would have reported, under
-decision rules recorded before results were read. That study and this one share
-a design and a conclusion on different objects, which is the reason to expect
-the effect wherever an evaluation is treated as a fixed instrument.
-
-\paragraph{Scope.}
 % SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md (all R values, range
 % 0.836--1.585); docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §2 (Llama
 % added only after its canary pair passes), §7 (exploratory; licenses no
 % confirmatory read; no gate/rule adjusted).
+% PROTECTED PASSAGE: every clause of this scope statement is mandatory.
+\paragraph{Scope.}
 On a fixed FP16 model and matched items, harness configuration moves per-item
 correctness by an amount comparable to quantization, with $R \in [0.836,\,1.585]$
 across the five conditions and the scoring-filter choice ($R=1.585$) exceeding
@@ -165,7 +143,7 @@ unstated or mismatched configuration can be dominated by the configuration.
 These caveats travel with the numbers. This is \textbf{one model}
 (Qwen2.5-1.5B-Instruct); the Llama-3.2-3B arm is admitted only after its seed-0
 canary passes, which has not run, so no Llama $R$ is reported. The items are the
-\textbf{bridge subsets} ($n=400$ MMLU, $n=200$ GSM8K), chosen so the study
+bridge subsets ($n=400$ MMLU, $n=200$ GSM8K), chosen so the study
 touches no confirmatory item definition. And the study is
 \textbf{exploratory}: it adjusts no gate, no escalation rule, and no
 confirmatory analysis, and states no H3 outcome. It contextualises how a

@@ -1,17 +1,27 @@
 % =====================================================================
-% Section: Preregistration, freezes, and analyst degrees of freedom
-% -- COMPLETE DRAFT
+% Subsections: Preregistration, freezes, and analyst degrees of freedom.
 %
-% TRIMMED 2026-07-26. The disclosed-contact subsection, the seven interpretive
-% choices in full, and the full spot-check narrative moved VERBATIM to
-% sections/appendix_prereg_detail.tex. Nothing was deleted in the move. What
-% stays here is the freeze timeline, a pointer-summary of the contact, the
-% compressed choice-1 statement, inspection discipline, the full H3 rule, and a
-% three-point spot-check summary.
+% RESTRUCTURED 2026-08-04 (flagship narrative, operations 4 and 5). This file
+% is no longer a \section: it is folded into the framework section
+% (sections/certification.tex, sec:certification) and opens at \subsection
+% level. main.tex inputs it immediately after that file. Do not reintroduce a
+% \section here.
+%
+% MOVED TO Appendix~\ref{app:prereg-detail} IN THE SAME COMMIT, NOTHING DELETED:
+%   tab:freeze-timeline                          (whole table)
+%   §"Disclosed pre-registration data contact"   (already there in full text,
+%                                                 at app:prereg:contact)
+%   §"Result-inspection discipline"              (moved verbatim)
+%   §"The H3 reporting rule"                     (moved verbatim)
+%   §"Atlas validation and population correction" narrative (already there in
+%                                                 full, at app:prereg-spotcheck)
+% WHAT STAYS HERE, AND WHY: the freeze summary, and the K = 1 -> 5 -> 4 ->
+% 1-of-11 sequence, which is the body's canonical self-correction and does not
+% move to an appendix.
 %
 % PRIMARY SOURCES:
 %   PREREGISTRATION.md                        (frozen 2026-07-11)
-%   docs/AUDIT_REGISTRATION_2026-07-15.md     (frozen; Amendment 1 appended)
+%   docs/AUDIT_REGISTRATION_2026-07-15.md     (frozen; Amendments 1-4 appended)
 %   docs/ATLAS_MINING_REGISTRATION_2026-07-15.md (frozen)
 %   docs/MINIGRID_REGISTRATION_2026-07-15.md  (frozen)
 %   docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices", §Provenance
@@ -22,88 +32,38 @@
 % rerun) NO LONGER APPEARS IN THIS FILE. It moved to
 % sections/appendix_prereg_detail.tex on 2026-07-26 and that file is now the
 % ONLY place it may appear in any FlipEval text. Do not reintroduce it here,
-% in the abstract, in §\ref{sec:atlas}, or anywhere in the blog post. The
-% boundary comment travels with the anecdote; the authoritative statement of it
-% is at the top of appendix_prereg_detail.tex.
+% in the abstract, in §\ref{sec:atlas}, or anywhere in the blog post.
 % =====================================================================
 
-\section{Preregistration, freezes, and analyst degrees of freedom}
-\label{sec:prereg}
-
-An audit paper is only as good as its own protocol discipline. This section
-documents that discipline, including where it cost us the result we would have
-preferred; readers who want results first may skip to \S\ref{sec:audit}. Full
-text of the disclosures, the interpretive rulings and the spot-check is in
-Appendix~\ref{app:prereg-detail}.
-
 \subsection{What was frozen, and when}
-\label{sec:prereg:timeline}
+\label{sec:prereg}
 
 % SOURCE: PREREGISTRATION.md header lines 3-7;
 % docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3 (commits b74fd58, d6e02dd, f06348f,
 % 715a7ce); docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table sha256).
-\begin{table}[t]
-\centering
-\small
-\caption{Freeze timeline. Each artifact was committed before the analysis it
-governs could be run, and each frozen file carries a \emph{Dated Amendments}
-section: deviations are appended, never edited in, and each records whether
-results had been inspected before the decision.}
-\label{tab:freeze-timeline}
-\begin{tabular}{llll}
-\toprule
-Date & Artifact & Commit & What it fixed in advance \\
-\midrule
-2026-07-11 & \texttt{PREREGISTRATION.md} & --- & Grid, metrics, TOST margin (2\,pp), H3 decision rule \\
-2026-07-15 & Three registrations & \texttt{b74fd58} & Audit, atlas-mining, and mini-grid protocols \\
-2026-07-15 & Audit Amendment 1 & \texttt{d6e02dd} & Blind-extraction independence mechanism \\
-2026-07-15 & Pair manifest & \texttt{f06348f} & The 59 atlas pairs, before any flip statistic \\
-2026-07-15 & Claim table & \texttt{715a7ce} & The 17 audited claims, before any verdict \\
-2026-07-20 & WikiText-2 amendment & --- & ``Document'' definition, Decision Point A \\
-\bottomrule
-\end{tabular}
-\end{table}
+Each artifact this paper depends on was committed before the analysis it
+governs could run, and each frozen file carries a \emph{Dated Amendments}
+section, so deviations are appended and never edited in, each recording whether
+results had been inspected before the decision.
+Table~\ref{tab:freeze-timeline} in Appendix~\ref{app:prereg-detail} dates every
+freeze against its commit. The frozen claim table's content hash is recorded
+with the verdicts (sha256 \texttt{842b9756...5af7b15}), as is the atlas
+summary's (\texttt{98201ade...10a4712d}) and the container image's, so a reader
+can confirm that the inputs to any reported number were the frozen ones.
 
-The frozen claim table's content hash is recorded with the verdicts
-(sha256 \texttt{842b9756...5af7b15}), as is the atlas summary's
-(\texttt{98201ade...10a4712d}) and the container image's, so a reader can
-confirm the inputs to any reported number were the frozen ones. Three properties
-of this arrangement do work in the paper. The mechanical parts of the
-audit (inclusion trigger vocabulary, extraction fields, verdict formulas,
-robustness sweep) were fixed before any claim's power was computed, so the
-audit cannot have selected its claims or its statistics to produce a headline;
-the atlas pair list was frozen before any flip statistic, so the atlas cannot
-have selected pairs to produce churn; and the H3 decision rule was fixed, in
-algebra, before the first compressed checkpoint existed, so the paper reports
-whatever that rule returns.
+Three properties of that arrangement do work in the paper. The mechanical parts
+of the audit, meaning the inclusion trigger vocabulary, the extraction fields,
+the verdict formulas and the robustness sweep, were fixed before any claim's
+power was computed, so the audit cannot have selected its claims or its
+statistics to produce a headline. The atlas pair list was fixed before any flip
+statistic, so the atlas cannot have selected pairs to produce churn. And the H3
+decision rule was fixed, in algebra, before the first compressed checkpoint
+existed, so the paper reports whatever that rule returns. The appendix carries
+the rest: the three disclosed points of pre-registration data contact, the seven
+interpretive rulings in full, the inspection discipline observed during grid
+execution, and the H3 rule as registered.
 
-\subsection{Disclosed pre-registration data contact}
-\label{sec:prereg:contact}
-
-% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §1;
-% docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §1;
-% docs/IDENTICAL_SCORE_CHURN_2026-07-21.md §"Why this note exists".
-% Full text, including the retired anecdote, at app:prereg:contact. Do not
-% restate the anecdote here -- see the disclosure boundary at the top of this
-% file.
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 10). All three disclosures are
-% still named here -- omitting any of them would defeat the purpose of the
-% subsection -- with the per-item justification moved to the appendix, which
-% already carries them at 327 words.
-Preregistration is a claim about ordering, so the places where our order was
-imperfect are disclosed by the registrations themselves rather than discovered
-by a reader. Three exist, all recorded in the frozen documents: five audit
-claims collected as exact quotes before the audit registration was written, with
-no power computation run on any of them; two atlas feasibility probes whose
-results were known before the mining registration was drafted, flagged and
-excluded from every headline aggregate at the level of the whole pair (99 cells,
-not two tasks); and one pre-registration motivating observation, retired from
-every quantitative use, its registered replacement being the identical-score
-statistic of \S\ref{sec:atlas:identical}.
-Appendix~\ref{app:prereg:contact} gives all three in full, with the reasoning
-for each.
-
-\subsection{The interpretive choices that moved the headline}
+\subsection{The interpretive choice that moved the headline}
 \label{sec:prereg:choices}
 
 Frozen protocols do not eliminate analyst judgement; they make it visible and
@@ -143,108 +103,35 @@ that was published, and the rev-3 recomputation at the registered margin returns
 which is the claim the first pass had flagged. All readings ship in the released
 CSV (\S\ref{sec:audit:results}).
 
-\subsection{Result-inspection discipline}
-\label{sec:prereg:discipline}
-
-% SOURCE: CLAUDE.md/AGENTS.md project guardrails; PREREGISTRATION.md
-% §"Outcomes and Analysis"; docs/MINIGRID_REGISTRATION_2026-07-15.md §5.
-During grid execution only job health, checksums, expected-file coverage and
-receipt pairing are inspected; the first accuracy inspection happens only after
-the mini-grid validator passes over the complete expected file set. The
-registered analysis is run once per cell, the escalation rule applied
-mechanically, and a dated escalation decision record written the same day. The
-paired-bootstrap rank-flip denominator convention (tie replicates included,
-ties also reported separately) was fixed in words in the registration, naming
-the implementing commit, so it cannot be re-chosen after inspection. No
-registered analysis is tuned after results are seen: not the calibration
-builder, not the paired bootstrap, not the verdict rule.
-
-\subsection{The H3 reporting rule, stated before the results exist}
-\label{sec:prereg:h3rule}
-
-% SOURCE: PREREGISTRATION.md §"H3 Decision Rule";
-% docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 3, 4.
-% THIS FILE STATES NO H3 OUTCOME. That is deliberate and survives the signed
-% verdict of 2026-07-26: §3's job is the protocol, §7's is the result. Updated
-% 2026-07-27 only to stop asserting the four-cell contingency as live -- all
-% eight cells completed, so that branch never fired.
-The registered decision rule is defined over eight confirmatory
-model-by-benchmark cells:
-$\{$Qwen2.5-1.5B, Qwen2.5-7B, Llama-3.2-3B, Llama-3.1-8B$\}
-\times \{$MMLU, GSM8K$\}$ at 4 bits, comparing GPTQ seed $s$ against AWQ
-seed $s$ on byte-identical calibration samples. H3 is \emph{supported} if winner
-flips occur in at least 3 of the 8 cells, or the range/gap criterion holds in at
-least 4 of the 8. It is \emph{disconfirmed} if winner flips occur in at most 1
-of the 8 and $\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}})
-< 0.5 \times \mathrm{gap}$ in at least 6 of the 8. Everything else is
-\emph{inconclusive}, reported without post-hoc promotion.
-
-The mini-grid executed \textbf{4 of those 8 cells}
-($\{$Qwen2.5-1.5B, Llama-3.2-3B$\} \times \{$MMLU, GSM8K$\}$), with the 7B/8B
-cells deferred behind a pre-committed, mechanical escalation rule. The mini-grid
-registration stated the consequence of each branch in advance: if all eight
-cells complete, the frozen rule is applied exactly as registered; if they do
-not, the paper reports the four completed cells descriptively and H3 is
-undecided under the registered rule, never supported or disconfirmed on four
-cells, and no reduced-cell variant of the rule is constructed after results are
-seen.
-
-The escalation screen fired on 2026-07-23, the 7B/8B cells were built, and
-\textbf{all eight cells completed}, so the second branch never applied and the
-frozen rule was applied once over the full set. Both decisions are dated, signed
-records
-(\texttt{docs/MINIGRID\_ESCALATION\_DECISION\_2026-07-23.md},
-\texttt{docs/H3\_EIGHT\_CELL\_DECISION\_2026-07-26.md}), and the screen's own
-authorship discipline is worth stating: it decides which cells to build and
-states no H3 outcome, so the confirmatory rule was never applied to a cell set
-selected after its result was known. The screen's per-cell outcomes are in
-\S\ref{sec:minigrid:escalation} and the verdict in
-\S\ref{sec:minigrid:verdict}; this section states neither.
-
 \subsection{Atlas validation and population correction}
 \label{sec:prereg-spotcheck}
 % SOURCE: docs/ATLAS_REV2_CORRECTION_2026-07-21.md; the spot-check report of
 % 2026-07-21 (10 cells, 262/262 fields); ruling R7. Full narrative, the two
 % defects, and the rev-1 -> rev-2 delta at app:prereg-spotcheck and
 % app:prereg:rev2delta.
+% ONE SENTENCE KEPT IN THE BODY (operation 5). The label stays here because
+% sections/limitations.tex, sections/atlas.tex and
+% sections/appendix_artifacts_detail.tex all point at it.
 
 The protocol required an independent spot-check before any atlas number could be
 quoted externally. It re-derived ten stratified cells from a fresh
-reimplementation of the registered definitions rather than a rerun of our own
-code, and all 262 compared fields reconciled exactly. The arithmetic was right;
-the \emph{population} was not. Two defects had silently dropped cells: an omitted
-reverse-chronological fallback clause of our own registration, and a parser that
-missed a newer nested metrics schema. The first dropped them non-randomly, the first non-randomly, removing
-exactly those pairs whose quantized side had been re-evaluated later. Three
-points follow, and none is that we were unlucky.
-
-\textbf{An aggregate can be exactly right and still be built on the wrong
-population.} Every cell we checked was computed correctly. Validating by
-recomputing our own numbers, which is the natural and useless self-check, would
-have confirmed all of them and shipped the selection bias intact. What caught it was
-reconstructing the measurement from the protocol text rather than the code.
-
-Preregistration did the work it is supposed to do. The frozen text
-determined the direction of the repair: we executed a rule already binding and
-under-implemented, rather than choosing one that flattered a result. The
-correction was nevertheless made \emph{after} results had been inspected, and we
-disclose that rather than presenting it as a pre-specified step.
-
-Both revisions are public. We publish rev-1 and rev-2 and report the
-delta (Appendix~\ref{app:prereg:rev2delta}) rather than replacing the record
-with its corrected version; the repair enlarged the analysable population by
-44\% and left the audit's headline verdicts unmoved. A field whose
-near-lossless claims cannot be rechecked because per-item outputs are never
-released, which is the finding of Section~\ref{sec:audit}, is one whose
-corrections cannot be seen. Both revisions of our atlas are released.
+reimplementation of the registered definitions instead of a rerun of our own
+code, and all 262 compared fields reconciled exactly: the arithmetic was right,
+and the \emph{population} was not, because two defects had silently dropped
+cells non-randomly. The repair executed a rule that was already binding and
+under-implemented, it enlarged the analysable population by 44\%, it left the
+audit's headline verdicts unmoved, and it was made \emph{after} results had been
+inspected, which we disclose instead of presenting it as a pre-specified step.
+Both revisions are published and the delta between them is reported
+(Appendix~\ref{app:prereg:rev2delta}); a field whose near-lossless claims cannot
+be rechecked, because per-item outputs are never released, is one whose
+corrections cannot be seen either.
 % CORRECTION TO THE RECORD (2026-07-22). Commit 272136b ("Update the paper's
 % banner-marked figures to atlas rev-2") states: "Every \revtwoBanner and
 % \revtwoTODO marker is resolved; none remain outside main.tex's macro
 % definitions." That claim was false of the tree it described -- the rev-1 vs
-% rev-2 delta marker survived it. The commit's substantive work (the figure
-% resync across atlas.tex, certification.tex, audit.tex, abstract.tex,
-% introduction.tex and appendix_audit_table.tex) was done; only the
-% completeness claim in its message was wrong, and a second miss in the same
+% rev-2 delta marker survived it. The commit's substantive work was done; only
+% the completeness claim in its message was wrong, and a second miss in the same
 % commit is recorded at appendix_audit_table.tex (944 -> 962).
 % The marker itself was CLOSED on 2026-07-26 by writing the delta narrative at
 % app:prereg:rev2delta from docs/ATLAS_REV2_CORRECTION_2026-07-21.md §8.

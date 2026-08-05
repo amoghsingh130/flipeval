@@ -79,12 +79,23 @@ arXiv rather than us to distribute them, so the release carries source URLs,
 pinned version identifiers, per-file SHA-256 digests, the manifest and a
 retrieval script in place of the captured text, and the full-text captures are
 kept private (\S\ref{sec:artifacts}). \textbf{(*) Two sources carry provenance
-limits no digest can close}: R11's page is generated per response, so its
-recorded digest was never a valid fingerprint, and R13 has a digest for the
-archived capture but none recorded before it, so that capture was never
-corroborated against an earlier record. Both are recorded per row in the
-manifest's status column and reported by the retrieval script rather than
-smoothed into a pass rate.
+limits no digest can close}, and the manifest records that per row rather than
+averaging it away.
+% RELOCATED 2026-08-04 (flagship narrative, operation 15) from
+% sections/artifacts.tex. The body keeps the fact that two of the seventeen
+% bound what a digest can establish and points here; the per-source detail,
+% including the expected-drift handling and the fifteen clean re-fetches, is
+% carried across whole so nothing was lost in the move.
+R11 is served with per-response content: two fetches made seconds apart returned
+different bytes, so the digest recorded for it was never a valid fingerprint of
+the page, and the retrieval script reports it as expected drift rather than as a
+verification failure. R13 does carry a digest for the archived capture, so a
+re-fetch can be checked against that capture; what is absent is any digest
+recorded \emph{before} the capture was made, so the capture itself was never
+corroborated against an independent earlier record. Provenance for these two is
+documentary rather than cryptographic, neither is described anywhere in this
+paper as hash-verified, and the other fifteen reproduced their recorded digests
+exactly when re-fetched on 2026-07-31.
 
 \paragraph{Revision history.} Both revisions are published and the delta is
 reported. Rev-1 carried a population defect found by an independent spot-check

@@ -26,9 +26,103 @@
 \section{Preregistration detail}
 \label{app:prereg-detail}
 
-This appendix holds the full text of three items summarised in
-\S\ref{sec:prereg}: the disclosed pre-registration data contact, the seven
-interpretive choices, and the spot-check narrative.
+This appendix holds the full text of six items summarised in
+\S\ref{sec:prereg}: the freeze timeline, the disclosed pre-registration data
+contact, the seven interpretive choices, the result-inspection discipline, the
+H3 reporting rule as registered, and the spot-check narrative.
+
+\subsection{The freeze timeline}
+\label{app:prereg:timeline}
+
+% RELOCATED 2026-08-04 (flagship narrative, operation 4) from
+% sections/preregistration.tex. The table and its caption are moved verbatim;
+% nothing was deleted, and the body keeps a pointer to it.
+% SOURCE: PREREGISTRATION.md header lines 3-7;
+% docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3 (commits b74fd58, d6e02dd, f06348f,
+% 715a7ce); docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table sha256).
+\begin{table}[t]
+\centering
+\small
+\caption{Freeze timeline. Each artifact was committed before the analysis it
+governs could be run, and each frozen file carries a \emph{Dated Amendments}
+section: deviations are appended, never edited in, and each records whether
+results had been inspected before the decision.}
+\label{tab:freeze-timeline}
+\begin{tabular}{llll}
+\toprule
+Date & Artifact & Commit & What it fixed in advance \\
+\midrule
+2026-07-11 & \texttt{PREREGISTRATION.md} & --- & Grid, metrics, TOST margin (2\,pp), H3 decision rule \\
+2026-07-15 & Three registrations & \texttt{b74fd58} & Audit, atlas-mining, and mini-grid protocols \\
+2026-07-15 & Audit Amendment 1 & \texttt{d6e02dd} & Blind-extraction independence mechanism \\
+2026-07-15 & Pair manifest & \texttt{f06348f} & The 59 atlas pairs, before any flip statistic \\
+2026-07-15 & Claim table & \texttt{715a7ce} & The 17 audited claims, before any verdict \\
+2026-07-20 & WikiText-2 amendment & --- & ``Document'' definition, Decision Point A \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Result-inspection discipline}
+\label{app:prereg:discipline}
+
+% RELOCATED 2026-08-04 (operation 4) from sections/preregistration.tex §3.4,
+% moved verbatim.
+% SOURCE: CLAUDE.md/AGENTS.md project guardrails; PREREGISTRATION.md
+% §"Outcomes and Analysis"; docs/MINIGRID_REGISTRATION_2026-07-15.md §5.
+During grid execution only job health, checksums, expected-file coverage and
+receipt pairing are inspected; the first accuracy inspection happens only after
+the mini-grid validator passes over the complete expected file set. The
+registered analysis is run once per cell, the escalation rule applied
+mechanically, and a dated escalation decision record written the same day. The
+paired-bootstrap rank-flip denominator convention (tie replicates included,
+ties also reported separately) was fixed in words in the registration, naming
+the implementing commit, so it cannot be re-chosen after inspection. No
+registered analysis is tuned after results are seen: not the calibration
+builder, not the paired bootstrap, not the verdict rule.
+
+\subsection{The H3 reporting rule, stated before the results exist}
+\label{app:prereg:h3rule}
+
+% RELOCATED 2026-08-04 (operation 4) from sections/preregistration.tex §3.5,
+% moved verbatim except for one repointed cross-reference
+% (sec:minigrid:escalation -> app:escalation).
+% SOURCE: PREREGISTRATION.md §"H3 Decision Rule";
+% docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 3, 4.
+% THIS SUBSECTION STATES NO H3 OUTCOME. That is deliberate and survives the
+% signed verdict of 2026-07-26: this is the protocol, §\ref{sec:minigrid} is the
+% result.
+The registered decision rule is defined over eight confirmatory
+model-by-benchmark cells:
+$\{$Qwen2.5-1.5B, Qwen2.5-7B, Llama-3.2-3B, Llama-3.1-8B$\}
+\times \{$MMLU, GSM8K$\}$ at 4 bits, comparing GPTQ seed $s$ against AWQ
+seed $s$ on byte-identical calibration samples. H3 is \emph{supported} if winner
+flips occur in at least 3 of the 8 cells, or the range/gap criterion holds in at
+least 4 of the 8. It is \emph{disconfirmed} if winner flips occur in at most 1
+of the 8 and $\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}})
+< 0.5 \times \mathrm{gap}$ in at least 6 of the 8. Everything else is
+\emph{inconclusive}, reported without post-hoc promotion.
+
+The mini-grid executed \textbf{4 of those 8 cells}
+($\{$Qwen2.5-1.5B, Llama-3.2-3B$\} \times \{$MMLU, GSM8K$\}$), with the 7B/8B
+cells deferred behind a pre-committed, mechanical escalation rule. The mini-grid
+registration stated the consequence of each branch in advance: if all eight
+cells complete, the frozen rule is applied exactly as registered; if they do
+not, the paper reports the four completed cells descriptively and H3 is
+undecided under the registered rule, never supported or disconfirmed on four
+cells, and no reduced-cell variant of the rule is constructed after results are
+seen.
+
+The escalation screen fired on 2026-07-23, the 7B/8B cells were built, and
+\textbf{all eight cells completed}, so the second branch never applied and the
+frozen rule was applied once over the full set. Both decisions are dated, signed
+records
+(\texttt{docs/MINIGRID\_ESCALATION\_DECISION\_2026-07-23.md},
+\texttt{docs/H3\_EIGHT\_CELL\_DECISION\_2026-07-26.md}), and the screen's own
+authorship discipline is worth stating: it decides which cells to build and
+states no H3 outcome, so the confirmatory rule was never applied to a cell set
+selected after its result was known. The screen's per-cell outcomes are in
+Appendix~\ref{app:escalation} and the verdict in
+\S\ref{sec:minigrid:verdict}; this subsection states neither.
 
 \subsection{Disclosed pre-registration data contact}
 \label{app:prereg:contact}
