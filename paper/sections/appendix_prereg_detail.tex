@@ -40,7 +40,7 @@ H3 reporting rule as registered, and the spot-check narrative.
 % SOURCE: PREREGISTRATION.md header lines 3-7;
 % docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3 (commits b74fd58, d6e02dd, f06348f,
 % 715a7ce); docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table sha256).
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \small
 \caption{Freeze timeline. Each artifact was committed before the analysis it
@@ -48,7 +48,11 @@ governs could be run, and each frozen file carries a \emph{Dated Amendments}
 section: deviations are appended, never edited in, and each records whether
 results had been inspected before the decision.}
 \label{tab:freeze-timeline}
-\begin{tabular}{llll}
+% WIDTH FIX 2026-08-05: tightened column separation and wrapped the widest
+% text column. No cell value changed and no row was dropped.
+\setlength{\tabcolsep}{4pt}
+\small
+\begin{tabular}{lll>{\raggedright\arraybackslash}p{4.6cm}}
 \toprule
 Date & Artifact & Commit & What it fixed in advance \\
 \midrule

@@ -183,7 +183,7 @@ run once and reported as ``$C \equiv D$''.
 % dir_incorrect_to_correct, R_cond).
 % C and D are byte-identical for MMLU (registration §3.3); the argument is at
 % app:sensitivity:mmlu-collapse.
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \small
 \caption{Configuration sensitivity on FP16 Qwen2.5-1.5B, against the
@@ -195,7 +195,10 @@ direction so churn is never read as net degradation. Conditions~C and~D are
 byte-identical for MMLU and are reported once as $C\equiv D$ (registration
 \S3.3).}
 \label{tab:sensitivity}
-\begin{tabular}{llrrrrr}
+% WIDTH FIX 2026-08-05: tightened column separation and wrapped the widest
+% text column. No cell value changed and no row was dropped.
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{l>{\raggedright\arraybackslash}p{3.1cm}rrrrr}
 \toprule
 Cond & Configuration vs.\ reference & Acc & Net $\Delta$ & $C_{\mathrm{cond}}$ & c$\to$i / i$\to$c & $R=C_{\mathrm{cond}}/\bar{Q}$ \\
 \midrule

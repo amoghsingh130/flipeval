@@ -16,6 +16,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
+\usepackage{array}   % >{\centering\arraybackslash}p{} column specs, for
+                     % header cells that must wrap. Added 2026-08-05 with the
+                     % overfull-table fixes.
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -25,6 +28,16 @@
 % Figure 1 is generated TikZ (paper/figures/fig1_cancellation.tex, emitted by
 % scripts/make_figure1.py). It is \input from the introduction, and it needs
 % both of these.
+% LINE BREAKING. Added 2026-08-05 after the first compile showed 58 overfull
+% hboxes, most of them prose lines containing unbreakable \texttt{} filenames
+% like docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md. \emergencystretch gives
+% TeX a final pass in which it may loosen interword spacing rather than let a
+% line run into the margin. It changes NO font size, NO margin and NO measure,
+% and it is not a page-count device: it trades a slightly looser line for a line
+% that does not overflow. Wide tabulars are unaffected by it and are fixed
+% individually.
+\setlength{\emergencystretch}{3em}
+
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
 
@@ -230,6 +243,14 @@
 % Added 2026-07-31: the four frozen protocol documents, reproduced. GENERATED --
 % regenerate rather than hand-edit, and re-run the word-stream check against the
 % frozen sources. Identical in the arXiv and TMLR builds by design.
-\input{sections/appendix_registrations}
+% appendix_registrations.tex is FROZEN VERBATIM and must not be edited, but it
+% contains long unbreakable identifiers (a 40-character model revision hash at
+% its line 142) that run into the margin. This is a PRESENTATION-ONLY setting
+% applied from outside the frozen file: a large local \emergencystretch plus
+% \sloppy lets TeX move such a token to its own line instead of overflowing.
+% Not one character of the registration text is changed, and
+% verify_registrations.py still matches it at 7,103 words.
+{\sloppy\setlength{\emergencystretch}{6em}
+\input{sections/appendix_registrations}}
 
 \end{document}

@@ -81,7 +81,7 @@ any quartile of the discordance distribution that the certification tables of
 % owned by another workstream, so the table was relocated rather than deleted.
 % The body keeps the mechanism, the 17.17/17.17 split, the p = 1.0 and all four
 % caveats in prose.
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \caption{The most extreme zero-delta cell in the atlas: identical accuracy,
 symmetric flips, $p = 1.0$. Read by \S\ref{sec:atlas:identical}, which carries
@@ -92,7 +92,9 @@ the caveats that travel with it.}
 % The rank-1 row is byte-identical between rev-1 and rev-2 (pair_index 35,
 % high_school_geography_5, churn 0.343434); the citation was repointed to rev-2
 % on 2026-07-26 for consistency, not because the values moved.
-\begin{tabular}{ll}
+% WIDTH FIX 2026-08-05: the Value column ran 85pt past the measure on the long
+% identifier rows. It wraps now. No value changed.
+\begin{tabular}{l>{\raggedright\arraybackslash}p{8.6cm}}
 \toprule
 Field & Value \\
 \midrule

@@ -72,8 +72,11 @@ fall inside $\pm m$) with 80\% power,
 \begin{align}
 \mathrm{sd}_{\mathrm{paired}}      &= \sqrt{p_d}, &
 \mathrm{sd}_{\mathrm{independent}} &= \sqrt{2p(1-p)}, \label{eq:sds}\\[2pt]
-n_{\mathrm{req}} &= \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil
- = \left\lceil \left(\frac{(1.6449 + 0.8416)\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil. \label{eq:nreq}
+% WIDTH FIX 2026-08-05: the two equalities on one line ran 91pt past the
+% measure. The numeric substitution moves to its own aligned line. The equation
+% is unchanged.
+n_{\mathrm{req}} &= \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil \label{eq:nreq}\\[2pt]
+ &= \left\lceil \left(\frac{(1.6449 + 0.8416)\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil. \nonumber
 \end{align}
 The paired standard deviation follows from the flip model: the per-item accuracy
 difference is $d_i \in \{-1,0,+1\}$, and under the null of no true difference
@@ -105,7 +108,7 @@ this paper is therefore a \emph{lower bound} on what a non-zero true
 difference would demand, and the tables are design tables, not retrospective
 certification of any particular reported result.
 
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \small
 \caption{Items required to certify equivalence within $\pm 2$\,pp under TOST at
@@ -123,7 +126,14 @@ independent samples. Eleven benchmark families plus the pooled row.}
 % margin", a REV-1 narrative whose numbers are superseded by the rev-2 CSV.
 % REPOINTED 2026-08-02: the cross-check pointer named the unsuffixed rev-1 CSV,
 % which is not the file these cells were checked against.
-\begin{tabular}{lrccrr}
+% WIDTH FIX 2026-08-05: was {lrccrr} with two long free-running header phrases,
+% running 126pt past the measure. The two wide headers wrap in fixed-width
+% centred columns. No cell value changed.
+% Set \small with tighter column separation so the p25/med/p75 triples fit on
+% one line; at \normalsize they wrapped mid-triple and read badly.
+\setlength{\tabcolsep}{3pt}
+\small
+\begin{tabular}{lr>{\centering\arraybackslash}p{2.8cm}>{\centering\arraybackslash}p{3.0cm}rr}
 \toprule
 Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
 \midrule

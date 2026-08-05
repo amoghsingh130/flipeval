@@ -12,7 +12,7 @@
 \section{Full audit table}
 \label{app:audit-table}
 
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \scriptsize
 \caption{The 17 audited claims: identity and frame. \textbf{F1} is a research-paper claim, \textbf{F2} a vendor model card or official documentation page, \textbf{F3} a vendor blog post. Source URLs, version dates and the exact quoted sentence per claim are in the frozen claim table \texttt{docs/audit\_claim\_table.csv}, which is part of the released artifact.}
@@ -45,7 +45,7 @@ R17 & F2 & RedHatAI/Meta-Llama-3-8B-Instruct-quantized.w8a16 (model card) \\
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \scriptsize
 \caption{Per-claim characterisation and sensitivity classification, at the registered 2\,pp margin. $n$ is the reported or imputed item count, with its basis recorded in the released CSV. $p_d$ is the discordance imputed from the atlas and \emph{tier} the match tier it came from. \emph{V3} is whether the source releases per-item outputs for the tasks its claim rests on. \emph{Classification} is evaluated across the interquartile range of the atlas cells supplying $p_d$: \emph{above throughout} and \emph{below throughout} hold at both quartiles, and \emph{sensitive} changes within the interval. R10 keeps its row and is marked ineligible rather than removed.}
@@ -57,7 +57,22 @@ R17 & F2 & RedHatAI/Meta-Llama-3-8B-Instruct-quantized.w8a16 (model card) \\
 % for ten days precisely because it was hand-transcribed.
 % The retired version carried a claimed-margin column and a verdict column
 % reading 'underpowered'. Both are gone with Amendment 2.
-\begin{tabular}{@{}llllrrlll@{}}
+% WIDTH FIX 2026-08-05: nine columns with a free-running Classification column
+% ran 141pt past the measure, the widest box in the document. Classification now
+% wraps in a fixed width and the table is set \small, which is the same size the
+% neighbouring certification tables already use. No cell value changed and no
+% row was dropped.
+% Tighter column separation for this one table only, restored automatically at
+% the end of the table environment. Nine columns of reference data do not fit at
+% the default 6pt tabcolsep even with three of them wrapped.
+% Narrow p{} columns were tried first and were worse: "(mixed/unmatched)" does
+% not fit 1.7cm and produced twenty small in-cell overfulls in place of one large
+% one. Only the Classification column wraps; the rest stay natural width and the
+% table is set \footnotesize, which is 9pt here and remains a legible reference
+% table. Column separation is tightened for this table only.
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{tabular}{@{}llllrrll>{\raggedright\arraybackslash}p{2.0cm}@{}}
 \toprule
 Claim & Family & Bits & Benchmark & $n$ & $p_d$ & Tier & V3 & Classification \\
 \midrule
@@ -82,7 +97,7 @@ R17 & w8a16 & 8 & mmlu & 28{,}659 & 0.135 & bits+benchmark & no & above througho
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \scriptsize
 \caption{Power quantities per claim at the registered 2\,pp margin. MDD is the minimum detectable difference in percentage points, under the paired and the independent-binomial variance models. Required $n$ is the item count needed under TOST at one-sided $\alpha=.05$ (a 90\% two-sided confidence interval) with 80\% power, assuming a true difference of zero, under the paired model; it is given at the first quartile, median and third quartile of the atlas cells supplying the claim's discordance rate, which bracket the interval because required $n$ increases monotonically in that rate. $d^{*}$ is the discordance rate at which the classification would reverse; it falls inside the swept interval for R01 alone, and is blank where no reversal is attainable. \textbf{Numbers on ineligible and non-assessable rows are not verdicts}; they are retained so a reader can see what the analysis could and could not evaluate.}
@@ -183,7 +198,7 @@ and is discussed in \S\ref{sec:audit:r04}.
 % paper/tools/gen_denominator_macros.py, and macro-ising them would mean editing
 % that generator's validated three-layer check from a branch that does not own
 % it. Do not add a second generator.
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \caption{Where the equivalence claim is written, across six model cards from one
 publisher with the underlying evidence held constant. Every card reports the
@@ -211,7 +226,7 @@ Table cell only      & no comparative sentence anywhere & 1 \\
 % The body keeps both readings of it: that the independent-binomial columns are
 % uniformly worse by roughly a factor of two, and that R04 and R14 carry no
 % verdict.
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \caption{Detection resolution (V1) at the registered 2\,pp margin: the smallest
 difference each evaluation could have detected, and its ratio to that margin. A
@@ -349,7 +364,7 @@ Table~\ref{tab:certification-3pp}. Note the quadratic margin scaling: MMLU's med
 requirement is 8{,}656 items at 1\,pp, 2{,}164 at 2\,pp, and 962 at 3\,pp, a
 factor of nine across a three-fold change in margin.
 
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \small
 \caption{Items required to certify equivalence within $\pm 1$\,pp under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
@@ -357,7 +372,14 @@ factor of nine across a three-fold change in margin.
 % GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 1.0.
 % Values are read from the CSV, never retyped. Row order matches
 % Table~\ref{tab:certification} so the margins compare row-by-row.
-\begin{tabular}{lrccrr}
+% WIDTH FIX 2026-08-05: the two long header phrases wrap in fixed-width centred
+% columns, matching tab:certification so the three margins still compare
+% row-by-row. No cell value changed.
+% Set \small with tighter column separation so the p25/med/p75 triples fit on
+% one line; at \normalsize they wrapped mid-triple and read badly.
+\setlength{\tabcolsep}{3pt}
+\small
+\begin{tabular}{lr>{\centering\arraybackslash}p{2.8cm}>{\centering\arraybackslash}p{3.0cm}rr}
 \toprule
 Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
 \midrule
@@ -378,7 +400,7 @@ gsm8k & 24 & 0.040 / 0.077 / 0.198 & 2{,}473 / \textbf{4{,}735} / 12{,}270 & 10{
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[!t]
 \centering
 \small
 \caption{Items required to certify equivalence within $\pm 3$\,pp under TOST at one-sided $\alpha=.05$ (a 90\% two-sided interval) with 80\% power, assuming a true difference of zero, by benchmark family, at the 25th/50th/75th percentiles of the discordance rates the atlas observes for that family. The naive column is the same requirement computed by treating the two runs as independent samples. Eleven benchmark families plus the pooled row. Row order matches Table~\ref{tab:certification} so the three margins compare row-by-row.}
@@ -386,7 +408,14 @@ gsm8k & 24 & 0.040 / 0.077 / 0.198 & 2{,}473 / \textbf{4{,}735} / 12{,}270 & 10{
 % GENERATED from results/certification_tables_rev2.csv, rows margin_pp = 3.0.
 % Values are read from the CSV, never retyped. Row order matches
 % Table~\ref{tab:certification} so the margins compare row-by-row.
-\begin{tabular}{lrccrr}
+% WIDTH FIX 2026-08-05: the two long header phrases wrap in fixed-width centred
+% columns, matching tab:certification so the three margins still compare
+% row-by-row. No cell value changed.
+% Set \small with tighter column separation so the p25/med/p75 triples fit on
+% one line; at \normalsize they wrapped mid-triple and read badly.
+\setlength{\tabcolsep}{3pt}
+\small
+\begin{tabular}{lr>{\centering\arraybackslash}p{2.8cm}>{\centering\arraybackslash}p{3.0cm}rr}
 \toprule
 Benchmark & Atlas cells & Discordance p25/med/p75 & Required $n$ p25/\textbf{med}/p75 & Naive & Advantage \\
 \midrule
