@@ -26,9 +26,10 @@ A net delta is the residue left after per-item changes in opposite directions
 cancel. The more alike two models are, the more completely those changes
 cancel. So the quantity used to argue two models are the same is least
 informative exactly where that argument is made. Across an atlas of 1,707
-paired model-by-task cells mined from public per-item evaluation dumps, answer
-churn runs about 5.3x the net accuracy delta; between two compression methods
-at the same bit width the median is 12.7x.
+paired model-by-task cells mined from public per-item evaluation dumps, the
+ratio of median accuracy-state churn to median absolute accuracy change is
+5.40; between two compression methods at the same bit width the median of the
+per-cell ratios is 12.7x, against 3.85x on that same aggregation in the atlas.
 
 FlipEval measures the churn directly and supplies the decision apparatus that
 goes with it: a declared margin, a paired equivalence test, and required

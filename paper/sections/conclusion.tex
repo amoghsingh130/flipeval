@@ -75,7 +75,7 @@ We propose five lines that a model card or method paper can adopt directly.
   non-significant difference test. Failing to detect a difference is not
   equivalence.
   \item \textbf{Report churn next to net delta.} They are different quantities;
-  in the public record churn runs $5.3\times$ the net delta, and about one
+  in the public record churn runs roughly five times the net delta, and about one
   evaluation cell in twelve posts an identical score while still disagreeing on
   items.
   % "ONE IN TEN" CORRECTED 2026-07-27. \S\ref{sec:atlas:identical} retired that
@@ -107,8 +107,9 @@ comparison at issue were a compressed model against its original. The cell in
 Figure~\ref{fig:cancellation} is not that comparison: H3 puts two
 \emph{compressed} models side by side, GPTQ against AWQ at the same bit width,
 which is the choice a practitioner makes after deciding to compress at all. The
-evidence problem is strictly worse there, at churn of $12.7\times$ the net delta
-against the atlas's $5.3\times$, and with the winner reversing on nothing but
+evidence problem is strictly worse there, at a median per-cell churn of
+$12.7\times$ the net delta against roughly four times in the atlas on the same
+aggregation, and with the winner reversing on nothing but
 the calibration seed in 5 of 8 registered cells. The reason is the same
 mechanism in its sharpest form: two compressed models are more alike than either
 is to the original, so cancellation is more complete and the aggregate hides

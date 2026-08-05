@@ -233,13 +233,22 @@ $n = 1{,}000$ rescues the comparison.
 % median 12.71. The extreme cell is Qwen2.5-7B/GSM8K, read directly from the
 % slot 4 row.
 % TWO POINTS, NOT A CURVE. Do not restate this as a monotone relationship.
+% AGGREGATIONS MADE LIKE-FOR-LIKE 2026-08-05 (defect D4;
+% docs/HEADLINE_CHURN_RATIO_DEFINITION.md). This Result used to set the atlas
+% $5.3\times$ against the controlled $12.7\times$. Those are DIFFERENT
+% aggregations: 12.7 is the median of the eight per-cell ratios, while the atlas
+% headline is a ratio of medians. The like-for-like atlas number is the median
+% of its per-cell ratios, 3.85 over the 1,562 cells with a non-zero net delta.
+% Both are now given, each against its own counterpart, and the comparison the
+% Result actually makes is the like-for-like one. It is the stronger of the two.
 \begin{result}\label{res:churnratio}
 The ratio of per-item churn to aggregate net delta is larger in the
 controlled method-against-method contrast than in the observational
-quantized-against-FP16 contrast. Across the atlas, churn runs
-\textbf{$5.3\times$} net delta (\S\ref{sec:atlas:netgross}). Across the eight
-controlled cells, comparing GPTQ with AWQ at the same bit width, it runs
-\textbf{$3.0\times$ to $30.5\times$}, with a median of \textbf{$12.7\times$}.
+quantized-against-FP16 contrast. Comparing like with like, the median of the
+per-cell ratios is \textbf{3.85} across the atlas
+(\S\ref{sec:atlas:netgross}) and \textbf{12.7} across the eight controlled
+cells, where the per-cell ratios run \textbf{$3.0\times$ to $30.5\times$}. On
+the other aggregation, the ratio of medians, the atlas gives 5.40.
 \end{result}
 
 The extreme cell makes the size of the discrepancy concrete. On

@@ -51,13 +51,18 @@ cancellation between opposing per-item changes, and cancellation is most
 complete in the regime equivalence claims occupy.
 
 % SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:atlas:identical}.
-% D4: the $5.3\times$ headline is an existing site and is reproduced unchanged.
-% It is public in the Zenodo release and the blog post, and its derivation is
-% escalated, so it is not restated at a new precision here or anywhere else.
+% D4 CLOSED 2026-08-05 (docs/HEADLINE_CHURN_RATIO_DEFINITION.md). The
+% $5.3\times$ headline is RETIRED: no unrounded derivation produces it. The
+% aggregation is now named (ratio of medians) and the technical statement lives
+% in \S\ref{sec:atlas:netgross}; the abstract and conclusion hedge to "roughly
+% five times", which every candidate in the 5.19 to 5.45 band supports. The
+% earlier note here said 5.3x was public in the Zenodo release and the blog: it
+% is not. The blog already says "roughly five times" and the Zenodo v1.0 release
+% asserts no ratio at all, shipping only the raw per-cell CSVs.
 Across an atlas of 1{,}707 paired model-by-task cells mined from public
-per-item evaluation dumps (1.3B--405B), churn runs $5.3\times$ the net accuracy
-delta, and cells scoring identically to their baseline still disagree on
-individual items.
+per-item evaluation dumps (1.3B--405B), churn runs roughly five times the net
+accuracy delta, and cells scoring identically to their baseline still disagree
+on individual items.
 
 % SOURCE: \S\ref{sec:audit:taxonomy}; \S\ref{sec:audit:v3};
 % \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
@@ -100,8 +105,12 @@ released.
 %
 %   cd paper && python3 tools/measure_abstract.py abstract.tex
 %
-% Last MEASURED 2026-08-05, Wave 3, on the flagship rewrite above:
-%   ABSTRACT_CHARS 1864 / 1920  margin=56  words=281
+% Last MEASURED 2026-08-05, after the D4 ratio change:
+%   ABSTRACT_CHARS 1879 / 1920  margin=41  words=283
+% The D4 change ("5.3x" -> "roughly five times") cost 15 characters. An earlier
+% draft of it also added "per-item" here and took the margin to 32, under the
+% 40-character floor this note warns about; "per-item" was dropped again.
+% Before D4 this measured 1864 / 1920, margin 56, 281 words.
 % The 2026-08-05 rewrite was budgeted by hand at "roughly 1,860, margin near 60"
 % by a session with no shell; the measurement confirms that estimate. The
 % previous measurement was 2026-08-02, rev-3 narrative pass: 1,903 / 1,920,

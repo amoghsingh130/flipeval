@@ -121,6 +121,29 @@ is pipeline accounting and is never used as an analysis denominator.
 % SOURCE: Table~\ref{tab:atlas-strata} (results/atlas_cells_summary_rev2.csv,
 % the 1,707-cell analysis population), as the ratio of the two medians:
 %   S1 0.137 / 0.026 = 5.2692 ; S2 0.048 / 0.009 = 5.3333.
+%   POOLED, at full precision: 0.120000 / 0.0222222 = 5.4000 exactly.
+%   Median of per-cell ratios, 1,562 cells with non-zero net delta: 3.8452.
+%
+% AGGREGATION NAMED AND FIXED 2026-08-05 (defect D4 closed;
+% docs/HEADLINE_CHURN_RATIO_DEFINITION.md). The aggregation is RATIO OF MEDIANS.
+% No frozen registration defines it -- the atlas registration fixes the per-cell
+% metrics and the population and is silent on aggregation -- so it is named here
+% explicitly and is a descriptive summary, not a registered quantity.
+%
+% PRECISION CONVENTION, stated because the three figures are NOT computed
+% identically and that must not be hidden. The pooled 5.40 divides unrounded
+% medians. The stratum 5.27/5.33 divide the medians AT THE PRECISION THE TABLE
+% PRINTS (3 dp), so a reader can reproduce them from the printed table; divided
+% unrounded the strata give 5.2232 and 5.1936. The prose says which is which.
+% Do not "harmonise" these into one number computed two ways.
+%
+% THE RETIRED 5.3x. Every occurrence of $5.3\times$ as the atlas headline was
+% replaced on 2026-08-05. No unrounded derivation produces 5.3; it arose only as
+% an eyeball average of the two rounded stratum values, and D8 showed the S1
+% input had additionally been mis-rounded. Do not reintroduce it.
+% NOT THIS QUANTITY: certification.tex and appendix_audit_table.tex print
+% $5.3\times$ in an ifeval row. That is the paired-versus-naive sample-size
+% advantage (4,211/800 = 5.26), a different quantity that rounds the same way.
 % ROUNDING CORRECTED 2026-08-05 (Wave 3 defect D8,
 % docs/WAVE3_ADVERSARIAL_REVIEW_2026-08-05.md §1). The S1 numerator read 0.138
 % and the quotient 5.3077. The S1 median accuracy-state churn over the analysis
@@ -144,8 +167,17 @@ is pipeline accounting and is never used as an analysis denominator.
 % REPETITION (2026-08-04): the ratio had five homes across the paper. The
 % headline and the S1/S2 preservation paragraph are merged here into one, so
 % this section states it once.
-Across the atlas, per-item accuracy-state churn runs \textbf{5.3 times the net
-accuracy delta}. The net delta a model card reports is the residue left after
+Across the atlas, per-item accuracy-state churn runs several times the net
+accuracy delta. The ratio of median accuracy-state churn to median absolute
+accuracy change is \textbf{5.40} pooled over the 1{,}707 cells, and 5.27 and
+5.33 within S1 and S2, the stratum figures computed from the medians at the
+precision Table~\ref{tab:atlas-strata} prints so that a reader can reproduce
+them from it. These are ratios of medians, not medians of cellwise ratios: the
+median of the per-cell ratio is 3.85 over the 1{,}562 cells with a non-zero net
+delta, and the two summarise different things. The pooled figure describes the
+typical churn against the typical net delta; the cellwise median describes the
+typical cell. Neither is the headline on its own.
+The net delta a model card reports is the residue left after
 harmful and beneficial flips cancel; the churn is the quantity that describes how
 much of the model's behaviour actually changed. They are different quantities and
 both should be reported. The consequence for inference is direct: churn is the

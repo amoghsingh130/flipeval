@@ -70,13 +70,20 @@ shown because it is legible; all eight appear in panel~D.
 % D2 CORRECTION 2026-08-05: this read "3B to 405B". Sixty analysis cells sit on
 % EleutherAI/gpt-neo-1.3B, so the floor is 1.3B, not 3B
 % (docs/FLAGSHIP_NARRATIVE_PLAN.md §2 D2).
-% D4: the $5.3\times$ headline is an existing site, reproduced unchanged. Its
-% derivation is escalated; do not restate it at a new precision.
+% D4 CLOSED 2026-08-05 (docs/HEADLINE_CHURN_RATIO_DEFINITION.md). The
+% $5.3\times$ headline is RETIRED: no unrounded derivation produces it. The
+% aggregation is now named (ratio of medians) and the technical statement lives
+% in \S\ref{sec:atlas:netgross}; the abstract and conclusion hedge to "roughly
+% five times", which every candidate in the 5.19 to 5.45 band supports. The
+% earlier note here said 5.3x was public in the Zenodo release and the blog: it
+% is not. The blog already says "roughly five times" and the Zenodo v1.0 release
+% asserts no ratio at all, shipping only the raw per-cell CSVs.
 One cell settles nothing about the field, so we measured the public record. An
 atlas of $1{,}707$ paired model-by-task cells, mined from published per-item
-evaluation dumps spanning 1.3B to 405B parameters, puts churn at $5.3\times$ the
-net delta, and a substantial minority of its cells post an accuracy identical to
-their baseline while still disagreeing on individual items
+evaluation dumps spanning 1.3B to 405B parameters, puts per-item churn at
+roughly five times the net delta, and a substantial minority of its cells post
+an accuracy identical to their baseline while still disagreeing on individual
+items
 (\S\ref{sec:atlas:identical}). Its two strata sit a generation apart in method
 and give nearly the same ratio. The atlas is observational: it describes the
 evidence the field circulates and supports no causal claim about quantization in
