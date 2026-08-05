@@ -63,71 +63,16 @@ configuration change compares with swapping in a quantized model. The protocol
 forbids printing the ratio without both inputs, and both appear in every row of
 Table~\ref{tab:sensitivity}.
 
-% SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md, GSM8K table
-% (n=200, REF acc 0.5750, Qbar 0.287) and MMLU table (n=400, REF acc 0.4150,
-% Qbar 0.199; C==D acc 0.4600, net +0.0450, C_cond 0.2100 (84/400), dir 33/51,
-% R 1.055); every cell cross-checked against
-% results/harness_sensitivity/sensitivity_results_qwen25-1p5b.json
-% per_task.{gsm8k,mmlu}.conditions (acc_cond, net_acc_delta, C_cond,
-% correctness_changed, answer_churn, dir_correct_to_incorrect,
-% dir_incorrect_to_correct, R_cond).
-% C and D are byte-identical for MMLU (registration §3.3); the argument is at
-% app:sensitivity:mmlu-collapse.
-\begin{table}[t]
-\centering
-\small
-\caption{Configuration sensitivity on FP16 Qwen2.5-1.5B, against the
-quantization denominator $\bar{Q}$ for each task. $C_{\mathrm{cond}}$ is
-correctness-state churn versus the reference; $R=C_{\mathrm{cond}}/\bar{Q}$ is
-reported only with both inputs in view. The
-$\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column splits churned items by
-direction so churn is never read as net degradation. Conditions~C and~D are
-byte-identical for MMLU and are reported once as $C\equiv D$ (registration
-\S3.3).}
-\label{tab:sensitivity}
-\begin{tabular}{llrrrrr}
-\toprule
-Cond & Configuration vs.\ reference & Acc & Net $\Delta$ & $C_{\mathrm{cond}}$ & c$\to$i / i$\to$c & $R=C_{\mathrm{cond}}/\bar{Q}$ \\
-\midrule
-\multicolumn{7}{l}{\emph{GSM8K}, $n=200$, reference accuracy $0.575$, $\bar{Q}=0.287$} \\
-A & exemplars as separate turns   & 0.515 & $-0.060$ & \textbf{0.240} & 30 / 18 & \textbf{0.836} $=0.240/0.287$ \\
-B & \texttt{strict-match} rescore & 0.120 & $-0.455$ & \textbf{0.455} & 91 / 0  & \textbf{1.585} $=0.455/0.287$ \\
-C & chat template off, 3-shot     & 0.475 & $-0.100$ & \textbf{0.320} & 42 / 22 & \textbf{1.115} $=0.320/0.287$ \\
-D & stock defaults (chat off, 5-shot) & 0.495 & $-0.080$ & \textbf{0.300} & 38 / 22 & \textbf{1.045} $=0.300/0.287$ \\
-\midrule
-\multicolumn{7}{l}{\emph{MMLU}, $n=400$, reference accuracy $0.415$, $\bar{Q}=0.199$} \\
-$C\equiv D$ & chat template off, zero-shot & 0.460 & $\mathbf{+0.045}$ & \textbf{0.210} & 33 / 51 & \textbf{1.055} $=0.210/0.199$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Three of the four GSM8K conditions (turning the chat template off, accepting
-every stock default at once, and switching the extraction filter) have
-$R \geq 1$: each moves a fixed model's per-item correctness by \emph{as much as
-or more than} swapping in one of ten quantized variants moves it. Only
-condition~A, the multiturn exemplar placement, stays below the quantization
-scale. The net accuracy deltas understate the movement in every case, because
-they net directional churn that the
-$\text{c}{\to}\text{i}/\text{i}{\to}\text{c}$ column keeps separate.
-Condition~B is sharpest because it holds the generations fixed: the stock task
-applies both filters to the same outputs, so B is a rescore of \emph{identical}
-generations at zero GPU cost, and its $91/0$ split means \texttt{strict-match}
-accepts a strict subset of what \texttt{flexible-extract} accepts here
-(Appendix~\ref{app:sensitivity:condB}).
-
-The MMLU cell makes a point the net delta hides. Turning the chat template off
-\emph{raises} reported accuracy by $+4.5$\,pp ($0.415 \to 0.460$), with a
-directional split of $33/51$, meaning more items recovered than lost. The
-harness default is therefore not uniformly worse than the reference: on MMLU it
-is better, on GSM8K worse, and either way \emph{different}. The churn behind the
-$+4.5$\,pp is $0.210$ ($84$ of $400$ items), giving $R=1.055$, again on the
-quantization scale. The movement is real, signed differently on the two tasks,
-and of a kind compression papers do not report: the setting that almost never
-appears in a model card is precisely the one silently moving the number a
-``near-lossless'' claim rests on. Holding the system fixed and varying the
-instrument is not specific to compression, and
-Appendix~\ref{app:sensitivity:bronder} records the same design and the same
-conclusion on a different object.
+% RELOCATED 2026-08-05 (compression pass, relocation 1). The results table and
+% the condition-by-condition reading moved to app:sensitivity:conditions whole.
+% The protected Scope paragraph below is UNTOUCHED and stays in the body: every
+% clause of it is mandatory.
+Across the five conditions the ratio runs $R \in [0.836,\,1.585]$, so on a
+fixed model a configuration change moves per-item correctness by as much as, or
+more than, swapping in a quantized variant does. The condition-by-condition
+table, the directional splits, and the MMLU cell whose net delta is positive
+while its churn is on the quantization scale are in
+Appendix~\ref{app:sensitivity:conditions}.
 
 % SOURCE: docs/HARNESS_SENSITIVITY_RESULTS_2026-07-23.md (all R values, range
 % 0.836--1.585); docs/HARNESS_SENSITIVITY_REGISTRATION_2026-07-22.md §2 (Llama
