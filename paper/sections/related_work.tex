@@ -53,15 +53,9 @@ that turns the shared premise into a decision: equivalence testing at a declared
 margin, required-$n$, a test of whether the calibration seed reorders two
 methods, and an audit of published claims. Two further concurrent studies
 measure per-item change on adjacent objects.
-% SOURCE: docs/PRIOR_ART_CONCURRENT_2026-07-24.md §§3-4, both verified against
-% the raw arXiv HTML rendering.
-\citet{cacioli2026beyondmean} adapts the clinical Reliable Change Index to
-per-item comparisons between model \emph{versions} rather than precisions, and
-likewise recommends reporting a churn rate beside the mean;
-\citet{nikolic2026displacement} extend the flips metric into a leapfrog/drop
-decomposition over community-published quantized checkpoints, and find
-that KL-divergence proxies lose their ranking signal in precisely the
-near-baseline region our certification tables adjudicate.
+Two further concurrent studies measure per-item change on adjacent
+objects, on model versions and on community checkpoints
+(Appendix~\ref{app:related:concurrent}).
 
 \citet{williamsaletras2024} establish that the calibration \emph{data} affects
 quantized model quality, finding substantial variation in downstream task
@@ -85,20 +79,10 @@ length: both results hold at once, because neither design measures the
 between them depends on, and our own eight cells show a seed-induced range at
 least as large as that gap in 7 of 8.
 
-\citet{helcig2026slq} occupy the phrase this paper is about. They formalise
-notions of losslessness for quantized LLMs (task-lossless and the stricter
-distribution-lossless), propose the Expected Acceptance Rate as an interpretable
-fidelity metric, and ship SLQ, a method that reaches those targets at low bit
-widths. Their question and ours are different, and the difference is the whole
-of \S\ref{sec:certification}. \emph{They define losslessness and build a method
-to achieve it.} \emph{We audit whether existing published claims of losslessness
-have the evidence to support them, and compute how many items it would take to
-certify one.} Their paper contains no equivalence test at a declared margin, no
-power or required-$n$ computation, and no audit of others' claims; ours contains
-no quantization method. A practitioner who adopts EAR as a fidelity target still
-needs to know how large an evaluation must be before the accuracy half of a
-losslessness claim means anything, and that number is what our certification
-tables supply.
+\citet{helcig2026slq} occupy the phrase this paper is about: they define
+losslessness for quantized LLMs and build a method reaching it. Their question
+is the complement of ours, and they compute no equivalence test, power or
+required $n$ (Appendix~\ref{app:related:lossless}).
 
 The closest existing work is \citet{llmaccuracystats2026}, which brings
 one-sided McNemar \emph{detection} to LLM accuracy comparisons and ships it in
@@ -118,30 +102,15 @@ sequential extension, using confidence sequences that let a practitioner stop as
 soon as the model is certified, is registered and in progress; it reports no results
 here and is not claimed as a contribution of this paper.
 
-The constructive-audit genre is well established: \citet{dodge2019showyourwork}
-on reporting the compute and search behind reported numbers, and
-\citet{marie2021mtaudit} on the statistical practice of machine-translation
-evaluation. We follow both in framing and in tone: the finding is about what the
-field reports, not about whether individual authors are right, and the paper's
-deliverable is a standard plus the tooling to meet it. The genre has also begun
-to adopt preregistration directly, which is the precedent for
-\S\ref{sec:prereg}: \citet{gringras2026frontierlag} run a preregistered
-bibliometric audit of which models the evaluation literature actually tests, and
-\citet{thomas2026prereg} propose preregistering an analysis against a model not
-yet released, so that the configuration cannot be tuned against the outcome.
+The constructive-audit genre is well established
+\citep{dodge2019showyourwork,marie2021mtaudit}, and has begun to adopt
+preregistration directly, which is the precedent for \S\ref{sec:prereg}
+(Appendix~\ref{app:related:genre}). We follow it in framing and in tone: the
+finding is about what the field reports, not about whether individual authors
+are right.
 
-The audited claims span the two dominant post-training families: weight-only
-quantization, represented by GPTQ \citep{gptq2022}, AWQ \citep{awq2023} and
-SqueezeLLM \citep{squeezellm2023}; weight-and-activation quantization, by
-LLM.int8() \citep{llmint82022} and SmoothQuant \citep{smoothquant2022}; and
-one-shot pruning, by SparseGPT \citep{sparsegpt2023} and Wanda
-\citep{wanda2023}. We audit the equivalence \emph{language} these papers use
-and the evidence offered for it, not the methods themselves, and the audit's
-verdicts are about reporting practice, not about whether a method works.
-Two of the most aggressive methods in the set are also the most restrained in
-what they assert: SpinQuant \citep{spinquant2024} and QuIP\#
-\citep{quipsharp2024} report their accuracy deltas without equivalence
-language, and are cited here as positive examples alongside the Qwen quantized
-model cards and the \texttt{llama.cpp} documentation.
-% SOURCE for the honest-non-claimer list:
-% docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §2, "Honest non-claimers" bullet.
+The audited claims span weight-only quantization, weight-and-activation
+quantization and one-shot pruning; the methods and the honest non-claimers among
+them are listed in Appendix~\ref{app:related:families}. We audit the equivalence
+\emph{language} these papers use and the evidence offered for it, not the
+methods themselves.
