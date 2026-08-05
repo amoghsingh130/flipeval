@@ -5,25 +5,39 @@
 % primary figures. Every number here appears in the section it summarises at
 % coarser or equal precision.
 %
-% REWRITTEN 2026-07-31 (advisor review 3.7). Changes:
-%  - Target 200-250 words, in the order: problem and estimand; audit design and
-%    sample; atlas result; controlled-experiment result; qualified conclusion
-%    and artifact.
-%  - ALL boldface removed. Six bolded spans previously competed for emphasis.
-%  - The "every protocol was frozen" closing claim is dropped; the methods
-%    section establishes it, and asserting it in an abstract reads as a bid for
-%    credibility rather than a result.
-%  - Secondary figures dropped: the shortfall range (since WITHDRAWN outright,
-%    not merely dropped from the abstract), the 145-cell count with its
-%    8.5%/7.2% pair, and the MMLU-2,164 / GPQA-749 comparison. The latter two
-%    remain in their result sections.
-%  - HEADLINE STATUS AT REV-3, correcting this note's own stale list: the 5.3x,
-%    12.7x and 5-of-8 headlines are retained. The 4-of-12 and 5-of-17 headlines
-%    are RETIRED, and 0-of-17 is superseded by 0 of 16 eligible sources with the
-%    task-matched qualifier. All audit counts here now come from
-%    paper/audit_denominators.tex; none is typed.
-%  - "The calibration seed alone reorders" -> what was observed (review 1.8).
-%  - Claims scoped to the registered frames (review 5).
+% REWRITTEN 2026-08-05 (flagship narrative pass, docs/FLAGSHIP_NARRATIVE_PLAN.md
+% §1). The abstract now performs the paper's five linked steps in order:
+%   (a) the cancellation mechanism in plain language;
+%   (b) atlas-scale evidence that it is not isolated;
+%   (c) the reporting gap the audit found;
+%   (d) paired certification as the instrument that closes it;
+%   (e) the controlled consequence for method choice;
+%   (f) the reporting standard, and the comparisons it covers beyond compression.
+% It no longer OPENS on an audit count. That ordering read as a paper about
+% other people's arithmetic; the mechanism is the contribution and the audit is
+% the evidence that the field has no reporting convention for it.
+%
+% Carried forward from the 2026-07-31 rewrite, still binding:
+%  - NO boldface. Six bolded spans once competed for emphasis here.
+%  - Every audit count is an \Audit* macro from paper/audit_denominators.tex.
+%    None is typed. The retired 4-of-12 and 5-of-17 headlines outlived the
+%    verdicts that produced them, which is why the rule exists.
+%  - "task-matched" stays in the SAME SENTENCE as the zero release count:
+%    \AuditPerItemOtherTaskOnly{} sources do release per-item outputs, for other
+%    task suites, so dropping the qualifier makes the sentence false.
+%  - "no claim is called false" is retained verbatim.
+%  - "The calibration seed alone reorders" stays replaced by what was observed.
+%
+% DROPPED HERE 2026-08-05, and where each survives:
+%  - The $12.7\times$ controlled churn ratio. It has three homes left
+%    (introduction, sections/minigrid.tex Result 1, conclusion) and did not fit
+%    the character budget alongside step (f). Restore it in the mini-grid
+%    sentence if a real measurement shows room.
+%  - The \AuditAboveThroughout/\AuditChangesWithinIQR/\AuditBelowThroughout
+%    sensitivity split. It is a §4 result with its own table; leading a reader
+%    into the threshold arithmetic before the mechanism inverts the argument.
+%  - "3B--405B" was WRONG, not dropped: 60 atlas cells sit on a 1.3B base model,
+%    so the floor is 1.3B (docs/FLAGSHIP_NARRATIVE_PLAN.md D2).
 %
 % ARXIV ABSTRACT FIELD: the limit is 1,920 characters, confirmed from
 % https://info.arxiv.org/help/prep.html. MEASURE, never eyeball -- see the
@@ -31,62 +45,74 @@
 
 \begin{abstract}
 A fraction of a point of benchmark accuracy is the usual evidence that a
-compressed model is equivalent to its original. We show this quantity is least
+compressed model is equivalent to its original. That quantity is least
 informative when two models are most alike: a net delta is what survives
 cancellation between opposing per-item changes, and cancellation is most
 complete in the regime equivalence claims occupy.
 
+% SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:atlas:identical}.
+% D4: the $5.3\times$ headline is an existing site and is reproduced unchanged.
+% It is public in the Zenodo release and the blog post, and its derivation is
+% escalated, so it is not restated at a new precision here or anywhere else.
+Across an atlas of 1{,}707 paired model-by-task cells mined from public
+per-item evaluation dumps (1.3B--405B), churn runs $5.3\times$ the net accuracy
+delta, and cells scoring identically to their baseline still disagree on
+individual items.
+
 % SOURCE: \S\ref{sec:audit:taxonomy}; \S\ref{sec:audit:v3};
 % \S\ref{sec:audit:results}; \S\ref{sec:audit:indeterminate}.
-% REWRITTEN 2026-07-31 for rev-3 (AUDIT_REGISTRATION Amendment 2, signed).
-% Three defects in the superseded sentence: the count (4 of 12 -> 1 of 11), the
-% denominator (17 -> 16 eligible), and "the margin they assert" -- the exact
-% construction the amendment retires, since no source asserts one.
-% The threshold result is stated with its sensitivity in the same breath, and
-% scoped to the atlas-IQR interval; "robustly underpowered" is NOT claimed.
-In a preregistered audit of \AuditFrozenCandidates{} frozen equivalence claims
-from three registered frames (method papers, model cards, vendor documentation),
-\AuditEligible{} are eligible. None states a
-prospective numerical equivalence margin, and none releases
-\emph{task-matched} per-item outputs, though \AuditPerItemOtherTaskOnly{} release
-outputs for other tasks only; \AuditXtabQualTotal{} state no number at all, and
-\AuditNotAssessable{} report too little to assess numerically. Among the
-remaining \AuditAssessable{}, at a uniform
-\AuditMarginPP{}-percentage-point margin, \AuditAboveThroughout{} stay above the
-approximate planning threshold throughout the interquartile range of the imputed
-disagreement rate and \AuditChangesWithinIQR{} changes classification within it;
-\AuditBelowThroughout{} stay below throughout. We audit evidential sufficiency,
-not truth: no claim is called false.
+% AUDIT_REGISTRATION Amendment 2 (signed) retires "the margin they assert": no
+% source asserts one. The claim here is about what is reported, not about what
+% is true.
+In a preregistered audit of \AuditFrozenCandidates{} equivalence claims from
+three registered frames (method papers, model cards, vendor documentation),
+\AuditEligible{} are eligible. None states a prospective numerical equivalence
+margin, and none releases \emph{task-matched} per-item outputs, though
+\AuditPerItemOtherTaskOnly{} release outputs for other tasks only;
+\AuditNotAssessable{} report too little to assess numerically, so a reader
+cannot check them at any sample size. We audit evidential sufficiency, not
+truth: no claim is called false.
 
-% SOURCE: \S\ref{sec:atlas:netgross}; \S\ref{sec:minigrid:churnratio} Result 1.
-Across an atlas of 1{,}707 paired model-by-task cells mined from public
-per-item evaluation dumps (3B--405B), churn runs $5.3\times$ the net
-accuracy delta; between two compression methods at one bit width the median is
-$12.7\times$. We supply the corresponding apparatus: equivalence testing at a
-declared margin, and certification tables giving the items an evaluation needs,
+% SOURCE: \S\ref{sec:certification}; \S\ref{sec:minigrid:verdict};
+% docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED).
+% "Was sufficient to reverse", not "the seed reorders": the observed statement,
+% not a sufficiency claim about a single factor.
+We supply the missing instrument: paired equivalence testing at a declared
+margin, with certification tables giving the items an evaluation needs,
 computed from disagreement observed under compression, not from
-independent-binomial variance.
+independent-binomial variance. A controlled experiment pairs GPTQ and AWQ on
+byte-identical calibration samples across five seeds. Under the frozen
+eight-cell decision rule H3 is supported: changing the calibration draw was
+sufficient to reverse the observed method ordering in 5 of 8 confirmatory
+cells.
 
-% SOURCE: \S\ref{sec:minigrid:verdict}; docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
-% (SIGNED). "Unreliable", not "not reproducible": three cells show individual
-% seeds disagreeing while the five-seed mean survives resampling.
-A preregistered experiment pairs GPTQ and AWQ on byte-identical calibration
-samples across five seeds. Under the frozen eight-cell decision rule H3 is
-supported: changing the calibration draw was sufficient to reverse the observed
-method ordering in 5 of 8 confirmatory cells, so a single-calibration
-comparison of compression methods is unreliable. All per-item outputs,
-protocols and code are released.
+% SOURCE: \S\ref{sec:conclusion}, the five numbered lines.
+The reporting standard we propose is five lines: declare a margin, run the
+paired test, report churn beside net delta, cite the sample size you met,
+release per-item outputs. It applies to any comparison between two models alike
+enough to be worth comparing. All per-item outputs, protocols and code are
+released.
 \end{abstract}
 
 % =====================================================================
 % MEASUREMENT NOTE. The ARXIV ABSTRACT FIELD header above promises a
-% "measurement note at the end of this file"; it did not previously exist.
+% "measurement note at the end of this file".
 %
 %   cd paper && python3 tools/measure_abstract.py abstract.tex
 %
-% Last measured 2026-08-02, rev-3 narrative pass: 1,903 / 1,920 characters,
-% margin 17, 281 words. MEASURE AFTER EVERY EDIT -- the margin has been under
-% 40 characters three times now, and the arXiv field truncates silently.
+% Last MEASURED 2026-08-02, rev-3 narrative pass: 1,903 / 1,920 characters,
+% margin 17, 281 words.
+%
+% NOT MEASURED for the 2026-08-05 flagship rewrite above: that session had no
+% shell and could not run the tool. The rewrite was budgeted by hand against the
+% 2026-08-02 measurement and is estimated at roughly 1,860 characters, i.e. a
+% margin near 60, deliberately larger than 17 because a hand estimate is not a
+% measurement. RUN THE TOOL BEFORE SUBMITTING. If the real figure leaves room,
+% the $12.7\times$ controlled churn ratio is the first thing to restore, in the
+% mini-grid sentence.
+%
+% MEASURE AFTER EVERY EDIT -- the margin has been under 40 characters three
+% times now, and the arXiv field truncates silently.
 %
 % The audit counts above are \Audit* macros from paper/audit_denominators.tex,
 % NOT typed digits. measure_abstract.py expands them before counting; without
