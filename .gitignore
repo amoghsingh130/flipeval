@@ -75,3 +75,16 @@ docs/*.zip
 # which refuses any worktree that `git status --porcelain` reports as dirty,
 # so a stale agent checkout made the source fingerprint unrefreshable.
 .claude/worktrees/
+
+# LaTeX build artifacts. DERIVED from paper/*.tex and paper/references.bib by
+# `pdflatex; bibtex; pdflatex; pdflatex`, so committing them stores a second
+# copy of the paper that goes stale. Added 2026-08-05, when the manuscript was
+# compiled for the first time (docs/COMPILE_BASELINE_2026-08-05.md).
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.pdf
+paper/bibtex.out
