@@ -280,13 +280,44 @@ def emit_tikz(data: dict) -> str:
     ty, by = 6.15, 1.55
     ph = 3.75
 
+    # Text-width budget, in cm, for the nodes that sit closest to a panel's
+    # right edge. These are estimates from Computer Modern metrics at
+    # \scriptsize (8pt in an 11pt document): a digit is 0.5em = 4pt, "%" is
+    # 1em, a lowercase letter averages about 0.53em. They exist so that
+    # fits_in_panel() below can fail the build instead of emitting a node that
+    # silently runs into the margin.
+    #
+    # Wave 3 (2026-08-05) found three such overruns by reading the emitted TikZ,
+    # because nothing here checked them: the panel D key ran about 1.1cm past
+    # \textwidth (G1), the panel B colour key overlapped its own subtitle by
+    # sitting 0.07cm below it (G2), and the panel A accuracy labels crossed the
+    # panel border (G3). All three are fixed below and guarded here.
+    W_ACC_LABEL = 0.95      # "74.28\%"
+    W_PANELD_KEY = 1.70     # "\ \ $\bullet$ reversed"
+
+    overruns: list[str] = []
+
+    def fits_in_panel(what: str, x_left: float, width: float,
+                      panel_x: float) -> None:
+        """Record a node whose right edge lands outside its panel."""
+        right = x_left + width
+        limit = panel_x + pw
+        if right > limit:
+            overruns.append(
+                f"{what}: right edge {right:.2f}cm exceeds panel edge "
+                f"{limit:.2f}cm by {right - limit:.2f}cm")
+
     # ---------------- Panel A: aggregate view ----------------------------
     acc_g = v["acc_gptq"] * 100
     acc_a = v["acc_awq"] * 100
     gap_pp = v["gap_gptq_minus_awq"] * 100
     # Full 0 to 100 axis. A truncated axis would exaggerate the gap, which is
     # the opposite of this panel's point.
-    axw = 4.35
+    # G3 (2026-08-05): was 4.35, which put the accuracy labels at x=5.38 with
+    # about 0.95cm of text to draw and a panel border at 6.00. They crossed it.
+    # The axis is the only thing here that can give, and shortening it does not
+    # distort anything: it is a full 0-to-100 axis either way.
+    axw = 3.90
     a(rf"\node[panel, minimum width={pw}cm, minimum height={ph}cm, "
       rf"anchor=south west] at ({lx},{ty}) {{}};")
     a(rf"\node[ttl] at ({lx + 0.18},{ty + ph - 0.30}) "
@@ -303,6 +334,8 @@ def emit_tikz(data: dict) -> str:
           rf"rectangle ({lx + 0.95 + axw * acc / 100.0},{yy + 0.32});")
         a(rf"\node[num, anchor=west] at ({lx + 0.95 + axw + 0.08},{yy + 0.16}) "
           rf"{{{fmt(acc, 2)}\%}};")
+        fits_in_panel(f"panel A {name} accuracy label",
+                      lx + 0.95 + axw + 0.08, W_ACC_LABEL, lx)
     a(rf"\draw[frule!55, line width=0.4pt] ({lx + 0.95},{ty + 0.72}) -- "
       rf"({lx + 0.95},{ty + 0.60}) -- ({lx + 0.95 + axw},{ty + 0.60}) -- "
       rf"({lx + 0.95 + axw},{ty + 0.72});")
@@ -345,18 +378,27 @@ def emit_tikz(data: dict) -> str:
     a(rf"\node[font=\scriptsize, anchor=south] "
       rf"at ({rx + 0.4 + bw * (harm + ben / 2) / 100.0},{byy + 0.46}) "
       rf"{{{fmt(ben, 2)}\%}};")
-    a(rf"\node[lbl] at ({rx + 0.4},{byy + 0.92}) "
+    # The colour key sits directly under the bar it explains.
+    # G2 (2026-08-05): this was at byy + 0.92, i.e. ABOVE the bar, which put it
+    # at y=9.05 against the panel subtitle at y=9.12. Both are anchor=west, so
+    # those are text centres 0.07cm apart and the two lines overlapped. The bug
+    # was that the subtitle's y came from the panel top and the key's came from
+    # the bar, so nothing kept them apart. Below the bar there is real room, and
+    # a key next to the thing it labels is better anyway.
+    a(rf"\node[lbl] at ({rx + 0.4},{byy - 0.30}) "
       r"{\textcolor{fharm}{$\blacksquare$} correct $\to$ wrong \quad "
       r"\textcolor{fben}{$\blacksquare$} wrong $\to$ correct};")
-    # The two derived quantities, stated as arithmetic.
-    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 0.55}) "
+    # The two derived quantities, stated as arithmetic. Shifted down with the
+    # key; the lowest line lands at byy - 1.57 = 6.56 against a panel floor of
+    # 6.15, so it keeps about 0.27cm of clearance.
+    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 0.75}) "
       rf"{{net delta $= {fmt(ben, 2)} - {fmt(harm, 2)} = "
       rf"{fmt(ben - harm, 2)}$ pp}};")
     a(rf"\node[lbl, anchor=west, font=\scriptsize\bfseries] "
-      rf"at ({rx + 0.4},{byy - 1.00}) "
+      rf"at ({rx + 0.4},{byy - 1.17}) "
       rf"{{churn $= {fmt(ben, 2)} + {fmt(harm, 2)} = "
       rf"{fmt(churn, 2)}$\%}};")
-    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 1.42}) "
+    a(rf"\node[lbl, anchor=west] at ({rx + 0.4},{byy - 1.57}) "
       rf"{{{fmt(answer, 2)}\% of answers change in all}};")
 
     # ---------------- Panel C: certification resolution ------------------
@@ -421,19 +463,35 @@ def emit_tikz(data: dict) -> str:
       rf"GPTQ does. Across the {cells_n} registered cells the winner reverses "
       rf"in \textbf{{{flips_n} of {cells_n}}}.}};")
     # All eight cells, so this one cannot read as the whole evidence base.
-    sx = rx + 0.32
+    #
+    # G1 (2026-08-05). The key used to be emitted at sx + 1.02 + 8*0.55 - 0.18,
+    # one dot-pitch past the last dot, with nothing checking the result. At a
+    # 0.55cm pitch that is x=12.16, and the key needs about 1.7cm, so it ran to
+    # about 13.8cm against a 12.6cm panel and a 12.65cm \textwidth: an overfull
+    # box with the key sitting in the right margin. The pitch is now derived
+    # from the space the key actually needs, and fits_in_panel() checks it.
+    sx = rx + 0.30
+    dot_x0 = sx + 1.05           # first dot, clear of the "all cells:" label
+    key_gap = 0.20               # dot centre to key left edge
+    n_dots = len(v["all_cells"])
+    # Solve for the pitch that leaves the key inside the panel, then round down
+    # to a tidy value. 0.36 keeps the circled marker clear of its neighbours
+    # (radius 0.16 against a 0.36 pitch) while leaving the key about 0.3cm.
+    dot_pitch = 0.36
     a(rf"\node[font=\scriptsize, anchor=west] at ({sx},{by + 0.30}) "
       r"{all cells:};")
     for idx, cell in enumerate(v["all_cells"]):
-        cx = sx + 1.02 + idx * 0.55
+        cx = dot_x0 + idx * dot_pitch
         mark = r"$\bullet$" if cell["winner_flip"] else r"$\circ$"
         col = "fharm" if cell["winner_flip"] else "frule!55"
         this = cell["model"] == CELL_MODEL and cell["task"] == CELL_TASK
         a(rf"\node[font=\scriptsize, text={col}] at ({cx},{by + 0.30}) {{{mark}}};")
         if this:
             a(rf"\draw[frule!60, line width=0.4pt] ({cx},{by + 0.30}) circle (0.16);")
-    a(rf"\node[font=\scriptsize, anchor=west] at ({sx + 1.02 + 8 * 0.55 - 0.18},{by + 0.30}) "
+    key_x = dot_x0 + (n_dots - 1) * dot_pitch + key_gap
+    a(rf"\node[font=\scriptsize, anchor=west] at ({key_x},{by + 0.30}) "
       r"{\ \ $\bullet$ reversed};")
+    fits_in_panel("panel D reversed key", key_x, W_PANELD_KEY, rx)
 
     # ---------------- Atlas context strip --------------------------------
     a(rf"\draw[frule!25, line width=0.4pt] ({lx},{by - 0.30}) -- ({rx + pw},{by - 0.30});")
@@ -454,6 +512,17 @@ def emit_tikz(data: dict) -> str:
     a(caption(data))
     a(r"\label{fig:cancellation}")
     a(r"\end{figure}")
+
+    # Fail the build rather than emit a node that runs into the margin. Nobody
+    # on this project can compile the figure to find out, so this is the only
+    # place an overrun can be caught. The widths are estimates, so this guard
+    # catches the gross case (Wave 3's G1 was 1.1cm past \textwidth) and is not
+    # a substitute for looking at a rendered page.
+    if overruns:
+        raise SystemExit(
+            "figure geometry: node(s) outside their panel:\n  "
+            + "\n  ".join(overruns))
+
     return "\n".join(out) + "\n"
 
 
