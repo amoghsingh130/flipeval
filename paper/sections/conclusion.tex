@@ -1,20 +1,50 @@
 % =====================================================================
-% Section: Conclusion -- SKELETON. The proposed reporting standard is the part
-% a reader should be able to copy into a model card, so keep it short, concrete,
-% and free of hedging.
+% Section: Conclusion. The proposed reporting standard is the part a reader
+% should be able to copy into a model card, so keep it short, concrete, and
+% free of hedging.
+%
+% REWRITTEN 2026-08-05 (flagship narrative pass,
+% docs/FLAGSHIP_NARRATIVE_PLAN.md §1). The close now returns to the cell the
+% paper opened on, Figure~\ref{fig:cancellation}, so the argument ends where it
+% started. The five numbered lines are unchanged in substance and are the
+% deliverable.
+%
+% EMPHASIS: the \textbf{} spans on the five list items are run-in headings for
+% a copyable checklist, not emphasis competing inside prose, and they stay. The
+% one \textbf{} span that WAS in prose (on the audit counts, first paragraph) is
+% removed, per §9 rule 5.
+%
+% D4: the $5.3\times$ site in item 3 is EXISTING and is reproduced unchanged.
+% New prose states the same fact as "about five times", which holds under every
+% derivation of it; do not introduce $5.3\times$ at a new site.
 % =====================================================================
 
 \section{Conclusion: a reporting standard for compression claims}
 \label{sec:conclusion}
 
+% SOURCE: Figure~\ref{fig:cancellation} and paper/figures/fig1_values.json.
+% SCOPE, from the figure caption: this cell is illustrative and is the most
+% extreme of the eight. The sentence below says so. The 2,730 figure is a
+% planning requirement at an assumed true difference of zero; it must never be
+% written as evidence that the two methods differ.
+Figure~\ref{fig:cancellation} is one evaluation of one model, and it is the
+argument in miniature. Two 4-bit quantizations of Qwen2.5-7B that sit $0.58$
+points apart on GSM8K disagree on $17.7\%$ of the items; certifying equivalence
+at a declared $\pm 2$-point margin needs $2{,}730$ items and the evaluation ran
+$1{,}000$; and which of the two comes out ahead changes with the calibration
+draw. None of that is visible in the two aggregate scores. The cell is the most
+extreme of the eight registered cells, but the mechanism is not peculiar to it:
+across the $1{,}707$ cells of the public record, median churn is about five
+times the median net accuracy delta.
+
 % Counts are \Audit* macros from paper/audit_denominators.tex. The
 % task-matched qualifier and the three other-task releases stay in the same
 % sentence as the zero: without them the claim is false (\S\ref{sec:audit:v3}).
 The claim ``near-lossless'' is cheap to write and expensive to support. This
-paper measured the gap, and what the measurement mostly found was absence rather
-than error. Across \textbf{\AuditEligible{} eligible sources, none declares a
+paper measured the gap, and what the measurement mostly found was absence, not
+error. Across \AuditEligible{} eligible sources, none declares a
 prospective numerical equivalence margin and none releases \emph{task-matched}
-per-item outputs}, though \AuditPerItemOtherTaskOnly{} release outputs for other
+per-item outputs, though \AuditPerItemOtherTaskOnly{} release outputs for other
 tasks only; \AuditNotAssessable{} cannot be assessed at all from what they
 report. Of the \AuditAssessable{} that can, \AuditAboveThroughout{} stay above
 the approximate planning threshold at a uniform \AuditMarginPP{}\,pp margin
@@ -24,7 +54,7 @@ rate its source never reported; \AuditBelowThroughout{} stay below the threshold
 throughout that interval. These are prevalences in this audited sample of
 \AuditEligible{} eligible sources, not estimates for the literature. The
 apparatus that closes the gap is equivalence certification at a declared margin,
-with sample-size tables computed from observed churn rather than assumed
+with sample-size tables computed from observed churn and not from assumed
 variance.
 
 % Sequential certification was a full section in earlier drafts. It is a
@@ -53,8 +83,7 @@ We propose five lines that a model card or method paper can adopt directly.
   % overstates rev-2's 8.49% (= 1 in 11.8). The atlas comment says explicitly
   % "do not restore one in ten"; this restatement in the conclusion was missed.
   % REV-1 SURVIVOR, CORRECTED 2026-07-27: read "five to six times", which was
-  % the rev-1 ratio. Rev-2 gives 5.31 (S1) and 5.33 (S2). See
-  % \S\ref{sec:atlas:netgross}.
+  % the rev-1 ratio. See \S\ref{sec:atlas:netgross}.
   \item \textbf{Cite the sample size you met.} Table~\ref{tab:certification}
   gives the count your benchmark family requires at your margin; say which
   column you are in and what you actually ran.
@@ -69,23 +98,26 @@ We propose five lines that a model card or method paper can adopt directly.
 % (docs/H3_EIGHT_CELL_DECISION_2026-07-26.md), so the closing paragraph is
 % written and may state the outcome. It states nothing the signed record does
 % not contain.
-% SOURCE: \S\ref{sec:minigrid:verdict} (5 of 8); \S\ref{sec:minigrid:churnratio}
-% Result 1 (5.3x observational, 12.7x controlled).
+% SOURCE: \S\ref{sec:minigrid:verdict} (5 of 8); sections/minigrid.tex Result 1
+% (the churn ratio), whose \label may move under the flagship reordering --
+% cite the file, not the label.
 The controlled experiment says where this standard actually bites, and it is not
 where the five lines above suggest. Every one of them is written as though the
-comparison at issue were a compressed model against its original. H3 compares
-two \emph{compressed} models, GPTQ against AWQ at the same bit width, which is
-the choice a practitioner makes after deciding to compress at all. It finds the
-evidence problem strictly worse there: churn at $12.7\times$ the net delta
-against the atlas's $5.3\times$, and the winner reversing on nothing but the
-calibration seed in 5 of 8 registered cells. The reason is the same mechanism in
-its sharpest form. Two compressed models are more alike than either is to the
-original, so cancellation is more complete and the aggregate hides more.
+comparison at issue were a compressed model against its original. The cell in
+Figure~\ref{fig:cancellation} is not that comparison: H3 puts two
+\emph{compressed} models side by side, GPTQ against AWQ at the same bit width,
+which is the choice a practitioner makes after deciding to compress at all. The
+evidence problem is strictly worse there, at churn of $12.7\times$ the net delta
+against the atlas's $5.3\times$, and with the winner reversing on nothing but
+the calibration seed in 5 of 8 registered cells. The reason is the same
+mechanism in its sharpest form: two compressed models are more alike than either
+is to the original, so cancellation is more complete and the aggregate hides
+more.
 
 That generalises the standard past its own framing. Nothing in the five lines is
 about quantization. They are about comparing two models similar enough that
 somebody thought the comparison worth making: compressed against original,
 method against method, checkpoint against checkpoint, version against version.
 Aggregate accuracy is least informative in the regime where these comparisons
-are made. What makes such a comparison checkable is the per-item evidence and a
-declared margin.
+are made, and what makes such a comparison checkable is the per-item evidence
+and a declared margin.

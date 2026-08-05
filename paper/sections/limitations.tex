@@ -1,150 +1,137 @@
 % =====================================================================
-% Section: Limitations -- SKELETON, but every bullet below is already supported
-% by a committed source and should survive to the final version.
+% Section: Limitations.
+%
+% REWRITTEN 2026-08-05 (flagship narrative pass,
+% docs/FLAGSHIP_NARRATIVE_PLAN.md §9 rule 4). This file carried TEN consecutive
+% \paragraph{} microheadings and read as a bulleted list in prose clothing. It
+% is now two paragraphs: what the observational and audit material cannot
+% support, then what the controlled experiment cannot support. NOTHING WAS
+% DROPPED -- all ten concerns survive, each compressed to one to three
+% sentences, and every number, appendix pointer and qualifier is retained.
+%
+% Concern -> source, in the order they appear.
+%  1 atlas is a record, not a sample:
+%      docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1 population caveats;
+%      docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §2.
+%  2 status of the atlas numbers:
+%      docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7 (the original
+%      provisional marking); docs/ATLAS_REV2_CORRECTION_2026-07-21.md
+%      §Verification (first spot-check 2026-07-21, 10 cells, 262/262 fields, 0
+%      discrepancies, embers jobs 11338401/11338619/11338712/11338745) and
+%      §"targeted second spot-check" (14/14 cells, 126/126
+%      fields). Both spot-checks have passed, so the provisional marking is
+%      lifted here rather than removed: the independent-check requirement is
+%      what produced the rev-1 -> rev-2 correction.
+%  3 discordance is imputed:
+%      results/audit_verdicts_rev3.csv column discordance_match_tier;
+%      \S\ref{sec:audit:rules}. REV-1 SURVIVOR, CORRECTED 2026-08-02: this once
+%      read "two claims fall through to the global tier", which is rev-1
+%      imputation behaviour. Rev-3 has no global tier and no claim matches
+%      there; the coarsest tier reached is bit width alone.
+%  4 family aggregation: results/certification_tables_rev2.csv column
+%      n_atlas_cells (mmlu_pro 5, ifeval 8; all others >= 17), and the scope
+%      caveats in \S\ref{sec:certification}. The rev-1 certification narrative
+%      that this comment used to cite is superseded and is deliberately not
+%      named here. REV-2: the prose read "four families" under rev-1;
+%      corrected 2026-07-26.
+%  5 claim-level granularity:
+%      docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #4.
+%  6 audit scope. SCOPE RULE (final rev-3 checklist §5): the counts are
+%      prevalences IN THIS SAMPLE. Do not restate them as estimates of how
+%      often the field as a whole fails to declare a margin or release outputs;
+%      the frames were chosen for auditability, not drawn at random.
 % =====================================================================
 
 \section{Limitations}
 \label{sec:limitations}
 
-\paragraph{The atlas is a record, not a sample.}
-% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1 population caveats;
-% docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §2.
-S1 is community quantizations of 2023-era models, conditioned on leaderboard
-coverage; S2 is one vendor's releases, evaluated by that vendor. Statistics
-computed over the atlas describe the evidence the field circulates, not the
-behaviour of quantization in general.
-
-\paragraph{Discordance is imputed for audited claims.}
-% SOURCE: results/audit_verdicts_rev3.csv column discordance_match_tier;
-% \S\ref{sec:audit:rules}.
-% REV-1 SURVIVOR, CORRECTED 2026-08-02. This read "Two claims fall through to
-% the global tier", which is rev-1 imputation behaviour: rev-1 descended to a
-% global tier, rev-3 does not, and no rev-3 claim matches there. The coarsest
-% tier any claim reaches is bit width alone. The per-claim tier is released, so
-% the sentence now points at that column instead of restating a count. This is
-% the same failure mode as the 1,155/1,254 population figures -- prose written
-% against rev-1 tables that a later revision replaced.
-No audited source reports a per-item disagreement rate, so the audit imputes one
-from the nearest atlas tier, using the median of the first non-empty tier. The
-tiers actually reached run from the most specific, matching model family, bit
-width and benchmark together, down to bit width alone; the match tier and the
-number of atlas cells behind it are released per claim, and the
+The atlas is a record, not a sample. S1 is community quantizations of 2023-era
+models, conditioned on leaderboard coverage, and S2 is one vendor's releases
+evaluated by that vendor, so statistics computed over the atlas describe the
+evidence the field circulates and not the behaviour of quantization in general.
+Its pipeline had two bugs found and fixed during the run, and its numbers were
+held provisional pending an independent spot-check; that check has since been
+completed twice, with 262 compared fields reconciled on the first pass, which
+surfaced the population defect that produced rev-2, and 14 of 14 cells at 126 of
+126 fields on the targeted second (\S\ref{sec:prereg-spotcheck}), so the figures
+reported here are rev-2 and are no longer provisional, and the delta between the
+two revisions is reported (Appendix~\ref{app:prereg:rev2delta}). The audit then
+leans on that record: no audited source reports a per-item disagreement rate, so
+the audit imputes one from the median of the nearest non-empty atlas tier, and
+the tiers actually reached run from the most specific, matching model family,
+bit width and benchmark together, down to bit width alone. A claim matched at a
+coarse tier rests on a wider and less similar set of cells, so the match tier
+and the number of atlas cells behind it are released per claim, the
 independent-binomial robustness column bounds the effect of the imputation in
-the conservative direction. A claim matched at a coarse tier rests on a wider
-and less similar set of cells, and Appendix~\ref{app:audit:imputation} names the
-weakest such match in the table explicitly rather than averaging the concern
-away.
+the conservative direction, and Appendix~\ref{app:audit:imputation} names the
+weakest such match in the table explicitly. In the certification tables,
+per-subject and per-subtask cells are collapsed into families, so a family's
+quartile band mixes subject-level with model-level variation; this makes the
+p25--p75 columns conservative, and two families rest on fewer than 12 cells and
+are indicative only. Audit verdicts are computed per claim, at the pooled $n$
+the frozen table records, because operating at a claim\,$\times$\,benchmark
+granularity would require inventing rows the freeze does not contain. The three
+frames fix the population: sources outside them are not audited, and claims
+discovered after the table freeze would form a separately reported post-freeze
+stratum. Every proportion reported here describes this audited sample of
+\AuditEligible{} eligible sources and is not an estimate of prevalence in the
+compression literature, which the three frames were never drawn to represent,
+and the audit measures evidential sufficiency only, saying nothing about whether
+an audited model is in fact equivalent.
 
-\paragraph{Family aggregation in the certification tables.}
-% SOURCE: results/certification_tables_rev2.csv column n_atlas_cells
-% (mmlu_pro 5, ifeval 8; all other families >= 17); docs/CERTIFICATION_TABLES_
-% 2026-07-20.md §"Scope and caveats". REV-2: this read "four families" under
-% rev-1; corrected 2026-07-26 to agree with \S\ref{sec:cert:caveats}.
-Per-subject and per-subtask cells are collapsed into families, so a family's
-quartile band mixes subject-level with model-level variation. This makes the
-p25--p75 columns conservative; two families rest on fewer than 12 cells and are
-indicative only.
-
-\paragraph{Claim-level granularity in the audit.}
-% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #4.
-Verdicts are computed per claim, at the pooled $n$ the frozen table records,
-rather than per claim\,$\times$\,benchmark, because operating at a finer
-granularity would require inventing rows the freeze does not contain.
-
-\paragraph{Audit scope.}
-% SCOPE RULE (final rev-3 checklist §5): the counts are prevalences IN THIS
-% SAMPLE. Do not restate them as estimates of how often the field as a whole
-% fails to declare a margin or release outputs; the frames were chosen for
-% auditability, not drawn at random from the literature.
-The three frames fix the population; sources outside them are not audited, and
-claims discovered after the table freeze would form a separately reported
-post-freeze stratum. Every proportion reported here describes this audited
-sample of \AuditEligible{} eligible sources and is not an estimate of prevalence
-in the compression literature, which the three frames were never drawn to
-represent. The audit measures evidential sufficiency only, and says nothing
-about whether an audited model is in fact equivalent.
-
-\paragraph{Experimental scope.}
-% SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 4;
-% docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED) §"What this verdict does
-% and does not say".
-% RESOLVED 2026-07-27: escalation fired, the 7B/8B cells completed, and all
-% eight confirmatory cells exist. The \minigridTODO this paragraph carried is
-% closed by stating the executed scope rather than the deferred one.
+% Concern -> source, continued.
+%  7 experimental scope: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 4;
+%      docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED) §"What this verdict
+%      does and does not say". RESOLVED 2026-07-27: escalation fired, the 7B/8B
+%      cells completed, all eight confirmatory cells exist, so the executed
+%      scope is stated rather than the deferred one. THE ENUMERATION AND WHAT
+%      IT LICENSES NO STATEMENT ABOUT ARE BOTH MANDATORY -- compress around
+%      them, never into them.
+%  8 five seeds is few: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md,
+%      §"Reconciling winner flips with bootstrap rank-flip rates" (3 of 8
+%      cells: winner flip TRUE with bootstrap rate < 0.05) and the registered
+%      parameters (2000 replicates, seed 0).
+%  9 GSM8K under-resolved: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md,
+%      step 5 table (POST-HOC) and §"The paper's own table predicted this";
+%      results/certification_tables_rev2.csv GSM8K rows at margin_pp = 2.0.
+%      MANDATORY: this is one of only two surviving homes for the GSM8K
+%      under-resolution qualification.
+% 10 benchmarks and languages: results/atlas_cells_summary_rev2.csv reason
+%      column (33 cells, 13.3% of 248 exclusions, carry no binary correctness
+%      metric). REV-2: this cited 643, the rev-1 float-scored count that the
+%      spot-check retracted; corrected 2026-07-26. Never write "incompatible
+%      with a paired framework": it is the flip model that does not apply.
 The controlled experiment covers all 8 registered confirmatory cells (1.5B to
 8B parameters, two benchmarks, 4 bits, two methods, five seeds) and nothing
-beyond them. The verdict licenses no statement about 3-bit behaviour,
+beyond them, so the verdict licenses no statement about 3-bit behaviour,
 ARC-Challenge, HellaSwag, calibration-\emph{dataset} effects, or any model or
 benchmark outside the registered set. The atlas reaches 405B but is
 observational; the controlled grid is causal but small, and eight cells is a
-small number of cells however cleanly they were obtained.
-
-\paragraph{Five seeds is few, and the bootstrap inherits that.}
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, §"Reconciling winner
-% flips with bootstrap rank-flip rates" (3 of 8 cells: winner flip TRUE with
-% bootstrap rate < 0.05) and the registered parameters (2000 replicates, seed 0).
-The two-level bootstrap of \S\ref{sec:minigrid:supporting} resamples seed labels
-from a sample of five, so it has limited resolution on the seed-level
-distribution it is drawing from. Where its rank-flip rate is low, what that
-bounds is the stability of the \emph{observed} five-seed mean under resampling.
-It is not evidence that five seeds are sufficient in general, and the three
-cells that combine a winner flip with a rank-flip rate below $0.05$ should be
-read as ``one calibration run can mislead, and five were more stable here'', not
-as a recommendation of five. A design aimed at the seed-level distribution
-itself would need more seeds than the registration committed to.
-
-\paragraph{The GSM8K arm is under-resolved.}
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, step 5 table (POST-HOC)
-% and §"The paper's own table predicted this";
-% results/certification_tables_rev2.csv GSM8K rows at margin_pp = 2.0.
-The four GSM8K confirmatory cells ran at $n = 1{,}000$, where a post-hoc
-resolution analysis puts the seed-induced range at roughly two to three-and-a-half
-paired standard errors and the mean gap itself at or below $1.25$\,SE in three of
-the four cells (\S\ref{sec:minigrid:resolution}). Seed-level SD and item-level SE
-are of the same order there, where on MMLU the seed term dominates. This paper's
-own certification table asked for about $1{,}184$ GSM8K items at median
-discordance and $3{,}068$ at p75, and the discordance observed in these cells sits
-at or above p75, so the shortfall was predicted by \S\ref{sec:certification}
-before it was measured (\S\ref{sec:minigrid:selfaudit}). The verdict is unaffected,
-being a count over the frozen rule rather than a significance test, but the MMLU
-cells carry the evidence and any per-cell reading of GSM8K should say so.
-
-\paragraph{Benchmarks and languages.}
-% SOURCE: results/atlas_cells_summary_rev2.csv reason column, via
-% \S\ref{sec:atlas:construction} (33 cells, 13.3% of 248 exclusions, carry no
-% binary correctness metric). REV-2: this cited 643, the rev-1 float-scored
-% count that the spot-check retracted (\S\ref{sec:prereg-spotcheck}); corrected
-% 2026-07-26 so the paper no longer retracts a number in one section and cites
-% it in another.
-All benchmarks are English and predominantly multiple-choice or short-answer,
-with per-item correctness defined by the original harness. Float-scored
-generation tasks are outside the flip model entirely, and 33 atlas cells were
+small number of cells however cleanly they were obtained. The experiment's
+two-level bootstrap (\S\ref{sec:minigrid:supporting}) resamples seed labels from a sample
+of five, so it has limited resolution on the seed-level distribution it draws
+from, and where its rank-flip rate is low what that bounds is the stability of
+the \emph{observed} five-seed mean under resampling. The three cells that
+combine a winner flip with a rank-flip rate below $0.05$ should be read as
+``one calibration run can mislead, and five were more stable here'', not as a
+recommendation of five; a design aimed at the seed-level distribution itself
+would need more seeds than the registration committed to. The four GSM8K
+confirmatory cells ran at $n = 1{,}000$, where a post-hoc resolution analysis
+puts the seed-induced range at roughly two to three-and-a-half paired standard
+errors and the mean gap itself at or below $1.25$\,SE in three of the four cells
+(\S\ref{sec:minigrid:resolution}), and seed-level SD and item-level SE are of
+the same order there, where on MMLU the seed term dominates. This paper's own
+certification table asked for about $1{,}184$ GSM8K items at median discordance
+and $3{,}068$ at p75, and the discordance observed in these cells sits at or
+above p75, so the shortfall was predicted by \S\ref{sec:certification} before it
+was measured (\S\ref{sec:minigrid:selfaudit}); the verdict is unaffected, being
+a count over the frozen rule and not a significance test, but the MMLU cells
+carry the evidence and any per-cell reading of GSM8K should say so. Finally, all
+benchmarks are English and predominantly multiple-choice or short-answer, with
+per-item correctness defined by the original harness, and float-scored
+generation tasks are outside the flip model entirely: 33 atlas cells were
 excluded for exactly this reason, so nothing here applies to quality claims
 about open-ended generation, including the CIDEr-style metric that put
 \AuditOutsideFrameworkClaim{} outside our registered binary paired-outcome
 calculation (\S\ref{sec:audit:r04}). That is a limit of the flip model we
 registered, not of paired analysis, which handles graded metrics perfectly well.
-
-\paragraph{Status of the atlas numbers.}
-% SOURCE: docs/RESULTS_2026-07-15_ATLAS_AUDIT.md lines 5-7 (the original
-% provisional marking); docs/ATLAS_REV2_CORRECTION_2026-07-21.md §Verification
-% (first spot-check 2026-07-21, 10 cells, 262/262 fields, 0 discrepancies,
-% embers jobs 11338401/11338619/11338712/11338745) and §"targeted second
-% spot-check" (14/14 cells, 126/126 fields).
-% \TODO CLOSED 2026-07-26 by restating as completed, per its own instruction:
-% both spot-checks have now passed and are documented, so the precondition the
-% marker named is met. The independent-check requirement did real work -- it is
-% what produced the rev-1 -> rev-2 correction -- so the paragraph is restated
-% rather than removed.
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 11). The spot-check narrative is
-% told in full at \S\ref{sec:prereg-spotcheck}; this paragraph keeps only what a
-% limitations section owes -- the provisional status is lifted, and on what
-% evidence. Both reconciliation counts are retained.
-The atlas pipeline had two bugs found and fixed during its run, and its numbers
-were held provisional pending an independent spot-check. That check has since
-been completed twice: 262 compared fields reconciled on the first pass, which
-surfaced the population defect that produced rev-2, and 14 of 14 cells with 126
-of 126 fields on the targeted second (\S\ref{sec:prereg-spotcheck}). The figures
-reported here are rev-2 and are no longer provisional; the delta between the two
-revisions is reported rather than absorbed
-(Appendix~\ref{app:prereg:rev2delta}).
