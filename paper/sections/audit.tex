@@ -286,85 +286,52 @@ single clearest reporting-standards recommendation this paper makes.
 \subsection{Verdict rules}
 \label{sec:audit:rules}
 
-For each claim, at its reported (or rule-imputed) sample size $n$,
-the frozen protocol computes three quantities.
-% SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4, as amended by Amendment 2
-% (signed 2026-07-31, commit ab279b2).
-% AMENDMENT 2, THE SHORT VERSION: the registration says "at the claim's own
-% margin WHEN IT STATES ONE". No source states one (§\ref{sec:audit:taxonomy}),
-% so the applicable margin is the registered uniform 2 pp everywhere. The
-% superseded implementation substituted each source's largest OBSERVED delta
-% and called it that source's margin, which inverted the direction of the
-% inference: an observed outcome was being used as a declared decision rule.
-% RETAIN VERBATIM: the sentence below is the logical hinge of the section
-% (mandatory qualification 5) and survives the 2026-08-04 compression unaltered.
+% STAGE C, 2026-08-06. The three estimators, eq:tost-n and the one-sided/90%
+% convention moved WHOLE to Appendix~\ref{app:audit:verdictrules}; the
+% tier-by-tier imputation detail was already in
+% Appendix~\ref{app:audit:imputation}. eq:tost-n has no reference outside this
+% file, so it moved with the equation.
+% RETAIN VERBATIM: the margin sentence below is the logical hinge of the section
+% (mandatory qualification 5) and has now survived two compressions unaltered.
 Because no source declares a margin, \textbf{the applicable margin throughout is
-the uniform 2\,pp registered in advance}; a source's reported deltas are
-outcomes of its evaluation, not a decision rule it adopted, and are never used
-as one.
+the uniform \AuditMarginPP{}\,pp registered in advance}; a source's reported
+deltas are outcomes of its evaluation, not a decision rule it adopted, and are
+never used as one.
 
-\emph{V1, detection resolution.} The minimum detectable difference (MDD)
-at 80\% power and two-sided $\alpha = 0.05$, under the paired-flip model. The
-per-item accuracy difference is $d_i \in \{-1, 0, +1\}$; under the null of no
-true difference, $\mathrm{Var}(d) = p_d$, the discordance rate, so
-$\mathrm{sd} = \sqrt{p_d}$. We report the MDD and its ratio to the registered
-margin.
-
-\emph{V2, equivalence support.} The number of items required for TOST at
-the applicable margin,
-\begin{equation}
-n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil ,
-\label{eq:tost-n}
-\end{equation}
-with $z_{1-\alpha}$ \emph{one-sided} ($1.6449$), because TOST rejects two
-one-sided nulls at level $\alpha$ each. At $\alpha=.05$ per bound this is
-operationally the requirement that a \textbf{90\% two-sided} confidence
-interval fall inside $\pm m$, not a 95\% one; the corresponding detection
-quantity V1 above is the one that takes the two-sided $z$.
-A claim is recorded as \emph{below the
-approximate planning threshold} iff its reported $n$ is below $n_{\mathrm{req}}$
-at the registered margin.
-% WORDING RULE (Amendment 2 + carry checklist §8): this is a PROSPECTIVE
-% PLANNING quantity -- how many items an evaluation would have needed to be
-% designed to carry -- not a retrospective diagnosis that a completed study was
-% "underpowered". Do not reintroduce a definitive underpowered verdict here.
-Equation~\ref{eq:tost-n} answers a question asked \emph{before} an evaluation is
-run, namely how many items it would need, so falling below it is a statement about
+For each claim, at its reported or rule-imputed sample size, the frozen protocol
+computes three quantities: \emph{V1}, the minimum detectable difference under
+the paired-flip model; \emph{V2}, the number of items TOST would require at the
+applicable margin; and \emph{V3}, whether per-item outputs were released. A
+claim is recorded as \emph{below the approximate planning threshold} iff its
+reported $n$ falls below the V2 requirement.
+Appendix~\ref{app:audit:verdictrules} gives the estimators and the one-sided
+$z$ convention, under which the requirement is that a 90\% two-sided interval
+fall inside the margin.
+% WORDING RULE (Amendment 2 + carry checklist §8): a PROSPECTIVE PLANNING
+% quantity, not a retrospective diagnosis. Do not reintroduce a definitive
+% underpowered verdict here.
+That requirement answers a question asked \emph{before} an evaluation is run,
+namely how many items it would need, so falling below it is a statement about
 how the evaluation was sized, not a diagnosis applied to its result.
 
-\emph{V3, reproducibility.} Binary, read from the frozen
-\texttt{per\_item\allowbreak\_outputs\allowbreak\_released} column and cross-checked against the
-extraction reconciliation memo.
-
-% RELOCATED 2026-07-27 (phase 4 trim, candidate 1). The tier-by-tier match
-% counts and the None-descent rule moved VERBATIM to
-% Appendix~\ref{app:audit:imputation}. Nothing was deleted.
-$p_d$ is not reported by any source, so it is imputed from the atlas
-(\S\ref{sec:atlas}) by matching the nearest (method family, bit width,
+% RELOCATED 2026-07-27: tier-by-tier match counts and the None-descent rule are
+% in Appendix~\ref{app:audit:imputation}. Nothing was deleted.
+The discordance rate $p_d$ is reported by no source, so it is imputed from the
+atlas (\S\ref{sec:atlas}) by matching the nearest (method family, bit width,
 benchmark) cell, most-specific tier first, taking the \emph{median} over the
-first non-empty tier because per-cell discordance is right-skewed.
-Appendix~\ref{app:audit:imputation} gives the tier-by-tier match counts and the
-rule by which an unmatchable field descends. Every quantity is then recomputed
-under the independent-binomial bound $\mathrm{sd} = \sqrt{2p(1-p)}$ and swept
-over 1\,pp and 3\,pp margins; a verdict that changes across the sweep is
-\emph{margin-sensitive}. Because $p_d$ is imputed and never reported by the
-source, each
-verdict is additionally recomputed at the first and third quartiles of the same
-atlas cells that supplied its median, and where the classification changes
-inside that interval we report the \emph{reversal point}: the discordance rate
-at which the reported $n$ exactly meets $n_{\mathrm{req}}$.
-% CHRONOLOGY DISCLOSURE, REQUIRED (carry checklist §8). The IQR recomputation
-% was added on 2026-07-31, AFTER the point-imputation result was seen. Saying so
-% is not optional and it must not be phrased so as to imply it was planned.
+first non-empty tier because per-cell discordance is right-skewed
+(Appendix~\ref{app:audit:imputation}). Because $p_d$ is imputed and never
+reported, each verdict is additionally recomputed at the first and third
+quartiles of the same atlas cells that supplied its median.
+% CHRONOLOGY DISCLOSURE, REQUIRED (carry checklist §8). Added 2026-07-31, AFTER
+% the point-imputation result was seen. Saying so is not optional and it must
+% not be phrased so as to imply it was planned.
 This quartile sweep was added after the point-imputation results had been seen,
 and is reported as post-hoc sensitivity, not as a registered analysis.
-% Monotonicity, not cell-counting, is what makes the interval claim valid:
-% n_req = ceil((z*sqrt(d)/m)^2) is strictly increasing in d, so Q1 and Q3
-% BRACKET the whole interval. Do not let this read as "we looked at the observed
-% cells and none of them flipped".
+% Monotonicity, not cell-counting, is what makes the interval claim valid.
 Because $n_{\mathrm{req}}$ is increasing in $p_d$, the two quartiles bracket the
-whole interval: a claim above threshold at $Q_3$ is above it throughout, and a
-claim below threshold at $Q_1$ is below it throughout. The interval statement is
+whole interval: a claim above threshold at $Q_3$ is above it throughout, and one
+below threshold at $Q_1$ is below it throughout. The interval statement is
 established at its endpoints, not inferred from the scatter of observed cells.
 
 \subsection{Results}
@@ -419,78 +386,55 @@ Below the planning threshold throughout          & \AuditBelowThroughout{} \\
 \end{tabular}
 \end{table}
 
-% SOURCE: results/audit_verdicts_rev3.csv row R01: n=1838, imputed_discordance
-% 0.13, v2_required_n_paired_2pp 2010, discordance_p25 0.0882 -> 1364,
-% discordance_p75 0.2800 -> 4328, reversal_discordance 0.118915,
-% tier_cells_below_reversal 345, discordance_n_cells 792.
+% STAGE C, 2026-08-06: the reversal-point and quartile arithmetic moved to
+% Appendix~\ref{app:audit:r01}; the detection-direction reading of
+% tab:audit-mdd moved to Appendix~\ref{app:audit:fullrobustness}; the reasoning
+% behind the two sensitivity directions was already in
+% Appendix~\ref{app:audit:robustness}.
 % THE 43.6% IS DESCRIPTIVE. It is the share of reference cells lying below the
 % reversal point. It is NOT a posterior probability, NOT a confidence level and
 % NOT a p-value, and the atlas cells are correlated (shared model pairs,
 % benchmark families, sources and infrastructure), so they are not independent
-% draws from anything. Never attach an inferential reading to it.
+% draws from anything. Never attach an inferential reading to it. The number and
+% its framing stay in ONE sentence.
 The single flagged claim is \AuditSensitiveClaim{}, the GPTQ paper, which
 reports $n = \AuditSensitiveN{}$ against a requirement of
-$\AuditSensitiveNReq{}$ items at the imputed discordance rate of $0.130$. The
-gap is one part in twelve of that requirement, and it closes entirely if the
-imputed rate is a little lower: the classification reverses at a discordance
-rate of $0.1189$, and $\AuditSensitiveCellsBelow{}$ of the
-$\AuditSensitiveCellsTotal{}$ atlas cells supplying the imputation
-($\AuditSensitiveCellsPct{}\%$) lie below that point. Across the interquartile
-range of those cells the requirement moves from $1{,}364$ items to $4{,}328$, so
-\AuditSensitiveClaim{} is adequately sized at the first quartile and undersized
-at the third. This is a sensitivity-dependent planning flag, not a verdict: the
-$\AuditSensitiveCellsPct{}\%$ is a descriptive share of reference cells, not a
-probability that the claim is underpowered, and those cells share models,
-benchmarks and infrastructure and are not independent observations.
+$\AuditSensitiveNReq{}$ items at an imputed discordance rate of $0.130$. Its
+classification reverses at a rate of $0.1189$, and
+$\AuditSensitiveCellsBelow{}$ of the $\AuditSensitiveCellsTotal{}$ atlas cells
+supplying the imputation lie below that point
+(Appendix~\ref{app:audit:r01}). This is a sensitivity-dependent planning flag,
+not a verdict: the $\AuditSensitiveCellsPct{}\%$ is a descriptive share of
+reference cells, not a probability that the claim is underpowered, and those
+cells share models, benchmarks and infrastructure and are not independent
+observations.
 
 No assessable claim falls below the threshold throughout the interval.
 Table~\ref{tab:audit-sensitivity} is therefore best read as a statement about
-resolution, not about error: at the margin a reporting standard would
-plausibly impose, ten of these eleven evaluations were sized to carry the claim
-made on them, and the eleventh cannot be classified without committing to a
-discordance rate its authors never reported. Nothing here says any model is
-degraded.
+resolution, not about error: at the margin a reporting standard would plausibly
+impose, ten of these eleven evaluations were sized to carry the claim made on
+them, and the eleventh cannot be classified without committing to a discordance
+rate its authors never reported. Nothing here says any model is degraded.
 
-The same conclusion appears in the detection direction.
-Table~\ref{tab:audit-mdd} in Appendix~\ref{app:audit:mdd} gives each
-evaluation's minimum detectable difference and its ratio to the registered
-margin, and two features of it matter for how the audit should be read. First,
-the independent-binomial columns are uniformly \emph{worse}, by roughly a factor
-of two: pairing is the generous modelling assumption, and the one evaluation
-that is coarser than the margin under pairing is coarser still without it.
+% CARE -- THE TWO SENSITIVITY DIRECTIONS ARE DIFFERENT FACTS AND MUST NEVER BE
+% MERGED INTO ONE SENTENCE. Margin sensitivity is instability with respect to
+% the yardstick; imputation sensitivity is instability with respect to an input
+% the sources did not report. They coincide on R01, which is a coincidence.
+The same conclusion appears in the detection direction, where the
+independent-binomial columns are uniformly worse by roughly a factor of two
+(Table~\ref{tab:audit-mdd}, Appendix~\ref{app:audit:fullrobustness}); an audit at
+a \AuditMarginPP{}\,pp margin is a weak test and should be understood as one.
 Second, \textbf{R04 and R14 carry no verdict}; their numbers are computable and
 are retained in the released CSV for transparency, but they are excluded from
 the assessable set (\S\ref{sec:audit:indeterminate}), and the appendix table
-italicises them for that reason. The ordering also makes the audit's reach
-visible: only \AuditSensitiveClaim{}'s evaluation is coarser than the registered
-margin, and the other ten resolve differences between a sixth and a half of it.
-An audit at a 2\,pp margin is a weak test, and it should be understood as one.
-The sources were not asked to meet a standard this permissive, because they were
-not asked to meet any stated standard at all, and what the table shows is that
-ten evaluations would already satisfy a reporting requirement none of them was
-given.
-
-% SOURCE: results/audit_verdicts_rev3.csv columns margin_sensitive and
-% robustness, over the 11 eligible assessable rows.
-% CARE -- THE TWO FIGURES BELOW ARE DIFFERENT FACTS AND MUST NEVER BE MERGED
-% INTO ONE SENTENCE. First: the classification is unstable across the MARGIN
-% sweep (1 pp -> 3 pp), i.e. with respect to the yardstick. Second: it is
-% unstable across the IMPUTATION interval (atlas Q1 -> Q3), i.e. with respect to
-% an input the sources did not report. They happen to coincide on the same claim
-% (R01), which is a coincidence and not a single finding.
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 3). The REASONING moved to
-% Appendix~\ref{app:audit:robustness}; nothing was deleted.
-The one flagged claim is unstable in two independent directions, and the
-coincidence is worth separating. First, \AuditSensitiveClaim{} is
-\emph{margin-sensitive}: its classification flips across the registered
-1\,pp\,$\to$\,3\,pp sweep, so it turns on where the yardstick is set. Second,
-and separately, it is \emph{imputation-sensitive}: it flips across the
-interquartile range of the atlas cells supplying its discordance rate, so it
-also turns on a quantity its source never reported. No other assessable claim is
-sensitive in either direction. These are two distinct properties, instability
-with respect to the standard applied and instability with respect to a missing
-input, that happen to land on the same claim, and they must not be read as one
-finding. Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
+italicises them for that reason. Finally, \AuditSensitiveClaim{} is unstable in
+two independent directions that must not be read as one finding: it is
+\emph{margin-sensitive}, flipping across the registered
+1\,pp\,$\to$\,3\,pp sweep, so it turns on where the yardstick is set, and
+separately \emph{imputation-sensitive}, flipping across the interquartile range
+of the atlas cells supplying its discordance rate, so it also turns on a
+quantity its source never reported. No other assessable claim is sensitive in
+either direction (Appendix~\ref{app:audit:robustness}).
 
 \subsection{Claims that cannot be assessed}
 \label{sec:audit:indeterminate}
@@ -499,16 +443,25 @@ finding. Appendix~\ref{app:audit:robustness} gives the reasoning behind each.
 % indeterminate_kind, indeterminate_reason, over the 16 eligible rows.
 % DENOMINATOR: 5 of 16, not of 17. R10 is eligible-excluded, not indeterminate.
 % THE 4 + 1 SPLIT IS MANDATORY AND MUST NOT COLLAPSE INTO ONE NUMBER.
+% STAGE C, 2026-08-06: the per-claim blockers for R02, R11, R13 and R14 and the
+% retained-components list moved to Appendix~\ref{app:audit:indeterminate}. The
+% R14 trap paragraph below STAYS IN THE BODY (mandatory qualification 12) and is
+% the body's only statement of it.
+% NEVER write "incompatible with a paired framework" for R04: CIDEr supports
+% paired resampling perfectly well; it is the flip model that does not apply.
 \AuditNotAssessable{} of the \AuditEligible{} eligible claims cannot be assessed
 numerically, in two kinds, each recorded with exactly one primary blocker.
+\AuditNotAssessableInsufficient{} are cases of \emph{insufficient reporting},
+where a registered input is genuinely absent: no sample size, no baseline, or
+headline equivalence evidence existing only as a chart image with no extractable
+numbers. The remaining \AuditNotAssessableOutsideFramework{},
+\AuditOutsideFrameworkClaim{}, is \emph{outside the registered calculation}: it
+reports enough, but about a quantity our registered \emph{binary paired-outcome}
+model cannot score (\S\ref{sec:audit:r04}). The per-claim blockers are in
+Appendix~\ref{app:audit:indeterminate}. Every non-assessable claim retains
+whatever components its available inputs support, reported as supplementary
+transparency only and \textbf{never verdict-bearing}.
 
-\emph{Insufficient reporting} (\AuditNotAssessableInsufficient{}). A registered
-input is genuinely absent. R02 (LLM.int8()) and R11 (Meta's quantized-Llama
-blog) state no sample size, no baseline, and no numeric delta, and their
-headline equivalence evidence exists only as a chart image. R13 (vLLM FP8
-documentation) states $n = 250$ but shows no on-page baseline run at all. R14
-(vLLM FP8 KV-cache blog) reports an observed 0.7\,pp difference and permits $n$
-to be imputed, but reports no baseline; its comparison lives in a figure.
 % R14 IS THE TRAP THIS PARAGRAPH EXISTS TO CLOSE (carry checklist §10). Its
 % imputed n = 728 sits just under the 742 that the 2 pp calculation would
 % require, so a reader who sees the numbers and not the blocker will assume it

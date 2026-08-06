@@ -340,6 +340,46 @@ R08 & 0.30\,pp & 0.84\,pp & $0.15\times$ & $0.42\times$ \\
 \end{tabular}
 \end{table}
 
+% STAGE C, 2026-08-06: the three estimators and the TOST convention moved here
+% from \S\ref{sec:audit:rules}, which keeps the registered-margin sentence
+% verbatim, the planning-not-diagnosis wording, the post-hoc disclosure and the
+% monotonicity argument. eq:tost-n moves with them; it has no reference outside
+% audit.tex.
+\subsection{The three registered verdict quantities}
+\label{app:audit:verdictrules}
+
+For each claim, at its reported or rule-imputed sample size $n$, the frozen
+protocol computes three quantities.
+
+\emph{V1, detection resolution.} The minimum detectable difference (MDD) at 80\%
+power and two-sided $\alpha = 0.05$, under the paired-flip model. The per-item
+accuracy difference is $d_i \in \{-1, 0, +1\}$; under the null of no true
+difference, $\mathrm{Var}(d) = p_d$, the discordance rate, so
+$\mathrm{sd} = \sqrt{p_d}$. Both the MDD and its ratio to the registered margin
+are reported (Table~\ref{tab:audit-mdd}).
+
+\emph{V2, equivalence support.} The number of items required for TOST at the
+applicable margin,
+\begin{equation}
+n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil ,
+\label{eq:tost-n}
+\end{equation}
+with $z_{1-\alpha}$ \emph{one-sided} ($1.6449$), because TOST rejects two
+one-sided nulls at level $\alpha$ each. At $\alpha=.05$ per bound this is
+operationally the requirement that a \textbf{90\% two-sided} confidence interval
+fall inside $\pm m$, not a 95\% one; V1 above is the quantity that takes the
+two-sided $z$. A claim is recorded as \emph{below the approximate planning
+threshold} iff its reported $n$ is below $n_{\mathrm{req}}$ at the registered
+margin.
+
+\emph{V3, reproducibility.} Binary, read from the frozen
+\texttt{per\_item\allowbreak\_outputs\allowbreak\_released} column and
+cross-checked against the extraction reconciliation memo.
+
+Every quantity is additionally recomputed under the independent-binomial bound
+$\mathrm{sd} = \sqrt{2p(1-p)}$ and swept over 1\,pp and 3\,pp margins; a verdict
+that changes across that sweep is \emph{margin-sensitive}.
+
 \subsection{Discordance imputation}
 \label{app:audit:imputation}
 

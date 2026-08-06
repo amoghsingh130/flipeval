@@ -47,15 +47,15 @@ page 16. Target: approximately 3 to 4 body pages across four committed stages.
 | 4 | **0** audited sources declare a prospective numerical equivalence margin, established over complete source text | **YES** | 195-209 | `app:audit:sweep` (new) for the keyword-sweep detail (parity/percentage point absent, "margin" only as layout artefact, the one vendor declining to fix a threshold) | Stage B | `\AuditProspectiveNumericMargin`, `\AuditXtabProspectiveTotal` | **Stage B** |
 | 5 | **10** of 16 make the claim in purely qualitative terms with no number attached, and the remaining **6** cite a number that is in every case a **measured outcome**, not a declared tolerance | **YES** | 196-201 | none; both halves stay | Stage B | `\AuditXtabQualTotal`, `\AuditXtabRetroTotal` | **Stage B** |
 | 6 | **0** sources release **task-matched** per-item outputs. "task-matched" must appear in the SAME SENTENCE as the zero, and R08/R15/R16 release outputs for other suites | **YES** | 306-313, 315-325 | `app:audit:v3detail` (new) for which suites each releases | Stage B | `\AuditPerItemTaskMatched`, `\AuditPerItemOtherTaskOnly`, `\AuditPerItemOtherTaskClaims`, `\AuditPerItemNone` | **Stage B** |
-| 7 | **5** non-assessable, as an explicit **4 + 1** split: 4 insufficient reporting, 1 outside the registered binary paired-outcome calculation. **Never** "incompatible with a paired framework" | **YES** | 553-554, 556, 581-583 | `app:audit:indeterminate` (new) for the per-claim R02/R11/R13 detail | Stage C | `\AuditNotAssessable`, `\AuditNotAssessableInsufficient`, `\AuditNotAssessableOutsideFramework` | pending |
-| 8 | **11** assessable claims, at the registered **uniform 2 pp** margin. The sentence "Because no source declares a margin, the applicable margin throughout is the uniform 2 pp registered in advance" is marked RETAIN VERBATIM in the file | **YES** | 352-355, 428-430 | none; the verbatim sentence stays | Stage C | `\AuditAssessable`, `\AuditMarginPP` | pending |
-| 9 | **10** above / **1** changes within / **0** below throughout the atlas-IQR interval, and **no assessable claim falls below the threshold throughout** | **YES** | 460-470 (`tab:audit-sensitivity`), 497 | none; table and sentence both stay in body | Stage C | `\AuditAboveThroughout`, `\AuditChangesWithinIQR`, `\AuditBelowThroughout` | pending |
-| 10 | **R01**'s sensitivity qualification: a sensitivity-dependent planning flag, **not** a verdict, and **not robustly underpowered**. Exactly one outright statement of the latter, in the section close | **YES** | 482-495, 644-648 | `app:audit:r01` (new) for the reversal-point and quartile arithmetic | Stage C (flag) + Stage D (the one outright statement) | `\AuditSensitiveClaim`, `\AuditSensitiveN`, `\AuditSensitiveNReq`, `\AuditSensitiveCellsBelow/Total/Pct` | pending |
-| 11 | **43.6%** is a descriptive share of reference cells, **not** a probability, confidence level or p-value; the cells are correlated and are not independent draws. Number and framing in one sentence | **YES** | 489-495 | none; stays whole | Stage C | `\AuditSensitiveCellsPct` (= 345/792) | pending |
+| 7 | **5** non-assessable, as an explicit **4 + 1** split: 4 insufficient reporting, 1 outside the registered binary paired-outcome calculation. **Never** "incompatible with a paired framework" | **YES** | 553-554, 556, 581-583 | `app:audit:indeterminate` (new) for the per-claim R02/R11/R13 detail | Stage C | `\AuditNotAssessable`, `\AuditNotAssessableInsufficient`, `\AuditNotAssessableOutsideFramework` | **Stage C** |
+| 8 | **11** assessable claims, at the registered **uniform 2 pp** margin. The sentence "Because no source declares a margin, the applicable margin throughout is the uniform 2 pp registered in advance" is marked RETAIN VERBATIM in the file | **YES** | 352-355, 428-430 | none; the verbatim sentence stays | Stage C | `\AuditAssessable`, `\AuditMarginPP` | **Stage C** |
+| 9 | **10** above / **1** changes within / **0** below throughout the atlas-IQR interval, and **no assessable claim falls below the threshold throughout** | **YES** | 460-470 (`tab:audit-sensitivity`), 497 | none; table and sentence both stay in body | Stage C | `\AuditAboveThroughout`, `\AuditChangesWithinIQR`, `\AuditBelowThroughout` | **Stage C** |
+| 10 | **R01**'s sensitivity qualification: a sensitivity-dependent planning flag, **not** a verdict, and **not robustly underpowered**. Exactly one outright statement of the latter, in the section close | **YES** | 482-495, 644-648 | `app:audit:r01` (new) for the reversal-point and quartile arithmetic | Stage C (flag) + Stage D (the one outright statement) | `\AuditSensitiveClaim`, `\AuditSensitiveN`, `\AuditSensitiveNReq`, `\AuditSensitiveCellsBelow/Total/Pct` | **Stage C**, close pending D |
+| 11 | **43.6%** is a descriptive share of reference cells, **not** a probability, confidence level or p-value; the cells are correlated and are not independent draws. Number and framing in one sentence | **YES** | 489-495 | none; stays whole | Stage C | `\AuditSensitiveCellsPct` (= 345/792) | **Stage C** |
 | 12 | Evidential sufficiency, **not truth**. **No claim is called false**, and no finding implies any audited model is degraded | **YES** | 120-128, 645-648 | none | Stage A (framing) + Stage D (the does-not-establish list) | `docs/AUDIT_REGISTRATION_2026-07-15.md` §4 | **Stage A** |
 | 13 | **Not a prevalence estimate**: 16 eligible sources in three frozen frames are not a sample from which the field's practice can be estimated | **YES** | 656-658 | none | Stage A (one clause) + Stage D (full) | `\AuditEligible` | **Stage A** |
 | 14 | **"Robust" means only** that a classification holds throughout the interquartile range of the atlas cells supplying its discordance rate. **SINGLE POINT OF FAILURE**: the sentence beginning *"Where a classification is called robust"* has no other home in the body | **YES, VERBATIM** | 658-661 | **none permitted** | Stage D | prose rule, not a count | pending |
-| 15 | **R14** stays non-assessable and does not enter K. The trap paragraph (imputed n = 728 against 742) stays in the body, and "R04 and R14 carry no verdict" must re-attach to surviving prose | **YES** | 512-514, 572-579 | none for the trap paragraph | Stage C | `results/audit_verdicts_rev3.csv` row R14 | pending |
+| 15 | **R14** stays non-assessable and does not enter K. The trap paragraph (imputed n = 728 against 742) stays in the body, and "R04 and R14 carry no verdict" must re-attach to surviving prose | **YES** | 512-514, 572-579 | none for the trap paragraph | Stage C | `results/audit_verdicts_rev3.csv` row R14 | **Stage C** |
 | 16 | **R04** is outside **our registered binary paired-outcome calculation**, not incompatible with paired analysis generally: CIDEr supports paired resampling; it is the flip model that does not apply | **YES** | 611-621 | `app:audit:r04detail` (new) for the overruled first-pass GSM8K history | Stage D | `results/audit_verdicts_rev3.csv` row R04 | pending |
 | 17 | Claim-derived margins and the old shortfall range remain **withdrawn and non-verdict-bearing**. The **K = 1 → 5 → 4 → 1-of-11** sequence is the body's canonical self-correction and **must not move to an appendix** | **YES** | 21-34 (header), 623-635 | the K = 5 → K = 4 R04 *history* is already in `app:prereg:choices`; the **sequence itself** stays in the body | Stage D | `\AuditBelowThresholdAtMedian`, `\AuditAssessable` | pending |
 | 18 | The two extraction passes are **automated** language-model sessions and **not statistically independent** (common model prior); never "inter-rater" or "dual coding". The locus re-verification was by the **author**, not an independent second coder | **YES** | 107-117, 287-293 | `app:extraction` already holds the procedure | Stage A (extraction) + Stage B (locus disclosure) | `docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md` §1, AUDIT_REGISTRATION §3.3 | **Stage A + B** |
@@ -137,3 +137,27 @@ with the generated macros rather than the words "ten" and "six", closing a
 hand-typed count that had survived every earlier pass.
 
 **Measured: audit 9 body pages to 8; the body boundary moved 35 to 34.**
+
+### Stage C, numerical assessment
+
+Moved: the three estimators and `eq:tost-n` to a new `app:audit:verdictrules`
+(the equation has no reference outside `audit.tex`, so it moved with them); the
+R01 reversal-point and quartile arithmetic to `app:audit:r01`; the
+detection-direction reading of `tab:audit-mdd` to `app:audit:fullrobustness`; the
+per-claim blockers and retained-components list to `app:audit:indeterminate`.
+
+Rows 7, 8, 9, 11 and 15 verified at source. Row 10's flag is placed; its single
+outright not-robustly-underpowered statement is Stage D's.
+
+Kept whole in the body, as the ledger requires: the RETAIN VERBATIM margin
+sentence, `tab:audit-sensitivity` with its 10/1/0 split, "No assessable claim
+falls below the threshold throughout the interval", the 43.6% descriptive-share
+sentence with number and framing together, and the R14 trap paragraph.
+
+The forbidden phrase "incompatible with a paired framework" appears twice in the
+file, both times inside a comment forbidding it. Zero occurrences in the PDF.
+
+**Measured: audit 8 body pages, unchanged; body boundary 34 to 33.** The audit
+did not shrink by a whole page this stage even though roughly 120 lines left it,
+because what left was dense prose that was already sharing pages with the two
+tables; the saving showed up downstream instead.
