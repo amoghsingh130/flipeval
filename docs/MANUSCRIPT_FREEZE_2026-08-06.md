@@ -7,7 +7,8 @@ consideration**, not pending; it is retained only as a record of what was
 considered and declined.
 
 Machine-readable manifest: `docs/MANUSCRIPT_FREEZE_2026-08-06.json`, 34 files,
-collective sha256 `f273ae6c4df1c2af40ed6ecfe6ddb82a66408e3d2a0a0f1460a00f8706961002`.
+collective sha256 `42a3d76e65b6f36216a9ba3008453d778fe4f8fd9e7952f4def9d052b2e746ce`
+(re-frozen after the date repair; the first freeze was `f273ae6c…961002`).
 
 ## What the freeze covers
 
@@ -58,21 +59,24 @@ freeze_prepace --verify        : passed
 prose em dashes                : 0
 ```
 
-## One caveat the freeze cannot close
+## The date caveat, CLOSED 2026-08-06
 
-`main.tex` line 121 sets `\date{Draft \today}`. **The PDF is therefore not
-byte-reproducible across days**: today's build says "Draft August 6, 2026" and
-tomorrow's will not match it. The *sources* are frozen by hash and are
-reproducible; the rendered date is not.
+The first freeze recorded that `main.tex` set `\date{Draft \today}`, so the PDF
+was not byte-reproducible across days. **That is now repaired.** The line reads
+`\date{August 2026}`, a fixed string that renders identically in both identity
+modes and needs no `\ifanon` routing.
 
-This was left as found rather than changed, because the title block is
-manuscript content and this freeze is a record, not an edit. Two options, for
-whoever decides:
+arXiv advises against `\today` precisely because it may rebuild a submission
+later, silently changing the displayed date on a paper whose sources are frozen.
+**The rendered PDF is now reproducible across days**, which is what a freeze
+should mean.
 
-- for a dated preprint, replace `\today` with the literal freeze date;
-- for a submission, drop the word "Draft" as well.
+This was release hygiene, not a reopening of scientific content: exactly one
+file changed, `paper/main.tex`, and the manifest above is the re-freeze.
 
-Neither is done here.
+If the arXiv build should say ``Preprint'' while the blind build does not, route
+the date through `\ifanon` as the identifiers are routed. It is deliberately not
+routed now, because one neutral string cannot desynchronise between modes.
 
 ## Verifying the freeze
 

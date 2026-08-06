@@ -2,7 +2,7 @@
   "schema_version": 1,
   "frozen": "2026-08-06",
   "what": "The scientific manuscript. Frozen by content hash; further compression of sections/audit.tex is closed and no scientific content may change under this freeze.",
-  "git_head_at_freeze": "e4f2cd3c1ff92bb49fe214050ee574676d6c1d9d",
+  "git_head_at_freeze": "23ffbbe5795df469006d4601d53c82df9e6becfe",
   "branch": "flagship-narrative",
   "pushed": false,
   "body_pages": 32,
@@ -28,8 +28,8 @@
       "bytes": 7022
     },
     "paper/main.tex": {
-      "sha256": "d574b932a9d1186a70367b0c2ace57ff67b8daaf1d494ca7779b2929b4ca33de",
-      "bytes": 11075
+      "sha256": "640e16ce11f1433592faafdffd0971d785b096b68858733ddabb1d76eea96fb1",
+      "bytes": 11641
     },
     "paper/references.bib": {
       "sha256": "be39f1b5a84590d889b5faba716577095eacb1ac7e067ab72addf3d1c41a84fc",
@@ -149,5 +149,7 @@
     }
   },
   "file_count": 34,
-  "manifest_sha256": "f273ae6c4df1c2af40ed6ecfe6ddb82a66408e3d2a0a0f1460a00f8706961002"
+  "manifest_sha256": "42a3d76e65b6f36216a9ba3008453d778fe4f8fd9e7952f4def9d052b2e746ce",
+  "revision": "re-frozen 2026-08-06 after the date repair: \\date{Draft \\today} -> \\date{August 2026}. Release hygiene only; no scientific content changed. The rendered PDF is now reproducible across days.",
+  "pdf_reproducible_across_days": true
 }

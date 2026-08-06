@@ -135,7 +135,15 @@
 \else
   \author{Amogh Singh\\ Georgia Institute of Technology}
 \fi
-\date{Draft \today}
+% STABLE DATE, 2026-08-06. Was \date{Draft \today}, which arXiv advises
+% against: arXiv may rebuild the PDF later, and \today would silently change
+% the displayed date on a paper whose sources are frozen by hash. A fixed
+% string makes the rendered PDF reproducible across days.
+% Works in both identity modes. If the arXiv build should say ``Preprint''
+% and the blind build should not, route it through \ifanon like the
+% identifiers above; it is deliberately NOT routed today, because one
+% neutral string needs no switch and cannot desynchronise between modes.
+\date{August 2026}
 
 % =====================================================================
 % PDF INFO DICTIONARY. hyperref leaves /Title and /Author EMPTY unless they are
