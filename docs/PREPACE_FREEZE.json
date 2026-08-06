@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-06T01:01:14.854082+00:00",
-  "source_commit": "c63616ba9399b4ef2b2f811c0d1f2f7a12b4a2ff",
-  "source_tree": "dd6ee6e363aaadf5c0523b71b073fa7820d593c3",
+  "created_at": "2026-08-06T02:55:06.242096+00:00",
+  "source_commit": "f0ab36c79b3ed5d87b9c6c73b5c62280df9f656e",
+  "source_tree": "45fcaeea0fa133ed7940787be3119fe65d816f8c",
   "branch": "flagship-narrative",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -48,7 +48,7 @@
     "scripts/freeze_prepace.py": "94f5abb98daa42d4d39ed889d5e8c5834164205e6b4046b9bb1852b716b2d12d",
     "scripts/kaggle_bootstrap.py": "c18c3528d281e3ab97a0e9dff3c5b1101afb06b4d41abae31536ed00d2e5c1fe",
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
-    "scripts/make_figure1.py": "d75dac82df5ed37e3f791c8172a97649448039730b6766151ab57d3304b08e94",
+    "scripts/make_figure1.py": "052b52ba79c7aab6a314d64ad6e85538841a2f041cb21843675c6f552e603df2",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "acfe3de31cb7ea38d53c255a1c01946e3baf5e6ddaf5202808b3ce583445bb75",
     "scripts/slurm/build_image.sbatch": "628272db01c755674c77be34d0728856f0dfe874425dd1baaa425d41dd5a6d61",
@@ -99,5 +99,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "3fd4e15e97679c45a87910bd85ba9ee745c7decad9838b96f1cfd7739b7d48da"
+  "manifest_payload_sha256": "2d9efa7aec01ab831498c52758d9923d4f8bf261e3060c8520bcea4d2b2b73fc"
 }
