@@ -384,6 +384,209 @@ either direction, and R01 is the only claim sensitive in both. That coincidence
 is worth stating precisely because it is a coincidence: the two properties
 answer different questions and neither implies the other.
 
+% =====================================================================
+% DESTINATIONS CREATED 2026-08-06 for the audit body compression.
+%
+% Created BEFORE any body deletion, per the standing rule and
+% docs/AUDIT_COMPRESSION_PROTECTION_LEDGER_2026-08-06.md: body text is removed
+% only once its destination exists, compiles, and is referenced successfully.
+% An earlier attempt at this compression cut body prose first and failed
+% PAPER_CHECK with eight dangling refs to appendix labels that had never been
+% created.
+%
+% Every subsection below carries material MOVED from sections/audit.tex. No
+% value, count or qualification is altered in transit; the counts remain the
+% generated \Audit* macros and are never retyped.
+% =====================================================================
+
+\subsection{Eligibility, and the full-text source review}
+\label{app:audit:eligibility}
+
+% MOVED from \S\ref{sec:audit:taxonomy}. The body keeps the ruling, the rule it
+% applies, and both denominators; the review that produced it lives here.
+The eligibility correction rests on a full-text review of every one of the
+\AuditFrozenCandidates{} archived sources, conducted after the first verdicts had
+been computed and reported as such. Each source was searched complete, including
+tables, captions, footnotes, appendices and reference lists, with model cards
+searched as raw Markdown rather than as rendered pages.
+
+The review found that one candidate's recorded quotation appears nowhere in its
+source: the sentence had been composed from a table cell rather than quoted from
+prose. The registered inclusion rule requires the assertion to appear in prose or
+a table caption. It appears in neither, so \AuditIneligibleClaim{} is excluded by
+applying the registered rule rather than by a new judgement, and the eligible
+denominator moves from \AuditFrozenCandidates{} to \AuditEligible{}. The
+exclusion cannot flatter any result reported in \S\ref{sec:audit}:
+\AuditIneligibleClaim{} was above the planning threshold at
+\AuditMarginPP{}\,pp and recorded \emph{no} on per-item outputs, so removing it
+lowers neither the threshold tally nor the reproducibility count. Its row remains
+in the released claim table and in Table~\ref{tab:audit-characterisation}.
+
+Source provenance: content hashes were recorded for 16 of the
+\AuditFrozenCandidates{} sources. R13's was left empty, and the consequence for
+provenance is stated in \S\ref{sec:artifacts}. Every archived source, its hash,
+and the retrieval script needed to reproduce these locations are released with
+the paper, so every classification here is checkable without re-fetching
+anything.
+
+\subsection{The complete-text margin sweep}
+\label{app:audit:sweep}
+
+% MOVED from \S\ref{sec:audit:taxonomy}. The body keeps the finding and that it
+% was established over complete source text; the sweep's contents live here.
+The finding that no source declares a prospective numerical equivalence margin is
+established over complete source text rather than over the quoted sentence. The
+registered vocabulary of tolerance language was swept across all
+\AuditFrozenCandidates{} archived sources in full.
+
+The terms \emph{parity} and \emph{percentage point} do not occur anywhere in the
+corpus. Every occurrence of \emph{margin} is a page-layout artefact, a stylesheet
+declaration, or the idiom ``by a large margin'' describing superiority rather
+than tolerance. One vendor document comes closest to a declared tolerance by
+explicitly declining to fix one, observing that ``users might have different
+tolerances on accuracy impact'', which states the absence of a threshold rather
+than a threshold.
+
+\subsection{Per-item outputs: what the three partial sources release}
+\label{app:audit:v3detail}
+
+% MOVED from \S\ref{sec:audit:v3}. The body keeps the zero, the task-matched
+% qualifier in the same sentence, and the three claim ids; the suite-by-suite
+% detail and the repair-cost argument live here.
+\AuditPerItemOtherTaskClaims{}, all Red~Hat AI model cards, are the closest the
+record comes to reproducibility, and they illustrate why the task-matched count
+is nonetheless \AuditPerItemTaskMatched{}. They release per-item outputs for
+Arena-Hard, OpenLLM~v2 and HumanEval, but \emph{not} for the OpenLLM~v1 tasks
+that the audited equivalence claim is actually about. The released artifacts and
+the asserted claim do not intersect. These three sources are ahead of the field
+in disclosure practice and the correction they need is small: publish the
+per-item outputs for the suite the claim quotes.
+
+The reason this finding is more actionable than any power calculation is that the
+two failures have different repair costs. Underpowering is fixable after the fact
+by evaluating more items, and \S\ref{sec:certification} says how many.
+Irreproducibility is not fixable downstream at all: with no per-item outputs,
+nobody outside the releasing organisation can run the paired test at \emph{any}
+sample size, cannot compute churn, and cannot check the arithmetic. Per-item
+outputs for a benchmark of a few thousand items are a file of a few megabytes.
+
+\subsection{The non-assessable claims, one by one}
+\label{app:audit:indeterminate}
+
+% MOVED from \S\ref{sec:audit:indeterminate}. The body keeps the 4+1 split, the
+% R14 trap paragraph and the category-is-itself-a-result argument. The
+% per-claim blockers and the retained-components list live here.
+Each non-assessable claim is recorded with exactly one primary blocker.
+
+\emph{Insufficient reporting} (\AuditNotAssessableInsufficient{}). R02
+(LLM.int8()) and R11 (Meta's quantized-Llama blog) state no sample size, no
+baseline and no numeric delta, and their headline equivalence evidence exists
+only as a chart image. R13 (vLLM FP8 documentation) states $n = 250$ but shows no
+on-page baseline run at all. R14 (vLLM FP8 KV-cache blog) reports an observed
+0.7\,pp difference and permits $n$ to be imputed, but reports no baseline; its
+comparison lives in a figure.
+
+\emph{Outside the registered calculation}
+(\AuditNotAssessableOutsideFramework{}). \AuditOutsideFrameworkClaim{} (AWQ)
+reports enough, but about a quantity the registered binary paired-outcome model
+cannot score (\S\ref{sec:audit:r04}).
+
+Every non-assessable claim retains whatever components its available inputs
+support. These are listed in the CSV column \texttt{determinate\_components} and
+are reported as supplementary transparency only, \textbf{never verdict-bearing}:
+R13 retains V2, because the paired standard deviation depends on discordance and
+not on baseline accuracy; R14 retains V1 (paired) and V2; and R04 retains V1 and
+V2 computed on a substituted benchmark.
+
+\subsection{R01: the planning values behind the single flag}
+\label{app:audit:r01}
+
+% MOVED from \S\ref{sec:audit:results}. The body keeps the flag, that it is a
+% sensitivity-dependent planning flag and not a verdict, and the 43.6%
+% descriptive-share sentence with its framing intact. The arithmetic lives here.
+% SOURCE: results/audit_verdicts_rev3.csv row R01: n=1838, imputed_discordance
+% 0.13, v2_required_n_paired_2pp 2010, discordance_p25 0.0882 -> 1364,
+% discordance_p75 0.2800 -> 4328, reversal_discordance 0.118915,
+% tier_cells_below_reversal 345, discordance_n_cells 792.
+\AuditSensitiveClaim{}, the GPTQ paper, reports $n = \AuditSensitiveN{}$ against
+a requirement of $\AuditSensitiveNReq{}$ items at the imputed discordance rate of
+$0.130$. The gap is one part in twelve of that requirement, and it closes
+entirely if the imputed rate is a little lower: the classification reverses at a
+discordance rate of $0.1189$, and $\AuditSensitiveCellsBelow{}$ of the
+$\AuditSensitiveCellsTotal{}$ atlas cells supplying the imputation lie below that
+point. Across the interquartile range of those cells the requirement moves from
+$1{,}364$ items to $4{,}328$, so \AuditSensitiveClaim{} is adequately sized at
+the first quartile and undersized at the third.
+
+\subsection{R04: the overruled first-pass computation}
+\label{app:audit:r04detail}
+
+% MOVED from \S\ref{sec:audit:r04}. The body keeps the ruling, why CIDEr is
+% outside the REGISTERED CALCULATION rather than incompatible with paired
+% analysis, and that the number is not claimed as an audit result. The history
+% of the overruled computation lives here.
+The first extraction pass scored R04 on GSM8K, the source's own accuracy
+benchmark ($-0.30$\,pp at $n = 1{,}319$), and reported it as the audit's largest
+shortfall. On review this was overruled, because computing a TOST requirement on
+GSM8K audits a sentence the source wrote about a different benchmark, in
+different and non-trigger language.
+
+That ruling moved the headline and removed the audit's biggest number. The counts
+and the ratio it moved are quoted as history in
+Appendix~\ref{app:prereg:choices}, computed under the superseded reading that
+took each source's reported delta as its margin, and \textbf{they are not current
+results}. The GSM8K computation is retained in the released CSV as a labelled
+transparency column so a reader can see exactly what was set aside and why. It is
+not claimed anywhere in this paper as an audit result.
+
+\subsection{Interpretive rulings and superseded verdicts}
+\label{app:audit:history}
+
+% Index, not new content: the histories already live in app:prereg:choices and
+% in the dated records. This exists so the compressed body has one pointer to
+% reach all of them, instead of repeating the chronology.
+The audit's interpretive history is recorded in full elsewhere and is indexed
+here so the main text needs only one pointer.
+
+The four interpretive rulings, each with the direction it moved the headline, are
+Appendix~\ref{app:prereg:choices}: which margin is ``the applicable margin'' and
+the $K = 5 \to K = 4$ correction; the R04 benchmark-substitution ruling; the
+claim-level rather than claim-by-benchmark granularity; and the treatment of
+sources that state no sample size.
+
+The superseded verdict record is \texttt{docs/AUDIT\_\allowbreak{}VERDICTS\_\allowbreak{}2026-07-20.md}, which
+predates both the rev-2 atlas and Amendment~2. \textbf{No value may be restored
+from it.} Amendment~2 (signed, commit \texttt{ab279b2}) makes the registered
+uniform \AuditMarginPP{}\,pp margin the primary yardstick for every claim,
+forbids describing any quantity derived from a source's own reported results as
+that source's declared margin, and reopens \S\S3.1--3.2 for eligibility only. The
+claim-derived margins and the shortfall range computed under the superseded
+reading are \textbf{withdrawn, not recomputed}, and are non-verdict-bearing
+wherever they still appear as history.
+
+\subsection{Both robustness directions in full}
+\label{app:audit:fullrobustness}
+
+% MOVED from \S\ref{sec:audit:results}, the detection-direction paragraph. The
+% body keeps the two-directions distinction and that they must never be merged.
+% The reading of tab:audit-mdd lives here, next to that table.
+Two features of Table~\ref{tab:audit-mdd} matter for how the audit should be
+read.
+
+First, the independent-binomial columns are uniformly \emph{worse}, by roughly a
+factor of two. Pairing is the generous modelling assumption, and the one
+evaluation that is coarser than the registered margin under pairing is coarser
+still without it.
+
+Second, the ordering makes the audit's reach visible. Only
+\AuditSensitiveClaim{}'s evaluation is coarser than the registered margin, and
+the other ten resolve differences between a sixth and a half of it. An audit at a
+\AuditMarginPP{}\,pp margin is a weak test and should be understood as one. The
+sources were not asked to meet a standard this permissive, because they were not
+asked to meet any stated standard at all, and what the table shows is that ten
+evaluations would already satisfy a reporting requirement none of them was given.
+
+
 \section{Certification tables at 1\,pp and 3\,pp}
 \label{app:certification-margins}
 
