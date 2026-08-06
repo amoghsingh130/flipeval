@@ -59,54 +59,50 @@ section computes that requirement empirically.
 
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
 % CORRECTED 2026-07-31. This read "at 95% confidence and 80% power", which
-% contradicted the paragraph below it: z_{1-alpha} = 1.6449 is ONE-sided at
-% alpha = .05, and TOST at one-sided .05 corresponds to containment of a 90%
-% two-sided interval, not a 95% one. The formula and every computed value are
-% unchanged -- only the description of them was wrong. Four table captions
-% carried the same error and are corrected with it.
-% RETAIN-VERBATIM: the sentence below is one of the two body homes of
-% qualification 17 and survives the 2026-08-04 compression unaltered.
+% contradicted the one-sided z: TOST at one-sided .05 corresponds to containment
+% of a 90% TWO-SIDED interval, not a 95% one. The formula and every computed
+% value are unchanged; only the description of them was wrong.
+% RETAIN-VERBATIM: the lead-in below is one of the two body homes of
+% qualification 17 and has survived three compressions unaltered.
+% COMPRESSED 2026-08-06, stage 3. The derivation of the two standard
+% deviations, the one-sided-z justification, the quartile method and the
+% independent-binomial discussion moved to Appendix~\ref{app:cert:method}. Both
+% equations STAY: atlas.tex cites Equations \eqref{eq:sds}--\eqref{eq:nreq} as
+% the reason churn is the variance term. The numeric substitution line was
+% dropped as repeated explanation; the constants are stated in the prose.
 For a discordance rate $p_d$ and margin $m$, under TOST at one-sided
 $\alpha=.05$ (equivalent to requiring a 90\% two-sided confidence interval to
 fall inside $\pm m$) with 80\% power,
 \begin{align}
 \mathrm{sd}_{\mathrm{paired}}      &= \sqrt{p_d}, &
 \mathrm{sd}_{\mathrm{independent}} &= \sqrt{2p(1-p)}, \label{eq:sds}\\[2pt]
-% WIDTH FIX 2026-08-05: the two equalities on one line ran 91pt past the
-% measure. The numeric substitution moves to its own aligned line. The equation
-% is unchanged.
-n_{\mathrm{req}} &= \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil \label{eq:nreq}\\[2pt]
- &= \left\lceil \left(\frac{(1.6449 + 0.8416)\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil. \nonumber
+n_{\mathrm{req}} &= \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil ,
+\label{eq:nreq}
 \end{align}
-The paired standard deviation follows from the flip model: the per-item accuracy
-difference is $d_i \in \{-1,0,+1\}$, and under the null of no true difference
-$\mathrm{Var}(d) = p_d$, the rate at which the two models disagree on
-correctness. The independent form uses $p$, the family's median baseline
-accuracy, because independent-binomial variance depends on accuracy and not on
-churn. $z_{1-\alpha}$ is \textbf{one-sided}, since TOST rejects two one-sided
-nulls at level $\alpha$ each (Appendix~\ref{app:prereg:choices}, interpretive
-choice~5). The discordance rates are not modelled; they are read off the atlas
-(\S\ref{sec:atlas}). For each benchmark family we take the 25th percentile,
-median, and 75th percentile of the per-cell accuracy-state churn observed across
-that family's atlas cells, giving optimistic, typical, and pessimistic
-compression behaviour. Quartiles are \texttt{numpy}'s linear-interpolation
-\texttt{np.quantile}.
+with $z_{1-\alpha} = 1.6449$ one-sided and $z_{1-\beta} = 0.8416$.
+The paired standard deviation is the whole point: it is set by $p_d$, the rate
+at which the two models disagree item by item, and not by how hard the benchmark
+is. The independent form depends instead on $p$, the family's median baseline
+accuracy. Appendix~\ref{app:cert:method} derives both, justifies the one-sided
+$z$, and states how the discordance quartiles are read off the atlas
+(\S\ref{sec:atlas}).
 
 % ADDED 2026-07-31. The design assumption was documented in the code
 % (scripts/audit_stats.py::required_n_for_tost, "assumed true difference zero")
-% but was never stated in the paper. Without it a reader may take these as the
-% n that would certify an already-observed delta, which they are not.
+% but was never stated in the paper. PROTECTED: without it a reader may take
+% these as the n that would certify an already-observed delta, which they are
+% not.
 Equation~\eqref{eq:nreq} is the standard TOST planning sample size under an
 assumed \emph{true} paired accuracy difference of zero. It answers ``how many
 items would this benchmark need for an equivalence test to have 80\% power,
-given how much models of this kind disagree item-by-item''. It does
-\emph{not} answer ``how many items would certify the delta this source
-observed''. Under a true difference $\delta$, the quantity TOST must resolve is
-the separation $m - |\delta|$ instead of $m$, so the requirement grows without
-bound as $|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in
-this paper is therefore a \emph{lower bound} on what a non-zero true
-difference would demand, and the tables are design tables, not retrospective
-certification of any particular reported result.
+given how much models of this kind disagree item-by-item''. It does \emph{not}
+answer ``how many items would certify the delta this source observed''. Under a
+true difference $\delta$ the quantity TOST must resolve is the separation
+$m - |\delta|$ instead of $m$, so the requirement grows without bound as
+$|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in this
+paper is therefore a \emph{lower bound} on what a non-zero true difference would
+demand, and these are design tables, not retrospective certification of any
+particular reported result.
 
 \begin{table}[!t]
 \centering
@@ -158,37 +154,23 @@ gsm8k         &  24 & 0.040 / 0.077 / 0.198 & 619 / \textbf{1{,}184} / 3{,}068 &
 
 % SOURCE: results/certification_tables_rev2.csv, mmlu at margin_pp 1.0/2.0/3.0
 % (required_n_median = 8656 / 2164 / 962; required_n_independent_binomial at
-% 2 pp = 7727). The rev-1 8,491-vs-8,492 discrepancy against the rev-1 narrative
-% doc is moot: both are superseded by rev-2, and the CSV remains authoritative.
-Pick the benchmark family and the margin you intend to certify. The three
-required-$n$ columns are the item counts you need under optimistic, typical and
-pessimistic compression behaviour for that family; the naive column is the count
-you would compute if you ignored pairing. \emph{MMLU, 2\,pp margin, typical
-discordance $\Rightarrow$ evaluate at least 2{,}164 items.} Ignoring pairing
-would have demanded 7{,}727, or $3.6\times$ the compute for the same conclusion.
-Tightening the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing
-it to 3\,pp lowers it to 962. The margin is the practitioner's declaration, and
-its cost is quadratic: parity within 1\,pp is four times as expensive to certify
-as parity within 2\,pp.
-
-The independent-binomial column is not a straw man. It is what you get by
-treating the baseline and compressed evaluations as two unrelated samples and
-comparing proportions, which is the default in most reporting, and it is wrong
-in a specific, quantifiable way: the two runs are \emph{the same items through
-two nearly identical models}, so they agree on the large majority of items, and
-their difference has far less variance than independence implies.
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column is in
-% the table"; results/certification_tables_rev2.csv column
-% paired_advantage_at_median (GSM8K 2.25--2.26, MuSR 14.66--14.68, pooled 4.16).
-% Pointer corrected 2026-07-26: the values here are rev-2, but this comment
-% named the rev-1 CSV, whose GSM8K entry is 1.7.
-The advantage column is exactly that gap. It ranges from $2.3\times$
-(GSM8K) to $14.7\times$ (MuSR) and sits at $4.2\times$ pooled
-over 1{,}707 cells: a practitioner using the paired design reaches the same
-equivalence conclusion on roughly a quarter of the evaluation budget. The
-variation across families is informative in itself: low-churn families (MuSR,
-BBH, GPQA) reward pairing most, while high-churn generative families (MATH,
-MMLU) both need more items \emph{and} gain less from pairing.
+% 2 pp = 7727); column paired_advantage_at_median (GSM8K 2.25--2.26, MuSR
+% 14.66--14.68, pooled 4.16).
+% COMPRESSED 2026-08-06, stage 3: the reading instructions are one sentence, the
+% independent-binomial discussion moved to Appendix~\ref{app:cert:method}, and
+% the worked example is kept whole because it is the section's one example.
+Pick the benchmark family and the margin you intend to certify, and read the
+item count under optimistic, typical or pessimistic compression behaviour for
+that family. \emph{MMLU, 2\,pp margin, typical discordance $\Rightarrow$
+evaluate at least 2{,}164 items.} Ignoring pairing would have demanded
+$7{,}727$, or $3.6\times$ the compute for the same conclusion. Tightening the
+margin to 1\,pp raises the requirement to $8{,}656$ items and relaxing it to
+3\,pp lowers it to $962$: the margin is the practitioner's declaration and its
+cost is quadratic, so parity within 1\,pp is four times as expensive to certify
+as parity within 2\,pp. Across families the paired design's advantage ranges
+from $2.3\times$ (GSM8K) to $14.7\times$ (MuSR) and sits at $4.2\times$ pooled
+over 1{,}707 cells, so a practitioner using it reaches the same equivalence
+conclusion on roughly a quarter of the evaluation budget.
 
 \subsection{The requirement is driven by churn, not by difficulty}
 
@@ -250,17 +232,13 @@ These caveats travel with the table, and any reuse of it should carry them.
 Families with fewer than four analysable cells are omitted, because a quartile
 over three points is not an empirical distribution; this drops nothing from the
 registered set, and all surviving families appear in
-Table~\ref{tab:certification}. Of those that survive, two rest on thin evidence
-and are indicative only, \texttt{mmlu\_pro} (5 cells) and \texttt{ifeval}
-(8), and should be treated as a starting hypothesis to be replaced by the
-reader's own measured churn, not as a reference constant.
-Appendix~\ref{app:cert:caveats-detail} covers the remaining two: that family
-aggregation makes the quartile columns \emph{conservative} rather than
-optimistic, and that both disclosed feasibility-probe pairs are excluded.
-Finally, these are certification sample sizes, not
-detection sample sizes: they certify equivalence within $\pm m$, the $n$ required
-to \emph{detect} a difference at the same margin is larger, and reporting one as
-the other is the error this section exists to prevent.
+Table~\ref{tab:certification}. Two of the surviving rows rest on thin evidence
+and are indicative only, and family aggregation and the excluded feasibility
+probes are covered in Appendices~\ref{app:cert:method}
+and~\ref{app:cert:caveats-detail}. Finally, these are certification sample
+sizes, not detection sample sizes: they certify equivalence within $\pm m$, the
+$n$ required to \emph{detect} a difference at the same margin is larger, and
+reporting one as the other is the error this section exists to prevent.
 
 This section \emph{does not support}: extrapolation to benchmark families
 absent from the atlas; extrapolation to compression methods absent from the

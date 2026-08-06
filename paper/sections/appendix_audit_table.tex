@@ -764,6 +764,54 @@ gsm8k & 24 & 0.040 / 0.077 / 0.198 & 275 / \textbf{527} / 1{,}364 & 1{,}188 & $2
 % was never a rendered claim -- but it is the instruction this appendix would
 % have been typeset from.
 
+% STAGE 3 of the body compression, 2026-08-06. Derivation detail, the
+% independent-binomial discussion and the thin-family discussion moved here from
+% \S\ref{sec:certification}, which keeps detection-is-not-certification, the
+% planning equation, one table, one worked example, the pairing advantage, the
+% planning-count-not-certificate qualification and its scope limits.
+\subsection{Certification method detail}
+\label{app:cert:method}
+
+\paragraph{The two standard deviations.} The paired form follows from the flip
+model: the per-item accuracy difference is $d_i \in \{-1,0,+1\}$, and under the
+null of no true difference $\mathrm{Var}(d) = p_d$, the rate at which the two
+models disagree on correctness. The independent form uses $p$, the family's
+median baseline accuracy, because independent-binomial variance depends on
+accuracy and not on churn. That is the whole of the difference between the two
+columns of Table~\ref{tab:certification}, and it is why the advantage varies by
+benchmark family rather than being a constant.
+
+\paragraph{The one-sided $z$.} $z_{1-\alpha}$ in Equation~\eqref{eq:nreq} is
+one-sided, since TOST rejects two one-sided nulls at level $\alpha$ each, which
+is why $\alpha = .05$ per bound corresponds to containment of a 90\% two-sided
+interval rather than a 95\% one (interpretive choice~5,
+Appendix~\ref{app:prereg:choices}). The detection quantity V1 of
+\S\ref{sec:audit:rules} is the one that takes the two-sided $z$.
+
+\paragraph{Where the discordance rates come from.} They are not modelled; they
+are read off the atlas (\S\ref{sec:atlas}). For each benchmark family we take
+the 25th percentile, median and 75th percentile of the per-cell accuracy-state
+churn observed across that family's atlas cells, giving optimistic, typical and
+pessimistic compression behaviour. Quartiles are \texttt{numpy}'s
+linear-interpolation \texttt{np.quantile}.
+
+\paragraph{Why the independent-binomial column is not a straw man.} It is what
+you get by treating the baseline and compressed evaluations as two unrelated
+samples and comparing proportions, which is the default in most reporting, and
+it is wrong in a specific, quantifiable way: the two runs are \emph{the same
+items through two nearly identical models}, so they agree on the large majority
+of items and their difference has far less variance than independence implies.
+The variation in the advantage across families is informative in itself:
+low-churn families (MuSR, BBH, GPQA) reward pairing most, while high-churn
+generative families (MATH, MMLU) both need more items \emph{and} gain less from
+pairing.
+
+\paragraph{The two thin rows.} Of the families that survive the four-cell
+threshold, two rest on thin evidence and are indicative only,
+\texttt{mmlu\_pro} (5 cells) and \texttt{ifeval} (8). They should be treated as
+a starting hypothesis to be replaced by the reader's own measured churn, not as
+reference constants.
+
 \subsection{Scope caveats carried from the main text}
 \label{app:cert:caveats-detail}
 
