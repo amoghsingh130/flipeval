@@ -23,94 +23,82 @@
 \section{Related work and positioning}
 \label{sec:related}
 
+% COMPRESSED 2026-08-06, stage 2 of the body compression. Two pages to one,
+% reorganised around the three things prior work actually did: per-item churn,
+% calibration-data sensitivity, and detection versus certification.
+% DEFECT FIXED IN THE SAME PASS: "Two further concurrent studies measure
+% per-item change on adjacent objects" appeared TWICE in consecutive sentences,
+% the second time with the appendix pointer attached. One copy remains.
+% EVERY CITATION THAT WAS HERE IS STILL HERE. The extended method-by-method and
+% audit-genre discussion was already in sections/appendix_related_detail.tex
+% (app:reconcile, app:related:concurrent, app:related:lossless,
+% app:related:genre, app:related:families); this section now points at it.
+
+% (1) PER-ITEM CHURN AND CORRECTNESS AGREEMENT.
+% THE NO-PRIORITY-CLAIM SENTENCE IS VERBATIM AND MUST STAY SO -- it is a dated,
+% author-affirmed statement about precedence.
+% SOURCE: docs/PRIOR_ART_CONCURRENT_2026-07-24.md, "Dated Amendments" (a)-(d),
+% reviewed and affirmed by the author 2026-07-24.
 \citet{dutta2024flips} show that compressed models can match baseline aggregate
 accuracy while flipping many individual answers, and propose flips and KL
 divergence as complementary metrics. \textbf{The flips metric is theirs, and we
-do not claim it.} What we add is the same decomposition measured across the
-public record at scale (\S\ref{sec:atlas}), the use of the observed flip-rate
-distribution as the \emph{variance model} for equivalence certification
+do not claim it.} What we add is that decomposition measured across the public
+record at scale (\S\ref{sec:atlas}), the observed flip-rate distribution used as
+the \emph{variance model} for equivalence certification
 (\S\ref{sec:certification}), and the audit that follows from it
-(\S\ref{sec:audit}).
-
-Concurrent work reaches the same premise independently.
+(\S\ref{sec:audit}). Concurrent work reaches the same premise independently:
 \citet{rababah2026illusion}, posted two days before our preregistration froze
 and unknown to us until the prior-art sweep of 2026-07-24, define
-\emph{correctness agreement}, the per-item rate at which base and quantized
-models are both correct on the same input. That statistic is the joint-correct
-cell of the same $2\times2$ table our accuracy-state churn is built from, and
-the two are interconvertible given the marginal accuracies. They study a
-quantization family disjoint from ours (\texttt{llama.cpp} GGUF legacy and
-$k$-quant rather than GPTQ and AWQ) and reach a conclusion consistent with
-ours. We read this as
-external corroboration of the premise, not competition on it, and we make no
-priority claim over it: no committed artifact in this repository predates its
-posting.
-% SOURCE for the independence and no-precedence statements:
-% docs/PRIOR_ART_CONCURRENT_2026-07-24.md, "Dated Amendments" (a)-(d),
-% reviewed and affirmed by the author 2026-07-24.
-What they do not supply, and what the rest of this paper is, is the machinery
-that turns the shared premise into a decision: equivalence testing at a declared
-margin, required-$n$, a test of whether the calibration seed reorders two
-methods, and an audit of published claims. Two further concurrent studies
-measure per-item change on adjacent objects.
-Two further concurrent studies measure per-item change on adjacent
-objects, on model versions and on community checkpoints
+\emph{correctness agreement}, the joint-correct cell of the same $2\times2$
+table our accuracy-state churn is built from and interconvertible with it given
+the marginal accuracies, over a quantization family disjoint from ours. We read
+this as external corroboration of the premise, not competition on it, and we
+make no priority claim over it: no committed artifact in this repository
+predates its posting. What it does not supply is the machinery that turns the
+shared premise into a decision. Two further concurrent studies measure per-item
+change on adjacent objects, on model versions and on community checkpoints
 (Appendix~\ref{app:related:concurrent}).
 
+% (2) CALIBRATION-DATA SENSITIVITY.
 \citet{williamsaletras2024} establish that the calibration \emph{data} affects
 quantized model quality, finding substantial variation in downstream task
 performance across calibration sets. \textbf{Calibration-data effects are
-theirs.} Our question is orthogonal and finer-grained: holding the
-calibration corpus fixed, does the calibration \emph{sample seed} change the
-\emph{ranking} of two methods? The design pairs GPTQ seed $s$ and AWQ seed $s$ on
-byte-identical calibration samples, so a seed-level ranking difference is
-attributable to method-by-calibration interaction and not to the two methods
-seeing different data (\S\ref{sec:minigrid}). The sweep found no prior work that
-varies a calibration \emph{seed} with the corpus held fixed and asks whether the
-resulting instability reorders two methods. The nearest antecedents vary the
-calibration set itself and disagree with each other about how much that matters:
+theirs.} Our question is orthogonal and finer-grained: holding the calibration
+corpus fixed, does the calibration \emph{sample seed} change the \emph{ranking}
+of two methods (\S\ref{sec:minigrid})? The sweep found no prior work that varies
+a calibration seed with the corpus held fixed and asks whether the resulting
+instability reorders two methods. The nearest antecedents vary the calibration
+set itself and disagree with each other about how much that matters:
 \citet{williamsaletras2024} find the effect substantial, and
-\citet{paglieri2024outliers} find it diminishing on modern models, with
-Mistral~7B close to immune. That disagreement is the strongest available
-objection to this paper, since a field insensitive to the calibration set would
-seem unlikely to reorder on the seed. Appendix~\ref{app:reconcile} answers it at
-length: both results hold at once, because neither design measures the
-\emph{gap between} two methods, which is the quantity a practitioner choosing
-between them depends on, and our own eight cells show a seed-induced range at
-least as large as that gap in 7 of 8.
+\citet{paglieri2024outliers} find it diminishing on modern models. That
+disagreement is the strongest available objection to this paper, since a field
+insensitive to the calibration set would seem unlikely to reorder on the seed.
+Appendix~\ref{app:reconcile} answers it at length: both results hold at once,
+because neither design measures the \emph{gap between} two methods, which is the
+quantity a practitioner choosing between them depends on, and our own eight
+cells show a seed-induced range at least as large as that gap in 7 of 8.
 
-\citet{helcig2026slq} occupy the phrase this paper is about: they define
-losslessness for quantized LLMs and build a method reaching it. Their question
-is the complement of ours, and they compute no equivalence test, power or
-required $n$ (Appendix~\ref{app:related:lossless}).
-
+% (3) STATISTICAL DETECTION VERSUS CERTIFICATION.
+% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
+% (GSM8K 2.25--2.26, MuSR 14.66--14.68). REV-2: the low end was 1.7 under rev-1.
 The closest existing work is \citet{llmaccuracystats2026}, which brings
 one-sided McNemar \emph{detection} to LLM accuracy comparisons and ships it in
 the evaluation harness the field already uses. We agree with its diagnosis and
 differ in the question asked. Detection asks whether there is evidence of a
 difference; a non-significant result is not equivalence, and at the sample sizes
 in \S\ref{sec:audit} it is frequently just an absence of resolution. Our deltas
-are: (i) TOST certification at a \emph{declared} margin;
-(ii) required-$n$ certification tables computed from empirical churn instead of
-% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
-% (GSM8K 2.25--2.26, MuSR 14.66--14.68). REV-2: the low end was 1.7 under rev-1;
-% corrected 2026-07-26 with the abstract, introduction and the certification §.
-from independent-binomial variance, with the $2.3$--$14.7\times$ correction that
-implies; and (iii) the audit of published claims, which is the
-empirical case that the distinction matters in practice. An anytime-valid
-sequential extension, using confidence sequences that let a practitioner stop as
-soon as the model is certified, is registered and in progress; it reports no results
-here and is not claimed as a contribution of this paper.
-
-The constructive-audit genre is well established
-\citep{dodge2019showyourwork,marie2021mtaudit}, and has begun to adopt
-preregistration directly, which is the precedent for \S\ref{sec:prereg}
-(Appendix~\ref{app:related:genre}). We follow it in framing and in tone: the
-finding is about what the field reports, not about whether individual authors
-are right.
-
-The audited claims span weight-only quantization, weight-and-activation
-quantization and one-shot pruning; the methods and the honest non-claimers among
-them are listed in Appendix~\ref{app:related:families}. We audit the equivalence
-\emph{language} these papers use and the evidence offered for it, not the
-methods themselves.
+are TOST certification at a \emph{declared} margin, required-$n$ tables computed
+from empirical churn instead of independent-binomial variance with the
+$2.3$--$14.7\times$ correction that implies, and the audit of published claims
+that is the empirical case the distinction matters. \citet{helcig2026slq} occupy
+the phrase this paper is about, defining losslessness for quantized LLMs and
+building a method reaching it; their question is the complement of ours and they
+compute no equivalence test, power or required $n$
+(Appendix~\ref{app:related:lossless}). The constructive-audit genre is well
+established \citep{dodge2019showyourwork,marie2021mtaudit} and has begun to
+adopt preregistration directly, which is the precedent for \S\ref{sec:prereg}.
+We follow it in framing and in tone: the finding is about what the field
+reports, not about whether individual authors are right, and we audit the
+equivalence \emph{language} these papers use and the evidence offered for it
+rather than the methods themselves (Appendices~\ref{app:related:genre}
+and~\ref{app:related:families}).
