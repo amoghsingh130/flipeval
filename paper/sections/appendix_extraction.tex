@@ -35,7 +35,7 @@ record does not support.
 \begin{enumerate}
 \item \textbf{Pass 1} enumerated the registered source frames and extracted the
   registered fields for each qualifying claim, producing 13 rows
-  (\texttt{docs/audit\_claim\_table\_pass1.csv}, committed 2026-07-15 as an
+  (\texttt{docs/\allowbreak{}audit\_\allowbreak{}claim\_\allowbreak{}table\_\allowbreak{}pass1.csv}, committed 2026-07-15 as an
   explicitly unfrozen artifact). Some pass-1 fields were derived from a
   summarised reading of the source rather than from the source text directly;
   those rows are flagged in the reconciliation memo.
@@ -43,15 +43,15 @@ record does not support.
   instructed not to read it or recover it from version history, and given only
   the frozen protocol and the source frames. It produced 23 rows (17 claims
   plus 6 logged exclusions) and recorded a SHA-256 of each fetched source
-  (\texttt{docs/audit\_claim\_table\_pass2.csv}).
+  (\texttt{docs/\allowbreak{}audit\_\allowbreak{}claim\_\allowbreak{}table\_\allowbreak{}pass2.csv}).
 \item \textbf{Human reconciliation} merged the two passes into
-  \texttt{docs/audit\_claim\_table.csv} (17 claims), resolving inclusion
+  \texttt{docs/\allowbreak{}audit\_\allowbreak{}claim\_\allowbreak{}table.csv} (17 claims), resolving inclusion
   disagreements against the registered trigger vocabulary, choosing the quote
   anchored in that vocabulary, and re-reading the cited table wherever the
   passes differed numerically. The merged table was frozen by commit
   \texttt{43ce229} before any verdict, power or required-$n$ computation ran.
   The adjudication is recorded claim-by-claim in
-  \texttt{docs/AUDIT\_RECONCILIATION\_2026-07-15.md}.
+  \texttt{docs/\allowbreak{}AUDIT\_\allowbreak{}RECONCILIATION\_\allowbreak{}2026-07-15.md}.
 \end{enumerate}
 
 This replaced the registration's original ``extracted twice on different days''
@@ -89,11 +89,11 @@ Tool family & Command-line coding agent, operated under the repository's
 Browsing / retrieval & Enabled; pass 2 fetched each source and recorded its
   SHA-256 \\
 Input documents & The registered source frames; per-source SHA-256 in
-  \texttt{audit\_claim\_table\_pass2.csv} \\
+  \texttt{audit\_\allowbreak{}claim\_\allowbreak{}table\_\allowbreak{}pass2.csv} \\
 Output schema & The registered \S3.2 extraction fields; both raw pass files
   are released \\
 Human adjudication & Documented per claim in
-  \texttt{docs/AUDIT\_RECONCILIATION\_2026-07-15.md} \\
+  \texttt{docs/\allowbreak{}AUDIT\_\allowbreak{}RECONCILIATION\_\allowbreak{}2026-07-15.md} \\
 \midrule
 Exact model ID and version & \textbf{Not recorded} \\
 System and extraction prompts & \textbf{Not recorded; not released} \\
@@ -131,7 +131,7 @@ agree exactly:
 Field & Agreement \\
 \midrule
 \texttt{per\_item\_outputs\_released} (yes / no / partial) & 11 / 11 \\
-\texttt{statistical\_test\_or\_interval\_reported} (any / none) & 11 / 11 \\
+\texttt{statistical\_\allowbreak{}test\_\allowbreak{}or\_\allowbreak{}interval\_\allowbreak{}reported} (any / none) & 11 / 11 \\
 \bottomrule
 \end{tabular}
 

@@ -512,7 +512,16 @@ def emit_tikz(data: dict) -> str:
 
     # ---------------- Atlas context strip --------------------------------
     a(rf"\draw[frule!25, line width=0.4pt] ({lx},{by - 0.30}) -- ({rx + pw},{by - 0.30});")
-    a(rf"\node[anchor=north west, text width={2 * pw + 0.6}cm, font=\scriptsize] "
+    # inner sep=0 is load-bearing, not cosmetic. This node is the only one whose
+    # text width spans the full picture, and TikZ adds its default inner sep
+    # (0.3333em, about 0.12cm at this size) OUTSIDE that width on both sides. The
+    # node therefore ran from -0.12cm to 12.72cm inside a 12.6cm picture, making
+    # the tikzpicture 6.2pt wider than \textwidth: ink in the right margin on
+    # page 3, the flagship figure's own page. Found by compiling, not by the
+    # guard below, which measured the declared widths and not the padding TeX
+    # adds to them. Any future full-width node needs the same treatment.
+    a(rf"\node[anchor=north west, inner sep=0, text width={2 * pw + 0.6}cm, "
+      rf"font=\scriptsize] "
       rf"at ({lx},{by - 0.42}) "
       rf"{{\textbf{{This is not one cell's problem.}} Across "
       rf"{fmt(v['atlas_cells'], 0)} paired model-by-task cells mined from public "
@@ -530,11 +539,21 @@ def emit_tikz(data: dict) -> str:
     a(r"\label{fig:cancellation}")
     a(r"\end{figure}")
 
-    # Fail the build rather than emit a node that runs into the margin. Nobody
-    # on this project can compile the figure to find out, so this is the only
-    # place an overrun can be caught. The widths are estimates, so this guard
-    # catches the gross case (Wave 3's G1 was 1.1cm past \textwidth) and is not
-    # a substitute for looking at a rendered page.
+    # Fail the build rather than emit a node that runs into the margin. The
+    # widths are estimates, so this guard catches the gross case (Wave 3's G1
+    # was 1.1cm past \textwidth) and is not a substitute for looking at a
+    # rendered page.
+    #
+    # THREE THINGS IT CANNOT SEE, each learned by compiling (2026-08-05):
+    #   1. vertical overflow and label/bar collisions -- ten defects were found
+    #      by rendering at 250 dpi after this guard passed clean;
+    #   2. the inner sep TeX adds outside a declared text width, which put the
+    #      atlas strip 6.2pt into the margin while every checked width fitted;
+    #   3. anything about the page the figure lands on.
+    # The premise it was written under -- "nobody on this project can compile
+    # the figure" -- stopped being true on 2026-08-05, when TeX Live was
+    # installed at ~/scratch/texlive (docs/PAPER_BUILD_ENVIRONMENT.md). Render
+    # the figure after changing its geometry; do not trust this guard alone.
     if overruns:
         raise SystemExit(
             "figure geometry: node(s) outside their panel:\n  "

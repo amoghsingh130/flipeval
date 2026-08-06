@@ -81,6 +81,13 @@ def rendered_text(tex: str) -> str:
     body = re.sub(r"\\[a-zA-Z]+", "", body)           # bare control sequences
     body = body.replace("{,}", ",").replace("---", "\u2014").replace("--", "\u2013")
     body = body.replace("~", " ").replace("$", "").replace("\\", "")
+    # Grouping braces are markup and render as nothing, so they must not count
+    # against a character limit. They survived every rule above: line 81 removes
+    # `\sloppy` and `\par` but leaves the `{` and `}` that scoped them, which
+    # added 3 phantom characters when the abstract's last paragraph was wrapped
+    # in a \sloppy group on 2026-08-05. Run after the `{,}` digit-separator
+    # substitution above, which is the one place a brace is meaningful.
+    body = body.replace("{", "").replace("}", "")
     return re.sub(r"\s+", " ", body).strip()
 
 

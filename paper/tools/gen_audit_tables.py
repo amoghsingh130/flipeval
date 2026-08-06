@@ -86,6 +86,27 @@ def table_identity(claims):
     return rows
 
 
+def breakable(text):
+    r"""Allow a line break after '+' and '/' in a table cell, changing no glyph.
+
+    tab:audit-characterisation ran 82pt past the measure, the worst box in the
+    document, because two cells are single unbreakable words:
+    'family+bits+benchmark' and '(mixed/unmatched)'. TeX has no break
+    opportunity inside either, so the column could not be narrowed at all --
+    wrapping it in a fixed-width p{} column only moves the overflow inside the
+    cell, which is the failure mode already recorded on 2026-08-05 when a
+    141pt table became twenty-one worse in-cell overflows.
+
+    `\allowbreak` is zero-width and inserts no hyphen, so the printed text is
+    identical whether or not the break is taken. It is emitted here rather than
+    edited into the .tex so that the generator still reproduces the table it
+    generates.
+    """
+    for sep in ("+", "/"):
+        text = text.replace(sep, sep + r"\allowbreak ")
+    return text
+
+
 def table_characterisation(claims, verdicts):
     """Identity-free per-claim characterisation at the REGISTERED margin.
 
@@ -113,9 +134,47 @@ def table_characterisation(claims, verdicts):
                    "imputation-sensitive": r"\textbf{sensitive}",
                    "robustly below threshold": "below throughout"}[v["robustness"]]
         rows.append("%s & %s & %s & %s & %s & %s & %s & %s & %s \\\\"
-                    % (cid, esc(v["method_family"]), bits, esc(bench), n, pd,
-                       tier, v3, cls))
+                    % (cid, esc(v["method_family"]), bits, esc(breakable(bench)), n, pd,
+                       breakable(tier), v3, cls))
     return rows
+
+
+def table_characterisation_panels(claims, verdicts):
+    r"""The same rows, split into two panels that each fit the measure.
+
+    Nine columns of reference data do not fit \textwidth at any legible size:
+    at \footnotesize the table ran 82pt past the measure, and narrowing the two
+    unbreakable columns only moved the overflow inside the cells. Splitting is
+    what tab:h3-supporting already does for the same reason, so it is the
+    precedent rather than a new device.
+
+    The split is by role and both panels are keyed by claim id, so no row is
+    separated from its identity: (a) what the claim is and what was measured,
+    (b) how it was assessed. Every field of the nine-column version survives in
+    exactly one panel; nothing is dropped, summarised, or recomputed.
+    """
+    identity, assessment = [], []
+    for cid in sorted(verdicts):
+        v = verdicts[cid]
+        bits = v["bits"] or "---"
+        bench = v["benchmark"] or "(mixed/unmatched)"
+        n = num(v["n"]) if v["n"] else "---"
+        pd = "%.3f" % float(v["imputed_discordance"])
+        if v["eligible"] != "True":
+            cls = r"\emph{ineligible}"
+        elif v["indeterminate"] == "True":
+            kind = "metric" if "metric" in v["indeterminate_kind"] else "reporting"
+            cls = "not assessable (%s)" % kind
+        else:
+            cls = {"robustly above threshold": "above throughout",
+                   "imputation-sensitive": r"\textbf{sensitive}",
+                   "robustly below threshold": "below throughout"}[v["robustness"]]
+        identity.append("%s & %s & %s & %s & %s"
+                        % (cid, esc(v["method_family"]), bits, esc(bench), n))
+        assessment.append("%s & %s & %s & %s & %s"
+                          % (cid, pd, v["discordance_match_tier"],
+                             v["v3_per_item_outputs"], cls))
+    return identity, assessment
 
 
 def table_power(verdicts):

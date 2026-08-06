@@ -39,6 +39,35 @@ pdflatex -interaction=nonstopmode main.tex
 Three pdflatex passes are required: one to write `.aux`, bibtex, then two more to
 resolve citations and settle float placement and page references.
 
+## The layout gate, which is not optional
+
+```bash
+python3 tools/check_layout.py        # after the three passes above
+```
+
+**The log is not a sufficient record of whether the paper fits its measure.** A
+`tabular` wider than `\textwidth` inside `\centering` is set **silently**: on
+2026-08-05 the three widest boxes in the document produced no warning at all,
+and the entire S2 column of the atlas strata table was rendering off the right
+edge of the page where no reader could see it.
+
+`tools/check_layout.py` therefore has two independent halves, and neither
+subsumes the other:
+
+1. **the log half**, overfull boxes above 1pt;
+2. **the ink half**, the maximum glyph `xMax` per page from `pdftotext -bbox`
+   against the right edge of the text block at 484.5pt.
+
+Body pages (1 to 35) are held to a stricter standard than the appendices and
+must be completely clean. Accepted violations live in `ACCEPTED_INK` with the
+reason each cannot be fixed; there is currently one, the 64-character model
+revision hash in the frozen registrations appendix, which cannot be given a
+break point without editing text that is reproduced verbatim.
+
+State at 2026-08-05, after the layout pass: **2 overfull hboxes and 0 overfull
+vboxes**, from 58 and 0 at the first compile, worst 244.4pt then 82.0pt then
+5.16pt. Body pages with ink outside the text block: **0**, from 4.
+
 ## Required packages
 
 `article.cls`, `inputenc`, `fontenc`, `amsmath`, `amssymb`, `booktabs`,

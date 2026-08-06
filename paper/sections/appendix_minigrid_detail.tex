@@ -176,6 +176,10 @@ flip is two seeds of opposite, nonzero sign; the five cells with a flip are
 those whose row is not sign-constant. No entry is zero, which is the 0-of-40 tie
 count stated in \S\ref{sec:minigrid:verdict}.}
 \label{tab:h3-ds}
+% WIDTH FIX 2026-08-05: 47.8pt past the measure. \small plus tighter column
+% separation. No cell value changed and no row was dropped.
+\setlength{\tabcolsep}{2pt}
+\small
 \begin{tabular}{llrrrrr}
 \toprule
 Model & Task & $d_0$ & $d_1$ & $d_2$ & $d_3$ & $d_4$ \\
@@ -245,6 +249,8 @@ Llama-3.1-8B & GSM8K & 0.014307 & 0.010654 & 0.013874 & 0.013640 \\
 
 \medskip
 \textbf{(b) Two-level paired bootstrap}\par\medskip
+% WIDTH FIX 2026-08-05: 54.1pt past the measure. Values unchanged.
+\setlength{\tabcolsep}{2pt}\small
 \begin{tabular}{llrlrll}
 \toprule
 Model & Task & Rank-flip rate & Replicates & Tie rate & Ties & Winner flip \\
@@ -269,8 +275,8 @@ Llama-3.1-8B & GSM8K & 0.1260 & 252 / 2000 & 0.0030 & 6 / 2000  & \textbf{TRUE} 
 % the atlas population of \S\ref{sec:atlas}.
 % WIDTH FIX 2026-08-05: tightened column separation and wrapped the widest
 % text column. No cell value changed and no row was dropped.
-\setlength{\tabcolsep}{3.5pt}
-\small
+\setlength{\tabcolsep}{2.5pt}
+\footnotesize
 \begin{tabular}{llrrrrrr}
 \toprule
 Model & Task & Net $\Delta$ & Harmful & Benef. & Churn & W$\to$w & Ans.\ churn \\
