@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-06T05:20:44Z from `paper/main.tex` at commit `48e77b1`.**
+**Generated 2026-08-06T06:57:29Z from `paper/main.tex` at commit `c67ea5a`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -692,97 +692,85 @@ are met today.
 \section{Related work and positioning}
 \label{sec:related}
 
+% COMPRESSED 2026-08-06, stage 2 of the body compression. Two pages to one,
+% reorganised around the three things prior work actually did: per-item churn,
+% calibration-data sensitivity, and detection versus certification.
+% DEFECT FIXED IN THE SAME PASS: "Two further concurrent studies measure
+% per-item change on adjacent objects" appeared TWICE in consecutive sentences,
+% the second time with the appendix pointer attached. One copy remains.
+% EVERY CITATION THAT WAS HERE IS STILL HERE. The extended method-by-method and
+% audit-genre discussion was already in sections/appendix_related_detail.tex
+% (app:reconcile, app:related:concurrent, app:related:lossless,
+% app:related:genre, app:related:families); this section now points at it.
+
+% (1) PER-ITEM CHURN AND CORRECTNESS AGREEMENT.
+% THE NO-PRIORITY-CLAIM SENTENCE IS VERBATIM AND MUST STAY SO -- it is a dated,
+% author-affirmed statement about precedence.
+% SOURCE: docs/PRIOR_ART_CONCURRENT_2026-07-24.md, "Dated Amendments" (a)-(d),
+% reviewed and affirmed by the author 2026-07-24.
 \citet{dutta2024flips} show that compressed models can match baseline aggregate
 accuracy while flipping many individual answers, and propose flips and KL
 divergence as complementary metrics. \textbf{The flips metric is theirs, and we
-do not claim it.} What we add is the same decomposition measured across the
-public record at scale (\S\ref{sec:atlas}), the use of the observed flip-rate
-distribution as the \emph{variance model} for equivalence certification
+do not claim it.} What we add is that decomposition measured across the public
+record at scale (\S\ref{sec:atlas}), the observed flip-rate distribution used as
+the \emph{variance model} for equivalence certification
 (\S\ref{sec:certification}), and the audit that follows from it
-(\S\ref{sec:audit}).
-
-Concurrent work reaches the same premise independently.
+(\S\ref{sec:audit}). Concurrent work reaches the same premise independently:
 \citet{rababah2026illusion}, posted two days before our preregistration froze
 and unknown to us until the prior-art sweep of 2026-07-24, define
-\emph{correctness agreement}, the per-item rate at which base and quantized
-models are both correct on the same input. That statistic is the joint-correct
-cell of the same $2\times2$ table our accuracy-state churn is built from, and
-the two are interconvertible given the marginal accuracies. They study a
-quantization family disjoint from ours (\texttt{llama.cpp} GGUF legacy and
-$k$-quant rather than GPTQ and AWQ) and reach a conclusion consistent with
-ours. We read this as
-external corroboration of the premise, not competition on it, and we make no
-priority claim over it: no committed artifact in this repository predates its
-posting.
-% SOURCE for the independence and no-precedence statements:
-% docs/PRIOR_ART_CONCURRENT_2026-07-24.md, "Dated Amendments" (a)-(d),
-% reviewed and affirmed by the author 2026-07-24.
-What they do not supply, and what the rest of this paper is, is the machinery
-that turns the shared premise into a decision: equivalence testing at a declared
-margin, required-$n$, a test of whether the calibration seed reorders two
-methods, and an audit of published claims. Two further concurrent studies
-measure per-item change on adjacent objects.
-Two further concurrent studies measure per-item change on adjacent
-objects, on model versions and on community checkpoints
+\emph{correctness agreement}, the joint-correct cell of the same $2\times2$
+table our accuracy-state churn is built from and interconvertible with it given
+the marginal accuracies, over a quantization family disjoint from ours. We read
+this as external corroboration of the premise, not competition on it, and we
+make no priority claim over it: no committed artifact in this repository
+predates its posting. What it does not supply is the machinery that turns the
+shared premise into a decision. Two further concurrent studies measure per-item
+change on adjacent objects, on model versions and on community checkpoints
 (Appendix~\ref{app:related:concurrent}).
 
+% (2) CALIBRATION-DATA SENSITIVITY.
 \citet{williamsaletras2024} establish that the calibration \emph{data} affects
 quantized model quality, finding substantial variation in downstream task
 performance across calibration sets. \textbf{Calibration-data effects are
-theirs.} Our question is orthogonal and finer-grained: holding the
-calibration corpus fixed, does the calibration \emph{sample seed} change the
-\emph{ranking} of two methods? The design pairs GPTQ seed $s$ and AWQ seed $s$ on
-byte-identical calibration samples, so a seed-level ranking difference is
-attributable to method-by-calibration interaction and not to the two methods
-seeing different data (\S\ref{sec:minigrid}). The sweep found no prior work that
-varies a calibration \emph{seed} with the corpus held fixed and asks whether the
-resulting instability reorders two methods. The nearest antecedents vary the
-calibration set itself and disagree with each other about how much that matters:
+theirs.} Our question is orthogonal and finer-grained: holding the calibration
+corpus fixed, does the calibration \emph{sample seed} change the \emph{ranking}
+of two methods (\S\ref{sec:minigrid})? The sweep found no prior work that varies
+a calibration seed with the corpus held fixed and asks whether the resulting
+instability reorders two methods. The nearest antecedents vary the calibration
+set itself and disagree with each other about how much that matters:
 \citet{williamsaletras2024} find the effect substantial, and
-\citet{paglieri2024outliers} find it diminishing on modern models, with
-Mistral~7B close to immune. That disagreement is the strongest available
-objection to this paper, since a field insensitive to the calibration set would
-seem unlikely to reorder on the seed. Appendix~\ref{app:reconcile} answers it at
-length: both results hold at once, because neither design measures the
-\emph{gap between} two methods, which is the quantity a practitioner choosing
-between them depends on, and our own eight cells show a seed-induced range at
-least as large as that gap in 7 of 8.
+\citet{paglieri2024outliers} find it diminishing on modern models. That
+disagreement is the strongest available objection to this paper, since a field
+insensitive to the calibration set would seem unlikely to reorder on the seed.
+Appendix~\ref{app:reconcile} answers it at length: both results hold at once,
+because neither design measures the \emph{gap between} two methods, which is the
+quantity a practitioner choosing between them depends on, and our own eight
+cells show a seed-induced range at least as large as that gap in 7 of 8.
 
-\citet{helcig2026slq} occupy the phrase this paper is about: they define
-losslessness for quantized LLMs and build a method reaching it. Their question
-is the complement of ours, and they compute no equivalence test, power or
-required $n$ (Appendix~\ref{app:related:lossless}).
-
+% (3) STATISTICAL DETECTION VERSUS CERTIFICATION.
+% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
+% (GSM8K 2.25--2.26, MuSR 14.66--14.68). REV-2: the low end was 1.7 under rev-1.
 The closest existing work is \citet{llmaccuracystats2026}, which brings
 one-sided McNemar \emph{detection} to LLM accuracy comparisons and ships it in
 the evaluation harness the field already uses. We agree with its diagnosis and
 differ in the question asked. Detection asks whether there is evidence of a
 difference; a non-significant result is not equivalence, and at the sample sizes
 in \S\ref{sec:audit} it is frequently just an absence of resolution. Our deltas
-are: (i) TOST certification at a \emph{declared} margin;
-(ii) required-$n$ certification tables computed from empirical churn instead of
-% SOURCE: results/certification_tables_rev2.csv column paired_advantage_at_median
-% (GSM8K 2.25--2.26, MuSR 14.66--14.68). REV-2: the low end was 1.7 under rev-1;
-% corrected 2026-07-26 with the abstract, introduction and the certification §.
-from independent-binomial variance, with the $2.3$--$14.7\times$ correction that
-implies; and (iii) the audit of published claims, which is the
-empirical case that the distinction matters in practice. An anytime-valid
-sequential extension, using confidence sequences that let a practitioner stop as
-soon as the model is certified, is registered and in progress; it reports no results
-here and is not claimed as a contribution of this paper.
-
-The constructive-audit genre is well established
-\citep{dodge2019showyourwork,marie2021mtaudit}, and has begun to adopt
-preregistration directly, which is the precedent for \S\ref{sec:prereg}
-(Appendix~\ref{app:related:genre}). We follow it in framing and in tone: the
-finding is about what the field reports, not about whether individual authors
-are right.
-
-The audited claims span weight-only quantization, weight-and-activation
-quantization and one-shot pruning; the methods and the honest non-claimers among
-them are listed in Appendix~\ref{app:related:families}. We audit the equivalence
-\emph{language} these papers use and the evidence offered for it, not the
-methods themselves.
+are TOST certification at a \emph{declared} margin, required-$n$ tables computed
+from empirical churn instead of independent-binomial variance with the
+$2.3$--$14.7\times$ correction that implies, and the audit of published claims
+that is the empirical case the distinction matters. \citet{helcig2026slq} occupy
+the phrase this paper is about, defining losslessness for quantized LLMs and
+building a method reaching it; their question is the complement of ours and they
+compute no equivalence test, power or required $n$
+(Appendix~\ref{app:related:lossless}). The constructive-audit genre is well
+established \citep{dodge2019showyourwork,marie2021mtaudit} and has begun to
+adopt preregistration directly, which is the precedent for \S\ref{sec:prereg}.
+We follow it in framing and in tone: the finding is about what the field
+reports, not about whether individual authors are right, and we audit the
+equivalence \emph{language} these papers use and the evidence offered for it
+rather than the methods themselves (Appendices~\ref{app:related:genre}
+and~\ref{app:related:families}).
 ```
 
 ---
@@ -851,54 +839,50 @@ section computes that requirement empirically.
 
 % SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §Method.
 % CORRECTED 2026-07-31. This read "at 95% confidence and 80% power", which
-% contradicted the paragraph below it: z_{1-alpha} = 1.6449 is ONE-sided at
-% alpha = .05, and TOST at one-sided .05 corresponds to containment of a 90%
-% two-sided interval, not a 95% one. The formula and every computed value are
-% unchanged -- only the description of them was wrong. Four table captions
-% carried the same error and are corrected with it.
-% RETAIN-VERBATIM: the sentence below is one of the two body homes of
-% qualification 17 and survives the 2026-08-04 compression unaltered.
+% contradicted the one-sided z: TOST at one-sided .05 corresponds to containment
+% of a 90% TWO-SIDED interval, not a 95% one. The formula and every computed
+% value are unchanged; only the description of them was wrong.
+% RETAIN-VERBATIM: the lead-in below is one of the two body homes of
+% qualification 17 and has survived three compressions unaltered.
+% COMPRESSED 2026-08-06, stage 3. The derivation of the two standard
+% deviations, the one-sided-z justification, the quartile method and the
+% independent-binomial discussion moved to Appendix~\ref{app:cert:method}. Both
+% equations STAY: atlas.tex cites Equations \eqref{eq:sds}--\eqref{eq:nreq} as
+% the reason churn is the variance term. The numeric substitution line was
+% dropped as repeated explanation; the constants are stated in the prose.
 For a discordance rate $p_d$ and margin $m$, under TOST at one-sided
 $\alpha=.05$ (equivalent to requiring a 90\% two-sided confidence interval to
 fall inside $\pm m$) with 80\% power,
 \begin{align}
 \mathrm{sd}_{\mathrm{paired}}      &= \sqrt{p_d}, &
 \mathrm{sd}_{\mathrm{independent}} &= \sqrt{2p(1-p)}, \label{eq:sds}\\[2pt]
-% WIDTH FIX 2026-08-05: the two equalities on one line ran 91pt past the
-% measure. The numeric substitution moves to its own aligned line. The equation
-% is unchanged.
-n_{\mathrm{req}} &= \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil \label{eq:nreq}\\[2pt]
- &= \left\lceil \left(\frac{(1.6449 + 0.8416)\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil. \nonumber
+n_{\mathrm{req}} &= \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,\mathrm{sd}}{m}\right)^{\!2} \right\rceil ,
+\label{eq:nreq}
 \end{align}
-The paired standard deviation follows from the flip model: the per-item accuracy
-difference is $d_i \in \{-1,0,+1\}$, and under the null of no true difference
-$\mathrm{Var}(d) = p_d$, the rate at which the two models disagree on
-correctness. The independent form uses $p$, the family's median baseline
-accuracy, because independent-binomial variance depends on accuracy and not on
-churn. $z_{1-\alpha}$ is \textbf{one-sided}, since TOST rejects two one-sided
-nulls at level $\alpha$ each (Appendix~\ref{app:prereg:choices}, interpretive
-choice~5). The discordance rates are not modelled; they are read off the atlas
-(\S\ref{sec:atlas}). For each benchmark family we take the 25th percentile,
-median, and 75th percentile of the per-cell accuracy-state churn observed across
-that family's atlas cells, giving optimistic, typical, and pessimistic
-compression behaviour. Quartiles are \texttt{numpy}'s linear-interpolation
-\texttt{np.quantile}.
+with $z_{1-\alpha} = 1.6449$ one-sided and $z_{1-\beta} = 0.8416$.
+The paired standard deviation is the whole point: it is set by $p_d$, the rate
+at which the two models disagree item by item, and not by how hard the benchmark
+is. The independent form depends instead on $p$, the family's median baseline
+accuracy. Appendix~\ref{app:cert:method} derives both, justifies the one-sided
+$z$, and states how the discordance quartiles are read off the atlas
+(\S\ref{sec:atlas}).
 
 % ADDED 2026-07-31. The design assumption was documented in the code
 % (scripts/audit_stats.py::required_n_for_tost, "assumed true difference zero")
-% but was never stated in the paper. Without it a reader may take these as the
-% n that would certify an already-observed delta, which they are not.
+% but was never stated in the paper. PROTECTED: without it a reader may take
+% these as the n that would certify an already-observed delta, which they are
+% not.
 Equation~\eqref{eq:nreq} is the standard TOST planning sample size under an
 assumed \emph{true} paired accuracy difference of zero. It answers ``how many
 items would this benchmark need for an equivalence test to have 80\% power,
-given how much models of this kind disagree item-by-item''. It does
-\emph{not} answer ``how many items would certify the delta this source
-observed''. Under a true difference $\delta$, the quantity TOST must resolve is
-the separation $m - |\delta|$ instead of $m$, so the requirement grows without
-bound as $|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in
-this paper is therefore a \emph{lower bound} on what a non-zero true
-difference would demand, and the tables are design tables, not retrospective
-certification of any particular reported result.
+given how much models of this kind disagree item-by-item''. It does \emph{not}
+answer ``how many items would certify the delta this source observed''. Under a
+true difference $\delta$ the quantity TOST must resolve is the separation
+$m - |\delta|$ instead of $m$, so the requirement grows without bound as
+$|\delta|$ approaches the margin. Every $n_{\mathrm{req}}$ reported in this
+paper is therefore a \emph{lower bound} on what a non-zero true difference would
+demand, and these are design tables, not retrospective certification of any
+particular reported result.
 
 \begin{table}[!t]
 \centering
@@ -950,37 +934,23 @@ gsm8k         &  24 & 0.040 / 0.077 / 0.198 & 619 / \textbf{1{,}184} / 3{,}068 &
 
 % SOURCE: results/certification_tables_rev2.csv, mmlu at margin_pp 1.0/2.0/3.0
 % (required_n_median = 8656 / 2164 / 962; required_n_independent_binomial at
-% 2 pp = 7727). The rev-1 8,491-vs-8,492 discrepancy against the rev-1 narrative
-% doc is moot: both are superseded by rev-2, and the CSV remains authoritative.
-Pick the benchmark family and the margin you intend to certify. The three
-required-$n$ columns are the item counts you need under optimistic, typical and
-pessimistic compression behaviour for that family; the naive column is the count
-you would compute if you ignored pairing. \emph{MMLU, 2\,pp margin, typical
-discordance $\Rightarrow$ evaluate at least 2{,}164 items.} Ignoring pairing
-would have demanded 7{,}727, or $3.6\times$ the compute for the same conclusion.
-Tightening the margin to 1\,pp raises the requirement to 8{,}656 items; relaxing
-it to 3\,pp lowers it to 962. The margin is the practitioner's declaration, and
-its cost is quadratic: parity within 1\,pp is four times as expensive to certify
-as parity within 2\,pp.
-
-The independent-binomial column is not a straw man. It is what you get by
-treating the baseline and compressed evaluations as two unrelated samples and
-comparing proportions, which is the default in most reporting, and it is wrong
-in a specific, quantifiable way: the two runs are \emph{the same items through
-two nearly identical models}, so they agree on the large majority of items, and
-their difference has far less variance than independence implies.
-% SOURCE: docs/CERTIFICATION_TABLES_2026-07-20.md §"Why the naive column is in
-% the table"; results/certification_tables_rev2.csv column
-% paired_advantage_at_median (GSM8K 2.25--2.26, MuSR 14.66--14.68, pooled 4.16).
-% Pointer corrected 2026-07-26: the values here are rev-2, but this comment
-% named the rev-1 CSV, whose GSM8K entry is 1.7.
-The advantage column is exactly that gap. It ranges from $2.3\times$
-(GSM8K) to $14.7\times$ (MuSR) and sits at $4.2\times$ pooled
-over 1{,}707 cells: a practitioner using the paired design reaches the same
-equivalence conclusion on roughly a quarter of the evaluation budget. The
-variation across families is informative in itself: low-churn families (MuSR,
-BBH, GPQA) reward pairing most, while high-churn generative families (MATH,
-MMLU) both need more items \emph{and} gain less from pairing.
+% 2 pp = 7727); column paired_advantage_at_median (GSM8K 2.25--2.26, MuSR
+% 14.66--14.68, pooled 4.16).
+% COMPRESSED 2026-08-06, stage 3: the reading instructions are one sentence, the
+% independent-binomial discussion moved to Appendix~\ref{app:cert:method}, and
+% the worked example is kept whole because it is the section's one example.
+Pick the benchmark family and the margin you intend to certify, and read the
+item count under optimistic, typical or pessimistic compression behaviour for
+that family. \emph{MMLU, 2\,pp margin, typical discordance $\Rightarrow$
+evaluate at least 2{,}164 items.} Ignoring pairing would have demanded
+$7{,}727$, or $3.6\times$ the compute for the same conclusion. Tightening the
+margin to 1\,pp raises the requirement to $8{,}656$ items and relaxing it to
+3\,pp lowers it to $962$: the margin is the practitioner's declaration and its
+cost is quadratic, so parity within 1\,pp is four times as expensive to certify
+as parity within 2\,pp. Across families the paired design's advantage ranges
+from $2.3\times$ (GSM8K) to $14.7\times$ (MuSR) and sits at $4.2\times$ pooled
+over 1{,}707 cells, so a practitioner using it reaches the same equivalence
+conclusion on roughly a quarter of the evaluation budget.
 
 \subsection{The requirement is driven by churn, not by difficulty}
 
@@ -1042,17 +1012,13 @@ These caveats travel with the table, and any reuse of it should carry them.
 Families with fewer than four analysable cells are omitted, because a quartile
 over three points is not an empirical distribution; this drops nothing from the
 registered set, and all surviving families appear in
-Table~\ref{tab:certification}. Of those that survive, two rest on thin evidence
-and are indicative only, \texttt{mmlu\_pro} (5 cells) and \texttt{ifeval}
-(8), and should be treated as a starting hypothesis to be replaced by the
-reader's own measured churn, not as a reference constant.
-Appendix~\ref{app:cert:caveats-detail} covers the remaining two: that family
-aggregation makes the quartile columns \emph{conservative} rather than
-optimistic, and that both disclosed feasibility-probe pairs are excluded.
-Finally, these are certification sample sizes, not
-detection sample sizes: they certify equivalence within $\pm m$, the $n$ required
-to \emph{detect} a difference at the same margin is larger, and reporting one as
-the other is the error this section exists to prevent.
+Table~\ref{tab:certification}. Two of the surviving rows rest on thin evidence
+and are indicative only, and family aggregation and the excluded feasibility
+probes are covered in Appendices~\ref{app:cert:method}
+and~\ref{app:cert:caveats-detail}. Finally, these are certification sample
+sizes, not detection sample sizes: they certify equivalence within $\pm m$, the
+$n$ required to \emph{detect} a difference at the same margin is larger, and
+reporting one as the other is the error this section exists to prevent.
 
 This section \emph{does not support}: extrapolation to benchmark families
 absent from the atlas; extrapolation to compression methods absent from the
@@ -2228,56 +2194,47 @@ because that is the granularity of the frozen claim table
 % MANDATORY ENUMERATION (qualification 14): 8 cells, 2 tasks, 2 methods,
 % 4 models, 4 bits, 5 seeds, and what it licenses no statement about. Compress
 % around it, never through it.
+% COMPRESSED 2026-08-06, stage 4. The calibration-construction procedure and the
+% escalation chronology moved to Appendix~\ref{app:escalation}, which already
+% carried both. THE SCREEN-VERSUS-VERDICT DISTINCTION IS STATED ONCE, below,
+% and must not be restated elsewhere in this section.
 The registered confirmatory design compares 4-bit GPTQ against 4-bit AWQ at
 five calibration seeds $\{0,1,2,3,4\}$ over eight model-by-benchmark cells:
 $\{$Qwen2.5-1.5B-Instruct, Qwen2.5-7B-Instruct, Llama-3.2-3B-Instruct,
 Llama-3.1-8B-Instruct$\}\times\{$MMLU, GSM8K$\}$, with MMLU as the registered
 likelihood-based benchmark and GSM8K as the registered generative one.
 
-The pairing is the design's load-bearing element. For seed $s$, the calibration
+The pairing is the design's load-bearing element. For seed $s$ the calibration
 set is 128 samples of exactly 2{,}048 tokens drawn from C4 by a fixed,
-seed-determined procedure (shuffle the full train-split document index array with
-\texttt{numpy.random.default\_rng(s)}, visit documents in that order, skip
-documents shorter than 2{,}048 tokens, retain the first 2{,}048 tokens of each
-eligible document until 128 are collected), and \textbf{GPTQ seed $s$ and AWQ
-seed $s$ receive the identical ordered calibration samples}. A ranking
-difference at seed $s$ is therefore attributable to method-by-calibration
-interaction and not to the two methods having seen different data. Selected
-document indices and token hashes are persisted. The chat template is on for
-every method including the FP16 baselines; GSM8K uses one inline few-shot
-example and test indices 0--999; MMLU uses the full test split.
+seed-determined procedure, and \textbf{GPTQ seed $s$ and AWQ seed $s$ receive
+the identical ordered calibration samples}; selected document indices and token
+hashes are persisted (Appendix~\ref{app:escalation}). A ranking difference at
+seed $s$ is therefore attributable to method-by-calibration interaction and not
+to the two methods having seen different data.
 
-% SOURCE: PREREGISTRATION.md §"H3 Decision Rule" and §"Hierarchical aggregation
-% across calibration seeds".
+% SOURCE: PREREGISTRATION.md §"H3 Decision Rule".
 Per cell, with $d_s = \mathrm{acc}_{\mathrm{GPTQ},s} - \mathrm{acc}_{\mathrm{AWQ},s}$:
-a \emph{winner flip} occurs when two seeds give $d_s$ and $d_t$ of
-opposite sign with both nonzero (exact ties are counted as neither flip nor
-non-flip, and reported separately, so a tie can neither create nor erase a flip);
-$\mathrm{gap} = |\mathrm{mean}_s(\mathrm{acc}_{\mathrm{GPTQ},s}) -
-\mathrm{mean}_s(\mathrm{acc}_{\mathrm{AWQ},s})|$;
-$\mathrm{range}_m = \max_s(\mathrm{acc}_{m,s}) - \min_s(\mathrm{acc}_{m,s})$;
-and the range/gap criterion holds when
+a \emph{winner flip} occurs when two seeds give $d_s$ and $d_t$ of opposite sign
+with both nonzero, exact ties counting as neither and reported separately;
+$\mathrm{gap}$ is the absolute difference of the two five-seed mean accuracies;
+$\mathrm{range}_m$ is the spread of method $m$ across seeds; and the
+\emph{range/gap} criterion holds when
 $\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}}) \geq
 \mathrm{gap}$. Seed-level SD and item-level SE are reported as separate variance
-components rather than collapsed, and the H3-relevant rank-instability estimate
-comes from the two-level paired bootstrap that resamples seed labels and, within
-each selected seed, items, with GPTQ and AWQ retaining the same sampled seed
-labels and item indices.
+components rather than collapsed, as the registration requires.
 
-% SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 3, 4;
-% docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md (SIGNED);
+% THE SCREEN-VERSUS-VERDICT DISTINCTION, STATED ONCE AND PRECISELY.
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md (SIGNED);
 % docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED).
-The eight cells were built in two stages, and the second stage was authorized by
-the first under a rule frozen before either ran. Four cells ran first; the 7B/8B
-cells sat behind a mechanical escalation screen, described with its per-cell
-outcomes in Appendix~\ref{app:escalation}. That screen fired, the deferred cells
-were built and evaluated, and the frozen
-Supported/Disconfirmed/Inconclusive rule was then applied once over all eight.
-Two properties of that sequence matter for how the verdict should be read. The
-screen decides only \emph{which cells to build} and states no H3 outcome, so the
-confirmatory rule was never applied to a cell set chosen after its own result
-was known. And the rule is defined over all eight cells and was applied only
-when all eight existed. No reduced-cell variant was constructed at any point.
+The eight cells were built in two stages, and the distinction between the two
+matters exactly once. Four cells ran first; the 7B and 8B cells sat behind a
+mechanical escalation screen frozen before either stage ran
+(Appendix~\ref{app:escalation}). \textbf{The screen decides only which cells to
+build and states no H3 outcome; the registered
+Supported/Disconfirmed/Inconclusive rule is defined over all eight cells and was
+applied once, after all eight existed.} The confirmatory rule was therefore
+never applied to a cell set chosen after its own result was known, and no
+reduced-cell variant was constructed at any point.
 
 \subsection{The eight-cell verdict}
 \label{sec:minigrid:verdict}
@@ -2364,60 +2321,43 @@ Llama-3.1-8B & GSM8K & 0.013200 & 0.033000 & 0.026000 & \textbf{TRUE}  & \textbf
 \subsection{Supporting analyses}
 \label{sec:minigrid:supporting}
 
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, header paragraph and
-% slots 2-4. All three tables are Table~\ref{tab:h3-supporting} in
-% Appendix~\ref{app:minigrid:supporting}; the readings stay here.
-Three further registered analyses were run once per cell as part of the same job
-that produced the verdict, and none of them modifies the verdict: it is what the
+% COMPRESSED 2026-08-06, stage 4. The per-cell variance-component readings, the
+% bootstrap rates cell by cell and the deferred-analysis history moved to
+% Appendix~\ref{app:minigrid:supporting}; tab:h3-supporting already carried all
+% three panels there. RETAINED: that the three analyses do NOT modify the
+% verdict, that the variance components are never collapsed, the 3-cells-on-both
+% finding, and the five-seed resolution limit.
+Three further registered analyses were run once per cell in the same job that
+produced the verdict, and none of them modifies it: the verdict is what the
 frozen rule returned over winner flips and range/gap, and a weak bootstrap rate
 or a poorly resolved cell is a limitation to report, not a second application of
-the rule. Table~\ref{tab:h3-supporting} carries all three.
+the rule. Table~\ref{tab:h3-supporting} in
+Appendix~\ref{app:minigrid:supporting} carries all three.
 
-Variance components are reported side by side and never collapsed into a single
-dispersion figure, as the registration requires. The two answer different
-questions, namely how much a method's accuracy moves when the calibration seed
-changes against how precisely a single seed's accuracy is estimated from the
-items. On MMLU the calibration seed moves the number more than the sample of
-items does, in every cell: taking per cell the larger of the two seed-level SDs
-against its own item-level SE, the ratio runs $1.6$ to $5.9\times$
-(Qwen2.5-7B $0.006224$ against $0.003983$; Llama-3.2-3B $0.024925$ against
-$0.004214$). On GSM8K the two components are of the same order throughout, and
-in \emph{five of the eight} method-by-cell entries the item-level SE is the
-larger of the two, so the sample of items is moving the number as much as the
-calibration seed is.
-% Ratios are arithmetic on panel (a): MMLU per-cell larger-SD/its-SE =
-% 4.54, 5.91, 1.56, 3.61 -> range 1.6-5.9. GSM8K SE > SD in 5 of 8 entries
-% (qwen1.5b GPTQ+AWQ, llama3b GPTQ+AWQ, llama8b AWQ).
+Two of them matter for how the verdict should be read. First, on MMLU the
+calibration seed moves accuracy more than the sample of items does in every
+cell, with the larger seed-level SD running $1.6$ to $5.9\times$ its own
+item-level SE, whereas on GSM8K the two components are of the same order
+throughout. Second, the bootstrap and the winner-flip criterion measure
+different things and a reader who assumes otherwise will read them as
+self-contradictory: a winner flip asks whether two \emph{individual seeds}
+disagree on sign, which is H3's registered question, while the bootstrap
+rank-flip rate asks whether the \emph{five-seed mean} ranking survives
+resampling seed labels and items together. Winner flips occur in 5 of 8 cells,
+the bootstrap rate is below $0.05$ in 6 of 8, and \textbf{3 cells have both}. In
+those three, some pair of individual seeds disagrees about which method wins
+while the five-seed average survives resampling in more than 95\% of
+replicates. The practical reading is that \emph{a single calibration run can
+hand you the wrong winner}, and averaging over the registered five seeds is
+substantially more stable than any one of them.
 
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, slot 3 table and
-% §"Reconciling winner flips with bootstrap rank-flip rates" (5/8 flips,
-% 6/8 bootstrap < 0.05, 3/8 both; the two unstable-on-both cells 0.2575, 0.1260).
-The bootstrap and the winner-flip criterion measure different things, and a
-reader who assumes otherwise will read them as self-contradictory. A winner flip
-asks whether two \emph{individual seeds} disagree on sign, which is H3's
-registered question and a description of what happens when a practitioner runs
-one calibration and takes the winner. The bootstrap rank-flip rate asks whether
-the \emph{five-seed mean} ranking survives resampling seed labels and items
-together. The combination is the sharpest form of the finding. Winner flips
-occur in 5 of 8 cells; the bootstrap rate is below $0.05$ in 6 of 8; and
-\textbf{3 cells have both}: Qwen2.5-1.5B/MMLU ($0.0445$),
-Llama-3.2-3B/GSM8K ($0.0220$) and Llama-3.1-8B/MMLU ($0.0405$). In each, some
-pair of individual seeds disagrees about which method wins while the five-seed
-average ranking survives resampling in more than 95\% of replicates. The
-practical reading is the one we intend a practitioner to take away: \emph{a
-single calibration run can hand you the wrong winner}, and averaging over the
-registered five seeds is substantially more stable than any one of them.
-
-The limitation on that reading, stated plainly. With five seeds the
-bootstrap resamples seed labels from a sample of five, so it has limited
-resolution on the seed-level distribution. What the low rates bound is the
-stability of \emph{this} observed mean under resampling; they do not establish
-that five seeds suffice in general, and no result here should be read as
-licensing five as a sufficient number. Two GSM8K cells are unstable on both
-measures, Qwen2.5-7B/GSM8K at $0.2575$ (515 of 2{,}000 replicates) and
-Llama-3.1-8B/GSM8K at $0.1260$ (252 of 2{,}000), and there even the five-seed mean
-ranking does not survive resampling, and no amount of seed averaging at
-$n = 1{,}000$ rescues the comparison.
+The limitation on that reading, stated plainly. With five seeds the bootstrap
+resamples seed labels from a sample of five, so it has limited resolution on the
+seed-level distribution. What the low rates bound is the stability of
+\emph{this} observed mean under resampling; they do not establish that five
+seeds suffice in general, and no result here licenses five as a sufficient
+number. Two GSM8K cells are unstable on both measures, and there even the
+five-seed mean ranking does not survive resampling.
 
 \subsection{Cancellation is more complete between two methods than against FP16}
 \label{sec:minigrid:churnratio}
@@ -2522,46 +2462,33 @@ modern LLMs (Appendix~\ref{app:reconcile}). It is descriptive, it tests no
 hypothesis, and it does not modify the verdict. It is recorded with its
 provenance, not folded silently into the registered results.
 
+% COMPRESSED 2026-08-06, stage 4. The per-cell SE arithmetic and the pilot
+% discriminant case moved to Appendix~\ref{app:minigrid:resolution}. RETAINED:
+% the MMLU/GSM8K resolution distinction, both directions, and the discriminant
+% argument that answers the obvious objection.
 Using the machinery of \S\ref{sec:certification} itself, with paired
-$\mathrm{sd} = \sqrt{p_d}$ and paired $\mathrm{SE} = \sqrt{p_d/n}$ and $p_d$
-the per-cell GPTQ-against-AWQ accuracy-state churn of
-Table~\ref{tab:h3-supporting}, the two tasks separate sharply
+$\mathrm{sd} = \sqrt{p_d}$ and $p_d$ the per-cell GPTQ-against-AWQ
+accuracy-state churn, the two tasks separate sharply
 (Table~\ref{tab:h3-resolution}, Appendix~\ref{app:minigrid:resolution}).
-
-MMLU carries the result. All four MMLU cells satisfy the range/gap
+\textbf{MMLU carries the result}: all four MMLU cells satisfy the range/gap
 criterion, their seed-induced ranges run $5.5$ to $17.5$ paired standard errors,
-their mean gaps run $2.2$ to $8.5$, and their seed-level SD exceeds item-level
-SE by $1.6$ to $5.9\times$. The instability is far larger than the measurement
-noise, and the benchmark resolves it comfortably.
-
-\textbf{GSM8K is under-resolved at $n = 1{,}000$.} There the ranges run roughly
-two to three-and-a-half SE, seed-level SD is of the same order as item-level SE,
-and in three of the four GSM8K cells the \emph{mean gap itself} sits at or below
-$1.25$ SE ($0.44$, $0.98$, $1.23$), so the quantity the range/gap criterion
+and the instability is far larger than the measurement noise.
+\textbf{GSM8K is under-resolved at $n = 1{,}000$}: there the ranges run roughly
+two to three-and-a-half SE, and in three of the four GSM8K cells the \emph{mean
+gap itself} sits at or below $1.25$ SE, so the quantity the range/gap criterion
 compares against is, in those cells, not resolved by the benchmark at the $n$
-used. Any per-cell reading of GSM8K should say so, and
-\S\ref{sec:limitations} does.
+used. Any per-cell reading of GSM8K should say so, and \S\ref{sec:limitations}
+does.
 
-% FOLDED IN 2026-08-04 from sections/discriminant.tex, which is deleted. Nothing
-% is computed here: every figure below is read from the resolution analysis
-% already reported above and from Table~\ref{tab:h3-eightcell}.
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md step 5 table
-% (gap/SE and max_range/SE per cell); docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
-% (gap column). qwen25-1p5b/gsm8k gap = 0.096800 = 9.68 pp at 5.65 SE.
 The split is also the answer to an obvious objection, that a certification-first
 framework demanding thousands of items will simply decline to conclude anything.
 The fourth GSM8K cell is the sharp case: Qwen2.5-1.5B posts a GPTQ--AWQ gap of
 \textbf{9.68\,pp}, which lands at $5.65$ paired SE, resolved on the same
-benchmark, at the same $n = 1{,}000$, under the same test, where its three
-siblings are not. Same items, same instrument, opposite verdicts, separated by
-effect size and not by any threshold somebody chose. The machinery declines to
-adjudicate where the evidence is thin and adjudicates where it is not,
-\emph{within} one benchmark at one sample size. A framework that returned
+benchmark, at the same $n$, under the same test, where its three siblings are
+not. Same items, same instrument, opposite verdicts, separated by effect size
+and not by any threshold somebody chose. A framework that returned
 ``insufficient evidence'' everywhere could not produce that pattern, and neither
 could one tuned to a convenient cut-off.
-Appendix~\ref{app:minigrid:pilot} reports the same discriminant behaviour in the
-project's earlier public-checkpoint pilot, which adds the case the eight cells
-lack, a positive detection.
 
 None of this weakens the verdict. The range/gap criterion holds in 7 of 8 cells
 and winner flips occur in 5 of 8, both computed from the registered per-seed
@@ -2983,6 +2910,16 @@ registered, not of paired analysis, which handles graded metrics perfectly well.
 % extreme of the eight. The sentence below says so. The 2,730 figure is a
 % planning requirement at an assumed true difference of zero; it must never be
 % written as evidence that the two methods differ.
+%
+% COMPRESSED 2026-08-06, stage 1 of the body compression. Three pages to one and
+% a half. REMOVED, each because it is stated in full earlier and this section
+% was restating it: the second complete presentation of the five-line standard
+% (the standard is introduced at the end of \S\ref{sec:intro} and this section
+% now recaps it); the repeated audit disclaimers, which are
+% \S\ref{sec:audit}'s own closing paragraphs; the repeated artifact description;
+% and the extended sequential-certification discussion, now one clause.
+% NOTHING NEW IS CLAIMED HERE. Every number in this section is a restatement,
+% and each is a generated macro or is cited to the section that establishes it.
 Figure~\ref{fig:cancellation} is one evaluation of one model, and it is the
 argument in miniature. Two 4-bit quantizations of Qwen2.5-7B that sit $0.58$
 points apart on GSM8K disagree on $17.7\%$ of the items; certifying equivalence
@@ -2991,99 +2928,57 @@ $1{,}000$; and which of the two comes out ahead changes with the calibration
 draw. None of that is visible in the two aggregate scores. The cell is the most
 extreme of the eight registered cells, but the mechanism is not peculiar to it:
 across the $1{,}707$ cells of the public record, median churn is about five
-times the median net accuracy delta.
+times the median net accuracy delta (\S\ref{sec:atlas}). Aggregate accuracy is
+not a summary of behaviour, and a net delta is not a summary of what a
+compression changed.
 
 % Counts are \Audit* macros from paper/audit_denominators.tex. The
 % task-matched qualifier and the three other-task releases stay in the same
 % sentence as the zero: without them the claim is false (\S\ref{sec:audit:v3}).
+% The audited-sample-not-literature scope sentence is retained here as well as
+% in \S\ref{sec:audit}, because a reader who reads only the conclusion must not
+% take these counts for prevalences.
 The claim ``near-lossless'' is cheap to write and expensive to support. This
 paper measured the gap, and what the measurement mostly found was absence, not
-error. Across \AuditEligible{} eligible sources, none declares a
-prospective numerical equivalence margin and none releases \emph{task-matched}
-per-item outputs, though \AuditPerItemOtherTaskOnly{} release outputs for other
-tasks only; \AuditNotAssessable{} cannot be assessed at all from what they
-report. Of the \AuditAssessable{} that can, \AuditAboveThroughout{} stay above
-the approximate planning threshold at a uniform \AuditMarginPP{}\,pp margin
-throughout the interquartile range of the imputed discordance rate, and
-\AuditChangesWithinIQR{} cannot be classified without committing to a discordance
-rate its source never reported; \AuditBelowThroughout{} stay below the threshold
-throughout that interval. These are prevalences in this audited sample of
-\AuditEligible{} eligible sources, not estimates for the literature. The
-apparatus that closes the gap is equivalence certification at a declared margin,
-with sample-size tables computed from observed churn and not from assumed
-variance.
+error. Across \AuditEligible{} eligible sources, none declares a prospective
+numerical equivalence margin and none releases \emph{task-matched} per-item
+outputs, though \AuditPerItemOtherTaskOnly{} release outputs for other tasks
+only, and \AuditNotAssessable{} cannot be assessed at all from what they report
+(\S\ref{sec:audit}). These are counts in this audited sample of
+\AuditEligible{} sources, not estimates for the literature. The apparatus that
+closes the gap is equivalence certification at a declared margin, with
+sample-size tables computed from observed churn rather than assumed variance
+(\S\ref{sec:certification}); the same apparatus is being extended to
+anytime-valid sequential certification, a component that is registered but has
+not been run and for which no results are reported here.
 
-% Sequential certification was a full section in earlier drafts. It is a
-% registered-but-unrun component and a results-free section reads as padding, so
-% it is reduced to this sentence (2026-07-26). Restore the section only when the
-% dated registration document exists under docs/ AND the component has run.
-The same apparatus is being extended to anytime-valid sequential certification,
-in which a confidence sequence lets an evaluation be monitored continuously and
-stopped as soon as the model is certified; that component is registered but has
-not yet been run, and no results for it are reported here.
-
-% RECAP, NOT INTRODUCTION (2026-08-05). The five lines are now stated in outline
-% at the end of \S\ref{sec:intro}; this is where they are stated in full, with
-% the evidence for each in hand. Keep both. The early copy carries no numbers
-% and the full copy carries them, so there is exactly one home for each figure.
-The five lines named in \S\ref{sec:intro} can be stated in full now that the
-evidence for each is in hand. A model card or method paper can adopt them
-directly.
-
-\begin{enumerate}
-  \item \textbf{Declare a margin.} ``Equivalent'' without $\pm m$ is not a
-  testable statement. State the margin before evaluating.
-  \item \textbf{Run the paired test.} Report TOST at your margin, not just a
-  non-significant difference test. Failing to detect a difference is not
-  equivalence.
-  \item \textbf{Report churn next to net delta.} They are different quantities;
-  in the public record churn runs roughly five times the net delta, and about one
-  evaluation cell in twelve posts an identical score while still disagreeing on
-  items.
-  % "ONE IN TEN" CORRECTED 2026-07-27. \S\ref{sec:atlas:identical} retired that
-  % phrasing on 2026-07-26: it was near-exact for rev-1's 9.78% share and
-  % overstates rev-2's 8.49% (= 1 in 11.8). The atlas comment says explicitly
-  % "do not restore one in ten"; this restatement in the conclusion was missed.
-  % REV-1 SURVIVOR, CORRECTED 2026-07-27: read "five to six times", which was
-  % the rev-1 ratio. See \S\ref{sec:atlas:netgross}.
-  \item \textbf{Cite the sample size you met.} Table~\ref{tab:certification}
-  gives the count your benchmark family requires at your margin; say which
-  column you are in and what you actually ran.
-  \item \textbf{Release per-item outputs.} A few megabytes converts an assertion
-  into something a third party can check. No eligible source we audited did this
-  for the tasks its own claim covers, and the \AuditPerItemOtherTaskOnly{} that
-  publish item-level results publish them for other suites.
-\end{enumerate}
-
-% CLOSED 2026-07-27. The \TODO's precondition -- all eight registered cells
-% exist -- was met on 2026-07-26, and the verdict is signed
-% (docs/H3_EIGHT_CELL_DECISION_2026-07-26.md), so the closing paragraph is
-% written and may state the outcome. It states nothing the signed record does
-% not contain.
-% SOURCE: \S\ref{sec:minigrid:verdict} (5 of 8); sections/minigrid.tex Result 1
-% (the churn ratio), whose \label may move under the flagship reordering --
-% cite the file, not the label.
+% SOURCE: \S\ref{sec:minigrid:verdict} (5 of 8); Result~\ref{res:churnratio}.
+% The 12.7 and the "roughly four times" are the SAME aggregation, the median of
+% per-cell ratios, which is what makes the comparison legitimate. Do not swap
+% either for a ratio of medians.
 The controlled experiment says where this standard actually bites, and it is not
-where the five lines above suggest. Every one of them is written as though the
-comparison at issue were a compressed model against its original. The cell in
+where the five lines suggest. Each of them is written as though the comparison
+at issue were a compressed model against its original. The cell in
 Figure~\ref{fig:cancellation} is not that comparison: H3 puts two
 \emph{compressed} models side by side, GPTQ against AWQ at the same bit width,
 which is the choice a practitioner makes after deciding to compress at all. The
 evidence problem is strictly worse there, at a median per-cell churn of
 $12.7\times$ the net delta against roughly four times in the atlas on the same
-aggregation, and with the winner reversing on nothing but
-the calibration seed in 5 of 8 registered cells. The reason is the same
-mechanism in its sharpest form: two compressed models are more alike than either
-is to the original, so cancellation is more complete and the aggregate hides
-more.
+aggregation, and with the winner reversing on nothing but the calibration seed
+in 5 of 8 registered cells (\S\ref{sec:minigrid}). Two compressed models are
+more alike than either is to the original, so cancellation is more complete and
+the aggregate hides more.
 
-That generalises the standard past its own framing. Nothing in the five lines is
-about quantization. They are about comparing two models similar enough that
-somebody thought the comparison worth making: compressed against original,
-method against method, checkpoint against checkpoint, version against version.
-Aggregate accuracy is least informative in the regime where these comparisons
-are made, and what makes such a comparison checkable is the per-item evidence
-and a declared margin.
+% BROADER APPLICABILITY. This is the paragraph that generalises the standard
+% past its own framing, and it is the section's close.
+That generalises the standard of \S\ref{sec:intro} past its own framing, and
+nothing in those five lines is about quantization. They are about comparing two
+models similar enough that somebody thought the comparison worth making:
+compressed against original, method against method, checkpoint against
+checkpoint, version against version. Aggregate accuracy is least informative in
+exactly the regime where these comparisons are made, and what makes such a
+comparison checkable is per-item evidence and a margin declared before the
+evaluation is run.
 ```
 
 ---
@@ -4470,6 +4365,54 @@ gsm8k & 24 & 0.040 / 0.077 / 0.198 & 275 / \textbf{527} / 1{,}364 & 1{,}188 & $2
 % The stale value sat inside this TODO rather than in typeset body text, so it
 % was never a rendered claim -- but it is the instruction this appendix would
 % have been typeset from.
+
+% STAGE 3 of the body compression, 2026-08-06. Derivation detail, the
+% independent-binomial discussion and the thin-family discussion moved here from
+% \S\ref{sec:certification}, which keeps detection-is-not-certification, the
+% planning equation, one table, one worked example, the pairing advantage, the
+% planning-count-not-certificate qualification and its scope limits.
+\subsection{Certification method detail}
+\label{app:cert:method}
+
+\paragraph{The two standard deviations.} The paired form follows from the flip
+model: the per-item accuracy difference is $d_i \in \{-1,0,+1\}$, and under the
+null of no true difference $\mathrm{Var}(d) = p_d$, the rate at which the two
+models disagree on correctness. The independent form uses $p$, the family's
+median baseline accuracy, because independent-binomial variance depends on
+accuracy and not on churn. That is the whole of the difference between the two
+columns of Table~\ref{tab:certification}, and it is why the advantage varies by
+benchmark family rather than being a constant.
+
+\paragraph{The one-sided $z$.} $z_{1-\alpha}$ in Equation~\eqref{eq:nreq} is
+one-sided, since TOST rejects two one-sided nulls at level $\alpha$ each, which
+is why $\alpha = .05$ per bound corresponds to containment of a 90\% two-sided
+interval rather than a 95\% one (interpretive choice~5,
+Appendix~\ref{app:prereg:choices}). The detection quantity V1 of
+\S\ref{sec:audit:rules} is the one that takes the two-sided $z$.
+
+\paragraph{Where the discordance rates come from.} They are not modelled; they
+are read off the atlas (\S\ref{sec:atlas}). For each benchmark family we take
+the 25th percentile, median and 75th percentile of the per-cell accuracy-state
+churn observed across that family's atlas cells, giving optimistic, typical and
+pessimistic compression behaviour. Quartiles are \texttt{numpy}'s
+linear-interpolation \texttt{np.quantile}.
+
+\paragraph{Why the independent-binomial column is not a straw man.} It is what
+you get by treating the baseline and compressed evaluations as two unrelated
+samples and comparing proportions, which is the default in most reporting, and
+it is wrong in a specific, quantifiable way: the two runs are \emph{the same
+items through two nearly identical models}, so they agree on the large majority
+of items and their difference has far less variance than independence implies.
+The variation in the advantage across families is informative in itself:
+low-churn families (MuSR, BBH, GPQA) reward pairing most, while high-churn
+generative families (MATH, MMLU) both need more items \emph{and} gain less from
+pairing.
+
+\paragraph{The two thin rows.} Of the families that survive the four-cell
+threshold, two rest on thin evidence and are indicative only,
+\texttt{mmlu\_pro} (5 cells) and \texttt{ifeval} (8). They should be treated as
+a starting hypothesis to be replaced by the reader's own measured churn, not as
+reference constants.
 
 \subsection{Scope caveats carried from the main text}
 \label{app:cert:caveats-detail}

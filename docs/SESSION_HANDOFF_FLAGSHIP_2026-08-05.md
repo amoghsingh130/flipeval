@@ -605,3 +605,46 @@ The next 10 pages, if they are to be found at all, are in **mini-grid (6 pages,
 target 3)**, **certification (5, target 4)**, **related work (2, target 1)** and
 **conclusion (3, target 1.5)** — not in the audit. Whether that is worth doing
 against the risk to load-bearing material is the author's call.
+
+
+---
+
+# 2026-08-06 addendum 2: body compression, four stages
+
+**`audit.tex` is frozen** until the rest of the body has been compressed and
+remeasured. That instruction is still in force; the next session must not edit it
+without approving the proposal below.
+
+| stage | section | result | commit |
+|---|---|---|---|
+| 1 | conclusion | 3 pages -> 1.5 | `fd64ddf` |
+| 2 | related work | reorganised, 740 -> 505 words | `771be51` |
+| 3 | certification | 5 pages -> 4 | `35a3d37` |
+| 4 | mini-grid | 6 pages -> 5 | `c67ea5a` |
+
+**Body 34 -> 32 pages. Target 26-29. Still three above.**
+
+## Open item: the audit line edit, proposed and NOT executed
+
+`docs/AUDIT_LINE_EDIT_PROPOSAL_2026-08-06.md` maps all 18 protected
+qualifications to the sentence that carries each one after the edit. Fourteen are
+untouched; four are shortened by merging elaboration around them, and none of the
+four has its own sentence changed. Expected outcome: audit 8 -> ~6, body -> ~30.
+**26-29 is not reachable from the audit alone**; the proposal's §6 says where the
+rest would have to come from and recommends stopping at about 30.
+
+## Two things this round established
+
+1. **The layout gate caught a defect I introduced** (stage 3, an over-wide
+   equation line putting ink in the page-7 margin). It was fixed before the
+   commit. This is the case the gate was built for and it works.
+2. **Related work had a duplicated sentence** shipped in the compiled PDF, fixed
+   in stage 2. Prose defects of that kind are not caught by any gate; only
+   reading is.
+
+## State at this addendum
+
+Body 1-32, references p33, total 100 pages. All gates pass, including in-image
+pytest **348 passed, 0 skipped** (job 11705552). Two overfull boxes remain, both
+in appendices, both classified in the QA report. Zero body pages have ink outside
+the measure. Zero main floats leak into the appendices.
