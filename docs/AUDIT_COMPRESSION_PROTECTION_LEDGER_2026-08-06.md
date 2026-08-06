@@ -50,14 +50,14 @@ page 16. Target: approximately 3 to 4 body pages across four committed stages.
 | 7 | **5** non-assessable, as an explicit **4 + 1** split: 4 insufficient reporting, 1 outside the registered binary paired-outcome calculation. **Never** "incompatible with a paired framework" | **YES** | 553-554, 556, 581-583 | `app:audit:indeterminate` (new) for the per-claim R02/R11/R13 detail | Stage C | `\AuditNotAssessable`, `\AuditNotAssessableInsufficient`, `\AuditNotAssessableOutsideFramework` | **Stage C** |
 | 8 | **11** assessable claims, at the registered **uniform 2 pp** margin. The sentence "Because no source declares a margin, the applicable margin throughout is the uniform 2 pp registered in advance" is marked RETAIN VERBATIM in the file | **YES** | 352-355, 428-430 | none; the verbatim sentence stays | Stage C | `\AuditAssessable`, `\AuditMarginPP` | **Stage C** |
 | 9 | **10** above / **1** changes within / **0** below throughout the atlas-IQR interval, and **no assessable claim falls below the threshold throughout** | **YES** | 460-470 (`tab:audit-sensitivity`), 497 | none; table and sentence both stay in body | Stage C | `\AuditAboveThroughout`, `\AuditChangesWithinIQR`, `\AuditBelowThroughout` | **Stage C** |
-| 10 | **R01**'s sensitivity qualification: a sensitivity-dependent planning flag, **not** a verdict, and **not robustly underpowered**. Exactly one outright statement of the latter, in the section close | **YES** | 482-495, 644-648 | `app:audit:r01` (new) for the reversal-point and quartile arithmetic | Stage C (flag) + Stage D (the one outright statement) | `\AuditSensitiveClaim`, `\AuditSensitiveN`, `\AuditSensitiveNReq`, `\AuditSensitiveCellsBelow/Total/Pct` | **Stage C**, close pending D |
+| 10 | **R01**'s sensitivity qualification: a sensitivity-dependent planning flag, **not** a verdict, and **not robustly underpowered**. Exactly one outright statement of the latter, in the section close | **YES** | 482-495, 644-648 | `app:audit:r01` (new) for the reversal-point and quartile arithmetic | Stage C (flag) + Stage D (the one outright statement) | `\AuditSensitiveClaim`, `\AuditSensitiveN`, `\AuditSensitiveNReq`, `\AuditSensitiveCellsBelow/Total/Pct` | **Stage C + D** |
 | 11 | **43.6%** is a descriptive share of reference cells, **not** a probability, confidence level or p-value; the cells are correlated and are not independent draws. Number and framing in one sentence | **YES** | 489-495 | none; stays whole | Stage C | `\AuditSensitiveCellsPct` (= 345/792) | **Stage C** |
 | 12 | Evidential sufficiency, **not truth**. **No claim is called false**, and no finding implies any audited model is degraded | **YES** | 120-128, 645-648 | none | Stage A (framing) + Stage D (the does-not-establish list) | `docs/AUDIT_REGISTRATION_2026-07-15.md` §4 | **Stage A** |
 | 13 | **Not a prevalence estimate**: 16 eligible sources in three frozen frames are not a sample from which the field's practice can be estimated | **YES** | 656-658 | none | Stage A (one clause) + Stage D (full) | `\AuditEligible` | **Stage A** |
-| 14 | **"Robust" means only** that a classification holds throughout the interquartile range of the atlas cells supplying its discordance rate. **SINGLE POINT OF FAILURE**: the sentence beginning *"Where a classification is called robust"* has no other home in the body | **YES, VERBATIM** | 658-661 | **none permitted** | Stage D | prose rule, not a count | pending |
+| 14 | **"Robust" means only** that a classification holds throughout the interquartile range of the atlas cells supplying its discordance rate. **SINGLE POINT OF FAILURE**: the sentence beginning *"Where a classification is called robust"* has no other home in the body | **YES, VERBATIM** | 658-661 | **none permitted** | Stage D | prose rule, not a count | **Stage D** |
 | 15 | **R14** stays non-assessable and does not enter K. The trap paragraph (imputed n = 728 against 742) stays in the body, and "R04 and R14 carry no verdict" must re-attach to surviving prose | **YES** | 512-514, 572-579 | none for the trap paragraph | Stage C | `results/audit_verdicts_rev3.csv` row R14 | **Stage C** |
-| 16 | **R04** is outside **our registered binary paired-outcome calculation**, not incompatible with paired analysis generally: CIDEr supports paired resampling; it is the flip model that does not apply | **YES** | 611-621 | `app:audit:r04detail` (new) for the overruled first-pass GSM8K history | Stage D | `results/audit_verdicts_rev3.csv` row R04 | pending |
-| 17 | Claim-derived margins and the old shortfall range remain **withdrawn and non-verdict-bearing**. The **K = 1 → 5 → 4 → 1-of-11** sequence is the body's canonical self-correction and **must not move to an appendix** | **YES** | 21-34 (header), 623-635 | the K = 5 → K = 4 R04 *history* is already in `app:prereg:choices`; the **sequence itself** stays in the body | Stage D | `\AuditBelowThresholdAtMedian`, `\AuditAssessable` | pending |
+| 16 | **R04** is outside **our registered binary paired-outcome calculation**, not incompatible with paired analysis generally: CIDEr supports paired resampling; it is the flip model that does not apply | **YES** | 611-621 | `app:audit:r04detail` (new) for the overruled first-pass GSM8K history | Stage D | `results/audit_verdicts_rev3.csv` row R04 | **Stage D** |
+| 17 | Claim-derived margins and the old shortfall range remain **withdrawn and non-verdict-bearing**. The **K = 1 → 5 → 4 → 1-of-11** sequence is the body's canonical self-correction and **must not move to an appendix** | **YES** | 21-34 (header), 623-635 | the K = 5 → K = 4 R04 *history* is already in `app:prereg:choices`; the **sequence itself** stays in the body | Stage D | `\AuditBelowThresholdAtMedian`, `\AuditAssessable` | **Stage D** |
 | 18 | The two extraction passes are **automated** language-model sessions and **not statistically independent** (common model prior); never "inter-rater" or "dual coding". The locus re-verification was by the **author**, not an independent second coder | **YES** | 107-117, 287-293 | `app:extraction` already holds the procedure | Stage A (extraction) + Stage B (locus disclosure) | `docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md` §1, AUDIT_REGISTRATION §3.3 | **Stage A + B** |
 
 ## Appendix destinations to create before any deletion
@@ -161,3 +161,41 @@ file, both times inside a comment forbidding it. Zero occurrences in the PDF.
 did not shrink by a whole page this stage even though roughly 120 lines left it,
 because what left was dense prose that was already sharing pages with the two
 tables; the saving showed up downstream instead.
+
+### Stage D, boundaries and interpretation
+
+Moved: the overruled first-pass GSM8K computation to `app:audit:r04detail`.
+
+Added: the **imputed-discordance limitation** to the section close, and the
+**K sequence to the body**, which is the finding of this stage.
+
+**Qualification 17 was not being met.** The K = 1 -> 5 -> 4 -> 1-of-11 sequence
+is the section's canonical self-correction and the plan says it must not live
+only in an appendix. It was in this file's header *comment* and in
+`app:prereg:choices`, so no reader of the compiled paper could see it. Building
+the ledger is what surfaced that; it was a pre-existing gap, not something this
+compression created. The sequence is now in body prose with the arithmetic of
+each step left in the appendix, and it ends on the generated macros rather than
+a typed "1 of 11".
+
+All 18 rows are now verified at source.
+
+**Measured: audit 8 body pages, body boundary 33.**
+
+## Where this leaves the target, measured rather than estimated
+
+| | words | pages |
+|---|---|---|
+| audit prose at the start | 3,307 | 10 |
+| audit prose now | **2,630** | **8** |
+| what 3-4 pages needs | ~1,200-1,600 | 3-4 |
+
+The section still carries **two tables** (`tab:audit-taxonomy`,
+`tab:audit-sensitivity`), both required by the ledger, which cost roughly a page
+between them, so the prose budget for a 4-page section is about 1,400 words.
+Reaching it means removing another ~1,200 words from prose that is now largely
+protected text. The stage-by-stage relocations have taken out everything that had
+a destination; what remains is the qualifications themselves.
+
+This is reported rather than forced, per the brief's instruction to report a
+defensible 25-26 pages instead of deleting load-bearing material.

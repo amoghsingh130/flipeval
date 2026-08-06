@@ -522,19 +522,37 @@ supports paired resampling on the same items perfectly well, and a certificate
 for it would be a straightforward extension. It is simply not the model we
 registered.
 
-The first extraction pass nonetheless scored R04 on GSM8K, the source's own
-accuracy benchmark ($-0.30$\,pp at $n = 1{,}319$), and reported it as the
-audit's largest shortfall. On review this was overruled, because computing a
-TOST requirement on GSM8K audits a sentence the source wrote about a different
-benchmark, in different and non-trigger language. That ruling moved the headline
-and removed the audit's biggest number; the counts and the ratio it moved are
-quoted as history in Appendix~\ref{app:prereg:choices}, computed under the
-superseded reading that took each source's reported delta as its margin, and
-they are not current results. The GSM8K computation is retained in the released
-CSV as a labelled transparency column so a reader can see exactly what was set
-aside and why. \textbf{It is not claimed anywhere in this paper as an audit
-result.} An audit's currency is unimpeachability, and it is not spent on its own
-largest number.
+% STAGE D, 2026-08-06: the overruled first-pass GSM8K computation moved to
+% Appendix~\ref{app:audit:r04detail}. The body keeps the ruling, that the number
+% is not claimed as a result, and its cost.
+Excluding it was not free. The first extraction pass had scored R04 on GSM8K,
+the source's own accuracy benchmark, and reported it as the audit's largest
+shortfall; that reading was overruled because computing a TOST requirement on
+GSM8K audits a sentence the source wrote about a different benchmark, in
+different and non-trigger language. The computation is retained in the released
+CSV as a labelled transparency column, and \textbf{it is not claimed anywhere in
+this paper as an audit result} (Appendix~\ref{app:audit:r04detail}). An audit's
+currency is unimpeachability, and it is not spent on its own largest number.
+
+% QUALIFICATION 17, PLACED IN THE BODY 2026-08-06. The K sequence is the
+% section's canonical self-correction and MUST NOT live only in an appendix. It
+% was previously in this file's header comment and in app:prereg:choices, so no
+% reader of the paper could see it; the compression ledger caught that. The
+% arithmetic of each step stays in the appendix; the sequence itself is here.
+% SOURCE: sections/appendix_prereg_detail.tex, interpretive choice 1.
+The count of claims below the planning threshold moved four times before it
+settled, and the order in which the numbers arrived is itself part of the
+disclosure. A first pass applying the registered \AuditMarginPP{}\,pp margin
+uniformly returned $K = 1$ of 12. Re-reading the frozen label produced $K = 5$;
+the R04 ruling above moved one claim out of the determinate set, giving the
+$K = 4$ that was reported for ten days. Amendment~2 then returned the analysis
+to the uniform registered margin, where the rev-3 recomputation gives
+\textbf{\AuditBelowThresholdAtMedian{} of \AuditAssessable{}} assessable claims
+below the threshold, the same claim the very first pass had flagged. The
+claim-derived margins and the shortfall range computed under the superseded
+reading are \textbf{withdrawn, not recomputed}, and are non-verdict-bearing
+wherever they still appear as history
+(Appendices~\ref{app:audit:history} and~\ref{app:prereg:choices}).
 
 % TRIMMED 2026-07-27 (phase 4, low-cost). The "Establishes" half restated
 % findings (i)-(iv) from \S\ref{sec:audit:v3} and \S\ref{sec:audit:results}
@@ -557,7 +575,11 @@ sensitivity analysis, and none is.
 % "Where a classification is called robust".
 Nor does it establish a prevalence: \AuditEligible{} eligible sources within
 three frozen frames are not a sample from which the field's reporting practice
-can be estimated, and no proportion reported here should be read as one. Where a
+can be estimated, and no proportion reported here should be read as one. Every
+numerical result here also rests on a discordance rate that no source reported
+and that is imputed from the atlas, which is why each verdict is recomputed
+across the interquartile range of the cells supplying it and why the one flagged
+claim is reported as sensitivity-dependent rather than as a finding. Where a
 classification is called robust, that means only that it holds throughout the
 interquartile range of the atlas cells supplying its discordance rate, not
 across every plausible model of discordance. It also does not
