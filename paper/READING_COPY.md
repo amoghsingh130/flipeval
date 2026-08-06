@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-04T22:43:38Z from `paper/main.tex` at commit `02ea10b`.**
+**Generated 2026-08-06T18:35:42Z from `paper/main.tex` at commit `85ef957`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -3365,9 +3365,27 @@ metadata and maintenance statements.
 % ANONYMITY 2026-07-31: every identifier below goes through a macro defined in
 % main.tex, so the TMLR build suppresses them from one switch. Do not write a
 % URL, DOI or issue number directly into this paragraph.
+% CORRECTED 2026-08-06. This paragraph used to end "...resolves to the frozen
+% v1.0.0 state this paper describes", which was false for the audit numbers.
+% VERIFIED from an unauthenticated client, not from a plan document:
+%   - https://zenodo.org/api/records/21708923 holds exactly ONE file,
+%     amoghsingh130/flipeval-v1.0.0.zip, 34,392,323 bytes. That is GitHub's
+%     source tarball of the tag (`git archive --format=zip v1.0.0` here is
+%     34,372,389 bytes), NOT the 331 MB artifact bundle, which went to the
+%     dataset mirror only.
+%   - https://api.github.com/repos/amoghsingh130/flipeval/git/ref/tags/v1.0.0
+%     resolves to 987377a, dated 2026-07-29. `git ls-tree v1.0.0 results/`
+%     carries audit_verdicts.csv and audit_verdicts_rev2.csv and NO rev3 file.
+%   - The rev-3 verdicts were computed 2026-07-31 at 645ac62, two days after
+%     the tag, and `origin/main` is still 987377a, so no public surface
+%     anywhere carries them.
+%   - The Zenodo record's own description still states the withdrawn "0 of 17".
+% DO NOT restore the old wording, and do not write a v1.1 version string here
+% until the deposit exists -- the rule at the head of this file applies to the
+% replacement as much as it applied to the original.
 \paragraph{Availability.} The archived release is canonical:
 \textbf{\versiondoi},
-which resolves to the frozen \textbf{v1.0.0} state this paper describes. (The
+which resolves to the frozen \textbf{v1.0.0} state. (The
 concept DOI \conceptdoi{}
 resolves to whichever version is latest and is deliberately \emph{not} the
 citation here, because the numbers reported above belong to one frozen state.)
@@ -3376,6 +3394,24 @@ tag \texttt{v1.0.0}. A copy of the data is mirrored for convenience at
 \dataseturl;
 \textbf{it is a secondary link}, provided because the per-item files are
 directly loadable there, and the DOI remains the citable record.
+
+\textbf{One part of this paper is newer than that archive, and the citation
+should not be read as covering it.} v1.0.0 was tagged on 2026-07-29. The audit
+verdicts reported in \S\ref{sec:audit} are \textbf{revision~3}, recomputed on
+2026-07-31 under Amendment~2 into
+\texttt{results/\allowbreak{}audit\_\allowbreak{}verdicts\_\allowbreak{}rev3.csv}
+(SHA-256 \texttt{\AuditVerdictsShaShort}), and the archive predates them: what
+it carries is the superseded rev-2 file, and the rev-3 file, the Amendment~2
+revision of the verdict script that produces it, and Amendments~3 and~4 are
+absent from it. Nothing else in this paper is affected. The per-item outputs,
+the sealed run archives, the atlas and the certification tables are unchanged
+since v1.0.0, and every number drawn from them resolves through the DOI as
+stated. \textbf{The audit numbers do not, and they cannot be recovered from the
+archive by rerunning it either}, because the eligibility and margin-category
+logic Amendment~2 introduces postdates the tag. A revised deposit under the same
+concept DOI will carry the rev-3 file beside the rev-2 one it supersedes; until
+that deposit exists, this paragraph is the mapping, which is why no version
+string for it is written here.
 
 The paired-comparison layer described here has been \textbf{proposed} to the
 \texttt{lm-evaluation-harness} maintainers, in a comment on \harnessissue; no
@@ -4712,8 +4748,12 @@ Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
 
 \medskip
 \noindent The \textbf{version DOI is what this paper cites}: it resolves to one
-frozen state, which is the only thing the reported numbers describe. The concept
-DOI is correct only when referring to the artifact series. A
+frozen state. The concept
+DOI is correct only when referring to the artifact series. \textbf{That frozen
+state does not cover the rev-3 audit verdicts}, which were recomputed two days
+after the tag; \S\ref{sec:artifacts} states exactly what the archive does and
+does not carry, and that statement is the one to read before citing this table.
+A
 \textbf{Croissant record} is served by the dataset repository at its standard
 \texttt{/croissant} endpoint and carries the CC-BY-4.0 licence through to the
 machine-readable metadata.
