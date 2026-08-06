@@ -44,9 +44,9 @@ page 16. Target: approximately 3 to 4 body pages across four committed stages.
 | 1 | The three frozen sampling frames (F1 method papers, F2 official model cards, F3 vendor blogs/docs) and the registered inclusion rule: assertion in prose or a table caption, trigger vocabulary fixed in advance, exhaustive, no discretionary sub-selection | **YES** | 84-92 | trigger vocabulary already in `app:registrations` and the released claim table | Stage A | `docs/audit_claim_table.csv` col `frame` (7/7/3) | **Stage A** |
 | 2 | **17** frozen candidates and **16** eligible. Both numbers, never collapsed | **YES** | 97-101 | none; both stay | Stage A | `\AuditFrozenCandidates`, `\AuditEligible` | **Stage A** |
 | 3 | Why **R10** is excluded: its recorded quotation appears nowhere in its source, having been composed from a table cell, so the registered inclusion rule excludes it; the row stays in the released table | **YES** | 148-157 | `app:audit:eligibility` (new) for the full-text-review detail | Stage A | `\AuditIneligibleClaim`, `docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md` §4 | **Stage A** |
-| 4 | **0** audited sources declare a prospective numerical equivalence margin, established over complete source text | **YES** | 195-209 | `app:audit:sweep` (new) for the keyword-sweep detail (parity/percentage point absent, "margin" only as layout artefact, the one vendor declining to fix a threshold) | Stage B | `\AuditProspectiveNumericMargin`, `\AuditXtabProspectiveTotal` | pending |
-| 5 | **10** of 16 make the claim in purely qualitative terms with no number attached, and the remaining **6** cite a number that is in every case a **measured outcome**, not a declared tolerance | **YES** | 196-201 | none; both halves stay | Stage B | `\AuditXtabQualTotal`, `\AuditXtabRetroTotal` | pending |
-| 6 | **0** sources release **task-matched** per-item outputs. "task-matched" must appear in the SAME SENTENCE as the zero, and R08/R15/R16 release outputs for other suites | **YES** | 306-313, 315-325 | `app:audit:v3detail` (new) for which suites each releases | Stage B | `\AuditPerItemTaskMatched`, `\AuditPerItemOtherTaskOnly`, `\AuditPerItemOtherTaskClaims`, `\AuditPerItemNone` | pending |
+| 4 | **0** audited sources declare a prospective numerical equivalence margin, established over complete source text | **YES** | 195-209 | `app:audit:sweep` (new) for the keyword-sweep detail (parity/percentage point absent, "margin" only as layout artefact, the one vendor declining to fix a threshold) | Stage B | `\AuditProspectiveNumericMargin`, `\AuditXtabProspectiveTotal` | **Stage B** |
+| 5 | **10** of 16 make the claim in purely qualitative terms with no number attached, and the remaining **6** cite a number that is in every case a **measured outcome**, not a declared tolerance | **YES** | 196-201 | none; both halves stay | Stage B | `\AuditXtabQualTotal`, `\AuditXtabRetroTotal` | **Stage B** |
+| 6 | **0** sources release **task-matched** per-item outputs. "task-matched" must appear in the SAME SENTENCE as the zero, and R08/R15/R16 release outputs for other suites | **YES** | 306-313, 315-325 | `app:audit:v3detail` (new) for which suites each releases | Stage B | `\AuditPerItemTaskMatched`, `\AuditPerItemOtherTaskOnly`, `\AuditPerItemOtherTaskClaims`, `\AuditPerItemNone` | **Stage B** |
 | 7 | **5** non-assessable, as an explicit **4 + 1** split: 4 insufficient reporting, 1 outside the registered binary paired-outcome calculation. **Never** "incompatible with a paired framework" | **YES** | 553-554, 556, 581-583 | `app:audit:indeterminate` (new) for the per-claim R02/R11/R13 detail | Stage C | `\AuditNotAssessable`, `\AuditNotAssessableInsufficient`, `\AuditNotAssessableOutsideFramework` | pending |
 | 8 | **11** assessable claims, at the registered **uniform 2 pp** margin. The sentence "Because no source declares a margin, the applicable margin throughout is the uniform 2 pp registered in advance" is marked RETAIN VERBATIM in the file | **YES** | 352-355, 428-430 | none; the verbatim sentence stays | Stage C | `\AuditAssessable`, `\AuditMarginPP` | pending |
 | 9 | **10** above / **1** changes within / **0** below throughout the atlas-IQR interval, and **no assessable claim falls below the threshold throughout** | **YES** | 460-470 (`tab:audit-sensitivity`), 497 | none; table and sentence both stay in body | Stage C | `\AuditAboveThroughout`, `\AuditChangesWithinIQR`, `\AuditBelowThroughout` | pending |
@@ -58,7 +58,7 @@ page 16. Target: approximately 3 to 4 body pages across four committed stages.
 | 15 | **R14** stays non-assessable and does not enter K. The trap paragraph (imputed n = 728 against 742) stays in the body, and "R04 and R14 carry no verdict" must re-attach to surviving prose | **YES** | 512-514, 572-579 | none for the trap paragraph | Stage C | `results/audit_verdicts_rev3.csv` row R14 | pending |
 | 16 | **R04** is outside **our registered binary paired-outcome calculation**, not incompatible with paired analysis generally: CIDEr supports paired resampling; it is the flip model that does not apply | **YES** | 611-621 | `app:audit:r04detail` (new) for the overruled first-pass GSM8K history | Stage D | `results/audit_verdicts_rev3.csv` row R04 | pending |
 | 17 | Claim-derived margins and the old shortfall range remain **withdrawn and non-verdict-bearing**. The **K = 1 → 5 → 4 → 1-of-11** sequence is the body's canonical self-correction and **must not move to an appendix** | **YES** | 21-34 (header), 623-635 | the K = 5 → K = 4 R04 *history* is already in `app:prereg:choices`; the **sequence itself** stays in the body | Stage D | `\AuditBelowThresholdAtMedian`, `\AuditAssessable` | pending |
-| 18 | The two extraction passes are **automated** language-model sessions and **not statistically independent** (common model prior); never "inter-rater" or "dual coding". The locus re-verification was by the **author**, not an independent second coder | **YES** | 107-117, 287-293 | `app:extraction` already holds the procedure | Stage A (extraction) + Stage B (locus disclosure) | `docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md` §1, AUDIT_REGISTRATION §3.3 | **Stage A** |
+| 18 | The two extraction passes are **automated** language-model sessions and **not statistically independent** (common model prior); never "inter-rater" or "dual coding". The locus re-verification was by the **author**, not an independent second coder | **YES** | 107-117, 287-293 | `app:extraction` already holds the procedure | Stage A (extraction) + Stage B (locus disclosure) | `docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md` §1, AUDIT_REGISTRATION §3.3 | **Stage A + B** |
 
 ## Appendix destinations to create before any deletion
 
@@ -122,3 +122,18 @@ protected qualification. The PDF itself is correct; the extraction is not.
 **Verify protected phrasing against the LaTeX source, and use `-layout` for any
 rendered check.** A ledger walk driven by plain `pdftotext` output would have
 raised a false alarm here, and could equally miss a real inversion.
+
+### Stage B, declarations and reproducibility
+
+Moved: the complete-text margin sweep to `app:audit:sweep`; the six-card locus
+comparison, tier description and boundary-case retention judgement to
+`app:audit:locus`, whole; the suite-by-suite per-item detail to
+`app:audit:v3detail`.
+
+Rows 4, 5, 6 and the locus half of 18 verified **at source**, since a rendered
+check cannot be trusted for emphasised text. The task-matched qualifier and the
+zero remain in one sentence; the qualitative/measured-outcome split is now stated
+with the generated macros rather than the words "ten" and "six", closing a
+hand-typed count that had survived every earlier pass.
+
+**Measured: audit 9 body pages to 8; the body boundary moved 35 to 34.**

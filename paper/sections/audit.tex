@@ -178,24 +178,26 @@ Not numerically assessable & 0 & 1 & 3 \\
 \end{tabular}
 \end{table}
 
-% SOURCE: docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §§6-7. Keyword sweep over
-% complete text of all 17 archived sources including tables, captions, footnotes,
-% appendices and reference lists; model cards searched as raw Markdown.
+% SOURCE: docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §§6-7.
+% STAGE B, 2026-08-06: the sweep's contents (parity and percentage point absent
+% from the corpus, every "margin" a layout artefact or the "by a large margin"
+% idiom, the one vendor explicitly declining to fix a threshold) moved to
+% Appendix~\ref{app:audit:sweep}. Nothing was deleted.
+% PROTECTED: the zero, the 10, and that the remaining 6 cite a MEASURED OUTCOME
+% rather than a declared tolerance. Do not report the margin_category marginals
+% alone: 7 of the 12 category-2 claims contain no number at all, so calling them
+% informal *margins* reads as contradicting the zero in the same paragraph.
 \textbf{No audited source declares a prospective numerical equivalence margin}
-(Table~\ref{tab:audit-taxonomy}). Ten of the sixteen make the claim in purely
-qualitative terms (``negligible'', ``matches'', ``practically no accuracy
-decrease''), with no number attached to the assertion at all. The remaining six
-cite a number, and in every case it is a measured outcome: a recovery percentage
-or an achieved benchmark score, computed after the evaluation rather than set
-before it. This is established over complete source text, not the quoted
-sentence: every source was archived and searched in full, including tables,
-captions, footnotes and appendices, for a registered vocabulary of tolerance
-language. The terms \emph{parity} and \emph{percentage point} do not occur
-anywhere in the corpus; every occurrence of \emph{margin} is a page-layout
-artefact, a stylesheet declaration, or the idiom ``by a large margin'' describing
-superiority rather than tolerance. One vendor document comes closest by
-explicitly declining to fix a threshold, observing that ``users might have
-different tolerances on accuracy impact''.
+(Table~\ref{tab:audit-taxonomy}). \AuditXtabQualTotal{} of the
+\AuditEligible{} make the claim in purely qualitative terms (``negligible'',
+``matches'', ``practically no accuracy decrease''), with no number attached to
+the assertion at all. The remaining \AuditXtabRetroTotal{} cite a number, and in
+every case it is a \emph{measured outcome}: a recovery percentage or an achieved
+benchmark score, computed after the evaluation rather than set before it. This
+is established over complete source text, not the quoted sentence: every source
+was archived and searched in full, including tables, captions, footnotes and
+appendices, for a registered vocabulary of tolerance language
+(Appendix~\ref{app:audit:sweep}).
 
 The consequence for this section is structural. An equivalence claim with no
 declared margin cannot be evaluated against its own standard, because it has
@@ -207,78 +209,40 @@ results is described anywhere in this paper as that source's margin.
 \subsection{Where the claim is written}
 \label{sec:audit:locus}
 
-% ADDED 2026-08-03. SOURCE: docs/AUDIT_SELF_RECHECK_2026-08-02.md §§3-4.
-% Author re-verification under decision 4 (C+D) of the 2026-08-02 handoff,
-% scoped to R01/R10/R09/R17 and extended to the other three vendor cards only
-% for the prose/table locus question below.
-%
-% STILL OPEN (defect D6): THE COUNTS 3/2/1 AND THE SIX-CARD DENOMINATOR ARE
-% HAND-TYPED. They are not yet emitted by
-% paper/tools/gen_denominator_macros.py, which is another session's active file,
-% and macro-ising them cannot be done from this branch without touching that
-% generator's validated three-layer check. The 2026-08-04 restructure moved
-% tab:audit-locus to Appendix~\ref{app:audit:locus} and the counts now survive
-% as prose here, which is exactly the case the plan said to macro-ise; it is
-% reported as still open instead. Do not add a second generator.
-%
-% DO NOT restate this as a defect count. The finding is that the locus VARIES
-% with the evidence held constant; a tally of "3 cards are deficient" invites
-% the reading that the other three are fine, which is not the claim.
-The taxonomy above asks what form a source's assertion takes. A second question
-turns out to matter as much: \emph{where in the document the assertion is
-written}, and whether it is written in words at all. Six of the eligible sources
-are quantized-model cards from a single publisher. They run the same benchmark
-suite, present the same results table with the same recovery column, declare no
-margin, and release no task-matched per-item outputs. The evidence behind them
-is, for present purposes, identical. What differs is where each one puts its
-equivalence claim (Table~\ref{tab:audit-locus},
-Appendix~\ref{app:audit:locus}): three cards assert recovery in prose, two
-report the quantized and the unquantized score in adjacent clauses and stop,
-characterising the gap neither as small nor as acceptable, and one makes no
-comparative statement in prose at all, its claim existing solely as a recovery
-figure in a table cell under a column header with no caption. That last card is
-the excluded one (\AuditIneligibleClaim{}), and the exclusion is legible as the
-endpoint of a gradient, not an isolated extraction defect.
-
-This is a selection effect, and it applies to this audit. The registered
-inclusion rule requires the assertion to appear in prose or a table caption.
-That rule is reasonable, and it is the same rule any comparable audit would
-need. It is also keyed to a property that varies independently of the evidence.
-A reader encountering all six cards would take all six as near-lossless claims;
-an inclusion rule keyed to prose vocabulary captures the first tier cleanly,
-must exercise judgement on the second, and cannot see the third. The claims do
-not become weaker as the locus moves from sentence to cell. They stop being
-written down. The consequence is that \AuditFrozenCandidates{} is a floor on the
-population, not a census of it, and the shortfall is concentrated in exactly the
-sources that state their claims least explicitly. This bounds what the counts in
-this section can mean, without weakening them, since every reported quantity is
-computed over the sources that were captured; the true rate of unbounded
-equivalence claims in this literature is understated here, not overstated.
-
-The two prose-juxtaposition cards were kept. They carry no trigger vocabulary in
-their prose, and the recovery figures that would qualify them appear only as
-table cells, which is the position that excluded \AuditIneligibleClaim{}. They
-were retained in the eligible population on the judgement that a bare
-juxtaposition of two scores differing by less than a point, in a document whose
-purpose is to offer the quantized model as a substitute for the unquantized one,
-is an equivalence assertion in substance even where it is not one in vocabulary.
-Excluding them instead would have moved the eligible denominator to 14 and the
-assessable count to 9 without changing which claims fall below the planning
-threshold, and it would have moved the headline proportion in the direction
-favourable to this paper's thesis. The conservative choice is to keep them and
-report the ambiguity.
-
-% DISCLOSURE, LOAD-BEARING. This locus review was a second automated pass by the
-% same class of tool that produced the record it checked. It is NOT independent
+% STAGE B, 2026-08-06. The six-card comparison, the tier description and the
+% retention judgement for the two boundary cases moved WHOLE to
+% Appendix~\ref{app:audit:locus}, which already held tab:audit-locus.
+% RETAINED HERE, PROTECTED: the consequence for the denominator (qualification
+% 13's floor-not-census reading) and the author-re-verification disclosure
+% (qualification 18). This locus review was a second automated pass by the same
+% class of tool that produced the record it checked. It is NOT independent
 % verification and must never be described as dual coding or inter-rater
-% agreement anywhere in this paper. See docs/AUDIT_SELF_RECHECK_2026-08-02.md §1
-% and AUDIT_REGISTRATION §3.3.
-The locus review reported here is author re-verification against the archived
-sources, not independent verification by a second coder; the project has no
-second human, and Appendix~\ref{app:extraction} states what that does and does
-not license. Every archived source, its content hash, and the retrieval script
-needed to reproduce these locations are released with the paper, so the
-classification is checkable by any reader without re-fetching anything.
+% agreement anywhere in this paper.
+% STILL OPEN (defect D6): the 3/2/1 tier counts and the six-card denominator are
+% hand-typed in the appendix. They are not emitted by gen_denominator_macros.py,
+% which is another session's active file. Do not add a second generator.
+A second question turns out to matter as much as what form an assertion takes:
+\emph{where in the document it is written}, and whether it is written in words at
+all. Across six model cards from one publisher with the underlying evidence held
+constant, the claim appears in prose in three, as a bare juxtaposition of two
+scores in two, and only as a table cell in one
+(Table~\ref{tab:audit-locus}, Appendix~\ref{app:audit:locus}). The registered
+inclusion rule is keyed to a property that varies independently of the evidence,
+so the claims do not become weaker as the locus moves from sentence to cell:
+they stop being written down. The consequence is that
+\AuditFrozenCandidates{} is a floor on the population and not a census of it,
+with the shortfall concentrated in exactly the sources that state their claims
+least explicitly. This bounds what the counts here can mean without weakening
+them, since every reported quantity is computed over the sources that were
+captured, and it means the true rate of unbounded equivalence claims in this
+literature is understated here rather than overstated.
+
+The locus review is author re-verification against the archived sources, not
+independent verification by a second coder; the project has no second human, and
+Appendix~\ref{app:extraction} states what that does and does not license. Every
+archived source, its content hash, and the retrieval script needed to reproduce
+these locations are released with the paper, so the classification is checkable
+by any reader without re-fetching anything.
 
 \subsection{Availability of per-item outputs}
 \label{sec:audit:v3}
@@ -301,27 +265,23 @@ need to rerun the paired comparison. The tally is \AuditPerItemTaskMatched{}
 (\AuditPerItemOtherTaskClaims{}), \AuditPerItemNone{} \emph{no}.
 \end{quote}
 
-The three partial cases,%
-% SOURCE: results/audit_verdicts_rev3.csv rows R08, R15, R16 (v3_per_item_outputs =
-% "partial", with the per-row `notes` column giving the suite mismatch).
-R08, R15 and R16, all Red~Hat AI model cards, are the closest the record comes
-to reproducibility, and they illustrate why the count is nonetheless zero: they
-release per-item outputs for Arena-Hard, OpenLLM~v2 and HumanEval, but
-\emph{not} for the OpenLLM~v1 tasks that the audited equivalence claim is
-actually about. The released artifacts and the asserted claim do not intersect.
-These three sources are ahead of the field in disclosure practice, and the
-correction they need is small: publish the per-item outputs for the suite the
-claim quotes.
-
-This finding is more actionable than any power calculation because the two
-failures have different repair costs. Underpowering is fixable by evaluating
-more items, and \S\ref{sec:certification} says how many. Irreproducibility
-is not fixable downstream at all: with no per-item outputs, nobody outside the
-releasing organisation can run the paired test at \emph{any} sample size, cannot
-compute churn, and cannot check the arithmetic. Per-item outputs for a
-benchmark of a few thousand items are a file of a few megabytes. The gap between
-that cost and its consequence is the single clearest reporting-standards
-recommendation this paper makes.
+% STAGE B, 2026-08-06: the suite-by-suite detail for the three partial sources
+% and the repair-cost argument moved to Appendix~\ref{app:audit:v3detail}.
+% PROTECTED AND RETAINED: the qualifier that the three DO release per-item
+% outputs, for other suites. "None released per-item outputs" is false without
+% "task-matched", and the zero above is meaningless without this sentence.
+\AuditPerItemOtherTaskClaims{} come closest: they release per-item outputs for
+other suites, but not for the tasks their audited equivalence claim is about, so
+the released artifacts and the asserted claim do not intersect
+(Appendix~\ref{app:audit:v3detail}). This finding is more actionable than any
+power calculation because the two failures have different repair costs.
+Underpowering is fixable by evaluating more items, and \S\ref{sec:certification}
+says how many. Irreproducibility is not fixable downstream at all: with no
+per-item outputs, nobody outside the releasing organisation can run the paired
+test at \emph{any} sample size, cannot compute churn, and cannot check the
+arithmetic. Per-item outputs for a benchmark of a few thousand items are a file
+of a few megabytes, and the gap between that cost and its consequence is the
+single clearest reporting-standards recommendation this paper makes.
 
 \subsection{Verdict rules}
 \label{sec:audit:rules}
