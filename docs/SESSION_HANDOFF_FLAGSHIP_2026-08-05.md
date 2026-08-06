@@ -15,7 +15,7 @@ discrepancy is noted.
 | worktree | `/storage/project/ps-compressedlm-0/asingh3206/flipeval/.claude/worktrees/flagship` |
 | main checkout | `/storage/project/ps-compressedlm-0/asingh3206/flipeval` (also `~/ps-compressedlm-0/flipeval`) |
 | branch | `flagship-narrative` |
-| HEAD | `9612a124b9429a1511d7653afc9d0b210801bfc6` (`9612a12`) |
+| HEAD | `ed54d4d` (was `9612a12` when this file was written) |
 | status | **clean**, 0 modified files |
 | pushed? | **no.** Branch is local only. `origin` is a PUBLIC GitHub remote; nothing on this branch has been sent to it |
 
@@ -64,6 +64,13 @@ b55fe8f Layout: 58 overfull -> 18
 2470d9c Measured page map
 110e125 Extended related work to appendix         <- relocation
 9612a12 Clear the body margins: 4 pages -> 1
+86b2b52 Compaction handoff (this file)
+48872d2 One rounding convention: 5.40 / 5.22 / 5.19, all unrounded   <- P1A
+c63616b Churn-ratio generator + zero-denominator policy              <- P1B/1C
+09045ca Freeze refresh
+f0ab36c Layout triage: 16 overfull boxes -> 2                        <- P2
+494eb57 Freeze refresh
+ed54d4d Reporting standard stated in the introduction                <- P3
 ```
 
 ---
@@ -163,79 +170,95 @@ PROJECT_DIR=<this worktree> SCRATCH_DIR=$HOME/scratch/flipeval \
 
 ---
 
-## 4. Measured state (verified at `9612a12`, clean build)
+## 4. Measured state (verified at `ed54d4d`, clean build)
 
-| quantity | first baseline (`18b2db1`) | **now** |
-|---|---|---|
-| **Main content, before references** | 1–35 | **1–35** |
-| References | 36–38 | **36–38** |
-| Appendices | 39–96 | **39–96** |
-| **Total PDF** | 96 | **96** |
-| Figure 1 page | 87 | **3** |
-| Overfull hbox | 58 | **16**, worst 82.0pt |
-| Overfull vbox | 0 | **1**, 2.69pt |
-| Underfull hbox | 11 | **34** (cost of `\emergencystretch`; loose lines, no ink in margin) |
-| Undefined refs / cites | 0 / 0 | **0 / 0** |
-| Body pages with ink past the text block | 4 | **1** (p9, +5.2pt) |
+| quantity | first baseline | at `9612a12` | **now** |
+|---|---|---|---|
+| **Main content, before references** | 1-35 | 1-35 | **1-35** |
+| **Total PDF** | 96 | 96 | **99** |
+| Figure 1 page | 87 | 3 | **3** |
+| Overfull hbox | 58 | 16 (worst 82.0pt) | **2** (worst 5.16pt) |
+| Overfull vbox | 0 | 1 (2.69pt) | **0** |
+| Underfull hbox | 11 | 34 | 34 |
+| Undefined refs / cites | 0 / 0 | 0 / 0 | **0 / 0** |
+| Body pages with ink past the text block | 4 | 1 | **0** |
 
-**Correction to a previously reported figure:** total PDF is **96**, not 95. It
-was 95 before the related-work relocation; relocation grows the appendix faster
-than it shrinks the body, which is expected and fine.
+The PDF grew from 96 to 99 in the appendix, not the body: +2 from splitting
+`tab:audit-characterisation` into two panels (the fix for the widest box in the
+document) and +1 from the introduction's reporting standard. The body boundary
+has not moved.
 
-### Section page map (verified)
+**The 2.69pt overfull vbox the brief asked to inspect before accepting no longer
+exists.** It was the same defect as Figure 1's 6.2pt hbox: one node overflowing
+the output routine. `inner sep=0` cleared both.
 
-| section | starts | span |
-|---|---|---|
-| Introduction + Fig 1 | 2 | 3 |
-| Related work | 5 | 2 |
-| Paired certification | 7 | 3 |
-| Preregistration | 10 | 2 |
-| Atlas | 12 | 4 |
-| **Audit** | **16** | **9** |
-| Mini-grid | 25 | 6 |
-| Harness sensitivity | 31 | 1 |
-| Artifacts | 32 | 0 |
-| Limitations | 32 | 2 |
-| Conclusion | 34 | 2 |
+### Section page map (verified at `ed54d4d`)
 
-Fuller map with prose word counts, float inventory and target budgets:
-`docs/PAGE_MAP_2026-08-05.md`.
+| # | section | starts | span |
+|---|---|---|---|
+| 1 | Introduction + Fig 1 | 2 | 3 |
+| 2 | Related work | 5 | 2 |
+| 3 | Paired certification | 7 | 5 |
+| 4 | Atlas | 12 | 4 |
+| 5 | **Audit** | **16** | **10** |
+| 6 | Mini-grid | 26 | 6 |
+| 7 | Harness sensitivity | 32 | 1 |
+| 8 | Artifacts | 33 | 0 |
+| 9 | Limitations | 33 | 2 |
+| 10 | Conclusion | 35 | 1 |
+
+**CORRECTION, repository over document.** There are **ten** body sections, not
+eleven. `preregistration.tex` is three *subsections* inside §3 (Paired
+certification), folded in by `b7b8b1c`; it has not been its own section since
+that commit. Both `docs/PAGE_MAP_2026-08-05.md` and the first version of this
+file listed it as section 4 with its own page span, which is why §3 looks
+like it grew from 3 pages to 5. It did not. Trust this table.
+
+**The audit is now 10 body pages of 35, not 9.** It is more than a quarter of
+the body and remains by far the dominant compression target.
 
 ### Float placement (all `[!t]`; verify after any change to a float's height)
 
-`fig:cancellation` p3 · `tab:certification` p9 · `tab:atlas-strata` p14 ·
-`tab:audit-taxonomy` p18 · `tab:audit-sensitivity` p22 · `tab:h3-eightcell` p27.
+`fig:cancellation` p3 - `tab:certification` p9 - `tab:atlas-strata` p14 -
+`tab:audit-taxonomy` p18 - `tab:audit-sensitivity` p23 - `tab:h3-eightcell` p28 -
+`tab:churn-aggregations` p29 (new).
 
 **Float placement is fragile.** Figure 1 originally sat on page 87, and making
-three body tables taller once pushed them to pages 85–86. `[!t]` is what holds
+three body tables taller once pushed them to pages 85-86. `[!t]` is what holds
 them. Any new float must be `[!t]` from the start.
 
----
-
-## 5. Gates currently passing (exact)
+## 5. Gates currently passing (exact, at `ed54d4d`)
 
 ```
-in-image pytest, job 11697689 : 325 passed, 0 skipped
+in-image pytest, job 11702653 : 348 passed, 0 skipped   (was 325; +23 new tests)
+check_layout.py               : OK, 1 accepted violation with a recorded reason
 PAPER_CHECK                   : OK, 0 dangling refs, 0 unresolved cites
-                                24 files, 109 labels, 171 refs, 23 cite keys,
-                                12 environments, 24 tabulars (234 rows)
+                                24 files, 110 labels, 183 refs, 26 tabulars
 STALE_CLAIM                   : OK
 REGISTRATIONS_VERBATIM        : OK, 7,103 words across 4 documents
 gen_denominator_macros --check: OK on all three layers
-  INPUT_DIGEST                : audit_verdicts_rev3.csv sha256 matches
-  CANONICAL_INVARIANTS        : 27 values reproduce the final checklist
-  COMMITTED_LEDGER            : 190 lines reproduce audit_denominators.tex
+gen_audit_tables --check      : OK, 17 rows reproduce byte for byte
+churn_ratio.py --check        : OK, 25 printed values reproduce
 freeze_prepace --verify       : passed
 ABSTRACT_CHARS                : 1879 / 1920, margin 41, 283 words
 prose em dashes               : 0
-undefined refs / cites        : 0 / 0
-bbox margin check             : 1 of 35 body pages, p9 at +5.2pt
 ```
 
-The expected in-image count in `CLAUDE.md` is **325** and is correct. No tests
-were added this session.
+**The expected in-image count in `CLAUDE.md` and `AGENTS.md` is now 348** and was
+updated in the same commit that added the tests, as the rule requires. The two
+files remain byte-identical.
 
----
+### Two new gates this session
+
+- **`paper/tools/check_layout.py`** - run after every build, from `paper/`. Two
+  halves: overfull boxes from the log, and glyph `xMax` per page from
+  `pdftotext -bbox`. **The log half alone is not sufficient**: a `tabular` wider
+  than `\textwidth` inside `\centering` is set silently, which is how the whole
+  S2 column of the strata table came to be rendering off the page with a clean
+  log. Body pages must be completely clean; accepted violations are keyed to a
+  string in the offending page's own text, never to a page number.
+- **`scripts/churn_ratio.py --check`** - run after touching any churn-ratio
+  figure. 25 values, both regimes, both aggregations.
 
 ## 6. Figure 1
 
@@ -262,126 +285,83 @@ first render). It has been rendered and visually inspected at 250 dpi.
 
 ---
 
-## 7. The headline ratio: state and the unresolved question
+## 7. The headline ratio: RESOLVED
 
-Full analysis: **`docs/HEADLINE_CHURN_RATIO_DEFINITION.md`**. Read it in full.
+Full analysis: `docs/HEADLINE_CHURN_RATIO_DEFINITION.md`. Policy:
+`docs/CHURN_RATIO_ZERO_DENOMINATOR_POLICY.md`. Both are current.
 
-**No frozen registration defines this ratio.** The atlas registration §5 fixes
-the per-cell metrics, §6 fixes the population, and both are silent on
-aggregation. It is a descriptive summary, named explicitly in the paper.
+**No frozen registration defines this ratio.** The atlas registration fixes the
+per-cell metrics and the population and is silent on aggregation, so the paper
+names its aggregation openly.
 
-Verified values over the registered 1,707-cell population
-(`excluded_or_skipped` false, `contains_disclosed_probe_cell` false):
+**One convention now, unrounded, everywhere** (commit `48872d2`):
 
-| quantity | value |
-|---|---|
-| pooled median churn | 0.120000 |
-| pooled median abs net delta | 0.0222222 |
-| **pooled ratio of medians, unrounded** | **5.4000 exactly** |
-| S1 (n=1,398) medians | 0.137452 / 0.026316 |
-| S1 ratio unrounded | **5.2232** |
-| S1 ratio from 3dp-rounded medians | 5.2692 → 5.27 |
-| S2 (n=309) medians | 0.048000 / 0.009242 |
-| S2 ratio unrounded | **5.1936** |
-| S2 ratio from 3dp-rounded medians | 5.3333 → 5.33 |
-| median of per-cell ratios (1,562 cells) | 3.8452 |
-| mean of per-cell ratios | 7.4125 |
-| answer churn / net delta, pooled | 13.5000 |
+| | value | printed as |
+|---|---|---|
+| pooled, 1,707 cells | 0.120000 / 0.0222222 = 5.4000 | **5.40** |
+| S1, 1,398 cells | 0.13745229 / 0.02631579 = 5.2232 | **5.22** |
+| S2, 309 cells | 0.04800000 / 0.00924214 = 5.1936 | **5.19** |
+| median of per-cell ratios, 1,562 cells | 3.8452 | **3.85** |
+| ... 128 zero-delta cells readmitted | 4.2000 | 4.20 |
+| controlled, ratio of medians | 12.1415 | **12.1** |
+| controlled, median of per-cell ratios | 12.7080 | **12.7** |
+| answer churn / net delta, pooled | 13.5000 | (README only) |
 
-**THE UNRESOLVED CONSISTENCY PROBLEM, and the next task.** The manuscript
-currently prints pooled **5.40** (unrounded) alongside stratum **5.27/5.33**
-(computed from 3dp-rounded medians). That is two rounding conventions in one
-sentence. The author has directed:
+The retired 5.27/5.33 divided medians pre-rounded to 3 dp. `tab:atlas-strata`
+now prints the four medians to six places so the printed ratios are reproducible
+from the printed cells, and the caption says so.
 
-- use **one convention, unrounded, from canonical artifacts**: pooled 5.40,
-  S1 **5.22**, S2 **5.19**;
-- do **not** keep 5.27/5.33 merely because they reproduce from the printed
-  table; instead either print more digits in `tab:atlas-strata` or give the
-  exact medians in a note;
-- abstract/introduction/conclusion keep "roughly five times";
-- technical prose names the aggregation, "the ratio of median accuracy-state
-  churn to median absolute accuracy change", and says explicitly it is not the
-  median of cellwise ratios.
+**Zero-denominator policy, settled (commit `c63616b`).** 145 of 1,707 cells have
+an exactly zero net delta; 128 of those have non-zero churn; 17 are true 0/0.
+The ratio of medians is unaffected. The per-cell median excludes all 145, which
+is **conservative**: readmitting the 128 as unbounded raises the median from
+3.85 to 4.20, so 3.85 is a lower bound and cannot be a flattering choice. Zero
+is defined at 1e-12, the same definition `sec:atlas:identical` already uses. One
+rule, both strata; the removal rate differs (6.8% of S1, 16.2% of S2) and is
+published.
 
-**Sites to change** (`sections/atlas.tex` only, for the stratum figures):
-the prose "5.27 in S1 and 5.33 in S2", the SOURCE comment block at the head of
-`sec:atlas:netgross`, and the comment near the section close. The retired
-`5.3\times` is already gone from all six former headline sites.
+**The cross-regime comparison is like-for-like both ways**, in the new
+`tab:churn-aggregations`: controlled exceeds observational under the ratio of
+medians (2.2x) and under the median of per-cell ratios (3.3x). Both are printed
+deliberately, because quoting only the larger contrast would be selecting on the
+answer, and a test requires both to point the same way.
 
-**Do not touch** the `$5.3\times$` in `certification.tex:136` and
-`appendix_audit_table.tex:370,399`. That is the ifeval paired-versus-naive
-sample-size advantage (4,211/800 = 5.26), a different quantity that rounds the
-same way.
+**Everything above is generated and pinned.** `scripts/churn_ratio.py` computes
+all of it from committed artifacts; `--check` verifies 25 printed values;
+`tests/test_churn_ratio.py` adds 23 tests. Before this session the number
+existed only as arithmetic in a LaTeX comment, which is how it rotted twice.
 
-### Also unresolved: zero-denominator policy (Priority 1B)
+**Do not touch** the `$5.3\times$` in `certification.tex` and
+`appendix_audit_table.tex`: that is the ifeval paired-versus-naive sample-size
+advantage (4,211/800 = 5.26), a different quantity that rounds the same way.
 
-The 3.85 figure excludes the **145 exact-zero-delta cells** because the per-cell
-ratio is undefined there. Those cells are the subject of `sec:atlas:identical`
-and 128 of them have non-zero churn, so they must not vanish silently from a
-metric meant to summarise cancellation. Required: document how zero-delta and
-zero-churn cells are handled, whether the policy differs by stratum, how many
-cells enter the median, whether the controlled calculation uses the same policy,
-and **add tests**. Then make the atlas-vs-controlled comparison like-for-like,
-or drop the numeric 3.85-vs-12.7 comparison entirely.
+**Public surfaces need no action.** The blog says "roughly five times" (fine);
+Zenodo v1.0 asserts no ratio at all; `README.md` was corrected in `d8ddb90` and
+is **not pushed**. No upload, DOI action or v1.1 bundle is required.
 
-`minigrid.tex` Result 1 currently compares 3.85 (atlas, median of per-cell
-ratios) against 12.7 (controlled, median of per-cell ratios) and gives 5.40
-separately. That comparison is like-for-like on aggregation but its zero policy
-is undocumented, which is exactly what 1B must settle.
+## 8. Layout: DONE
 
-### Public surfaces
+16 overfull hboxes and 1 vbox reduced to **2 hboxes, 0 vboxes**; body pages with
+ink outside the text block **1 to 0**. Commit `f0ab36c`. Both survivors are
+accepted with recorded reasons:
 
-- Blog (`paper/blog/2026-07-21-...md:121`) says "roughly **five times**". **No
-  correction needed.**
-- Zenodo v1.0 asserts **no ratio at all**; it ships raw per-cell CSVs. **No
-  upload, no DOI action, no v1.1 bundle required.**
-- `README.md` was corrected in commit `d8ddb90` (it had attributed the ratio to
-  *answer* churn, whose true value is 13.50). **Not pushed.** README.md is
-  inside the source fingerprint, so any further edit needs a freeze refresh.
+| pt | where | why accepted |
+|---|---|---|
+| 5.16 | `appendix_registrations.tex` | a 64-character revision hash with no break point, inside verbatim frozen text that cannot be edited. `\emergencystretch` 6em is already applied from outside. |
+| 0.32 | `appendix_artifacts_detail.tex` | below the width of a rule; invisible |
 
----
+Techniques used, all content-preserving: `\allowbreak` after `/` and escaped `_`
+in long typewriter paths (zero-width, no hyphen printed); tighter `\tabcolsep`;
+`\small`/`\footnotesize` matching neighbouring tables; two fixed-width columns
+narrowed; one table split into two panels; `inner sep=0` on Figure 1's
+full-width node. **No font was reduced to reach a page number, no margin or
+measure changed, and no value, row or column was dropped.**
 
-## 8. Layout: remaining warnings
-
-All 16 overfull hboxes, verified at `9612a12`:
-
-| pt | page | source | line |
-|---|---|---|---|
-| 82.0 | 48 | `appendix_audit_table.tex` | 75 |
-| 59.4 | 69 | (output routine) | 47 |
-| 54.1 | 60 | `appendix_minigrid_detail.tex` | 248 |
-| 47.8 | 60 | `appendix_minigrid_detail.tex` | 179 |
-| 36.2 | 60 | `appendix_minigrid_detail.tex` | 274 |
-| 33.2 | 63 | `appendix_harness_detail.tex` | 201 |
-| 28.2 | 57 | `appendix_atlas_detail.tex` | 97 |
-| 21.9 | 67 | (output routine) | 196 |
-| 11.9 | 69 | (output routine) | 95 |
-| 10.7 | 54 | (output routine) | 382 |
-| 9.9 | 57 | `appendix_atlas_detail.tex` | 102 |
-| 7.7 | 54 | (output routine) | 418 |
-| **7.7** | **7** | **`certification.tex`** | **136** |
-| **6.2** | **1** | (output routine) | 96 |
-| 5.2 | 92 | (output routine) | 369 |
-| **1.7** | **26** | (output routine) | 154 |
-
-**Only four are in the main body** (pages 1, 7, 26 and the p9 bbox hit), and all
-are ≤7.7pt. Everything ≥28pt is in an appendix. The 2.69pt overfull vbox is on
-page 2 and has not yet been visually checked; the author has asked that it be
-accepted only after that check.
-
-**A warning about method.** Three of the worst offenders found earlier produced
-*no* LaTeX warning at all, because a `tabular` inside `\centering` that exceeds
-`\textwidth` is set silently. They were found with:
-
-```bash
-pdftotext -bbox -f 1 -l 35 main.pdf /tmp/bb.html
-# then compare max xMax per page against the modal text-block right edge (484.5pt)
-```
-
-**Keep this bounding-box check. The log alone is not sufficient.** The author has
-asked for it to become a build gate.
-
----
+**Three things the Figure 1 generator's width guard cannot see**, now recorded in
+the guard itself: vertical overflow, label collisions, and the inner sep TeX adds
+*outside* a declared text width. The last one put the flagship figure 6.2pt into
+the margin while every checked width fitted. Render the figure after any geometry
+change; the guard is not a substitute.
 
 ## 9. Work completed and work remaining
 
@@ -417,15 +397,15 @@ before they register.
 
 ### Other pending work
 
-- **Priority 3, narrative**: move a compact five-line reporting standard to the
-  end of the introduction or just after the certification framework, so the
-  flagship argument completes early. The conclusion then recaps rather than
-  introduces. Authorized as a narrative change, not a scientific one.
-- **Priority 5, audit compression**: 9 body pages → target 3–4.
+- **Priority 3, DONE** (`ed54d4d`). The five lines are stated in outline at the
+  end of the introduction, one sentence each, each pointing at the section that
+  argues it, and **carrying no numbers** so no figure gets a second home to rot
+  in. The conclusion states them in full and now says it is returning to lines
+  the reader already has. Keep both copies; if a line changes, change both.
+- **Priority 4, relocations: NOT STARTED.**
+- **Priority 5, audit compression: NOT STARTED.** See §12.
 - `paper/READING_COPY.md` still needs its single regeneration at the very end
   (`paper/tools/gen_reading_copy.py`).
-
----
 
 ## 10. Protected audit qualifications (must survive in the BODY)
 
@@ -499,27 +479,85 @@ this file.**
 
 Reorient first (§11), confirm the state matches §4 and §5, then:
 
-**Priority 1A — the ratio-consistency gate. Do this before touching the audit.**
+**Priority 4, the relocations, and Priority 5, the audit compression.** Neither
+has been started. Priorities 1, 2 and 3 are complete, verified and committed.
 
-Edit `paper/sections/atlas.tex` only:
+### Why they were not started, so the next session does not repeat the mistake
 
-- replace the prose "5.27 in S1 and 5.33 in S2" with the unrounded
-  **5.22** and **5.19**;
-- update the SOURCE comment block at the head of `sec:atlas:netgross` so the
-  recorded derivation is the unrounded one;
-- make the stratum medians reproducible: either print more decimal places in
-  `tab:atlas-strata` or add a note giving 0.137452 / 0.026316 / 0.048000 /
-  0.009242;
-- keep pooled 5.40 and the "not the median of cellwise ratios" sentence;
-- verify with:
+The audit compression needs 18 protected qualifications held against 665 lines
+of `sections/audit.tex` while several new appendix destinations are created and
+verified. It is the one operation in this plan that cannot be safely left
+half-finished: Wave 4 died mid-edit having cut ~2,990 body words with no
+appendix destinations, and recovering from that cost a branch and a revert. It
+should be started only with enough budget to finish a whole relocation, and each
+relocation committed on its own.
+
+### The rule that Wave 4 broke, restated
+
+**Create the appendix destination FIRST, move the material whole, then remove it
+from the body and leave a pointer.** Never cut first. A body edit that references
+an appendix label that does not exist yet fails `PAPER_CHECK` with dangling
+refs, which is how the earlier `audit.tex` attempt was caught.
+
+### The audit's shape, measured (`sections/audit.tex`, 665 lines, 10 body pages)
+
+| line | subsection |
+|---|---|
+| 68 | What was audited, and what was not |
+| 130 | What the sources declare |
+| 218 | Where the claim is written |
+| 294 | Availability of per-item outputs |
+| 337 | Verdict rules |
+| 421 | Results |
+| 546 | Claims that cannot be assessed |
+| 598 | R04: outside the registered calculation |
+
+**Destinations that already exist**, so relocating into them needs no new label:
+`app:audit-table`, `app:audit-method`, `app:audit:locus` (already holds
+`tab:audit-locus`), `app:audit:mdd`, `app:audit:imputation`,
+`app:audit:robustness`, `app:extraction`.
+
+**One safe, already-scoped move, identified but not made:** the retention
+judgement for the two prose-juxtaposition cards, the paragraph beginning *"The
+two prose-juxtaposition cards were kept"* (`audit.tex`, in
+`sec:audit:locus`). Its table is already in `app:audit:locus`. It is roughly a
+third of a page and is not one of the 18 protected items. The selection-effect
+paragraph before it and the author-re-verification disclosure after it are both
+load-bearing and stay in the body.
+
+**Known open defect D6, do not try to fix it here:** the 3/2/1 locus tier counts
+and the six-card denominator are hand-typed in both the body and the appendix.
+They are not emitted by `gen_denominator_macros.py`, which is another session's
+active file, and macro-ising them would mean editing that generator's validated
+three-layer check from a branch that does not own it. **Do not add a second
+generator.** Report it as still open.
+
+### Order
+
+1. Priority 4 relocations, each in its own commit, destination first.
+   `preregistration.tex` has ~100 words of slack at most; do not expect a page
+   from it. A relocation smaller than a page does not move the reference
+   boundary, so savings accumulate before they register.
+2. Priority 5, audit compression, 10 body pages toward 3-4, preserving all 18
+   qualifications in §10 verbatim in substance. **Deletion-only compression is
+   not accepted.**
+3. Priority 6, final QA. Regenerate `paper/READING_COPY.md` last.
+
+### After every change
 
 ```bash
-cd paper && python3 tools/check_paper.py && python3 tools/gen_denominator_macros.py --check
+cd paper
+python3 tools/check_paper.py && python3 tools/gen_denominator_macros.py --check \
+  && python3 tools/gen_audit_tables.py --check
+python3 ../scripts/churn_ratio.py --check
 export PATH=$HOME/scratch/texlive/bin/x86_64-linux:$PATH
 pdflatex -interaction=nonstopmode main.tex && bibtex main \
   && pdflatex -interaction=nonstopmode main.tex \
   && pdflatex -interaction=nonstopmode main.tex
+python3 tools/check_layout.py          # NOT optional; the log alone is not enough
+python3 tools/measure_abstract.py
 ```
 
-Then **Priority 1B**, the zero-denominator policy, with tests, before any audit
-compression. Commit the ratio correction separately.
+Anything touching `scripts/`, `tests/`, `configs/`, `flipeval/`, `pilot_eval/`
+or `README.md` additionally needs the in-image gate (**expect 348 passed, 0
+skipped**) and a freeze refresh after the commit.
