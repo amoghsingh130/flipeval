@@ -1,0 +1,43 @@
+# ADDENDUM to docs/audit_source_tarball_hash_map_20260804.tsv.
+#
+# Amendment 4 (signed 2026-08-04) cites a "full 54-row mapping". That mapping
+# was computed at 83d2b6c and is correct and unchanged: all 54 rows were
+# reproduced byte-for-byte when the rewrite was actually applied on 2026-08-06,
+# including the bb45528 -> ed92ae8 remap the amendment turns on.
+#
+# It is nevertheless SHORT BY FIVE COMMITS, because five commits were made
+# after the map was computed and each carries the tarball in its tree, so each
+# is rewritten too. This file records those five. The signed file is NOT edited.
+#
+# THREE OF THE FIVE ARE AMENDMENT 4'S OWN COMMITS. The commit that signed and
+# appended Amendment 4, 02ea10b, becomes 5339a48. An amendment that exists to
+# remap a signature's provenance pointer therefore moves its own. This is the
+# same defect one level up, and it is recorded rather than quietly absorbed --
+# whether it needs its own dated amendment is the decision owner's call, not
+# this file's.
+#
+# Applied 2026-08-06 with the SAME tool the signed map was computed with,
+# git filter-branch --index-filter, on a disposable clone containing only
+# `main`. Using a different tool was rejected: commit hashes are a function of
+# the tool's exact output, and a tool substitution that shifted any of the 54
+# would have falsified a signed document.
+#
+# Verified on application: 256 commits before and after, none pruned; author,
+# email, author date, committer, committer date and subject byte-identical for
+# every commit; the tarball the only path differing in any tree; the blob
+# absent from the object database and unreachable from every ref; and
+# 987377a (tag v1.0.0) unchanged and still an ancestor of the sanitized tip,
+# so publication is a fast-forward and no force push is required.
+#
+# The tag pre-source-tarball-removal-20260802 was DELETED from the publication
+# clone rather than remapped: it marks the state that still contained the
+# tarball, so a remapped version of it would point at a tree without it and
+# assert something false. That state is preserved outside the repository, in
+# the sealed pre-rewrite backup bundle of 2026-08-06.
+#
+old_sha	new_sha	old_short	new_short	subject
+df1615b934f293db4d7e4d0ce5414a95a41e00c9	7d053c17851d60fbca971816b4aa30052218d574	df1615b	7d053c1	Draft Amendment 4 for signature: the source-tarball hash remap
+02ea10bc9801efa7447a55afa4184641a015b9a8	5339a4804c3816913c394b6c33ac85ae266bbfe4	02ea10b	5339a48	Amendment 4 SIGNED and appended: the source-tarball hash remap
+af4d07e7e9faf75ae5eb5290ea7516a73dbb75dc	bd66557eba97c9f112b332df2b44a6ca1b29d87a	af4d07e	bd66557	Regenerate READING_COPY.md at 02ea10b
+85ef9577bdf42309b193f0a231d5795164782f18	9445957c9bfc42a4d82c58de6374ef97ddb7b429	85ef957	9445957	Correct the availability claim; embed PDF title and author
+4683a606d4adb119277aaa27049092c443de7671	ab62e48b8d65da4202660043befa7a79b4bb616c	4683a60	ab62e48	Regenerate READING_COPY.md at 85ef957
