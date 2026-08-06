@@ -67,65 +67,65 @@
 
 \subsection{What was audited, and what was not}
 
-The audit protocol was frozen on 2026-07-15, before any per-claim
-power computation was run, and the claim list itself was frozen separately before
-any verdict was computed.\footnote{%
+% STAGE A of the audit compression, 2026-08-06. Protected qualifications 1, 2,
+% 3, 12, 13 and 18 all live in this subsection and are carried below.
+% RELOCATED, NOT DELETED: the full-text review behind the R10 ruling and the
+% source provenance detail (content hashes for 16 of 17, R13 empty) are in
+% Appendix~\ref{app:audit:eligibility}.
+% NEVER describe the two extraction passes as inter-rater or independent human
+% verification. NEVER collapse 17 and 16 into one number.
+The audit protocol was frozen on 2026-07-15, before any per-claim power
+computation was run, and the claim list itself was frozen separately before any
+verdict was computed.\footnote{%
 % SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md (status line, §3.4);
-% docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table freeze commit
-% 715a7ce, sha256 842b9756...5af7b15). That doc is superseded for VALUES and is
-% cited here only for the freeze provenance, which rev-3 reconfirms: the same
-% sha256 was declared on the rev-3 command line (job 11591245).
+% freeze provenance reconfirmed on the rev-3 command line (job 11591245).
 Registration frozen at commit \texttt{b74fd58}; claim table frozen at commit
 \texttt{715a7ce} with its sha256 recorded in the verdicts document.}
-% TRIMMED 2026-07-27 (phase 4 trim, candidate 8). The trigger vocabulary is
-% enumerated in full in docs/AUDIT_REGISTRATION_2026-07-15.md §3 and in the
-% released claim table; the body keeps the criterion, the exhaustiveness
-% guarantee and the 7/7/3 split, which are the load-bearing parts.
 Sources were enumerated exhaustively within three fixed frames: method papers
 (F1), official quantized model cards (F2), and inference-stack vendor blogs and
 documentation (F3). A source enters the pool if it asserts, in prose or a table
 caption, that a compressed model's benchmark quality is
 equivalent-or-negligibly-different from its uncompressed baseline, under a
-trigger vocabulary fixed in advance (``near-lossless'', ``negligible'',
-``$X\%$ recovery'' with $X \geq 98$, and four further triggers, among them an
-explicit $\leq 1$\,pp delta framed as parity). Every claim
-meeting the criterion is audited; there is no discretionary sub-selection.
+trigger vocabulary fixed in advance. Every claim meeting the criterion is
+audited; there is no discretionary sub-selection.
+
 % SOURCE: docs/audit_claim_table.csv column `frame`: F1=7, F2=7, F3=3.
-% REV-3 2026-07-31: the frozen table still holds 17; one is ruled ineligible in
-% \S\ref{sec:audit:taxonomy} by the inclusion rule registered here. Both numbers
-% are load-bearing and must not be collapsed into one.
+% BOTH DENOMINATORS ARE LOAD-BEARING AND MUST NOT BE COLLAPSED.
 The frozen table contains \AuditFrozenCandidates{} candidate claims: 7 method
-papers, 7 official model cards or blogs, and 3 vendor documents. One is
-subsequently ruled ineligible against this same criterion
-(\S\ref{sec:audit:taxonomy}), leaving \textbf{\AuditEligible{}} eligible
-sources; every count in this section is over those \AuditEligible{}.
-% ADDED 2026-07-31, PROTECTED. The body previously said only "extracted twice by
-% mutually blind passes" and never said by WHAT. That the passes were
-% language-model agent sessions was disclosed only inside the reproduced
-% registration (Amendment 1) in the appendix, which is not where a reader looks.
-% NEVER describe these passes as inter-rater or independent human verification.
-Each claim's fields were extracted by two blinded automated extraction
-passes (separate language-model agent sessions, the second given no access to
-the first pass's output), with source content hashes recorded for 16 of the 17
-(R13's was left empty, and the provenance consequence is stated in
-\S\ref{sec:artifacts}), followed by
-human reconciliation of every disagreement before the verdict stage
-(\S\ref{sec:prereg}). Separate sessions prevent the second pass from copying the
-first; they do not make the two passes statistically independent, because both
-share a common model prior. Appendix~\ref{app:extraction} specifies the
-procedure, reports what agreement between the passes can and cannot be measured
-after the fact, and states what was not recorded at the time.
+papers, 7 official model cards or blogs, and 3 vendor documents. A full-text
+review of every source, conducted after the first verdicts were computed, found
+that one candidate's recorded quotation appears nowhere in its source, having
+been composed from a table cell. The registered rule requires the assertion to
+appear in prose or a table caption, so \AuditIneligibleClaim{} is excluded by
+applying that rule as registered, leaving \textbf{\AuditEligible{}} eligible
+sources; every count in this section is over those \AuditEligible{}, and the
+exclusion lowers no count reported here
+(Appendix~\ref{app:audit:eligibility}).
+
+% ADDED 2026-07-31, PROTECTED. The body must say WHAT the passes were.
+Each claim's fields were extracted by two blinded automated passes, separate
+language-model agent sessions with the second given no access to the first
+pass's output, followed by human reconciliation of every disagreement before the
+verdict stage (\S\ref{sec:prereg}). Separate sessions prevent the second pass
+from copying the first; they do \emph{not} make the two passes statistically
+independent, because both share a common model prior, and nothing here is
+inter-rater agreement. Appendix~\ref{app:extraction} specifies the procedure and
+reports what can and cannot be measured after the fact.
 
 % SOURCE: docs/AUDIT_REGISTRATION_2026-07-15.md §4 closing paragraph.
+% PROTECTED: evidential sufficiency, not truth. No claim is called false. The
+% prevalence disclaimer is stated in full at the section close as well.
 \textbf{No audited claim is described as false, and none of our findings implies
 that any audited model is in fact degraded.} The audited property is the
 \emph{evidential sufficiency of the reported evaluation}: whether the evaluation
 offered in support of an equivalence claim was large enough to have detected the
 difference the claim pronounces negligible. A claim can be perfectly correct and
 still be unsupported by the evaluation offered for it, and several of the claims
-below are very probably correct. What is missing from the audited sources is a
-reporting standard. This section measures the gap such a standard would close;
-\S\ref{sec:certification} supplies the instrument.
+below are very probably correct. Nor is any proportion reported here a
+prevalence estimate for the field. What is missing from the audited sources is a
+reporting standard: this section measures the gap such a standard would close,
+and \S\ref{sec:certification} supplies the instrument.
+
 
 \subsection{What the sources declare}
 \label{sec:audit:taxonomy}
@@ -141,21 +141,10 @@ reporting standard. This section measures the gap such a standard would close;
 % reads as contradicting the 0-of-16 headline in the same paragraph. The
 % cross-tab is the honest presentation.
 %
-% SOURCE: docs/AUDIT_SOURCE_VERIFICATION_2026-07-31.md §4; Amendment 2
-% *Eligibility correction*. R10 was above the planning threshold at 2 pp and
-% recorded `no` on per-item outputs, so its removal cannot reduce any count
-% reported here.
-A full-text review of every source, conducted after the first verdicts were
-computed, found that one candidate's recorded quotation appears nowhere in its
-source: the sentence had been composed from a table cell. The registered
-inclusion rule requires the assertion to appear in prose or a table caption, and
-it appears in neither, so that claim (\AuditIneligibleClaim{}) is excluded from
-the eligible population by applying the rule as registered. The correction moves
-the eligible denominator from \AuditFrozenCandidates{} to \AuditEligible{}. It
-changes neither the number of claims below the planning threshold nor the
-per-item-outputs result, and the excluded row remains in the released claim
-table and the certification appendix.
-
+% STAGE A, 2026-08-06: the R10 eligibility ruling moved UP into
+% \S\ref{sec:audit} (design and scope), where both denominators are now
+% introduced together, and the full-text review behind it moved to
+% Appendix~\ref{app:audit:eligibility}. Nothing was deleted.
 Across the \AuditEligible{} eligible sources we distinguish two independent
 properties: what form the source's evidence takes, and whether the reported
 information suffices to assess it numerically at all.
