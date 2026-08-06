@@ -119,9 +119,11 @@ is pipeline accounting and is never used as an analysis denominator.
 \label{sec:atlas:netgross}
 
 % SOURCE: Table~\ref{tab:atlas-strata} (results/atlas_cells_summary_rev2.csv,
-% the 1,707-cell analysis population), as the ratio of the two medians:
-%   S1 0.137 / 0.026 = 5.2692 ; S2 0.048 / 0.009 = 5.3333.
-%   POOLED, at full precision: 0.120000 / 0.0222222 = 5.4000 exactly.
+% the 1,707-cell analysis population), as the ratio of the two medians, every
+% figure dividing the medians AT FULL PRECISION:
+%   POOLED 0.120000 / 0.0222222 = 5.4000 exactly.
+%   S1     0.13745229 / 0.02631579 = 5.2232.
+%   S2     0.04800000 / 0.00924214 = 5.1936.
 %   Median of per-cell ratios, 1,562 cells with non-zero net delta: 3.8452.
 %
 % AGGREGATION NAMED AND FIXED 2026-08-05 (defect D4 closed;
@@ -130,12 +132,14 @@ is pipeline accounting and is never used as an analysis denominator.
 % metrics and the population and is silent on aggregation -- so it is named here
 % explicitly and is a descriptive summary, not a registered quantity.
 %
-% PRECISION CONVENTION, stated because the three figures are NOT computed
-% identically and that must not be hidden. The pooled 5.40 divides unrounded
-% medians. The stratum 5.27/5.33 divide the medians AT THE PRECISION THE TABLE
-% PRINTS (3 dp), so a reader can reproduce them from the printed table; divided
-% unrounded the strata give 5.2232 and 5.1936. The prose says which is which.
-% Do not "harmonise" these into one number computed two ways.
+% PRECISION CONVENTION, ONE CONVENTION ONLY, fixed 2026-08-05. All three
+% figures divide UNROUNDED medians: pooled 5.40, S1 5.22, S2 5.19. The earlier
+% pair 5.27/5.33 divided the medians at the 3 dp the table then printed, which
+% put two rounding conventions in one sentence. It is retired. Reproducibility
+% is now supplied by PRECISION rather than by rounding: tab:atlas-strata prints
+% the stratum medians to 6 dp, and dividing the printed cells reproduces 5.22
+% and 5.19 (5.223134 and 5.193681 against the exact 5.223187 and 5.193600).
+% Never reintroduce a ratio of pre-rounded inputs.
 %
 % THE RETIRED 5.3x. Every occurrence of $5.3\times$ as the atlas headline was
 % replaced on 2026-08-05. No unrounded derivation produces 5.3; it arose only as
@@ -148,11 +152,12 @@ is pipeline accounting and is never used as an analysis denominator.
 % docs/WAVE3_ADVERSARIAL_REVIEW_2026-08-05.md §1). The S1 numerator read 0.138
 % and the quotient 5.3077. The S1 median accuracy-state churn over the analysis
 % population (excluded_or_skipped false, contains_disclosed_probe_cell false,
-% n=1,398) is 0.137452, which rounds to 0.137, not 0.138. Every other cell of
-% tab:atlas-strata reproduces exactly. Unrounded the two strata give 5.2232 and
-% 5.1936; the ratio-of-rounded-medians reading used here gives 5.2692 and
-% 5.3333. Both readings still put the two strata at the same multiple to two
-% significant figures, which is the claim this section makes.
+% n=1,398) is 0.13745229. Every other cell of tab:atlas-strata reproduces
+% exactly. Unrounded the two strata give 5.2232 and 5.1936, which is what the
+% section now prints; the superseded ratio-of-rounded-medians reading gave
+% 5.2692 and 5.3333. Both readings put the two strata at the same multiple to
+% two significant figures, which is the claim this section makes, and the
+% unrounded pair is the closer of the two.
 % REV-1 SURVIVOR, CORRECTED 2026-07-27. This read "roughly five to six times"
 % and cited docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §1's "Reading" bullet, which
 % sits under the REV-1 strata table (S1 = 846 cells). At rev-2 both strata land
@@ -169,10 +174,11 @@ is pipeline accounting and is never used as an analysis denominator.
 % this section states it once.
 Across the atlas, per-item accuracy-state churn runs several times the net
 accuracy delta. The ratio of median accuracy-state churn to median absolute
-accuracy change is \textbf{5.40} pooled over the 1{,}707 cells, and 5.27 and
-5.33 within S1 and S2, the stratum figures computed from the medians at the
-precision Table~\ref{tab:atlas-strata} prints so that a reader can reproduce
-them from it. These are ratios of medians, not medians of cellwise ratios: the
+accuracy change is \textbf{5.40} pooled over the 1{,}707 cells
+($0.120000 / 0.022222$), and 5.22 and 5.19 within S1 and S2. All three divide
+unrounded medians; Table~\ref{tab:atlas-strata} prints the stratum medians to
+enough places that a reader can reproduce the stratum figures from it. These
+are ratios of medians, not medians of cellwise ratios: the
 median of the per-cell ratio is 3.85 over the 1{,}562 cells with a non-zero net
 delta, and the two summarise different things. The pooled figure describes the
 typical churn against the typical net delta; the cellwise median describes the
@@ -185,15 +191,18 @@ variance term in Equations~\eqref{eq:sds}--\eqref{eq:nreq}, so a compressed mode
 whose net delta looks reassuringly small can still be sitting on the noisiest
 possible evidence base for the claim that it is unchanged.
 
-% SOURCE: Table~\ref{tab:atlas-strata}. Median churn 0.137 -> 0.048 is a factor
-% of 2.854; median |net delta| 0.026 -> 0.009 is a factor of 2.889; the two move
-% together, which is why the ratio is preserved to two significant figures.
-% Numerator and factor corrected 2026-08-05 with defect D8 above.
+% SOURCE: Table~\ref{tab:atlas-strata}, dividing the unrounded medians.
+% Median churn 0.13745229 -> 0.04800000 is a factor of 2.8636; median |net
+% delta| 0.02631579 -> 0.00924214 is a factor of 2.8474; the two move together,
+% which is why the ratio is preserved to two significant figures. Both factors
+% were recomputed unrounded on 2026-08-05; from 3 dp inputs they read 2.854 and
+% 2.889, a wider gap than the data actually show.
 The ratio is preserved across a generational change in method. The two strata
 differ by nearly a factor of three in how much behaviour they disturb, with
-median churn falling from $0.137$ in S1 to $0.048$ in S2, and by almost exactly
-the same factor in the net delta they report, $0.026$ to $0.009$, so the
-understatement ratio barely moves: 5.27 in S1 and 5.33 in S2. Two generations of
+median accuracy-state churn falling by a factor of 2.86 from S1 to S2, and by
+almost exactly the same factor, 2.85, in the net delta they report
+(Table~\ref{tab:atlas-strata}), so the understatement ratio barely moves: 5.22
+in S1 and 5.19 in S2. Two generations of
 compression method, one of them three times gentler than the other, hide the
 disturbance they do cause by the same multiple. Better methods have made the
 difference smaller \emph{without making the evidence for equivalence any more
@@ -211,7 +220,9 @@ scales down in lockstep with the quantity being claimed small.
 the Open LLM Leaderboard v1 archive of community quantizations of 2023-era base
 models, TheBloke-era GPTQ and similar; S2 is the Neural Magic / Red~Hat
 W4A16, INT8 and FP8 releases from 8B to 405B. Percentages are within-stratum
-shares of cells.}
+shares of cells. The two medians are given to six places because the ratios
+quoted in the text divide them unrounded; dividing the printed cells reproduces
+5.22 and 5.19.}
 \label{tab:atlas-strata}
 % SOURCE: results/atlas_cells_summary_rev2.csv, grouped by source.
 % Population: 1,707 (S1 1,398 + S2 309) -- NOT the 1,807 figure.
@@ -220,8 +231,8 @@ shares of cells.}
  & S1 & S2 \\
 \midrule
 Cells                                & 1{,}398        & 309 \\
-Median accuracy-state churn          & 0.137          & 0.048 \\
-Median $|$net accuracy delta$|$      & 0.026          & 0.009 \\
+Median accuracy-state churn          & 0.137452       & 0.048000 \\
+Median $|$net accuracy delta$|$      & 0.026316       & 0.009242 \\
 TOST-equivalent at 2\,pp             & 68 (4.9\%)     & 53 (17.2\%) \\
 Exact McNemar $p < 0.05$             & 371 (26.5\%)   & 19 (6.1\%) \\
 \bottomrule
@@ -340,7 +351,9 @@ inheritance that is itself part of the finding.
 
 % A REV-1 SURVIVOR died with the deleted "Supports" half of this closer in the
 % 2026-07-27 pass: it read "five to six times", rev-1's ratio, where rev-2 gives
-% 5.27 (S1) / 5.33 (S2). S1 corrected from 5.31 on 2026-08-05, defect D8.
+% 5.22 (S1) / 5.19 (S2) on the unrounded medians. S1 was corrected from 5.31 to
+% 5.27 on 2026-08-05 (defect D8), then to 5.22 with the single unrounded
+% convention later the same day.
 The findings above are claimed at the population each was measured on and no
 wider. This section does not support any statement about quantization methods in
 general, about models or methods absent from the two sources, or about causal
