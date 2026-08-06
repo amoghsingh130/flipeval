@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-06T02:55:06.242096+00:00",
-  "source_commit": "f0ab36c79b3ed5d87b9c6c73b5c62280df9f656e",
-  "source_tree": "45fcaeea0fa133ed7940787be3119fe65d816f8c",
+  "created_at": "2026-08-06T04:54:31.135481+00:00",
+  "source_commit": "d0d460fabd849e4961d87c89cd1d15655b233557",
+  "source_tree": "2a36bb4da01e62bcbf9974b264ffcab2696c9b4c",
   "branch": "flagship-narrative",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -41,7 +41,7 @@
     "scripts/audit_verdicts.py": "ae81fdcafd5c9f9a96724526093498929e78d45527dde7ee6b8574bba3bd9aba",
     "scripts/build_quantized.py": "73fce25b619799a713e0c0090221c8c110b933028694270772ad73b040852c80",
     "scripts/certification_tables.py": "1206a2b200c9993d98797990d6ec70eb0f0e4d1edb5992d81b1ea46264ac95ea",
-    "scripts/churn_ratio.py": "a9b6df78e8bd46391322567e6a03a4c5a3d5ac51cdd4ccdea73a1e9119a97ace",
+    "scripts/churn_ratio.py": "03d780595b93b9a5e4688f813041a445159732892df5520170d457aa09ff8502",
     "scripts/compare_mmlu_reference.py": "2e47f1e89bf77e0f6edaee87c685f399e77fbb2f39e2b816327c5f438f275c88",
     "scripts/expected_grid.py": "d56cab5397c8928d22d716655fc1398ed69b7ee7942720f72e3f557fc0f8b4fe",
     "scripts/fetch_audit_sources.py": "dadacb9a509e0a809d690d36fb34418ba5ccafc503c93bd6e6a314c4922dfd42",
@@ -79,7 +79,7 @@
     "tests/test_audit_stats.py": "f9f341841705f0291e4b4739b9cdc65da354e776e25627c684fedef612fe2e4a",
     "tests/test_build_quantized.py": "50b5857a99502b30087007bc15b30825f21bc13497a1f502efe0af98129e43d9",
     "tests/test_check_paper_stale.py": "d1e11679e04e2dbcaae2acd717acf2617a91f08574ea9b4552022a6573a0ca0c",
-    "tests/test_churn_ratio.py": "e74002012c4a7a13d09210429a4a51efa7cc7be565d724547a941caa447d9c62",
+    "tests/test_churn_ratio.py": "5ae716506f5f2b3224540f6b061ddb4f57798225468d01b95cbe1c5dd5d69d91",
     "tests/test_compare_mmlu_reference.py": "887b9539311e16bed12c9886da6a3e5675bb4a03a21a28b3f2b5e2ad7de7271a",
     "tests/test_core.py": "42b33120a60f530ec46c967fbd90b2b27db72d23f460c5ae956643e6e3c6ff0b",
     "tests/test_escalation_config.py": "1dadd3e596a6e6ac8b2af2397bf5c8f9c773bb6e71f0ce566e740c25acf22405",
@@ -99,5 +99,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "2d9efa7aec01ab831498c52758d9923d4f8bf261e3060c8520bcea4d2b2b73fc"
+  "manifest_payload_sha256": "b84941e05094a54237121ea5801224cac46e86a8b81f64377994a212e3756d2e"
 }
