@@ -561,3 +561,47 @@ python3 tools/measure_abstract.py
 Anything touching `scripts/`, `tests/`, `configs/`, `flipeval/`, `pilot_eval/`
 or `README.md` additionally needs the in-image gate (**expect 348 passed, 0
 skipped**) and a freeze refresh after the commit.
+
+
+---
+
+# 2026-08-06 addendum: audit compression, and where the page target stands
+
+## Done
+
+- **Three wording checks** on the ratio result (`d0d460f`): "lower bound"
+  retired everywhere in favour of the exact two-medians statement; the
+  cross-regime comparison labelled descriptive and not a registered hypothesis;
+  the 6.8% / 16.2% stratum exclusion rates placed beside the cellwise result.
+  **The ratio machinery is closed. Do not reopen it.**
+- **Protection ledger** (`59868de`), 18 rows, committed before any audit edit.
+- **Eight appendix destinations created before any deletion** (`4879ed5`), plus
+  `app:audit:verdictrules` in Stage C.
+- **Stages A, B, C, D** (`cbd868b`, `9dc0c13`, `2679f97`, `48e77b1`). All 18
+  qualifications verified **at source** after each stage.
+
+## Two findings worth carrying
+
+1. **Qualification 17 was not being met before this work.** The
+   K = 1 → 5 → 4 → 1-of-11 sequence existed only in a LaTeX *comment* and in
+   `app:prereg:choices`, so no reader of the compiled paper could see it. It is
+   now body prose. Building the ledger is what surfaced it.
+2. **`pdftotext` without `-layout` silently drops `\emph{}` runs.** It produced
+   extracted text asserting that the two extraction passes *are* statistically
+   independent, the exact opposite of a protected qualification. Verify
+   protected phrasing against the LaTeX source.
+
+## Where the page target stands, measured
+
+**Main content is 34 pages; references begin on page 35.** The target is 20-24.
+The audit went 10 → 8 pages and 3,307 → 2,630 prose words. Getting the audit to
+3-4 pages requires removing about 1,200 more words from text that is now almost
+entirely protected qualifications, and every paragraph with an appendix
+destination has already been moved.
+
+**All four remaining relocations were already complete**, verified not assumed.
+
+The next 10 pages, if they are to be found at all, are in **mini-grid (6 pages,
+target 3)**, **certification (5, target 4)**, **related work (2, target 1)** and
+**conclusion (3, target 1.5)** — not in the audit. Whether that is worth doing
+against the risk to load-bearing material is the author's call.
