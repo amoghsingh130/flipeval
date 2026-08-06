@@ -42,56 +42,47 @@
 % MANDATORY ENUMERATION (qualification 14): 8 cells, 2 tasks, 2 methods,
 % 4 models, 4 bits, 5 seeds, and what it licenses no statement about. Compress
 % around it, never through it.
+% COMPRESSED 2026-08-06, stage 4. The calibration-construction procedure and the
+% escalation chronology moved to Appendix~\ref{app:escalation}, which already
+% carried both. THE SCREEN-VERSUS-VERDICT DISTINCTION IS STATED ONCE, below,
+% and must not be restated elsewhere in this section.
 The registered confirmatory design compares 4-bit GPTQ against 4-bit AWQ at
 five calibration seeds $\{0,1,2,3,4\}$ over eight model-by-benchmark cells:
 $\{$Qwen2.5-1.5B-Instruct, Qwen2.5-7B-Instruct, Llama-3.2-3B-Instruct,
 Llama-3.1-8B-Instruct$\}\times\{$MMLU, GSM8K$\}$, with MMLU as the registered
 likelihood-based benchmark and GSM8K as the registered generative one.
 
-The pairing is the design's load-bearing element. For seed $s$, the calibration
+The pairing is the design's load-bearing element. For seed $s$ the calibration
 set is 128 samples of exactly 2{,}048 tokens drawn from C4 by a fixed,
-seed-determined procedure (shuffle the full train-split document index array with
-\texttt{numpy.random.default\_rng(s)}, visit documents in that order, skip
-documents shorter than 2{,}048 tokens, retain the first 2{,}048 tokens of each
-eligible document until 128 are collected), and \textbf{GPTQ seed $s$ and AWQ
-seed $s$ receive the identical ordered calibration samples}. A ranking
-difference at seed $s$ is therefore attributable to method-by-calibration
-interaction and not to the two methods having seen different data. Selected
-document indices and token hashes are persisted. The chat template is on for
-every method including the FP16 baselines; GSM8K uses one inline few-shot
-example and test indices 0--999; MMLU uses the full test split.
+seed-determined procedure, and \textbf{GPTQ seed $s$ and AWQ seed $s$ receive
+the identical ordered calibration samples}; selected document indices and token
+hashes are persisted (Appendix~\ref{app:escalation}). A ranking difference at
+seed $s$ is therefore attributable to method-by-calibration interaction and not
+to the two methods having seen different data.
 
-% SOURCE: PREREGISTRATION.md §"H3 Decision Rule" and §"Hierarchical aggregation
-% across calibration seeds".
+% SOURCE: PREREGISTRATION.md §"H3 Decision Rule".
 Per cell, with $d_s = \mathrm{acc}_{\mathrm{GPTQ},s} - \mathrm{acc}_{\mathrm{AWQ},s}$:
-a \emph{winner flip} occurs when two seeds give $d_s$ and $d_t$ of
-opposite sign with both nonzero (exact ties are counted as neither flip nor
-non-flip, and reported separately, so a tie can neither create nor erase a flip);
-$\mathrm{gap} = |\mathrm{mean}_s(\mathrm{acc}_{\mathrm{GPTQ},s}) -
-\mathrm{mean}_s(\mathrm{acc}_{\mathrm{AWQ},s})|$;
-$\mathrm{range}_m = \max_s(\mathrm{acc}_{m,s}) - \min_s(\mathrm{acc}_{m,s})$;
-and the range/gap criterion holds when
+a \emph{winner flip} occurs when two seeds give $d_s$ and $d_t$ of opposite sign
+with both nonzero, exact ties counting as neither and reported separately;
+$\mathrm{gap}$ is the absolute difference of the two five-seed mean accuracies;
+$\mathrm{range}_m$ is the spread of method $m$ across seeds; and the
+\emph{range/gap} criterion holds when
 $\max(\mathrm{range}_{\mathrm{GPTQ}}, \mathrm{range}_{\mathrm{AWQ}}) \geq
 \mathrm{gap}$. Seed-level SD and item-level SE are reported as separate variance
-components rather than collapsed, and the H3-relevant rank-instability estimate
-comes from the two-level paired bootstrap that resamples seed labels and, within
-each selected seed, items, with GPTQ and AWQ retaining the same sampled seed
-labels and item indices.
+components rather than collapsed, as the registration requires.
 
-% SOURCE: docs/MINIGRID_REGISTRATION_2026-07-15.md §§1, 3, 4;
-% docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md (SIGNED);
+% THE SCREEN-VERSUS-VERDICT DISTINCTION, STATED ONCE AND PRECISELY.
+% SOURCE: docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md (SIGNED);
 % docs/H3_EIGHT_CELL_DECISION_2026-07-26.md (SIGNED).
-The eight cells were built in two stages, and the second stage was authorized by
-the first under a rule frozen before either ran. Four cells ran first; the 7B/8B
-cells sat behind a mechanical escalation screen, described with its per-cell
-outcomes in Appendix~\ref{app:escalation}. That screen fired, the deferred cells
-were built and evaluated, and the frozen
-Supported/Disconfirmed/Inconclusive rule was then applied once over all eight.
-Two properties of that sequence matter for how the verdict should be read. The
-screen decides only \emph{which cells to build} and states no H3 outcome, so the
-confirmatory rule was never applied to a cell set chosen after its own result
-was known. And the rule is defined over all eight cells and was applied only
-when all eight existed. No reduced-cell variant was constructed at any point.
+The eight cells were built in two stages, and the distinction between the two
+matters exactly once. Four cells ran first; the 7B and 8B cells sat behind a
+mechanical escalation screen frozen before either stage ran
+(Appendix~\ref{app:escalation}). \textbf{The screen decides only which cells to
+build and states no H3 outcome; the registered
+Supported/Disconfirmed/Inconclusive rule is defined over all eight cells and was
+applied once, after all eight existed.} The confirmatory rule was therefore
+never applied to a cell set chosen after its own result was known, and no
+reduced-cell variant was constructed at any point.
 
 \subsection{The eight-cell verdict}
 \label{sec:minigrid:verdict}
@@ -178,60 +169,43 @@ Llama-3.1-8B & GSM8K & 0.013200 & 0.033000 & 0.026000 & \textbf{TRUE}  & \textbf
 \subsection{Supporting analyses}
 \label{sec:minigrid:supporting}
 
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, header paragraph and
-% slots 2-4. All three tables are Table~\ref{tab:h3-supporting} in
-% Appendix~\ref{app:minigrid:supporting}; the readings stay here.
-Three further registered analyses were run once per cell as part of the same job
-that produced the verdict, and none of them modifies the verdict: it is what the
+% COMPRESSED 2026-08-06, stage 4. The per-cell variance-component readings, the
+% bootstrap rates cell by cell and the deferred-analysis history moved to
+% Appendix~\ref{app:minigrid:supporting}; tab:h3-supporting already carried all
+% three panels there. RETAINED: that the three analyses do NOT modify the
+% verdict, that the variance components are never collapsed, the 3-cells-on-both
+% finding, and the five-seed resolution limit.
+Three further registered analyses were run once per cell in the same job that
+produced the verdict, and none of them modifies it: the verdict is what the
 frozen rule returned over winner flips and range/gap, and a weak bootstrap rate
 or a poorly resolved cell is a limitation to report, not a second application of
-the rule. Table~\ref{tab:h3-supporting} carries all three.
+the rule. Table~\ref{tab:h3-supporting} in
+Appendix~\ref{app:minigrid:supporting} carries all three.
 
-Variance components are reported side by side and never collapsed into a single
-dispersion figure, as the registration requires. The two answer different
-questions, namely how much a method's accuracy moves when the calibration seed
-changes against how precisely a single seed's accuracy is estimated from the
-items. On MMLU the calibration seed moves the number more than the sample of
-items does, in every cell: taking per cell the larger of the two seed-level SDs
-against its own item-level SE, the ratio runs $1.6$ to $5.9\times$
-(Qwen2.5-7B $0.006224$ against $0.003983$; Llama-3.2-3B $0.024925$ against
-$0.004214$). On GSM8K the two components are of the same order throughout, and
-in \emph{five of the eight} method-by-cell entries the item-level SE is the
-larger of the two, so the sample of items is moving the number as much as the
-calibration seed is.
-% Ratios are arithmetic on panel (a): MMLU per-cell larger-SD/its-SE =
-% 4.54, 5.91, 1.56, 3.61 -> range 1.6-5.9. GSM8K SE > SD in 5 of 8 entries
-% (qwen1.5b GPTQ+AWQ, llama3b GPTQ+AWQ, llama8b AWQ).
+Two of them matter for how the verdict should be read. First, on MMLU the
+calibration seed moves accuracy more than the sample of items does in every
+cell, with the larger seed-level SD running $1.6$ to $5.9\times$ its own
+item-level SE, whereas on GSM8K the two components are of the same order
+throughout. Second, the bootstrap and the winner-flip criterion measure
+different things and a reader who assumes otherwise will read them as
+self-contradictory: a winner flip asks whether two \emph{individual seeds}
+disagree on sign, which is H3's registered question, while the bootstrap
+rank-flip rate asks whether the \emph{five-seed mean} ranking survives
+resampling seed labels and items together. Winner flips occur in 5 of 8 cells,
+the bootstrap rate is below $0.05$ in 6 of 8, and \textbf{3 cells have both}. In
+those three, some pair of individual seeds disagrees about which method wins
+while the five-seed average survives resampling in more than 95\% of
+replicates. The practical reading is that \emph{a single calibration run can
+hand you the wrong winner}, and averaging over the registered five seeds is
+substantially more stable than any one of them.
 
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, slot 3 table and
-% §"Reconciling winner flips with bootstrap rank-flip rates" (5/8 flips,
-% 6/8 bootstrap < 0.05, 3/8 both; the two unstable-on-both cells 0.2575, 0.1260).
-The bootstrap and the winner-flip criterion measure different things, and a
-reader who assumes otherwise will read them as self-contradictory. A winner flip
-asks whether two \emph{individual seeds} disagree on sign, which is H3's
-registered question and a description of what happens when a practitioner runs
-one calibration and takes the winner. The bootstrap rank-flip rate asks whether
-the \emph{five-seed mean} ranking survives resampling seed labels and items
-together. The combination is the sharpest form of the finding. Winner flips
-occur in 5 of 8 cells; the bootstrap rate is below $0.05$ in 6 of 8; and
-\textbf{3 cells have both}: Qwen2.5-1.5B/MMLU ($0.0445$),
-Llama-3.2-3B/GSM8K ($0.0220$) and Llama-3.1-8B/MMLU ($0.0405$). In each, some
-pair of individual seeds disagrees about which method wins while the five-seed
-average ranking survives resampling in more than 95\% of replicates. The
-practical reading is the one we intend a practitioner to take away: \emph{a
-single calibration run can hand you the wrong winner}, and averaging over the
-registered five seeds is substantially more stable than any one of them.
-
-The limitation on that reading, stated plainly. With five seeds the
-bootstrap resamples seed labels from a sample of five, so it has limited
-resolution on the seed-level distribution. What the low rates bound is the
-stability of \emph{this} observed mean under resampling; they do not establish
-that five seeds suffice in general, and no result here should be read as
-licensing five as a sufficient number. Two GSM8K cells are unstable on both
-measures, Qwen2.5-7B/GSM8K at $0.2575$ (515 of 2{,}000 replicates) and
-Llama-3.1-8B/GSM8K at $0.1260$ (252 of 2{,}000), and there even the five-seed mean
-ranking does not survive resampling, and no amount of seed averaging at
-$n = 1{,}000$ rescues the comparison.
+The limitation on that reading, stated plainly. With five seeds the bootstrap
+resamples seed labels from a sample of five, so it has limited resolution on the
+seed-level distribution. What the low rates bound is the stability of
+\emph{this} observed mean under resampling; they do not establish that five
+seeds suffice in general, and no result here licenses five as a sufficient
+number. Two GSM8K cells are unstable on both measures, and there even the
+five-seed mean ranking does not survive resampling.
 
 \subsection{Cancellation is more complete between two methods than against FP16}
 \label{sec:minigrid:churnratio}
@@ -336,46 +310,33 @@ modern LLMs (Appendix~\ref{app:reconcile}). It is descriptive, it tests no
 hypothesis, and it does not modify the verdict. It is recorded with its
 provenance, not folded silently into the registered results.
 
+% COMPRESSED 2026-08-06, stage 4. The per-cell SE arithmetic and the pilot
+% discriminant case moved to Appendix~\ref{app:minigrid:resolution}. RETAINED:
+% the MMLU/GSM8K resolution distinction, both directions, and the discriminant
+% argument that answers the obvious objection.
 Using the machinery of \S\ref{sec:certification} itself, with paired
-$\mathrm{sd} = \sqrt{p_d}$ and paired $\mathrm{SE} = \sqrt{p_d/n}$ and $p_d$
-the per-cell GPTQ-against-AWQ accuracy-state churn of
-Table~\ref{tab:h3-supporting}, the two tasks separate sharply
+$\mathrm{sd} = \sqrt{p_d}$ and $p_d$ the per-cell GPTQ-against-AWQ
+accuracy-state churn, the two tasks separate sharply
 (Table~\ref{tab:h3-resolution}, Appendix~\ref{app:minigrid:resolution}).
-
-MMLU carries the result. All four MMLU cells satisfy the range/gap
+\textbf{MMLU carries the result}: all four MMLU cells satisfy the range/gap
 criterion, their seed-induced ranges run $5.5$ to $17.5$ paired standard errors,
-their mean gaps run $2.2$ to $8.5$, and their seed-level SD exceeds item-level
-SE by $1.6$ to $5.9\times$. The instability is far larger than the measurement
-noise, and the benchmark resolves it comfortably.
-
-\textbf{GSM8K is under-resolved at $n = 1{,}000$.} There the ranges run roughly
-two to three-and-a-half SE, seed-level SD is of the same order as item-level SE,
-and in three of the four GSM8K cells the \emph{mean gap itself} sits at or below
-$1.25$ SE ($0.44$, $0.98$, $1.23$), so the quantity the range/gap criterion
+and the instability is far larger than the measurement noise.
+\textbf{GSM8K is under-resolved at $n = 1{,}000$}: there the ranges run roughly
+two to three-and-a-half SE, and in three of the four GSM8K cells the \emph{mean
+gap itself} sits at or below $1.25$ SE, so the quantity the range/gap criterion
 compares against is, in those cells, not resolved by the benchmark at the $n$
-used. Any per-cell reading of GSM8K should say so, and
-\S\ref{sec:limitations} does.
+used. Any per-cell reading of GSM8K should say so, and \S\ref{sec:limitations}
+does.
 
-% FOLDED IN 2026-08-04 from sections/discriminant.tex, which is deleted. Nothing
-% is computed here: every figure below is read from the resolution analysis
-% already reported above and from Table~\ref{tab:h3-eightcell}.
-% SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md step 5 table
-% (gap/SE and max_range/SE per cell); docs/H3_EIGHT_CELL_DECISION_2026-07-26.md
-% (gap column). qwen25-1p5b/gsm8k gap = 0.096800 = 9.68 pp at 5.65 SE.
 The split is also the answer to an obvious objection, that a certification-first
 framework demanding thousands of items will simply decline to conclude anything.
 The fourth GSM8K cell is the sharp case: Qwen2.5-1.5B posts a GPTQ--AWQ gap of
 \textbf{9.68\,pp}, which lands at $5.65$ paired SE, resolved on the same
-benchmark, at the same $n = 1{,}000$, under the same test, where its three
-siblings are not. Same items, same instrument, opposite verdicts, separated by
-effect size and not by any threshold somebody chose. The machinery declines to
-adjudicate where the evidence is thin and adjudicates where it is not,
-\emph{within} one benchmark at one sample size. A framework that returned
+benchmark, at the same $n$, under the same test, where its three siblings are
+not. Same items, same instrument, opposite verdicts, separated by effect size
+and not by any threshold somebody chose. A framework that returned
 ``insufficient evidence'' everywhere could not produce that pattern, and neither
 could one tuned to a convenient cut-off.
-Appendix~\ref{app:minigrid:pilot} reports the same discriminant behaviour in the
-project's earlier public-checkpoint pilot, which adds the case the eight cells
-lack, a positive detection.
 
 None of this weakens the verdict. The range/gap criterion holds in 7 of 8 cells
 and winner flips occur in 5 of 8, both computed from the registered per-seed
