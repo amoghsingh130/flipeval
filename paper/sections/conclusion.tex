@@ -27,6 +27,16 @@
 % extreme of the eight. The sentence below says so. The 2,730 figure is a
 % planning requirement at an assumed true difference of zero; it must never be
 % written as evidence that the two methods differ.
+%
+% COMPRESSED 2026-08-06, stage 1 of the body compression. Three pages to one and
+% a half. REMOVED, each because it is stated in full earlier and this section
+% was restating it: the second complete presentation of the five-line standard
+% (the standard is introduced at the end of \S\ref{sec:intro} and this section
+% now recaps it); the repeated audit disclaimers, which are
+% \S\ref{sec:audit}'s own closing paragraphs; the repeated artifact description;
+% and the extended sequential-certification discussion, now one clause.
+% NOTHING NEW IS CLAIMED HERE. Every number in this section is a restatement,
+% and each is a generated macro or is cited to the section that establishes it.
 Figure~\ref{fig:cancellation} is one evaluation of one model, and it is the
 argument in miniature. Two 4-bit quantizations of Qwen2.5-7B that sit $0.58$
 points apart on GSM8K disagree on $17.7\%$ of the items; certifying equivalence
@@ -35,96 +45,54 @@ $1{,}000$; and which of the two comes out ahead changes with the calibration
 draw. None of that is visible in the two aggregate scores. The cell is the most
 extreme of the eight registered cells, but the mechanism is not peculiar to it:
 across the $1{,}707$ cells of the public record, median churn is about five
-times the median net accuracy delta.
+times the median net accuracy delta (\S\ref{sec:atlas}). Aggregate accuracy is
+not a summary of behaviour, and a net delta is not a summary of what a
+compression changed.
 
 % Counts are \Audit* macros from paper/audit_denominators.tex. The
 % task-matched qualifier and the three other-task releases stay in the same
 % sentence as the zero: without them the claim is false (\S\ref{sec:audit:v3}).
+% The audited-sample-not-literature scope sentence is retained here as well as
+% in \S\ref{sec:audit}, because a reader who reads only the conclusion must not
+% take these counts for prevalences.
 The claim ``near-lossless'' is cheap to write and expensive to support. This
 paper measured the gap, and what the measurement mostly found was absence, not
-error. Across \AuditEligible{} eligible sources, none declares a
-prospective numerical equivalence margin and none releases \emph{task-matched}
-per-item outputs, though \AuditPerItemOtherTaskOnly{} release outputs for other
-tasks only; \AuditNotAssessable{} cannot be assessed at all from what they
-report. Of the \AuditAssessable{} that can, \AuditAboveThroughout{} stay above
-the approximate planning threshold at a uniform \AuditMarginPP{}\,pp margin
-throughout the interquartile range of the imputed discordance rate, and
-\AuditChangesWithinIQR{} cannot be classified without committing to a discordance
-rate its source never reported; \AuditBelowThroughout{} stay below the threshold
-throughout that interval. These are prevalences in this audited sample of
-\AuditEligible{} eligible sources, not estimates for the literature. The
-apparatus that closes the gap is equivalence certification at a declared margin,
-with sample-size tables computed from observed churn and not from assumed
-variance.
+error. Across \AuditEligible{} eligible sources, none declares a prospective
+numerical equivalence margin and none releases \emph{task-matched} per-item
+outputs, though \AuditPerItemOtherTaskOnly{} release outputs for other tasks
+only, and \AuditNotAssessable{} cannot be assessed at all from what they report
+(\S\ref{sec:audit}). These are counts in this audited sample of
+\AuditEligible{} sources, not estimates for the literature. The apparatus that
+closes the gap is equivalence certification at a declared margin, with
+sample-size tables computed from observed churn rather than assumed variance
+(\S\ref{sec:certification}); the same apparatus is being extended to
+anytime-valid sequential certification, a component that is registered but has
+not been run and for which no results are reported here.
 
-% Sequential certification was a full section in earlier drafts. It is a
-% registered-but-unrun component and a results-free section reads as padding, so
-% it is reduced to this sentence (2026-07-26). Restore the section only when the
-% dated registration document exists under docs/ AND the component has run.
-The same apparatus is being extended to anytime-valid sequential certification,
-in which a confidence sequence lets an evaluation be monitored continuously and
-stopped as soon as the model is certified; that component is registered but has
-not yet been run, and no results for it are reported here.
-
-% RECAP, NOT INTRODUCTION (2026-08-05). The five lines are now stated in outline
-% at the end of \S\ref{sec:intro}; this is where they are stated in full, with
-% the evidence for each in hand. Keep both. The early copy carries no numbers
-% and the full copy carries them, so there is exactly one home for each figure.
-The five lines named in \S\ref{sec:intro} can be stated in full now that the
-evidence for each is in hand. A model card or method paper can adopt them
-directly.
-
-\begin{enumerate}
-  \item \textbf{Declare a margin.} ``Equivalent'' without $\pm m$ is not a
-  testable statement. State the margin before evaluating.
-  \item \textbf{Run the paired test.} Report TOST at your margin, not just a
-  non-significant difference test. Failing to detect a difference is not
-  equivalence.
-  \item \textbf{Report churn next to net delta.} They are different quantities;
-  in the public record churn runs roughly five times the net delta, and about one
-  evaluation cell in twelve posts an identical score while still disagreeing on
-  items.
-  % "ONE IN TEN" CORRECTED 2026-07-27. \S\ref{sec:atlas:identical} retired that
-  % phrasing on 2026-07-26: it was near-exact for rev-1's 9.78% share and
-  % overstates rev-2's 8.49% (= 1 in 11.8). The atlas comment says explicitly
-  % "do not restore one in ten"; this restatement in the conclusion was missed.
-  % REV-1 SURVIVOR, CORRECTED 2026-07-27: read "five to six times", which was
-  % the rev-1 ratio. See \S\ref{sec:atlas:netgross}.
-  \item \textbf{Cite the sample size you met.} Table~\ref{tab:certification}
-  gives the count your benchmark family requires at your margin; say which
-  column you are in and what you actually ran.
-  \item \textbf{Release per-item outputs.} A few megabytes converts an assertion
-  into something a third party can check. No eligible source we audited did this
-  for the tasks its own claim covers, and the \AuditPerItemOtherTaskOnly{} that
-  publish item-level results publish them for other suites.
-\end{enumerate}
-
-% CLOSED 2026-07-27. The \TODO's precondition -- all eight registered cells
-% exist -- was met on 2026-07-26, and the verdict is signed
-% (docs/H3_EIGHT_CELL_DECISION_2026-07-26.md), so the closing paragraph is
-% written and may state the outcome. It states nothing the signed record does
-% not contain.
-% SOURCE: \S\ref{sec:minigrid:verdict} (5 of 8); sections/minigrid.tex Result 1
-% (the churn ratio), whose \label may move under the flagship reordering --
-% cite the file, not the label.
+% SOURCE: \S\ref{sec:minigrid:verdict} (5 of 8); Result~\ref{res:churnratio}.
+% The 12.7 and the "roughly four times" are the SAME aggregation, the median of
+% per-cell ratios, which is what makes the comparison legitimate. Do not swap
+% either for a ratio of medians.
 The controlled experiment says where this standard actually bites, and it is not
-where the five lines above suggest. Every one of them is written as though the
-comparison at issue were a compressed model against its original. The cell in
+where the five lines suggest. Each of them is written as though the comparison
+at issue were a compressed model against its original. The cell in
 Figure~\ref{fig:cancellation} is not that comparison: H3 puts two
 \emph{compressed} models side by side, GPTQ against AWQ at the same bit width,
 which is the choice a practitioner makes after deciding to compress at all. The
 evidence problem is strictly worse there, at a median per-cell churn of
 $12.7\times$ the net delta against roughly four times in the atlas on the same
-aggregation, and with the winner reversing on nothing but
-the calibration seed in 5 of 8 registered cells. The reason is the same
-mechanism in its sharpest form: two compressed models are more alike than either
-is to the original, so cancellation is more complete and the aggregate hides
-more.
+aggregation, and with the winner reversing on nothing but the calibration seed
+in 5 of 8 registered cells (\S\ref{sec:minigrid}). Two compressed models are
+more alike than either is to the original, so cancellation is more complete and
+the aggregate hides more.
 
-That generalises the standard past its own framing. Nothing in the five lines is
-about quantization. They are about comparing two models similar enough that
-somebody thought the comparison worth making: compressed against original,
-method against method, checkpoint against checkpoint, version against version.
-Aggregate accuracy is least informative in the regime where these comparisons
-are made, and what makes such a comparison checkable is the per-item evidence
-and a declared margin.
+% BROADER APPLICABILITY. This is the paragraph that generalises the standard
+% past its own framing, and it is the section's close.
+That generalises the standard of \S\ref{sec:intro} past its own framing, and
+nothing in those five lines is about quantization. They are about comparing two
+models similar enough that somebody thought the comparison worth making:
+compressed against original, method against method, checkpoint against
+checkpoint, version against version. Aggregate accuracy is least informative in
+exactly the regime where these comparisons are made, and what makes such a
+comparison checkable is per-item evidence and a margin declared before the
+evaluation is run.
