@@ -80,6 +80,9 @@
   % text and is not dropped -- it is routed here, so the blind build shows a
   % visible marker instead of a silent deletion.
   \newcommand{\authorname}{\withheld}
+  % PDF info dictionary, plain text only -- see \hypersetup below. \authorname
+  % cannot be reused for it: it expands to \withheld, which is \textsc markup.
+  \newcommand{\pdfauthorstring}{Anonymous authors}
 \else
   \newcommand{\versiondoi}{%
     \href{https://doi.org/10.5281/zenodo.21708923}{10.5281/zenodo.21708923}}
@@ -94,6 +97,7 @@
   \newcommand{\datasetpath}{\texttt{huggingface.co/\allowbreak datasets/\allowbreak AmoghSingh123/\allowbreak flipeval-artifacts}}
   \newcommand{\harnessissue}{issue \#3831}
   \newcommand{\authorname}{Amogh Singh}
+  \newcommand{\pdfauthorstring}{Amogh Singh}
 \fi
 
 \title{Certifying Compressed Language Models:\\ An Audit and a Statistical Toolkit}
@@ -103,6 +107,26 @@
   \author{Amogh Singh\\ Georgia Institute of Technology}
 \fi
 \date{Draft \today}
+
+% =====================================================================
+% PDF INFO DICTIONARY. hyperref leaves /Title and /Author EMPTY unless they are
+% set here: \title and \author feed \maketitle, not the info dictionary, so
+% every build so far shipped a PDF with blank file-level identification.
+%
+% pdftitle is written out rather than reusing \title, which carries a \\ that
+% has no meaning in a metadata string. Keep the two in sync by hand; there is
+% only one title and it has not changed since 2026-07-27.
+%
+% pdfauthor goes through the \ifanon block above like every other identifier.
+% The info dictionary is the one de-anonymising surface a reader never sees on
+% the page, which is exactly how a blind submission leaks a name unnoticed --
+% so it is routed, not hard-coded. Note that /Creator and /Producer are still
+% set by the TeX engine and are not identifying.
+% =====================================================================
+\hypersetup{
+  pdftitle={Certifying Compressed Language Models: An Audit and a Statistical Toolkit},
+  pdfauthor={\pdfauthorstring},
+}
 
 % Audit denominators and per-claim values, GENERATED from the sealed rev-3
 % verdict CSV by paper/tools/gen_denominator_macros.py. Loaded in the preamble
