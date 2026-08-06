@@ -1,5 +1,11 @@
 # Proposal: a body-level line edit of the audit, eight pages to about six
 
+> **WITHDRAWN 2026-08-06.** The manuscript is frozen and the audit is not to be
+> compressed further (`docs/MANUSCRIPT_FREEZE_2026-08-06.md`). This document is
+> retained as the record of what was considered and declined, and as the
+> qualification-to-sentence map, which stays useful for any future review of the
+> section. **Do not execute it.**
+
 **Not executed.** `paper/sections/audit.tex` is unchanged and stays unchanged
 until this proposal is approved. Written 2026-08-06 because the four body
 compression stages left the main body at **32 pages** against a 26-29 target,
