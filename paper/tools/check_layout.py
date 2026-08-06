@@ -55,13 +55,19 @@ LAST_BODY_PAGE = 35
 # Accepted violations, each with the reason it cannot be fixed. An entry here is
 # a decision, not a silencer: if the reason stops applying, delete the entry.
 #
-# Format: (page, description). A page may appear once.
-ACCEPTED_INK = {
-    88: "frozen registrations appendix: a 64-character model revision hash with "
-        "no break point, inside text reproduced verbatim and machine-checked by "
-        "verify_registrations.py. The file cannot be edited to add one, and "
-        "main.tex already applies \\emergencystretch 6em around it from outside.",
-}
+# Keyed by a string that appears in the offending page's own text, NOT by page
+# number. Page numbers shift with every edit -- this gate failed the first time
+# it was run after an unrelated paragraph was added to the introduction, because
+# the accepted page moved from 88 to 89. An acceptance that expires whenever the
+# document is edited is worse than none: it trains you to renumber it, and the
+# renumbering is indistinguishable from suppressing a new defect.
+ACCEPTED_INK = [
+    ("a912a1e7af0efd58459dcf57ade84be96cfea8337147a13d336dacfdb9240259",
+     "frozen registrations appendix: a 64-character model revision hash with no "
+     "break point, inside text reproduced verbatim and machine-checked by "
+     "verify_registrations.py. The file cannot be edited to add one, and "
+     "main.tex already applies \\emergencystretch 6em around it from outside."),
+]
 
 
 def overfull_boxes(log: Path) -> list[tuple[float, str, str]]:
@@ -73,7 +79,7 @@ def overfull_boxes(log: Path) -> list[tuple[float, str, str]]:
     return sorted(out, key=lambda r: -r[0])
 
 
-def ink_past_measure(pdf: Path) -> list[tuple[int, float]]:
+def ink_past_measure(pdf: Path) -> list[tuple[int, float, str]]:
     if shutil.which("pdftotext") is None:
         sys.exit("check_layout: pdftotext not on PATH; see docs/PAPER_BUILD_ENVIRONMENT.md")
     proc = subprocess.run(["pdftotext", "-bbox", str(pdf), "-"],
@@ -86,8 +92,17 @@ def ink_past_measure(pdf: Path) -> list[tuple[int, float]]:
     for number, body in enumerate(pages, 1):
         xs = [float(x) for x in re.findall(r'xMax="([\d.]+)"', body)]
         if xs and max(xs) > TEXT_RIGHT_PT + INK_TOLERANCE_PT:
-            out.append((number, max(xs) - TEXT_RIGHT_PT))
+            words = re.findall(r"<word[^>]*>([^<]*)</word>", body)
+            out.append((number, max(xs) - TEXT_RIGHT_PT, " ".join(words)))
     return out
+
+
+def acceptance_for(page_text: str) -> str | None:
+    """The recorded reason this page's overflow is accepted, if any."""
+    for needle, reason in ACCEPTED_INK:
+        if needle in page_text.replace(" ", ""):
+            return reason
+    return None
 
 
 def main() -> int:
@@ -115,18 +130,20 @@ def main() -> int:
     print(f"LAYOUT: ink past the text block, pages {checked}:")
     if not ink:
         print("  none")
-    for page, over in ink:
+    for page, over, text in ink:
         if args.body_only and page > LAST_BODY_PAGE:
             continue
-        if page in ACCEPTED_INK:
-            print(f"  page {page:3d}: +{over:.1f}pt  ACCEPTED -- {ACCEPTED_INK[page]}")
+        reason = acceptance_for(text)
+        if reason and page > LAST_BODY_PAGE:
+            print(f"  page {page:3d}: +{over:.1f}pt  ACCEPTED -- {reason}")
             continue
         print(f"  page {page:3d}: +{over:.1f}pt  FAIL")
         failures.append(f"page {page} has ink {over:.1f}pt past the text block")
 
-    # The body is held to a stricter standard than the appendices: it is what a
-    # reviewer reads, and every body-page violation to date has been fixable.
-    body_ink = [p for p, _ in ink if p <= LAST_BODY_PAGE and p not in ACCEPTED_INK]
+    # The body is held to a stricter standard than the appendices, and no
+    # acceptance applies there: it is what a reviewer reads, and every body-page
+    # violation to date has been fixable.
+    body_ink = [p for p, _, _ in ink if p <= LAST_BODY_PAGE]
     if body_ink:
         failures.append(f"body pages with ink outside the text block: {body_ink}")
 
