@@ -184,17 +184,15 @@ accuracy change is \textbf{5.40} pooled over the 1{,}707 cells
 ($0.120000 / 0.022222$), and 5.22 and 5.19 within S1 and S2. All three divide
 unrounded medians; Table~\ref{tab:atlas-strata} prints the stratum medians to
 enough places that a reader can reproduce the stratum figures from it. These
-are ratios of medians, not medians of cellwise ratios: the
-median of the per-cell ratio is 3.85, and the two summarise different things.
-That figure is taken over the 1{,}562 cells whose net delta is non-zero, because
-a per-cell ratio is undefined for the other 145
-(\S\ref{sec:atlas:identical}). Dropping them is the conservative choice rather
-than a convenient one: 128 of the 145 have non-zero churn, which is the most
-complete cancellation in the atlas, so any convention that keeps them sorts them
-above every finite ratio and raises the median, to 4.20 if they are admitted as
-unbounded. The pooled figure describes the typical churn against the typical net
-delta; the cellwise median describes the typical cell. Neither is the headline on
-its own.
+are ratios of medians, not medians of cellwise ratios, and the two
+summarise different things. The median among finite cellwise ratios is
+\textbf{3.85}. Assigning $+\infty$ to the 128 zero-delta/nonzero-churn cells
+raises the all-cell median to 4.20. The finite ratios are the 1{,}562 cells
+whose net delta is non-zero; a cellwise ratio is undefined for the remaining 145
+(\S\ref{sec:atlas:identical}), and the exclusion is not evenly spread, removing
+6.8\% of S1 and 16.2\% of S2. The pooled figure describes the typical churn
+against the typical net delta; the cellwise median describes the typical cell.
+Neither is the headline on its own.
 The net delta a model card reports is the residue left after
 harmful and beneficial flips cancel; the churn is the quantity that describes how
 much of the model's behaviour actually changed. They are different quantities and

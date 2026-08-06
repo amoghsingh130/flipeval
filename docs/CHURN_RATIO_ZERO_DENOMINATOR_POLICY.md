@@ -74,11 +74,16 @@ they sort above every finite ratio, and the median can only rise:
 | `EXCLUDE` (reported) | 1,562 | **3.85** |
 | `EXTENDED` (128 readmitted as unbounded, 17 true 0/0 still dropped) | 1,690 | **4.20** |
 
-So **3.85 is a lower bound** on the per-cell ratio under either treatment. The
-reported figure is the smaller one. A future change that made the reported figure
-the larger of the two would be a change in the paper's favour and would need
-explaining; `test_readmitting_the_zero_delta_cells_raises_the_ratio` is where that
-surfaces.
+Stated exactly, and without the shorthand "lower bound", which invites the
+reading that 3.85 brackets a single true quantity: **the median among finite
+cellwise ratios is 3.85, and assigning $+\infty$ to the 128
+zero-delta/nonzero-churn cells raises the all-cell median to 4.20.** Those are
+two medians over two different cell sets, not a bound and an estimate.
+
+The direction is what matters and is pinned by a test: the reported figure is the
+smaller one, so the exclusion cannot be flattering the result. A future change
+that made it the larger of the two would need explaining, and
+`test_readmitting_the_zero_delta_cells_raises_the_ratio` is where that surfaces.
 
 The 17 genuine 0/0 cells are dropped under both policies. Zero churn against zero
 delta is undefined in every extended sense too, and is never quietly called zero.
@@ -100,7 +105,10 @@ and `tab:churn-aggregations` carries it as its last row.
 | median of per-cell ratios | 3.85 | 12.71 | 3.3x |
 
 **The direction survives the choice of aggregation**, which is the only reason the
-comparison is reportable at all. Both are printed. The like-for-like pairing gives
+comparison is reportable at all. This is a descriptive robustness check on the
+choice of summary statistic. It is **not** a preregistered hypothesis, no
+inferential test is performed on it, and the contrast figures (2.2x, 3.3x) are
+descriptive ratios rather than effect estimates. Both are printed. The like-for-like pairing gives
 the larger contrast, so quoting only that one would be selecting on the answer;
 `test_the_direction_holds_under_both_aggregations` requires both to point the same
 way, and the retired framing (atlas 5.3 ratio-of-medians against controlled 12.7

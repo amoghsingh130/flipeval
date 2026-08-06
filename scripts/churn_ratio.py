@@ -54,9 +54,11 @@ choice is **conservative in the direction that matters**:
   limit of the ratio, and drops only the 17 genuine 0/0 cells. The median then
   **rises**, since every readmitted cell sorts above every finite one.
 
-So the reported 3.85 is a lower bound on the per-cell ratio under any convention
-that does not throw the zero-delta cells away, and cannot be the product of a
-favourable choice. `--zero-policy` computes both; the paper states both.
+State it exactly, without the shorthand "lower bound", which invites the reading
+that 3.85 brackets some single true quantity: the median among finite cellwise
+ratios is 3.85, and assigning +infinity to the 128 zero-delta/nonzero-churn cells
+raises the all-cell median to 4.20. Those are two different medians over two
+different cell sets, not a bound and an estimate. The paper states both.
 """
 from __future__ import annotations
 

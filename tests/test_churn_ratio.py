@@ -161,13 +161,18 @@ def test_the_reported_per_cell_median_excludes_exactly_those_cells(summary):
 
 
 def test_readmitting_the_zero_delta_cells_raises_the_ratio(summary):
-    """The reported 3.85 is a lower bound, not a favourable choice.
+    """Two medians over two cell sets, and which way the second moves.
 
-    A cell with churn against an exactly zero net delta is the most complete
-    cancellation the atlas contains. Its ratio diverges, so under any convention
-    that keeps it, it sorts above every finite cell and pushes the median up.
-    3.85 -> 4.20 here. A future change that made the reported figure the *larger*
-    of the two would need explaining, and this test is where it surfaces.
+    The median among finite cellwise ratios is 3.85; assigning +infinity to the
+    128 zero-delta/nonzero-churn cells raises the all-cell median to 4.20. These
+    are not a bound and an estimate, they are different statistics over
+    different cell sets, and the paper says so in those terms.
+
+    The direction is what is pinned. A cell with churn against an exactly zero
+    net delta is the most complete cancellation the atlas contains, so it sorts
+    above every finite cell under any convention that keeps it. A future change
+    that made the reported figure the *larger* of the two would need explaining,
+    and this test is where it surfaces.
     """
     assert summary["atlas"]["per_cell_median_extended"] == pytest.approx(4.2000, abs=5e-5)
     assert summary["atlas"]["per_cell_median_extended"] > summary["atlas"]["per_cell_median_exclude"]
