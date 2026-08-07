@@ -85,16 +85,26 @@ than us, so the working archive is kept private. What ships in its place is each
 source's URL and pinned version identifier, a SHA-256 per captured file, the
 manifest and a retrieval script (Appendix~\ref{app:artifacts:released}).
 
-% RESOLVED 2026-07-30. All four identifiers now exist and are stated, routed
-% through main.tex macros so the blind build suppresses them from one switch.
-% VERIFIED against the live records, not against a plan document: the version /
-% concept split was read from the Zenodo record API (doi vs conceptdoi -- they
-% differ only in the final digit), and the dataset's public, ungated state and
-% cc-by-4.0 metadata from an unauthenticated client.
 % ANONYMITY 2026-07-31: every identifier below goes through a macro defined in
 % main.tex. Do not write a URL, DOI or issue number directly into this paragraph.
+%
+% CORRECTED 2026-08-07 during the flagship/release integration. This paragraph
+% used to name the v1.0.0 archive as the frozen state the paper describes, which
+% was FALSE for the audit numbers and was verified false from an unauthenticated
+% client on 2026-08-06: Zenodo 21708923 holds one file, the 34 MB source zip of
+% tag v1.0.0 (987377a, 2026-07-29), whose tree carries audit_verdicts_rev2.csv
+% and no rev3 file, while the rev-3 verdicts were computed 2026-07-31. v1.1.0 is
+% the first archive that contains them.
+%
+% \versiondoi is now the RESERVED v1.1.0 DOI. A reserved DOI does not resolve
+% until the deposit is published, so this paper MUST NOT go to arXiv first.
+% Enforced by paper/tools/check_release_claims.py -- do not restore the old
+% wording, and do not point \versiondoi back at the v1.0.0 record.
 The archived release is canonical: \textbf{\versiondoi}, which resolves to the
-frozen v1.0.0 state this paper describes and not to the latest one. The package
-is at \repourl, tag \texttt{v1.0.0}, and the data is mirrored at \dataseturl.
+frozen v1.1.0 state this paper describes and not to the latest one. The package
+is at \repourl, tag \texttt{v1.1.0}, and the data is mirrored at \dataseturl.
+\textbf{v1.0.0 (\priorversiondoi) is historical}: it predates the rev-3 audit
+verdicts reported here, carries the superseded rev-2 file, and stays published
+rather than withdrawn so that the correction remains visible.
 Appendix~\ref{app:artifacts-detail} describes every artifact in full, with the
 datasheet, licensing findings, metadata and maintenance statement.
