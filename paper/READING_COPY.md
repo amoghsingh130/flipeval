@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-07T01:37:22Z from `paper/main.tex` at commit `f8e3ff3`.**
+**Generated 2026-08-07T02:06:49Z from `paper/main.tex` at commit `aa750be`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -3380,38 +3380,39 @@ metadata and maintenance statements.
 %     the tag, and `origin/main` is still 987377a, so no public surface
 %     anywhere carries them.
 %   - The Zenodo record's own description still states the withdrawn "0 of 17".
-% DO NOT restore the old wording, and do not write a v1.1 version string here
-% until the deposit exists -- the rule at the head of this file applies to the
-% replacement as much as it applied to the original.
+% RESOLVED 2026-08-06 by publishing a matched artifact rather than by leaving
+% the gap disclosed. v1.1.0 carries audit_verdicts_rev3.csv, so \versiondoi now
+% points at the RESERVED v1.1.0 DOI and v1.0.0 is named through \priorversiondoi
+% as the superseded record. The reserved DOI does not resolve until the deposit
+% is published: DO NOT submit to arXiv first. The disclosure wording this
+% replaced is preserved in git at commit 9445957 (pre-rewrite 85ef957).
+% DO NOT restore the old wording.
 \paragraph{Availability.} The archived release is canonical:
 \textbf{\versiondoi},
-which resolves to the frozen \textbf{v1.0.0} state. (The
+which resolves to the frozen \textbf{v1.1.0} state this paper describes. (The
 concept DOI \conceptdoi{}
 resolves to whichever version is latest and is deliberately \emph{not} the
 citation here, because the numbers reported above belong to one frozen state.)
 The analysis package is at \repourl,
-tag \texttt{v1.0.0}. A copy of the data is mirrored for convenience at
+tag \texttt{v1.1.0}. A copy of the data is mirrored for convenience at
 \dataseturl;
 \textbf{it is a secondary link}, provided because the per-item files are
 directly loadable there, and the DOI remains the citable record.
 
-\textbf{One part of this paper is newer than that archive, and the citation
-should not be read as covering it.} v1.0.0 was tagged on 2026-07-29. The audit
-verdicts reported in \S\ref{sec:audit} are \textbf{revision~3}, recomputed on
-2026-07-31 under Amendment~2 into
-\texttt{results/\allowbreak{}audit\_\allowbreak{}verdicts\_\allowbreak{}rev3.csv}
-(SHA-256 \texttt{\AuditVerdictsShaShort}), and the archive predates them: what
-it carries is the superseded rev-2 file, and the rev-3 file, the Amendment~2
-revision of the verdict script that produces it, and Amendments~3 and~4 are
-absent from it. Nothing else in this paper is affected. The per-item outputs,
-the sealed run archives, the atlas and the certification tables are unchanged
-since v1.0.0, and every number drawn from them resolves through the DOI as
-stated. \textbf{The audit numbers do not, and they cannot be recovered from the
-archive by rerunning it either}, because the eligibility and margin-category
-logic Amendment~2 introduces postdates the tag. A revised deposit under the same
-concept DOI will carry the rev-3 file beside the rev-2 one it supersedes; until
-that deposit exists, this paragraph is the mapping, which is why no version
-string for it is written here.
+\textbf{The first release is still published, and it is not the one to cite.}
+v1.0.0 (\priorversiondoi) was archived on 2026-07-30, before the audit verdicts
+were recomputed, and carries the superseded rev-2 verdict file. The rev-3
+verdicts reported in \S\ref{sec:audit} were computed on 2026-07-31 under
+Amendment~2 and reach an archive for the first time here. \textbf{v1.1.0 ships
+both files}, the superseded one beside its replacement, which is the same
+practice the rev-1 atlas already gets in this release and is the paper's own
+argument applied to itself: a corrected artifact whose correction stays visible
+is worth more than one that presents a clean surface. For that reason v1.0.0 is
+left published rather than withdrawn. A reader holding it should know that its
+verdict CSV is rev-2, that the verdict script archived with it predates the
+eligibility and margin-category logic Amendment~2 introduces and so cannot
+reproduce rev-3, and that \S\ref{app:reg:audit} records every amendment that
+separates the two.
 
 The paired-comparison layer described here has been \textbf{proposed} to the
 \texttt{lm-evaluation-harness} maintainers, in a comment on \harnessissue; no
@@ -4637,8 +4638,9 @@ run once and reported as ``$C \equiv D$''.
 % and the detail lives here.
 %
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
-% exists. The version string v1.0.0 is pinned by the release checklist; the DOI
-% and dataset URL remain \TODO until Amogh has minted them.
+% exists. UPDATED 2026-08-06: the release is now v1.1.0, whose version DOI is
+% RESERVED and does not resolve until the deposit is published. v1.0.0 stays
+% listed as the superseded record, via \priorversiondoi.
 % =====================================================================
 
 \section{Artifact detail}
@@ -4723,7 +4725,7 @@ remains visible is this paper's argument applied to itself.
 \subsection{Metadata and identifiers}
 \label{app:artifacts:metadata}
 
-Released at version \textbf{v1.0.0}, the string shared by the source tag, the
+Released at version \textbf{v1.1.0}, the string shared by the source tag, the
 archived release and the dataset revision. The archived DOI is canonical for
 citation; the dataset repository is a convenience mirror.
 
@@ -4739,8 +4741,9 @@ Identifier & Value \\
 \midrule
 % ANONYMITY 2026-07-31: routed through main.tex macros for the TMLR build.
 Version DOI (canonical) & \versiondoi \\
+Version DOI (v1.0.0, superseded) & \priorversiondoi \\
 Concept DOI (latest) & \conceptdoi \\
-Source package & \repopath, tag \texttt{v1.0.0} \\
+Source package & \repopath, tag \texttt{v1.1.0} \\
 Dataset mirror (secondary) & \datasetpath \\
 Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
 \bottomrule
@@ -4749,10 +4752,9 @@ Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
 \medskip
 \noindent The \textbf{version DOI is what this paper cites}: it resolves to one
 frozen state. The concept
-DOI is correct only when referring to the artifact series. \textbf{That frozen
-state does not cover the rev-3 audit verdicts}, which were recomputed two days
-after the tag; \S\ref{sec:artifacts} states exactly what the archive does and
-does not carry, and that statement is the one to read before citing this table.
+DOI is correct only when referring to the artifact series. \textbf{The superseded v1.0.0 DOI is listed
+so that a reader holding it can tell which release they have}: its verdict CSV
+is rev-2, and \S\ref{sec:artifacts} states what separates the two.
 A
 \textbf{Croissant record} is served by the dataset repository at its standard
 \texttt{/croissant} endpoint and carries the CC-BY-4.0 licence through to the
