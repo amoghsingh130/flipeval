@@ -1,15 +1,21 @@
-# Audit Registration, Amendment 5 (DRAFT — AWAITING SIGNATURE)
+# Audit Registration, Amendment 5 (SIGNED, APPENDED — DRAFTING RECORD ONLY)
 
-> **⏳ NOT SIGNED.** This draft is complete and ready to read. Nothing has been
-> appended to `docs/AUDIT_REGISTRATION_2026-07-15.md`.
+> **✅ SIGNED by Amogh Singh, 2026-08-06**, on the verbatim instruction
+> "sign the addendum", the draft having been returned unsigned and then read,
+> with its one open statement confirmed on the verbatim instruction "confirm".
+> Appended to `docs/AUDIT_REGISTRATION_2026-07-15.md` under "Dated Amendments"
+> (lines 412-487), verified to have changed **0 lines above the append point**.
 >
-> To sign, give the verbatim instruction, as with Amendments 2, 3 and 4. The
-> *Signed.* line below will then be completed with that instruction quoted, and
-> the **Determination** and **Decision context** appended to the frozen
-> registration under "Dated Amendments" — changing zero lines above the append
-> point, verified after the append.
+> **THE OPERATIVE TEXT IS THE REGISTRATION, NOT THIS FILE.** This is now a
+> drafting record, retained for the provenance of the wording. Amending
+> Amendment 5 means a new dated amendment, never an edit here. Editing below
+> would silently desynchronise this file from the frozen document and from the
+> appendix that reproduces it.
 >
-> **One thing only you can settle** is marked `[CONFIRM]` in *Decision context*.
+> The appended text is reorganised into the frozen file's run-in heading style
+> (*Occasion.*, *Finding.*, *Determination.*, …) to match Amendments 2, 3 and 4.
+> The substance is the same; where the two differ in wording, the registration
+> governs.
 
 Drafted by Claude Code, 2026-08-06, on the instruction "sign the addendum",
 following the precedent of `docs/AUDIT_AMENDMENT4_DRAFT_2026-08-04.md`.
@@ -121,8 +127,8 @@ for that knowledge to have biased. It is recorded because the standing
 requirement applies to every amendment to a frozen protocol, not only to those
 that could move a number.
 
-`[CONFIRM]` — the sentence above is carried forward from Amendment 4 because the
-same facts hold. Confirm it reads true for you, or replace it. It is the one
-statement in this document that is yours to make and not mine to infer.
+The sentence above was carried forward from Amendment 4 because the same facts
+hold, and was marked as the one statement in this document that was the decision
+owner's to make and not an agent's to infer. It was confirmed, not inferred.
 
-*Signed.* — **awaiting signature; do not treat this document as in force.**
+*Signed.* Amogh Singh, 2026-08-06. See the registration for the operative text.
