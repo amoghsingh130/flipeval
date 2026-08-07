@@ -68,6 +68,7 @@
 \newcommand{\withheld}{\textsc{[withheld for double-blind review]}}
 \ifanon
   \newcommand{\versiondoi}{\withheld}
+  \newcommand{\priorversiondoi}{\withheld}
   \newcommand{\conceptdoi}{\withheld}
   \newcommand{\repourl}{\withheld}
   \newcommand{\dataseturl}{\withheld}
@@ -84,7 +85,17 @@
   % cannot be reused for it: it expands to \withheld, which is \textsc markup.
   \newcommand{\pdfauthorstring}{Anonymous authors}
 \else
+  % v1.1.0 version DOI, RESERVED on Zenodo 2026-08-06 via "New version" on the
+  % existing record. A reserved DOI exists as an identifier but does NOT resolve
+  % until the deposit is published -- https://zenodo.org/api/records/21829570
+  % returned 404 to an unauthenticated client on 2026-08-06, which is the
+  % expected state for a reservation and is also the reason this paper MUST NOT
+  % be submitted to arXiv before the deposit is published. Re-check that it
+  % resolves before submission.
   \newcommand{\versiondoi}{%
+    \href{https://doi.org/10.5281/zenodo.21829570}{10.5281/zenodo.21829570}}
+  % v1.0.0, superseded but deliberately left published.
+  \newcommand{\priorversiondoi}{%
     \href{https://doi.org/10.5281/zenodo.21708923}{10.5281/zenodo.21708923}}
   \newcommand{\conceptdoi}{%
     \href{https://doi.org/10.5281/zenodo.21708922}{10.5281/zenodo.21708922}}

@@ -10,8 +10,9 @@
 % and the detail lives here.
 %
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
-% exists. The version string v1.0.0 is pinned by the release checklist; the DOI
-% and dataset URL remain \TODO until Amogh has minted them.
+% exists. UPDATED 2026-08-06: the release is now v1.1.0, whose version DOI is
+% RESERVED and does not resolve until the deposit is published. v1.0.0 stays
+% listed as the superseded record, via \priorversiondoi.
 % =====================================================================
 
 \section{Artifact detail}
@@ -96,7 +97,7 @@ remains visible is this paper's argument applied to itself.
 \subsection{Metadata and identifiers}
 \label{app:artifacts:metadata}
 
-Released at version \textbf{v1.0.0}, the string shared by the source tag, the
+Released at version \textbf{v1.1.0}, the string shared by the source tag, the
 archived release and the dataset revision. The archived DOI is canonical for
 citation; the dataset repository is a convenience mirror.
 
@@ -112,8 +113,9 @@ Identifier & Value \\
 \midrule
 % ANONYMITY 2026-07-31: routed through main.tex macros for the TMLR build.
 Version DOI (canonical) & \versiondoi \\
+Version DOI (v1.0.0, superseded) & \priorversiondoi \\
 Concept DOI (latest) & \conceptdoi \\
-Source package & \repopath, tag \texttt{v1.0.0} \\
+Source package & \repopath, tag \texttt{v1.1.0} \\
 Dataset mirror (secondary) & \datasetpath \\
 Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
 \bottomrule
@@ -122,10 +124,9 @@ Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
 \medskip
 \noindent The \textbf{version DOI is what this paper cites}: it resolves to one
 frozen state. The concept
-DOI is correct only when referring to the artifact series. \textbf{That frozen
-state does not cover the rev-3 audit verdicts}, which were recomputed two days
-after the tag; \S\ref{sec:artifacts} states exactly what the archive does and
-does not carry, and that statement is the one to read before citing this table.
+DOI is correct only when referring to the artifact series. \textbf{The superseded v1.0.0 DOI is listed
+so that a reader holding it can tell which release they have}: its verdict CSV
+is rev-2, and \S\ref{sec:artifacts} states what separates the two.
 A
 \textbf{Croissant record} is served by the dataset repository at its standard
 \texttt{/croissant} endpoint and carries the CC-BY-4.0 licence through to the
