@@ -27,15 +27,62 @@
 # rather than being absent by design. Whichever session adds tests updates that
 # count in the same commit; a stale expectation is a gate that cannot fail.
 #
+#   PROJECT_DIR   REQUIRED. The repository root to test. NO DEFAULT.
 #   PYTEST_ARGS   optional extra pytest arguments (default: none)
 #
 # Example:
-#   sbatch -A "$ACCOUNT" -q inferno -p cpu-small --export=ALL \
+#   sbatch -A "$ACCOUNT" -q inferno -p cpu-small \
+#          --export=ALL,PROJECT_DIR="$PWD" \
 #          scripts/slurm/run_tests.sbatch
+#
+# ---------------------------------------------------------------------------
+# PROJECT_DIR IS REQUIRED AND HAS NO DEFAULT (added 2026-08-07, incident 29).
+#
+# This script used to read:
+#     source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+# so an unset PROJECT_DIR silently tested a DIFFERENT CHECKOUT and exited 0. On
+# 2026-08-07 that certified the wrong tree during the v1.1.0 integration: it
+# reported 298 passed against an expectation of 348 and returned success. The
+# failure is not a crash -- it is a green gate that describes a tree nobody
+# asked about, which is the same shape as incident 24.
+#
+# The validation below runs BEFORE env.sh is sourced, deliberately: env.sh
+# ALSO carries `PROJECT_DIR="${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}"`,
+# so checking afterwards would read a value that env.sh had just invented.
+# Removing that default from env.sh is a wider change affecting every job
+# script and is deliberately NOT made here; it is shadowed for this script by
+# requiring the variable up front.
+# ---------------------------------------------------------------------------
+die() { echo "run_tests: FATAL: $*" >&2; exit 2; }
+
+[ -n "${PROJECT_DIR:-}" ] || die "PROJECT_DIR is not set. It is REQUIRED and has no default.
+  Pass it explicitly, BEFORE the script path (options after the path are parsed
+  as script arguments -- incident 21):
+    sbatch -A \"\$ACCOUNT\" -q inferno -p cpu-small \\
+           --export=ALL,PROJECT_DIR=\"\$PWD\" scripts/slurm/run_tests.sbatch"
+
+[ -d "$PROJECT_DIR" ] || die "PROJECT_DIR=$PROJECT_DIR does not exist or is not a directory"
+
+# Resolve, so the log records the real tree and two spellings of one path cannot
+# read as two different trees.
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd -P)" || die "cannot resolve PROJECT_DIR"
+export PROJECT_DIR
+
+# It must be a repository ROOT, not a subdirectory and not an unrelated tree.
+# Checked by the project's own marker files rather than by .git, so this works
+# in a linked worktree (where .git is a file) and in an exported snapshot.
+for marker in pyproject.toml tests flipeval scripts/slurm/env.sh; do
+  [ -e "$PROJECT_DIR/$marker" ] || die "PROJECT_DIR=$PROJECT_DIR is not a flipeval repository root: missing '$marker'"
+done
+[ -n "$(find "$PROJECT_DIR/tests" -maxdepth 1 -name 'test_*.py' -print -quit)" ] \
+  || die "PROJECT_DIR=$PROJECT_DIR has no tests/test_*.py -- refusing to report a vacuous pass"
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 mkdir -p logs
+
+echo "run_tests: PROJECT_DIR validated explicit -> $PROJECT_DIR"
+echo "run_tests: tests/ holds $(find "$PROJECT_DIR/tests" -maxdepth 1 -name 'test_*.py' | wc -l) test files"
 
 echo "run_tests: image=$IMAGE project=$PROJECT_DIR args=${PYTEST_ARGS:-<none>}"
 

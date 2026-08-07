@@ -94,7 +94,26 @@ mini-grid summary: job `11375247`, 409 checks, `passed: true`, 44 cells, per
 `docs/MINIGRID_ESCALATION_DECISION_2026-07-23.md`), never against the log it was
 recovered from alone.
 
-## No job script is ever given a default grid
+## No job script is ever given a default grid, or a default tree
+
+**Widened again 2026-08-07 (incident 29): the rule covers the TREE a job acts
+on, not only the grid.** `scripts/slurm/run_tests.sbatch` read
+`${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}`, so an unset `PROJECT_DIR`
+ran the authoritative in-image gate against **a different checkout** and exited
+**0**. During the v1.1.0 integration it reported 298 passed against an
+expectation of 348 and returned success: a green gate certifying a tree nobody
+asked about. `PROJECT_DIR` is now **REQUIRED with no default**, and is validated
+*before* `env.sh` is sourced, because `env.sh` carries the same default and
+would otherwise invent the value before it could be checked. The script also
+verifies the path exists, resolves it, checks it is a repository **root** by the
+project's own marker files (`pyproject.toml`, `tests`, `flipeval`,
+`scripts/slurm/env.sh`) rather than by `.git` so linked worktrees work, and
+refuses to run when `tests/` holds no `test_*.py` — a vacuous pass is a green
+gate too. `env.sh`'s own default is deliberately left in place for the other job
+scripts and is shadowed here; removing it is a separate, wider change.
+
+**Any variable naming what a job reads or writes is covered by this rule** —
+grid, results root, model list, or source tree.
 
 **Widened 2026-07-25 (incident 24), from "validators must be told which grid
 they are validating".** Every job script that reads *or writes* a grid must be
@@ -176,7 +195,7 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 348 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 368 passed, 0 skipped
 ```
 
 Run it with `scripts/slurm/run_tests.sbatch`, which executes the suite in the

@@ -41,7 +41,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_ROOT = Path(__file__).resolve().parents[2]
 
 V11_DOI = "10.5281/zenodo.21829570"
 V10_DOI = "10.5281/zenodo.21708923"
@@ -51,9 +51,9 @@ AUTHOR_NAME = "Amogh Singh"
 # Compiled manuscript sources. READING_COPY.md is generated from these and is
 # included deliberately: if it still carries a withdrawn claim, it was not
 # regenerated after the fix, which is itself the defect.
-def paper_sources() -> list[Path]:
-    out = sorted((ROOT / "paper").rglob("*.tex"))
-    rc = ROOT / "paper" / "READING_COPY.md"
+def paper_sources(root: Path) -> list[Path]:
+    out = sorted((root / "paper").rglob("*.tex"))
+    rc = root / "paper" / "READING_COPY.md"
     if rc.is_file():
         out.append(rc)
     return out
@@ -70,12 +70,12 @@ class Report:
         return any(not ok for _, ok, _ in self.rows)
 
 
-def c1_no_false_availability_claim(r: Report) -> None:
-    files = paper_sources()
+def c1_no_false_availability_claim(r: Report, root: Path) -> None:
+    files = paper_sources(root)
     if not files:
         r.add("C1", False, "no paper sources found -- cannot verify, failing closed")
         return
-    hits = [f"{p.relative_to(ROOT)}" for p in files if FALSE_CLAIM in p.read_text(encoding="utf-8", errors="replace")]
+    hits = [f"{p.relative_to(root)}" for p in files if FALSE_CLAIM in p.read_text(encoding="utf-8", errors="replace")]
     r.add("C1", not hits,
           "the withdrawn availability claim is absent from all paper sources"
           if not hits else f"withdrawn claim present in: {', '.join(hits)}")
@@ -105,8 +105,8 @@ def _macro_body(text: str, macro: str) -> str | None:
     return text[start:i] if depth == 0 else None
 
 
-def c2_v10_not_canonical(r: Report) -> None:
-    main = ROOT / "paper" / "main.tex"
+def c2_v10_not_canonical(r: Report, root: Path) -> None:
+    main = root / "paper" / "main.tex"
     if not main.is_file():
         r.add("C2", False, "paper/main.tex missing -- failing closed")
         return
@@ -123,9 +123,9 @@ def c2_v10_not_canonical(r: Report) -> None:
     r.add("C2", True, f"\\versiondoi resolves to {V11_DOI}, not {V10_DOI}")
 
 
-def c3_v11_present(r: Report) -> None:
-    main = (ROOT / "paper" / "main.tex")
-    arts = (ROOT / "paper" / "sections" / "artifacts.tex")
+def c3_v11_present(r: Report, root: Path) -> None:
+    main = (root / "paper" / "main.tex")
+    arts = (root / "paper" / "sections" / "artifacts.tex")
     if not (main.is_file() and arts.is_file()):
         r.add("C3", False, "main.tex or artifacts.tex missing -- failing closed")
         return
@@ -142,8 +142,8 @@ def c3_v11_present(r: Report) -> None:
           f"defined={defined} cited_in_availability={cited} (need both)")
 
 
-def c4_pdf_metadata(r: Report) -> None:
-    main = ROOT / "paper" / "main.tex"
+def c4_pdf_metadata(r: Report, root: Path) -> None:
+    main = root / "paper" / "main.tex"
     if not main.is_file():
         r.add("C4", False, "paper/main.tex missing -- failing closed")
         return
@@ -156,20 +156,30 @@ def c4_pdf_metadata(r: Report) -> None:
     value = am.group(1).strip()
     routed = value.startswith("\\")          # a macro, not a literal
     literal_name = AUTHOR_NAME in value
-    # the macro must be defined in BOTH arms of \ifanon
     macro = value.lstrip("\\").strip()
-    anon_arm = re.search(r"\\ifanon(.*?)\\else(.*?)\\fi", t, re.S)
-    both_arms = bool(anon_arm and macro and f"\\{macro}" in anon_arm.group(1) and f"\\{macro}" in anon_arm.group(2))
-    ok = has_title and routed and not literal_name and both_arms
-    detail = (f"pdftitle set; pdfauthor routed through \\{macro}, defined in both \\ifanon arms"
+    arms = re.search(r"\\ifanon(.*?)\\else(.*?)\\fi", t, re.S)
+    anon_src = arms.group(1) if arms else ""
+    named_src = arms.group(2) if arms else ""
+    both_arms = bool(macro and f"\\{macro}" in anon_src and f"\\{macro}" in named_src)
+
+    # The anonymous arm's VALUE must not identify the author. Checking only that
+    # the macro is "routed" is not enough: routing it and then defining it as the
+    # real name in the \ifanon arm leaks the identity into the blind build's info
+    # dictionary, where no reader would ever see it on the page.
+    anon_value = _macro_body(anon_src, "\\" + macro) if both_arms else None
+    anon_leaks = bool(anon_value and AUTHOR_NAME in anon_value)
+
+    ok = has_title and routed and not literal_name and both_arms and not anon_leaks
+    detail = (f"pdftitle set; pdfauthor routed through \\{macro}; anonymous arm does not name the author"
               if ok else
-              f"pdftitle={has_title} routed={routed} literal_name={literal_name} both_arms={both_arms}")
+              f"pdftitle={has_title} routed={routed} literal_name={literal_name} "
+              f"both_arms={both_arms} anon_arm_names_author={anon_leaks}")
     r.add("C4", ok, detail)
 
 
-def c5_audit_is_rev3(r: Report) -> None:
-    ledger = ROOT / "paper" / "audit_denominators.tex"
-    csv = ROOT / "results" / "audit_verdicts_rev3.csv"
+def c5_audit_is_rev3(r: Report, root: Path) -> None:
+    ledger = root / "paper" / "audit_denominators.tex"
+    csv = root / "results" / "audit_verdicts_rev3.csv"
     if not ledger.is_file() or not csv.is_file():
         r.add("C5", False, "denominator ledger or rev-3 CSV missing -- failing closed")
         return
@@ -217,17 +227,24 @@ def c6_release_tree_clean(r: Report, tree: Path | None) -> None:
           if not bad else "; ".join(bad[:6]))
 
 
+def run_checks(root: Path = DEFAULT_ROOT, release_tree: Path | None = None) -> Report:
+    """All six checks against `root`. Importable so the gate itself is testable."""
+    r = Report()
+    c1_no_false_availability_claim(r, root)
+    c2_v10_not_canonical(r, root)
+    c3_v11_present(r, root)
+    c4_pdf_metadata(r, root)
+    c5_audit_is_rev3(r, root)
+    c6_release_tree_clean(r, release_tree)
+    return r
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     ap.add_argument("--release-tree", type=Path, default=None)
     a = ap.parse_args()
-    r = Report()
-    c1_no_false_availability_claim(r)
-    c2_v10_not_canonical(r)
-    c3_v11_present(r)
-    c4_pdf_metadata(r)
-    c5_audit_is_rev3(r)
-    c6_release_tree_clean(r, a.release_tree)
+    r = run_checks(a.root, a.release_tree)
     for cid, ok, detail in r.rows:
         print(f"{cid}: {'PASS' if ok else 'FAIL'} -- {detail}")
     if r.failed():
