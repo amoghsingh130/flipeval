@@ -28,7 +28,9 @@
 #   1  Qwen2.5-1.5B-Instruct  GSM8K    3  Llama-3.2-3B-Instruct  GSM8K
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 mkdir -p logs
 
 # Revisions are the pinned ones in configs/main_grid_manifest.yaml. A reference

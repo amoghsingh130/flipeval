@@ -110,15 +110,18 @@ Example staged submission (do not submit the second block until the two canaries
 have been reviewed):
 
 ```bash
-CALIB0=$(sbatch --parsable --array=0 scripts/slurm/prepare_calibration.sbatch)
-CANARY=$(sbatch --parsable --array=0,3 --dependency=afterok:$CALIB0 \
+# PROJECT_DIR is REQUIRED (incident 29) and must precede the script path
+# (incident 21). Everything below assumes:
+#   export SB="sbatch -A $ACCOUNT -q inferno --export=ALL,PROJECT_DIR=$PWD"
+CALIB0=$($SB --parsable --array=0 scripts/slurm/prepare_calibration.sbatch)
+CANARY=$($SB --parsable --array=0,3 --dependency=afterok:$CALIB0 \
   scripts/slurm/build_quantized.sbatch)
 
 # Pause here and review CALIB0 and CANARY artifacts/logs.
-CALIB12=$(sbatch --parsable --array=1-2%1 scripts/slurm/prepare_calibration.sbatch)
-BUILD12=$(sbatch --parsable --array=1-2,4-5 --dependency=afterok:$CALIB12 \
+CALIB12=$($SB --parsable --array=1-2%1 scripts/slurm/prepare_calibration.sbatch)
+BUILD12=$($SB --parsable --array=1-2,4-5 --dependency=afterok:$CALIB12 \
   scripts/slurm/build_quantized.sbatch)
-BRIDGE=$(sbatch --parsable --dependency=afterok:$BUILD12 scripts/slurm/run_bridge.sbatch)
+BRIDGE=$($SB --parsable --dependency=afterok:$BUILD12 scripts/slurm/run_bridge.sbatch)
 sbatch --dependency=afterok:$BRIDGE scripts/slurm/verify_bridge.sbatch
 ```
 

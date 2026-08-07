@@ -48,7 +48,9 @@
 #   sbatch -A "$ACCOUNT" -q inferno --export=ALL scripts/slurm/verify_minigrid.sbatch
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 mkdir -p logs
 
 : "${MINIGRID_CONFIG:?required (no default: a default validates the wrong grid)}"

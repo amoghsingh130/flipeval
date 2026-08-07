@@ -10,7 +10,9 @@
 #SBATCH --array=0-2%1
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 mkdir -p logs
 
 SEED=$SLURM_ARRAY_TASK_ID
@@ -21,9 +23,13 @@ SEED=$SLURM_ARRAY_TASK_ID
 # models are selected by exporting these at submit time, e.g.
 #   sbatch --array=0-4 --export=ALL,CALIB_MODEL_ID=meta-llama/Llama-3.2-3B-Instruct,...
 # Values must match the pinned tag in configs/main_grid_manifest.yaml.
-CALIB_MODEL_ID="${CALIB_MODEL_ID:-Qwen/Qwen2.5-1.5B-Instruct}"
-CALIB_MODEL_REVISION="${CALIB_MODEL_REVISION:-989aa7980e4cf806f80c7fef2b1adb7bc71aa306}"
-CALIB_ARTIFACT_PREFIX="${CALIB_ARTIFACT_PREFIX:-qwen25-1p5b-c4-s}"
+# REGISTERED VALUES (copy these; they are no longer inherited silently):
+#   CALIB_MODEL_ID=Qwen/Qwen2.5-1.5B-Instruct
+#   CALIB_MODEL_REVISION=989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+#   CALIB_ARTIFACT_PREFIX=qwen25-1p5b-c4-s
+: "${CALIB_MODEL_ID:?required (no default: selects WHICH model the calibration set is built for)}"
+: "${CALIB_MODEL_REVISION:?required (no default: a default pins a revision the operator did not choose)}"
+: "${CALIB_ARTIFACT_PREFIX:?required (no default: names the OUTPUT calibration artifacts)}"
 
 echo "calib model:  $CALIB_MODEL_ID @ $CALIB_MODEL_REVISION"
 echo "calib artifact: /scratch/calibration/${CALIB_ARTIFACT_PREFIX}${SEED}.json"

@@ -11,7 +11,9 @@
 #SBATCH --array=0-5
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 mkdir -p logs outputs/quantized
 
 # Model/artifact identity is parameterized so one script serves every build
@@ -35,9 +37,13 @@ mkdir -p logs outputs/quantized
 # only -- do NOT shrink the AWQ batch to fit, which would change build numerics.
 # GPTQ-7B and all Llama-8B cells build fine at the 40 GB / 64 GB defaults
 # (Llama-8B AWQ completed at 64 GB, peak RSS 63.9 GB -- fit by a hair).
-BUILD_MODEL_ID="${BUILD_MODEL_ID:-Qwen/Qwen2.5-1.5B-Instruct}"
-BUILD_MODEL_REVISION="${BUILD_MODEL_REVISION:-989aa7980e4cf806f80c7fef2b1adb7bc71aa306}"
-BUILD_TAG="${BUILD_TAG:-qwen25-1p5b}"
+# REGISTERED VALUES (copy these; they are no longer inherited silently):
+#   BUILD_MODEL_ID=Qwen/Qwen2.5-1.5B-Instruct
+#   BUILD_MODEL_REVISION=989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+#   BUILD_TAG=qwen25-1p5b
+: "${BUILD_MODEL_ID:?required (no default: selects WHICH model is quantized)}"
+: "${BUILD_MODEL_REVISION:?required (no default: a default pins a revision the operator did not choose)}"
+: "${BUILD_TAG:?required (no default: names the OUTPUT artifact directory)}"
 # Seeds per method sets the array index map: index = method*SEEDS + seed. It
 # defaults to 3, the bridge's layout, so a bare resubmission of an existing
 # array element still builds exactly what it built before.

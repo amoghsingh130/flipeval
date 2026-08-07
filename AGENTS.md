@@ -115,6 +115,16 @@ scripts and is shadowed here; removing it is a separate, wider change.
 **Any variable naming what a job reads or writes is covered by this rule** —
 grid, results root, model list, or source tree.
 
+**Extended again 2026-08-07 to the shared `env.sh` itself.** The `PROJECT_DIR`
+default was removed at source, not shadowed in one caller, and every released
+job script now requires it explicitly. **No repository auto-discovery replaced
+it** — no `git rev-parse --show-toplevel`, no `$(dirname "$0")/../..`. Discovery
+is the same defect wearing a different hat: it silently picks a tree instead of
+failing when nobody said which one. `IMAGE` keeps a default *path* but is now
+verified against `container/flipeval.sif.sha256`, because requiring the operator
+to type a path proves only that a file exists there, not that it is the pinned
+environment cell; a missing digest record is a failure, not a skip.
+
 **Widened 2026-07-25 (incident 24), from "validators must be told which grid
 they are validating".** Every job script that reads *or writes* a grid must be
 told which grid, with no fallback. An unset grid variable aborts the job before
@@ -195,7 +205,7 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 368 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 388 passed, 0 skipped
 ```
 
 Run it with `scripts/slurm/run_tests.sbatch`, which executes the suite in the

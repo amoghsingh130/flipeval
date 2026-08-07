@@ -11,7 +11,9 @@
 #SBATCH --array=0-6
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 mkdir -p logs results/qwen25_1p5b_bridge_chat
 
 METHODS=(fp16 gptq_s0 gptq_s1 gptq_s2 awq_s0 awq_s1 awq_s2)

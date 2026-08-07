@@ -9,7 +9,9 @@
 #SBATCH --time=01:00:00
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 apptainer exec --cleanenv --pwd /workspace \
   --bind "$PROJECT_DIR:/workspace,$SCRATCH_DIR:/scratch" \
   "$IMAGE" python /workspace/scripts/verify_bridge.py \

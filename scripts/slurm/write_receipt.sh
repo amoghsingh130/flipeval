@@ -92,8 +92,12 @@ if [ -z "$PEAK_RSS_KB" ] || [ "$PEAK_RSS_KB" = "null" ]; then
 fi
 
 IMAGE_SHA="null"
-if [ -r "${PROJECT_DIR:-.}/container/flipeval.sif.sha256" ]; then
-  IMAGE_SHA="\"$(awk '{print $1}' "${PROJECT_DIR:-.}/container/flipeval.sif.sha256" | head -1)\""
+# PROJECT_DIR selects WHICH repository's recorded image digest is stamped into
+# the receipt, so `${PROJECT_DIR:-.}` could record a digest from an unrelated
+# tree, or none at all, and still emit a receipt that looks complete.
+: "${PROJECT_DIR:?required (no default): selects the container digest record stamped into this receipt}"
+if [ -r "$PROJECT_DIR/container/flipeval.sif.sha256" ]; then
+  IMAGE_SHA="\"$(awk '{print $1}' "$PROJECT_DIR/container/flipeval.sif.sha256" | head -1)\""
 fi
 
 EXTRA=""

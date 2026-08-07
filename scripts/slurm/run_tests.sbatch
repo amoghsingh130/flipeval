@@ -46,12 +46,11 @@
 # failure is not a crash -- it is a green gate that describes a tree nobody
 # asked about, which is the same shape as incident 24.
 #
-# The validation below runs BEFORE env.sh is sourced, deliberately: env.sh
-# ALSO carries `PROJECT_DIR="${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}"`,
-# so checking afterwards would read a value that env.sh had just invented.
-# Removing that default from env.sh is a wider change affecting every job
-# script and is deliberately NOT made here; it is shadowed for this script by
-# requiring the variable up front.
+# The validation below runs BEFORE env.sh is sourced. When this guard was added
+# env.sh still carried the same default, so checking afterwards would have read
+# a value env.sh had just invented. That default was removed from env.sh on
+# 2026-08-07, so the two now agree; this check is kept as the nearer of the two,
+# because it gives the operator a message naming this script.
 # ---------------------------------------------------------------------------
 die() { echo "run_tests: FATAL: $*" >&2; exit 2; }
 

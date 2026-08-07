@@ -22,7 +22,13 @@
 
 set -uo pipefail
 
-PROJECT_DIR="${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+[ -d "$PROJECT_DIR" ] || { echo "FATAL: PROJECT_DIR=$PROJECT_DIR does not exist" >&2; exit 2; }
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd -P)"
+for _m in pyproject.toml tests flipeval scripts/slurm/env.sh; do
+  [ -e "$PROJECT_DIR/$_m" ] || { echo "FATAL: PROJECT_DIR=$PROJECT_DIR is not a flipeval repository root: missing '$_m'" >&2; exit 2; }
+done; unset _m
 SCRATCH_DIR="${SCRATCH_DIR:-$HOME/scratch/flipeval}"
 IMAGE="${IMAGE:-$SCRATCH_DIR/flipeval.sif}"
 

@@ -61,7 +61,9 @@
 # MINIGRID_CONFIG is the single thing that selects where output lands.
 
 # shellcheck source=scripts/slurm/env.sh
-source "${PROJECT_DIR:-$HOME/ps-compressedlm-0/flipeval}/scripts/slurm/env.sh"
+: "${PROJECT_DIR:?required (no default): the flipeval repository root this job acts on.
+  Pass it BEFORE the script path: --export=ALL,PROJECT_DIR=\"$PWD\"  (incidents 21, 29)}"
+source "$PROJECT_DIR/scripts/slurm/env.sh"
 mkdir -p logs
 
 : "${MINIGRID_CONFIG:?required (no default: a default targets the wrong grid IN WRITE MODE)}"
