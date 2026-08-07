@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-07T19:46:46Z from `paper/main.tex` at commit `836a29b`.**
+**Generated 2026-08-07T22:49:25Z from `paper/main.tex` at commit `daba759`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -5411,7 +5411,15 @@ Identifier & Value \\
 \midrule
 % ANONYMITY 2026-07-31: routed through main.tex macros for the TMLR build.
 Version DOI (canonical) & \versiondoi \\
-Version DOI (v1.0.0, superseded) & \priorversiondoi \\
+% SHORTENED 2026-08-07, TYPOGRAPHIC ONLY. "Version DOI (v1.0.0, superseded)" was
+% the longest label in this auto-sized l column and pushed the tabular 16.9pt
+% past the text measure on the rendered page, failing tools/check_layout.py.
+% Cause was two individually-correct changes meeting: the column narrowed to
+% p{0.56\linewidth} in the compression pass, and this row was added in the
+% release pass. Proven by deleting this row alone: overfull 28.81pt -> 0.32pt.
+% The DOI macro, its value, the table structure, the font size and the margins
+% are all unchanged. Only the label text is shorter.
+v1.0.0 DOI (superseded) & \priorversiondoi \\
 Concept DOI (latest) & \conceptdoi \\
 Source package & \repopath, tag \texttt{v1.1.0} \\
 Dataset mirror (secondary) & \datasetpath \\
