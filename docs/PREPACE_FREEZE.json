@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-06T04:54:31.135481+00:00",
-  "source_commit": "d0d460fabd849e4961d87c89cd1d15655b233557",
-  "source_tree": "2a36bb4da01e62bcbf9974b264ffcab2696c9b4c",
-  "branch": "flagship-narrative",
+  "created_at": "2026-08-07T19:49:11.110276+00:00",
+  "source_commit": "0d42932a7416484a5595212512bc276b91fdc8eb",
+  "source_tree": "1dc13a4d964c062ff65c45dbe253b2c34664f14b",
+  "branch": "integration-v1.1.0",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
     "PREREGISTRATION.md": "9d7b1a5a691d1b703f7588910a327e748d060c6238c672cc5e2e9702cf8d5115",
@@ -99,5 +99,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "b84941e05094a54237121ea5801224cac46e86a8b81f64377994a212e3756d2e"
+  "manifest_payload_sha256": "bf71dfe51325c711230991a113cbc9e1f241351e7be4c074997d29179611865c"
 }
