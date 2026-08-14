@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-14T05:02:47Z from `paper/main.tex` at commit `a17139a`.**
+**Generated 2026-08-14T14:50:18Z from `paper/main.tex` at commit `877fae6`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -732,7 +732,7 @@ and what it adds.
 \definecolor{fneutral}{RGB}{110,110,110}
 \definecolor{frule}{RGB}{60,60,60}
 
-\begin{figure}[!t]
+\begin{figure}[!tp]
 \centering
 \begin{tikzpicture}[
   x=1cm, y=1cm, line width=0.5pt,
@@ -741,34 +741,34 @@ and what it adds.
   lbl/.style={font=\scriptsize, anchor=north west},
   gone/.style={font=\scriptsize, text=fneutral, anchor=north west},
 ]
-\node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,10.91) {Qwen2.5-7B on GSM8K, 4-bit GPTQ against 4-bit AWQ, $1{,}000$ paired items, five calibration seeds. One evaluation, reported twice. Column~A is the whole of the report; column~B is the same run, same items, same numbers, under the five-line standard.};
-\node[ttl, text width=3.06cm, inner sep=0] at (2.86,9.68) {A\quad As reported today};
-\node[ttl, text width=6.24cm, inner sep=0] at (6.3,9.68) {B\quad The same evaluation, reported to the standard};
-\draw[frule!45, line width=0.5pt] (0,9.26) -- (12.6,9.26);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,9.08) {\textbf{1}\quad declare a margin};
-\node[gone, text width=3.06cm, inner sep=0] at (2.86,9.08) {\textemdash\ none declared};
-\node[lbl, text width=6.24cm, inner sep=0] at (6.3,9.08) {$\pm2$ pp, declared in advance};
-\draw[frule!18, line width=0.3pt] (0,8.58) -- (12.6,8.58);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,8.49) {\textbf{2}\quad run the paired equivalence test at that margin};
-\node[gone, text width=3.06cm, inner sep=0] at (2.86,8.49) {\textemdash\ no equivalence test is reported};
-\draw[fill=frule!8, draw=none] (7.065,7.870) rectangle (10.935,8.170);
-\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (7.065,7.770) -- (7.065,8.270);
-\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (10.935,7.770) -- (10.935,8.270);
-\node[font=\scriptsize, anchor=south] at (9.000,8.290) {declared equivalence region, $\pm2$ pp};
-\draw[frule!40, line width=0.4pt] (6.400,7.850) -- (11.600,7.850);
-\node[font=\scriptsize, anchor=north] at (7.065,7.810) {$-2$};
-\node[font=\scriptsize, anchor=north] at (9.000,7.810) {$0$};
-\node[font=\scriptsize, anchor=north] at (10.935,7.810) {$+2$};
-\draw[frule!85, line width=0.9pt] (6.833,8.020) -- (10.296,8.020);
-\draw[frule!85, line width=0.9pt] (6.833,7.930) -- (6.833,8.110);
-\draw[frule!85, line width=0.9pt] (10.296,7.930) -- (10.296,8.110);
-\draw[fill=fharm, draw=fharm] (8.439,8.020) circle (0.075);
-\node[font=\scriptsize, anchor=west] at (11.700,8.020) {pp};
-\node[lbl, text width=6.24cm, inner sep=0] at (6.3,7.19) {$\Delta = -0.58$ pp (AWQ $-$ GPTQ), 95\% paired bootstrap CI $[-2.24, +1.34]$ pp. No TOST verdict is recorded for this cell, and this is not the 90\% interval TOST would read.};
-\draw[frule!18, line width=0.3pt] (0,5.68) -- (12.6,5.68);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,5.59) {\textbf{3}\quad report churn beside net delta};
-\node[gone, text width=3.06cm, inner sep=0] at (2.86,5.59) {net delta $-0.58$ pp \\ (GPTQ 74.28\%, AWQ 73.70\%)};
-\node[lbl, text width=6.24cm, inner sep=0] at (6.3,5.59) {net delta $-0.58$ pp \emph{and} churn 17.66\%: 9.12\% correct $\to$ wrong, 8.54\% wrong $\to$ correct. The net is what is left of the two.};
+\node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,12.07) {Qwen2.5-7B on GSM8K, 4-bit GPTQ against 4-bit AWQ, $1{,}000$ paired items, five calibration seeds. One evaluation, reported twice. Column~A is the whole of the report; column~B is the same run, same items, same numbers, under the five-line standard.};
+\node[ttl, text width=3.06cm, inner sep=0] at (2.86,10.85) {A\quad As reported today};
+\node[ttl, text width=6.24cm, inner sep=0] at (6.3,10.85) {B\quad The same evaluation, reported to the standard};
+\draw[frule!45, line width=0.5pt] (0,10.09) -- (12.6,10.09);
+\node[lbl, text width=2.52cm, inner sep=0] at (0.04,9.91) {\textbf{1}\quad declare a margin};
+\node[gone, text width=3.06cm, inner sep=0] at (2.86,9.91) {\textemdash\ none declared};
+\node[lbl, text width=6.24cm, inner sep=0] at (6.3,9.91) {$\pm2$ pp, declared in advance};
+\draw[frule!18, line width=0.3pt] (0,9.07) -- (12.6,9.07);
+\node[lbl, text width=2.52cm, inner sep=0] at (0.04,8.98) {\textbf{2}\quad run the paired equivalence test at that margin};
+\node[gone, text width=3.06cm, inner sep=0] at (2.86,8.98) {\textemdash\ no equivalence test is reported};
+\draw[fill=frule!8, draw=none] (7.065,8.205) rectangle (10.935,8.505);
+\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (7.065,8.105) -- (7.065,8.605);
+\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (10.935,8.105) -- (10.935,8.605);
+\node[font=\scriptsize, anchor=south] at (9.000,8.625) {declared equivalence region, $\pm2$ pp};
+\draw[frule!40, line width=0.4pt] (6.400,8.185) -- (11.600,8.185);
+\node[font=\scriptsize, anchor=north] at (7.065,8.145) {$-2$};
+\node[font=\scriptsize, anchor=north] at (9.000,8.145) {$0$};
+\node[font=\scriptsize, anchor=north] at (10.935,8.145) {$+2$};
+\draw[frule!85, line width=0.9pt] (6.833,8.355) -- (10.296,8.355);
+\draw[frule!85, line width=0.9pt] (6.833,8.265) -- (6.833,8.445);
+\draw[frule!85, line width=0.9pt] (10.296,8.265) -- (10.296,8.445);
+\draw[fill=fharm, draw=fharm] (8.439,8.355) circle (0.075);
+\node[font=\scriptsize, anchor=west] at (11.700,8.355) {pp};
+\node[lbl, text width=6.24cm, inner sep=0] at (6.3,7.52) {$\Delta = -0.58$ pp (AWQ $-$ GPTQ), 95\% paired bootstrap CI $[-2.24, +1.34]$ pp. No TOST verdict is recorded for this cell, and this is not the 90\% interval TOST would read.};
+\draw[frule!18, line width=0.3pt] (0,6.01) -- (12.6,6.01);
+\node[lbl, text width=2.52cm, inner sep=0] at (0.04,5.92) {\textbf{3}\quad report churn beside net delta};
+\node[gone, text width=3.06cm, inner sep=0] at (2.86,5.92) {net delta $-0.58$ pp \\ (GPTQ 74.28\%, AWQ 73.70\%)};
+\node[lbl, text width=6.24cm, inner sep=0] at (6.3,5.92) {net delta $-0.58$ pp \emph{and} churn 17.66\%: 9.12\% correct $\to$ wrong, 8.54\% wrong $\to$ correct. The net is what is left of the two.};
 \draw[frule!18, line width=0.3pt] (0,4.41) -- (12.6,4.41);
 \node[lbl, text width=2.52cm, inner sep=0] at (0.04,4.32) {\textbf{4}\quad cite the sample size met against the size required};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,4.32) {$n = 1{,}000$; no requirement cited};
@@ -777,7 +777,7 @@ and what it adds.
 \node[lbl, text width=2.52cm, inner sep=0] at (0.04,2.39) {\textbf{5}\quad release per-item outputs};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,2.39) {\textemdash\ not released};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,2.39) {released: 88 per-item cell JSONL files, one per cell of the controlled experiment};
-\draw[frule!25, rounded corners=1pt, line width=0.4pt] (2.72,9.22) rectangle (6.0600000000000005,1.52);
+\draw[frule!25, rounded corners=1pt, line width=0.4pt] (2.72,10.05) rectangle (6.0600000000000005,1.52);
 \draw[frule!45, line width=0.5pt] (0,1.48) -- (12.6,1.48);
 \node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,1.34) {\textbf{Nothing in column~B is a new experiment.} Every quantity there was already produced by the run column~A summarises; what changes is what is reported. Column~A is complete as drawn: there is no further evidence behind it. Across the 16 eligible sources of our audit, 0 declare a prospective numerical margin and 0 release task-matched per-item outputs.};
 \end{tikzpicture}
@@ -1268,7 +1268,7 @@ these counts is equivalent, because meeting the count makes the test
 \definecolor{fneutral}{RGB}{110,110,110}
 \definecolor{frule}{RGB}{60,60,60}
 
-\begin{figure}[!t]
+\begin{figure}[!tp]
 \centering
 \begin{tikzpicture}[
   x=1cm, y=1cm, line width=0.5pt,
@@ -1277,135 +1277,135 @@ these counts is equivalent, because meeting the count makes the test
   lbl/.style={font=\scriptsize, anchor=west},
   num/.style={font=\scriptsize, anchor=east},
 ]
-\node[hd, anchor=west] at (0.04,7.77) {benchmark family};
-\node[hd, anchor=north] at (5.91,7.93) {items required to certify equivalence within $\pm2$ pp};
-\node[hd, anchor=east] at (10.42,7.77) {med.};
-\node[hd, anchor=east] at (11.46,7.77) {churn};
-\node[hd, anchor=east] at (12.58,7.77) {base acc};
-\node[font=\scriptsize\itshape, anchor=north] at (5.91,7.63) {p25 \rule[0.10em]{0.45cm}{0.30ex} p75 band, $\bullet$ median, log scale};
-\draw[frule!45, line width=0.5pt] (0,7.23) -- (12.6,7.23);
-\node[lbl] at (0.04,6.977) {MuSR};
-\draw[fill=frule!20, draw=none] (2.907,6.912) rectangle (4.696,7.042);
-\draw[frule!60, line width=0.4pt] (2.907,6.892) -- (2.907,7.062);
-\draw[frule!60, line width=0.4pt] (4.696,6.892) -- (4.696,7.062);
-\draw[fill=fharm, draw=fharm] (4.244,6.977) circle (0.070);
-\node[num] at (10.42,6.977) {519};
-\node[num] at (11.46,6.977) {0.034};
-\node[num] at (12.58,6.977) {0.560};
-\node[lbl] at (0.04,6.582) {BBH};
-\draw[fill=frule!20, draw=none] (3.687,6.517) rectangle (5.210,6.647);
-\draw[frule!60, line width=0.4pt] (3.687,6.497) -- (3.687,6.667);
-\draw[frule!60, line width=0.4pt] (5.210,6.497) -- (5.210,6.667);
-\draw[fill=fharm, draw=fharm] (4.696,6.582) circle (0.070);
-\node[num] at (10.42,6.582) {681};
-\node[num] at (11.46,6.582) {0.044};
-\node[num] at (12.58,6.582) {0.700};
-\node[lbl] at (0.04,6.188) {HellaSwag};
-\draw[fill=frule!20, draw=none] (4.104,6.122) rectangle (6.049,6.253);
-\draw[frule!60, line width=0.4pt] (4.104,6.103) -- (4.104,6.272);
-\draw[frule!60, line width=0.4pt] (6.049,6.103) -- (6.049,6.272);
-\draw[fill=fharm, draw=fharm] (4.730,6.188) circle (0.070);
-\node[num] at (10.42,6.188) {695};
-\node[num] at (11.46,6.188) {0.045};
-\node[num] at (12.58,6.188) {0.802};
-\node[lbl] at (0.04,5.793) {GPQA};
-\draw[fill=frule!20, draw=none] (4.326,5.728) rectangle (5.391,5.858);
-\draw[frule!60, line width=0.4pt] (4.326,5.708) -- (4.326,5.878);
-\draw[frule!60, line width=0.4pt] (5.391,5.708) -- (5.391,5.878);
-\draw[fill=fharm, draw=fharm] (4.854,5.793) circle (0.070);
-\node[num] at (10.42,5.793) {749};
-\node[num] at (11.46,5.793) {0.048};
-\node[num] at (12.58,5.793) {0.373};
-\node[lbl] at (0.04,5.398) {IFEval};
-\draw[fill=frule!20, draw=none] (4.825,5.333) rectangle (5.505,5.463);
-\draw[frule!60, line width=0.4pt] (4.825,5.313) -- (4.825,5.483);
-\draw[frule!60, line width=0.4pt] (5.505,5.313) -- (5.505,5.483);
-\draw[fill=fharm, draw=fharm] (4.963,5.398) circle (0.070);
-\node[num] at (10.42,5.398) {800};
-\node[num] at (11.46,5.398) {0.052};
-\node[num] at (12.58,5.398) {0.837};
-\node[lbl] at (0.04,5.003) {MMLU-Pro};
-\draw[fill=frule!20, draw=none] (4.832,4.938) rectangle (5.183,5.068);
-\draw[frule!60, line width=0.4pt] (4.832,4.918) -- (4.832,5.088);
-\draw[frule!60, line width=0.4pt] (5.183,4.918) -- (5.183,5.088);
-\draw[fill=fharm, draw=fharm] (5.019,5.003) circle (0.070);
-\node[num] at (10.42,5.003) {827};
-\node[num] at (11.46,5.003) {0.053};
-\node[num] at (12.58,5.003) {0.533};
-\node[lbl] at (0.04,4.608) {GSM8K};
-\draw[fill=frule!20, draw=none] (4.537,4.543) rectangle (7.197,4.673);
-\draw[frule!60, line width=0.4pt] (4.537,4.523) -- (4.537,4.693);
-\draw[frule!60, line width=0.4pt] (7.197,4.523) -- (7.197,4.693);
-\draw[fill=fharm, draw=fharm] (5.615,4.608) circle (0.070);
-\node[num] at (10.42,4.608) {1{,}184};
-\node[num] at (11.46,4.608) {0.077};
-\node[num] at (12.58,4.608) {0.096};
-\node[lbl] at (0.04,4.213) {ARC-Challenge};
-\draw[fill=frule!20, draw=none] (5.511,4.148) rectangle (6.047,4.278);
-\draw[frule!60, line width=0.4pt] (5.511,4.128) -- (5.511,4.298);
-\draw[frule!60, line width=0.4pt] (6.047,4.128) -- (6.047,4.298);
-\draw[fill=fharm, draw=fharm] (5.662,4.213) circle (0.070);
-\node[num] at (10.42,4.213) {1{,}218};
-\node[num] at (11.46,4.213) {0.079};
-\node[num] at (12.58,4.213) {0.609};
-\node[lbl] at (0.04,3.818) {WinoGrande};
-\draw[fill=frule!20, draw=none] (5.385,3.753) rectangle (7.378,3.883);
-\draw[frule!60, line width=0.4pt] (5.385,3.733) -- (5.385,3.903);
-\draw[frule!60, line width=0.4pt] (7.378,3.733) -- (7.378,3.903);
-\draw[fill=fharm, draw=fharm] (5.912,3.818) circle (0.070);
-\node[num] at (10.42,3.818) {1{,}416};
-\node[num] at (11.46,3.818) {0.092};
-\node[num] at (12.58,3.818) {0.762};
-\node[lbl] at (0.04,3.423) {MMLU};
-\draw[fill=frule!20, draw=none] (5.931,3.358) rectangle (7.640,3.488);
-\draw[frule!60, line width=0.4pt] (5.931,3.338) -- (5.931,3.508);
-\draw[frule!60, line width=0.4pt] (7.640,3.338) -- (7.640,3.508);
-\draw[fill=fharm, draw=fharm] (6.617,3.423) circle (0.070);
-\node[num] at (10.42,3.423) {2{,}164};
-\node[num] at (11.46,3.423) {0.140};
-\node[num] at (12.58,3.423) {0.492};
-\node[lbl] at (0.04,3.028) {MATH};
-\draw[fill=frule!20, draw=none] (6.177,2.963) rectangle (6.928,3.093);
-\draw[frule!60, line width=0.4pt] (6.177,2.943) -- (6.177,3.113);
-\draw[frule!60, line width=0.4pt] (6.928,2.943) -- (6.928,3.113);
-\draw[fill=fharm, draw=fharm] (6.634,3.028) circle (0.070);
-\node[num] at (10.42,3.028) {2{,}186};
-\node[num] at (11.46,3.028) {0.141};
-\node[num] at (12.58,3.028) {0.215};
-\draw[frule!30, line width=0.4pt] (0,2.830) -- (12.6,2.830);
-\node[lbl] at (0.04,2.633) {\textbf{ALL (pooled)}};
-\draw[fill=frule!20, draw=none] (5.324,2.568) rectangle (7.405,2.698);
-\draw[frule!60, line width=0.4pt] (5.324,2.548) -- (5.324,2.718);
-\draw[frule!60, line width=0.4pt] (7.405,2.548) -- (7.405,2.718);
-\draw[fill=fharm, draw=fharm] (6.361,2.633) circle (0.070);
-\node[num] at (10.42,2.633) {\textbf{1{,}855}};
-\node[num] at (11.46,2.633) {0.120};
-\node[num] at (12.58,2.633) {0.515};
-\draw[frule!16, line width=0.3pt] (2.660,2.435) -- (2.660,7.235);
-\draw[frule!16, line width=0.3pt] (4.182,2.435) -- (4.182,7.235);
-\draw[frule!16, line width=0.3pt] (5.334,2.435) -- (5.334,7.235);
-\draw[frule!16, line width=0.3pt] (6.486,2.435) -- (6.486,7.235);
-\draw[frule!16, line width=0.3pt] (8.008,2.435) -- (8.008,7.235);
-\draw[frule!16, line width=0.3pt] (9.160,2.435) -- (9.160,7.235);
-\draw[frule!30, line width=0.4pt] (0,2.435) -- (12.6,2.435);
-\node[lbl] at (0.04,2.238) {pooled, by margin};
-\draw[frule!55, line width=0.4pt, {Latex[length=1.4mm]}-{Latex[length=1.4mm]}] (5.015,2.238) -- (8.664,2.238);
-\draw[fill=fneutral, draw=fneutral] (8.664,2.238) circle (0.055);
-\node[font=\scriptsize, anchor=south] at (8.664,2.308) {$\pm1$};
-\draw[fill=fneutral, draw=fneutral] (6.361,2.238) circle (0.055);
-\node[font=\scriptsize, anchor=south] at (6.361,2.308) {$\pm2$};
-\draw[fill=fneutral, draw=fneutral] (5.015,2.238) circle (0.055);
-\node[font=\scriptsize, anchor=south] at (5.015,2.308) {$\pm3$};
-\node[num] at (12.58,2.238) {7{,}420 / 1{,}855 / 825};
-\draw[frule!45, line width=0.5pt] (0,2.000) -- (12.6,2.000);
-\node[font=\scriptsize, anchor=north] at (2.660,1.960) {200};
-\node[font=\scriptsize, anchor=north] at (4.182,1.960) {500};
-\node[font=\scriptsize, anchor=north] at (5.334,1.960) {1{,}000};
-\node[font=\scriptsize, anchor=north] at (6.486,1.960) {2{,}000};
-\node[font=\scriptsize, anchor=north] at (8.008,1.960) {5{,}000};
-\node[font=\scriptsize, anchor=north] at (9.160,1.960) {10{,}000};
-\node[font=\scriptsize, anchor=north east] at (12.6,1.960) {items};
-\node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,1.580) {\textbf{The ordering is set by churn, not by difficulty.} MMLU needs $2{,}164$ items at $\pm2$ pp and GPQA needs $749$, although GPQA is the harder benchmark: its median baseline accuracy in the atlas is $0.373$ against MMLU's $0.492$. What separates them is the churn column, $0.140$ against $0.048$. Read the row, not the leaderboard.};
+\node[hd, anchor=north] at (5.91,8.49) {items required to certify equivalence within $\pm2$ pp};
+\node[font=\scriptsize\itshape, anchor=north] at (5.91,8.21) {p25 \rule[0.10em]{0.45cm}{0.30ex} p75 band, $\bullet$ median, log scale};
+\node[hd, anchor=west] at (0.04,7.75) {benchmark family};
+\node[hd, anchor=east] at (10.18,7.75) {med.};
+\node[hd, anchor=east] at (11.13,7.75) {churn};
+\node[hd, anchor=east] at (12.58,7.75) {base acc};
+\draw[frule!45, line width=0.5pt] (0,7.51) -- (12.6,7.51);
+\node[lbl] at (0.04,7.258) {MuSR};
+\draw[fill=frule!20, draw=none] (2.907,7.192) rectangle (4.696,7.323);
+\draw[frule!60, line width=0.4pt] (2.907,7.173) -- (2.907,7.343);
+\draw[frule!60, line width=0.4pt] (4.696,7.173) -- (4.696,7.343);
+\draw[fill=fharm, draw=fharm] (4.244,7.258) circle (0.070);
+\node[num] at (10.18,7.258) {519};
+\node[num] at (11.13,7.258) {0.034};
+\node[num] at (12.58,7.258) {0.560};
+\node[lbl] at (0.04,6.863) {BBH};
+\draw[fill=frule!20, draw=none] (3.687,6.798) rectangle (5.210,6.928);
+\draw[frule!60, line width=0.4pt] (3.687,6.778) -- (3.687,6.948);
+\draw[frule!60, line width=0.4pt] (5.210,6.778) -- (5.210,6.948);
+\draw[fill=fharm, draw=fharm] (4.696,6.863) circle (0.070);
+\node[num] at (10.18,6.863) {681};
+\node[num] at (11.13,6.863) {0.044};
+\node[num] at (12.58,6.863) {0.700};
+\node[lbl] at (0.04,6.468) {HellaSwag};
+\draw[fill=frule!20, draw=none] (4.104,6.403) rectangle (6.049,6.533);
+\draw[frule!60, line width=0.4pt] (4.104,6.383) -- (4.104,6.553);
+\draw[frule!60, line width=0.4pt] (6.049,6.383) -- (6.049,6.553);
+\draw[fill=fharm, draw=fharm] (4.730,6.468) circle (0.070);
+\node[num] at (10.18,6.468) {695};
+\node[num] at (11.13,6.468) {0.045};
+\node[num] at (12.58,6.468) {0.802};
+\node[lbl] at (0.04,6.073) {GPQA};
+\draw[fill=frule!20, draw=none] (4.326,6.008) rectangle (5.391,6.138);
+\draw[frule!60, line width=0.4pt] (4.326,5.988) -- (4.326,6.158);
+\draw[frule!60, line width=0.4pt] (5.391,5.988) -- (5.391,6.158);
+\draw[fill=fharm, draw=fharm] (4.854,6.073) circle (0.070);
+\node[num] at (10.18,6.073) {749};
+\node[num] at (11.13,6.073) {0.048};
+\node[num] at (12.58,6.073) {0.373};
+\node[lbl] at (0.04,5.678) {IFEval};
+\draw[fill=frule!20, draw=none] (4.825,5.613) rectangle (5.505,5.743);
+\draw[frule!60, line width=0.4pt] (4.825,5.593) -- (4.825,5.763);
+\draw[frule!60, line width=0.4pt] (5.505,5.593) -- (5.505,5.763);
+\draw[fill=fharm, draw=fharm] (4.963,5.678) circle (0.070);
+\node[num] at (10.18,5.678) {800};
+\node[num] at (11.13,5.678) {0.052};
+\node[num] at (12.58,5.678) {0.837};
+\node[lbl] at (0.04,5.283) {MMLU-Pro};
+\draw[fill=frule!20, draw=none] (4.832,5.218) rectangle (5.183,5.348);
+\draw[frule!60, line width=0.4pt] (4.832,5.198) -- (4.832,5.368);
+\draw[frule!60, line width=0.4pt] (5.183,5.198) -- (5.183,5.368);
+\draw[fill=fharm, draw=fharm] (5.019,5.283) circle (0.070);
+\node[num] at (10.18,5.283) {827};
+\node[num] at (11.13,5.283) {0.053};
+\node[num] at (12.58,5.283) {0.533};
+\node[lbl] at (0.04,4.888) {GSM8K};
+\draw[fill=frule!20, draw=none] (4.537,4.823) rectangle (7.197,4.953);
+\draw[frule!60, line width=0.4pt] (4.537,4.803) -- (4.537,4.973);
+\draw[frule!60, line width=0.4pt] (7.197,4.803) -- (7.197,4.973);
+\draw[fill=fharm, draw=fharm] (5.615,4.888) circle (0.070);
+\node[num] at (10.18,4.888) {1{,}184};
+\node[num] at (11.13,4.888) {0.077};
+\node[num] at (12.58,4.888) {0.096};
+\node[lbl] at (0.04,4.493) {ARC-Challenge};
+\draw[fill=frule!20, draw=none] (5.511,4.428) rectangle (6.047,4.558);
+\draw[frule!60, line width=0.4pt] (5.511,4.408) -- (5.511,4.578);
+\draw[frule!60, line width=0.4pt] (6.047,4.408) -- (6.047,4.578);
+\draw[fill=fharm, draw=fharm] (5.662,4.493) circle (0.070);
+\node[num] at (10.18,4.493) {1{,}218};
+\node[num] at (11.13,4.493) {0.079};
+\node[num] at (12.58,4.493) {0.609};
+\node[lbl] at (0.04,4.098) {WinoGrande};
+\draw[fill=frule!20, draw=none] (5.385,4.033) rectangle (7.378,4.163);
+\draw[frule!60, line width=0.4pt] (5.385,4.013) -- (5.385,4.183);
+\draw[frule!60, line width=0.4pt] (7.378,4.013) -- (7.378,4.183);
+\draw[fill=fharm, draw=fharm] (5.912,4.098) circle (0.070);
+\node[num] at (10.18,4.098) {1{,}416};
+\node[num] at (11.13,4.098) {0.092};
+\node[num] at (12.58,4.098) {0.762};
+\node[lbl] at (0.04,3.703) {MMLU};
+\draw[fill=frule!20, draw=none] (5.931,3.638) rectangle (7.640,3.768);
+\draw[frule!60, line width=0.4pt] (5.931,3.618) -- (5.931,3.788);
+\draw[frule!60, line width=0.4pt] (7.640,3.618) -- (7.640,3.788);
+\draw[fill=fharm, draw=fharm] (6.617,3.703) circle (0.070);
+\node[num] at (10.18,3.703) {2{,}164};
+\node[num] at (11.13,3.703) {0.140};
+\node[num] at (12.58,3.703) {0.492};
+\node[lbl] at (0.04,3.308) {MATH};
+\draw[fill=frule!20, draw=none] (6.177,3.243) rectangle (6.928,3.373);
+\draw[frule!60, line width=0.4pt] (6.177,3.223) -- (6.177,3.393);
+\draw[frule!60, line width=0.4pt] (6.928,3.223) -- (6.928,3.393);
+\draw[fill=fharm, draw=fharm] (6.634,3.308) circle (0.070);
+\node[num] at (10.18,3.308) {2{,}186};
+\node[num] at (11.13,3.308) {0.141};
+\node[num] at (12.58,3.308) {0.215};
+\draw[frule!30, line width=0.4pt] (0,3.110) -- (12.6,3.110);
+\node[lbl] at (0.04,2.913) {\textbf{ALL (pooled)}};
+\draw[fill=frule!20, draw=none] (5.324,2.848) rectangle (7.405,2.978);
+\draw[frule!60, line width=0.4pt] (5.324,2.828) -- (5.324,2.998);
+\draw[frule!60, line width=0.4pt] (7.405,2.828) -- (7.405,2.998);
+\draw[fill=fharm, draw=fharm] (6.361,2.913) circle (0.070);
+\node[num] at (10.18,2.913) {\textbf{1{,}855}};
+\node[num] at (11.13,2.913) {0.120};
+\node[num] at (12.58,2.913) {0.515};
+\draw[frule!16, line width=0.3pt] (2.660,2.715) -- (2.660,7.515);
+\draw[frule!16, line width=0.3pt] (4.182,2.715) -- (4.182,7.515);
+\draw[frule!16, line width=0.3pt] (5.334,2.715) -- (5.334,7.515);
+\draw[frule!16, line width=0.3pt] (6.486,2.715) -- (6.486,7.515);
+\draw[frule!16, line width=0.3pt] (8.008,2.715) -- (8.008,7.515);
+\draw[frule!16, line width=0.3pt] (9.160,2.715) -- (9.160,7.515);
+\draw[frule!30, line width=0.4pt] (0,2.715) -- (12.6,2.715);
+\node[lbl] at (0.04,2.278) {pooled, by margin};
+\draw[frule!55, line width=0.4pt, {Latex[length=1.4mm]}-{Latex[length=1.4mm]}] (5.015,2.278) -- (8.664,2.278);
+\draw[fill=fneutral, draw=fneutral] (8.664,2.278) circle (0.055);
+\node[font=\scriptsize, anchor=south] at (8.664,2.348) {$\pm1$};
+\draw[fill=fneutral, draw=fneutral] (6.361,2.278) circle (0.055);
+\node[font=\scriptsize, anchor=south] at (6.361,2.348) {$\pm2$};
+\draw[fill=fneutral, draw=fneutral] (5.015,2.278) circle (0.055);
+\node[font=\scriptsize, anchor=south] at (5.015,2.348) {$\pm3$};
+\node[num] at (12.58,2.278) {7{,}420 / 1{,}855 / 825};
+\draw[frule!45, line width=0.5pt] (0,2.040) -- (12.6,2.040);
+\node[font=\scriptsize, anchor=north] at (2.660,2.000) {200};
+\node[font=\scriptsize, anchor=north] at (4.182,2.000) {500};
+\node[font=\scriptsize, anchor=north] at (5.334,2.000) {1{,}000};
+\node[font=\scriptsize, anchor=north] at (6.486,2.000) {2{,}000};
+\node[font=\scriptsize, anchor=north] at (8.008,2.000) {5{,}000};
+\node[font=\scriptsize, anchor=north] at (9.160,2.000) {10{,}000};
+\node[font=\scriptsize, anchor=north east] at (12.6,2.000) {items};
+\node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,1.620) {\textbf{The ordering is set by churn, not by difficulty.} MMLU needs $2{,}164$ items at $\pm2$ pp and GPQA needs $749$, although GPQA is the harder benchmark: its median baseline accuracy in the atlas is $0.373$ against MMLU's $0.492$. What separates them is the churn column, $0.140$ against $0.048$. Read the row, not the leaderboard.};
 \end{tikzpicture}
 \caption{\textbf{How many items an equivalence claim needs, by benchmark family.} The same data as Table~\ref{tab:certification}, drawn for reference at the registered $\pm2$~pp margin: TOST at one-sided $\alpha=.05$ with 80\% power, at an assumed true difference of zero. Each row is one family; the band spans the requirement at the 25th and 75th percentiles of the discordance the atlas observes for that family and the disc is the median. Families are ordered by that median, and the two right-hand columns are what the ordering does and does not follow: it tracks median churn and not median baseline accuracy. \textbf{Other margins.} The requirement scales as $1/m^2$, so on this log axis a change of margin translates the whole chart without reshaping it: across all twelve rows the $\pm1$~pp requirement is $4.00$--$4.00\times$ the $\pm2$~pp one and the $\pm3$~pp requirement is $0.44$--$0.45\times$ it. The ruler row marks the pooled median at all three margins on this same axis ($825$, $1{,}855$, $7{,}420$ items). \textbf{Scope.} These are planning sizes, and a lower bound under any non-zero true difference (\S\ref{sec:cert:method}); meeting one makes the equivalence test informative, it does not certify anything on its own. Families with fewer than four analysable atlas cells are absent, and two of the rows shown rest on thin evidence (\S\ref{sec:cert:caveats}).}
 \label{fig:requiredn}
