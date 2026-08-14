@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-14T14:50:18Z from `paper/main.tex` at commit `877fae6`.**
+**Generated 2026-08-14T15:50:08Z from `paper/main.tex` at commit `0cafe08`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -739,17 +739,19 @@ and what it adds.
   font=\scriptsize,
   ttl/.style={font=\scriptsize\bfseries, anchor=north west},
   lbl/.style={font=\scriptsize, anchor=north west},
+  lab/.style={font=\scriptsize, anchor=north west,
+    execute at begin node={\hyphenpenalty=10000\relax}},
   gone/.style={font=\scriptsize, text=fneutral, anchor=north west},
 ]
 \node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,12.07) {Qwen2.5-7B on GSM8K, 4-bit GPTQ against 4-bit AWQ, $1{,}000$ paired items, five calibration seeds. One evaluation, reported twice. Column~A is the whole of the report; column~B is the same run, same items, same numbers, under the five-line standard.};
 \node[ttl, text width=3.06cm, inner sep=0] at (2.86,10.85) {A\quad As reported today};
 \node[ttl, text width=6.24cm, inner sep=0] at (6.3,10.85) {B\quad The same evaluation, reported to the standard};
 \draw[frule!45, line width=0.5pt] (0,10.09) -- (12.6,10.09);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,9.91) {\textbf{1}\quad declare a margin};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,9.91) {\textbf{1}\quad declare a margin};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,9.91) {\textemdash\ none declared};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,9.91) {$\pm2$ pp, declared in advance};
 \draw[frule!18, line width=0.3pt] (0,9.07) -- (12.6,9.07);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,8.98) {\textbf{2}\quad run the paired equivalence test at that margin};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,8.98) {\textbf{2}\quad run the paired equivalence test at that margin};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,8.98) {\textemdash\ no equivalence test is reported};
 \draw[fill=frule!8, draw=none] (7.065,8.205) rectangle (10.935,8.505);
 \draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (7.065,8.105) -- (7.065,8.605);
@@ -766,15 +768,15 @@ and what it adds.
 \node[font=\scriptsize, anchor=west] at (11.700,8.355) {pp};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,7.52) {$\Delta = -0.58$ pp (AWQ $-$ GPTQ), 95\% paired bootstrap CI $[-2.24, +1.34]$ pp. No TOST verdict is recorded for this cell, and this is not the 90\% interval TOST would read.};
 \draw[frule!18, line width=0.3pt] (0,6.01) -- (12.6,6.01);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,5.92) {\textbf{3}\quad report churn beside net delta};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,5.92) {\textbf{3}\quad report churn beside net delta};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,5.92) {net delta $-0.58$ pp \\ (GPTQ 74.28\%, AWQ 73.70\%)};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,5.92) {net delta $-0.58$ pp \emph{and} churn 17.66\%: 9.12\% correct $\to$ wrong, 8.54\% wrong $\to$ correct. The net is what is left of the two.};
 \draw[frule!18, line width=0.3pt] (0,4.41) -- (12.6,4.41);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,4.32) {\textbf{4}\quad cite the sample size met against the size required};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,4.32) {\textbf{4}\quad cite the sample size met against the size required};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,4.32) {$n = 1{,}000$; no requirement cited};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,4.32) {$1{,}000$ items evaluated against $2{,}730$ required at $\pm2$ pp. That is a planning requirement at an assumed true difference of zero: it says this evaluation cannot support the claim, and it is \emph{not} evidence that the two methods differ.};
 \draw[frule!18, line width=0.3pt] (0,2.48) -- (12.6,2.48);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,2.39) {\textbf{5}\quad release per-item outputs};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,2.39) {\textbf{5}\quad release per-item outputs};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,2.39) {\textemdash\ not released};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,2.39) {released: 88 per-item cell JSONL files, one per cell of the controlled experiment};
 \draw[frule!25, rounded corners=1pt, line width=0.4pt] (2.72,10.05) rectangle (6.0600000000000005,1.52);
@@ -4198,10 +4200,38 @@ R17 & F2 & RedHatAI/Meta-Llama-3-8B-Instruct-quantized.w8a16 (model card) \\
 \end{tabular}
 \end{table}
 
-\begin{table}[!t]
+% HEIGHT FIX 2026-08-14 -- FLOAT TALLER THAN THE PAGE. This float measured
+% 576.4pt in the arXiv arm (plain article 11pt, \textheight 541.4pt), 35.0pt
+% taller than the page, and had been so for a long time. Two things followed,
+% both silent:
+%   1. \@largefloatcheck clamps an oversized float's \ht to \textheight rather
+%      than refusing it, so the overflow printed BELOW the text block -- the
+%      R17 row struck through the page number.
+%   2. It could never be placed. A float this tall is not a legal top float
+%      (\topfraction allows 0.7\textheight = 379pt) and had no "p", so it was
+%      deferred, and floats are placed IN ORDER: Tables 9 through 20 all went
+%      with it, flushed at the end of the document on pages 102-110 against
+%      references on pages 50-64.
+% The float is now 526.8pt and fits. NO NUMBER, ROW, CAPTION WORD OR SCOPE
+% STATEMENT CHANGED, and the two tabular bodies are untouched -- both panels
+% are still \footnotesize with single-line rows. Four presentation settings:
+%   [!tp]   lets an oversized float take a page of its own. This is exactly
+%           what commit c1982ef did for Figures 2 and 3, for the same reason.
+%   caption at \footnotesize. LaTeX's \@caption issues \normalsize
+%           unconditionally, so the only way to set a caption smaller without
+%           loading the caption package -- which would restyle all 23 floats in
+%           both arms -- is to \let \normalsize for the duration of the
+%           \caption. The group closes immediately after \label.
+%   \abovecaptionskip 0pt, and \smallskip rather than \medskip between panels.
+% Re-render after any change here: the width guards cannot see float height,
+% and neither can the log until it is already too late to place the float.
+\begin{table}[!tp]
 \centering
+\setlength{\abovecaptionskip}{0pt}
+\begingroup\let\normalsize\footnotesize
 \caption{Per-claim characterisation and sensitivity classification, at the registered 2\,pp margin. $n$ is the reported or imputed item count, with its basis recorded in the released CSV. $p_d$ is the discordance imputed from the atlas and \emph{tier} the match tier it came from. \emph{V3} is whether the source releases per-item outputs for the tasks its claim rests on. \emph{Classification} is evaluated across the interquartile range of the atlas cells supplying $p_d$: \emph{above throughout} and \emph{below throughout} hold at both quartiles, and \emph{sensitive} changes within the interval. R10 keeps its row and is marked ineligible rather than removed.}
 \label{tab:audit-characterisation}
+\endgroup
 % GENERATED by paper/tools/gen_audit_tables.py from
 % results/audit_verdicts_rev3.csv. Values read, not retyped. The generator is
 % validated by --check, which regenerates tab:audit-identity and diffs it
@@ -4227,7 +4257,7 @@ R17 & F2 & RedHatAI/Meta-Llama-3-8B-Instruct-quantized.w8a16 (model card) \\
 % GENERATED: table_characterisation_panels() in the generator emits both panels.
 \setlength{\tabcolsep}{4pt}
 \footnotesize
-\textbf{(a) What the claim is, and what it measured}\par\medskip
+\textbf{(a) What the claim is, and what it measured}\par\smallskip
 \begin{tabular}{@{}lllll@{}}
 \toprule
 Claim & Family & Bits & Benchmark & $n$ \\
@@ -4252,8 +4282,8 @@ R17 & w8a16 & 8 & mmlu & 28{,}659 \\
 \bottomrule
 \end{tabular}
 
-\medskip
-\textbf{(b) How it was assessed, at the registered 2\,pp margin}\par\medskip
+\smallskip
+\textbf{(b) How it was assessed, at the registered 2\,pp margin}\par\smallskip
 \begin{tabular}{@{}lllll@{}}
 \toprule
 Claim & $p_d$ & Tier & V3 & Classification \\
@@ -5341,9 +5371,30 @@ The three analyses were run once per cell at the registered parameters
 the verdict, and \S\ref{sec:minigrid:supporting} reads them. None of them
 modifies the verdict, and none can.
 
-\begin{table}[!t]
+% HEIGHT FIX 2026-08-14 -- FLOAT TALLER THAN THE PAGE, the same defect as
+% tab:audit-characterisation and worse. This float measured 619.1pt in the
+% arXiv arm (plain article 11pt, \textheight 541.4pt), 77.7pt taller than the
+% page. \@largefloatcheck clamps an oversized float to \textheight instead of
+% refusing it, so the last rows of panel (c) printed over the page number, and
+% a float this tall can never be placed as a top float, so it was deferred to
+% the end of the document -- page 109 against a reference on page 62.
+% The float is now 517.3pt. NO NUMBER, ROW, CAPTION WORD OR SCOPE STATEMENT
+% CHANGED. The settings, and why each:
+%   [!tp]   lets an oversized float take a page of its own (commit c1982ef,
+%           Figures 2 and 3).
+%   \footnotesize for the caption and for panels (a) and (b). Panel (c) was
+%           ALREADY \footnotesize, so this makes the three panels agree rather
+%           than mixing two sizes in one float. The caption size has to be set
+%           by \let-ing \normalsize, because \@caption issues \normalsize
+%           unconditionally; the caption package would do it properly but
+%           restyles all 23 floats in both arms.
+%   \abovecaptionskip 0pt, and \smallskip rather than \medskip between panels.
+% Re-render after any change here. The width guards cannot see float height.
+\begin{table}[!tp]
 \centering
-\small
+\footnotesize
+\setlength{\abovecaptionskip}{0pt}
+\begingroup\let\normalsize\footnotesize
 \caption{The three registered supporting analyses over the eight confirmatory
 cells. \textbf{(a)}~Variance components, reported separately as registered: SD
 is across the five calibration seeds, SE is the item-level standard error within
@@ -5360,8 +5411,9 @@ beneficial are the two directions of correctness change, accuracy-state churn is
 their sum, and total answer churn adds items that change answer without changing
 correctness state.}
 \label{tab:h3-supporting}
+\endgroup
 
-\textbf{(a) Variance components, kept separate}\par\medskip
+\textbf{(a) Variance components, kept separate}\par\smallskip
 \begin{tabular}{llrrrr}
 \toprule
 & & \multicolumn{2}{c}{Seed-level SD} & \multicolumn{2}{c}{Item-level SE} \\
@@ -5379,10 +5431,12 @@ Llama-3.1-8B & GSM8K & 0.014307 & 0.010654 & 0.013874 & 0.013640 \\
 \bottomrule
 \end{tabular}
 
-\medskip
-\textbf{(b) Two-level paired bootstrap}\par\medskip
+\smallskip
+\textbf{(b) Two-level paired bootstrap}\par\smallskip
 % WIDTH FIX 2026-08-05: 54.1pt past the measure. Values unchanged.
-\setlength{\tabcolsep}{2pt}\small
+% \small -> \footnotesize with the 2026-08-14 height fix above; still no value
+% changed, and this panel now matches panels (a) and (c).
+\setlength{\tabcolsep}{2pt}\footnotesize
 \begin{tabular}{llrlrll}
 \toprule
 Model & Task & Rank-flip rate & Replicates & Tie rate & Ties & Winner flip \\
@@ -5398,8 +5452,8 @@ Llama-3.1-8B & GSM8K & 0.1260 & 252 / 2000 & 0.0030 & 6 / 2000  & \textbf{TRUE} 
 \bottomrule
 \end{tabular}
 
-\medskip
-\textbf{(c) Flip statistics, GPTQ against AWQ}\par\medskip
+\smallskip
+\textbf{(c) Flip statistics, GPTQ against AWQ}\par\smallskip
 % SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, slot 4 table.
 % base = GPTQ, method = AWQ, so net delta = acc_AWQ - acc_GPTQ (= -d_s in the
 % decision record's sign convention). Churn quantities are direction-symmetric.
