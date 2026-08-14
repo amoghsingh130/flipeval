@@ -31,7 +31,7 @@
 \definecolor{fneutral}{RGB}{110,110,110}
 \definecolor{frule}{RGB}{60,60,60}
 
-\begin{figure}[!t]
+\begin{figure}[!tp]
 \centering
 \begin{tikzpicture}[
   x=1cm, y=1cm, line width=0.5pt,
@@ -40,34 +40,34 @@
   lbl/.style={font=\scriptsize, anchor=north west},
   gone/.style={font=\scriptsize, text=fneutral, anchor=north west},
 ]
-\node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,10.91) {Qwen2.5-7B on GSM8K, 4-bit GPTQ against 4-bit AWQ, $1{,}000$ paired items, five calibration seeds. One evaluation, reported twice. Column~A is the whole of the report; column~B is the same run, same items, same numbers, under the five-line standard.};
-\node[ttl, text width=3.06cm, inner sep=0] at (2.86,9.68) {A\quad As reported today};
-\node[ttl, text width=6.24cm, inner sep=0] at (6.3,9.68) {B\quad The same evaluation, reported to the standard};
-\draw[frule!45, line width=0.5pt] (0,9.26) -- (12.6,9.26);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,9.08) {\textbf{1}\quad declare a margin};
-\node[gone, text width=3.06cm, inner sep=0] at (2.86,9.08) {\textemdash\ none declared};
-\node[lbl, text width=6.24cm, inner sep=0] at (6.3,9.08) {$\pm2$ pp, declared in advance};
-\draw[frule!18, line width=0.3pt] (0,8.58) -- (12.6,8.58);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,8.49) {\textbf{2}\quad run the paired equivalence test at that margin};
-\node[gone, text width=3.06cm, inner sep=0] at (2.86,8.49) {\textemdash\ no equivalence test is reported};
-\draw[fill=frule!8, draw=none] (7.065,7.870) rectangle (10.935,8.170);
-\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (7.065,7.770) -- (7.065,8.270);
-\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (10.935,7.770) -- (10.935,8.270);
-\node[font=\scriptsize, anchor=south] at (9.000,8.290) {declared equivalence region, $\pm2$ pp};
-\draw[frule!40, line width=0.4pt] (6.400,7.850) -- (11.600,7.850);
-\node[font=\scriptsize, anchor=north] at (7.065,7.810) {$-2$};
-\node[font=\scriptsize, anchor=north] at (9.000,7.810) {$0$};
-\node[font=\scriptsize, anchor=north] at (10.935,7.810) {$+2$};
-\draw[frule!85, line width=0.9pt] (6.833,8.020) -- (10.296,8.020);
-\draw[frule!85, line width=0.9pt] (6.833,7.930) -- (6.833,8.110);
-\draw[frule!85, line width=0.9pt] (10.296,7.930) -- (10.296,8.110);
-\draw[fill=fharm, draw=fharm] (8.439,8.020) circle (0.075);
-\node[font=\scriptsize, anchor=west] at (11.700,8.020) {pp};
-\node[lbl, text width=6.24cm, inner sep=0] at (6.3,7.19) {$\Delta = -0.58$ pp (AWQ $-$ GPTQ), 95\% paired bootstrap CI $[-2.24, +1.34]$ pp. No TOST verdict is recorded for this cell, and this is not the 90\% interval TOST would read.};
-\draw[frule!18, line width=0.3pt] (0,5.68) -- (12.6,5.68);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,5.59) {\textbf{3}\quad report churn beside net delta};
-\node[gone, text width=3.06cm, inner sep=0] at (2.86,5.59) {net delta $-0.58$ pp \\ (GPTQ 74.28\%, AWQ 73.70\%)};
-\node[lbl, text width=6.24cm, inner sep=0] at (6.3,5.59) {net delta $-0.58$ pp \emph{and} churn 17.66\%: 9.12\% correct $\to$ wrong, 8.54\% wrong $\to$ correct. The net is what is left of the two.};
+\node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,12.07) {Qwen2.5-7B on GSM8K, 4-bit GPTQ against 4-bit AWQ, $1{,}000$ paired items, five calibration seeds. One evaluation, reported twice. Column~A is the whole of the report; column~B is the same run, same items, same numbers, under the five-line standard.};
+\node[ttl, text width=3.06cm, inner sep=0] at (2.86,10.85) {A\quad As reported today};
+\node[ttl, text width=6.24cm, inner sep=0] at (6.3,10.85) {B\quad The same evaluation, reported to the standard};
+\draw[frule!45, line width=0.5pt] (0,10.09) -- (12.6,10.09);
+\node[lbl, text width=2.52cm, inner sep=0] at (0.04,9.91) {\textbf{1}\quad declare a margin};
+\node[gone, text width=3.06cm, inner sep=0] at (2.86,9.91) {\textemdash\ none declared};
+\node[lbl, text width=6.24cm, inner sep=0] at (6.3,9.91) {$\pm2$ pp, declared in advance};
+\draw[frule!18, line width=0.3pt] (0,9.07) -- (12.6,9.07);
+\node[lbl, text width=2.52cm, inner sep=0] at (0.04,8.98) {\textbf{2}\quad run the paired equivalence test at that margin};
+\node[gone, text width=3.06cm, inner sep=0] at (2.86,8.98) {\textemdash\ no equivalence test is reported};
+\draw[fill=frule!8, draw=none] (7.065,8.205) rectangle (10.935,8.505);
+\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (7.065,8.105) -- (7.065,8.605);
+\draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (10.935,8.105) -- (10.935,8.605);
+\node[font=\scriptsize, anchor=south] at (9.000,8.625) {declared equivalence region, $\pm2$ pp};
+\draw[frule!40, line width=0.4pt] (6.400,8.185) -- (11.600,8.185);
+\node[font=\scriptsize, anchor=north] at (7.065,8.145) {$-2$};
+\node[font=\scriptsize, anchor=north] at (9.000,8.145) {$0$};
+\node[font=\scriptsize, anchor=north] at (10.935,8.145) {$+2$};
+\draw[frule!85, line width=0.9pt] (6.833,8.355) -- (10.296,8.355);
+\draw[frule!85, line width=0.9pt] (6.833,8.265) -- (6.833,8.445);
+\draw[frule!85, line width=0.9pt] (10.296,8.265) -- (10.296,8.445);
+\draw[fill=fharm, draw=fharm] (8.439,8.355) circle (0.075);
+\node[font=\scriptsize, anchor=west] at (11.700,8.355) {pp};
+\node[lbl, text width=6.24cm, inner sep=0] at (6.3,7.52) {$\Delta = -0.58$ pp (AWQ $-$ GPTQ), 95\% paired bootstrap CI $[-2.24, +1.34]$ pp. No TOST verdict is recorded for this cell, and this is not the 90\% interval TOST would read.};
+\draw[frule!18, line width=0.3pt] (0,6.01) -- (12.6,6.01);
+\node[lbl, text width=2.52cm, inner sep=0] at (0.04,5.92) {\textbf{3}\quad report churn beside net delta};
+\node[gone, text width=3.06cm, inner sep=0] at (2.86,5.92) {net delta $-0.58$ pp \\ (GPTQ 74.28\%, AWQ 73.70\%)};
+\node[lbl, text width=6.24cm, inner sep=0] at (6.3,5.92) {net delta $-0.58$ pp \emph{and} churn 17.66\%: 9.12\% correct $\to$ wrong, 8.54\% wrong $\to$ correct. The net is what is left of the two.};
 \draw[frule!18, line width=0.3pt] (0,4.41) -- (12.6,4.41);
 \node[lbl, text width=2.52cm, inner sep=0] at (0.04,4.32) {\textbf{4}\quad cite the sample size met against the size required};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,4.32) {$n = 1{,}000$; no requirement cited};
@@ -76,7 +76,7 @@
 \node[lbl, text width=2.52cm, inner sep=0] at (0.04,2.39) {\textbf{5}\quad release per-item outputs};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,2.39) {\textemdash\ not released};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,2.39) {released: 88 per-item cell JSONL files, one per cell of the controlled experiment};
-\draw[frule!25, rounded corners=1pt, line width=0.4pt] (2.72,9.22) rectangle (6.0600000000000005,1.52);
+\draw[frule!25, rounded corners=1pt, line width=0.4pt] (2.72,10.05) rectangle (6.0600000000000005,1.52);
 \draw[frule!45, line width=0.5pt] (0,1.48) -- (12.6,1.48);
 \node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,1.34) {\textbf{Nothing in column~B is a new experiment.} Every quantity there was already produced by the run column~A summarises; what changes is what is reported. Column~A is complete as drawn: there is no further evidence behind it. Across the 16 eligible sources of our audit, 0 declare a prospective numerical margin and 0 release task-matched per-item outputs.};
 \end{tikzpicture}

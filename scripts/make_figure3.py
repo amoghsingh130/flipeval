@@ -332,10 +332,19 @@ def emit_tikz(data: dict) -> str:
     W = 12.6                     # the width Figure 1 uses; nothing is scaled
     lab_x = 0.04                 # family names, left aligned
     ax_l, ax_r = 2.66, 9.16      # the log axis
-    col_n = 10.42                # required n, right aligned
-    col_d = 11.46                # median discordance, right aligned
+    # The three right-hand columns are spaced by their HEADERS, not their
+    # numbers: set bold, "med.", "churn" and "base acc" measure about 0.55,
+    # 0.80 and 1.30cm against roughly 0.62cm of digits, so the widest thing in
+    # each column is the word above it. Placed right to left from col_a with a
+    # 0.15cm gutter between headers. The first attempt spaced them by eye and
+    # printed "churnbase acc"; the second moved one column and printed
+    # "med.churn". Measured, they clear.
+    col_n = 10.18                # required n, right aligned
+    col_d = 11.13                # median discordance, right aligned
     col_a = 12.58                # median baseline accuracy, right aligned
     pitch = 0.395                # row pitch
+    RULER_EXTRA = 0.24           # the margin ruler's captions sit above its
+                                 # dots; this is the room they need
 
     # Axis domain: the 1-2-5 bracket around everything that has to be drawn,
     # including the pooled medians at the other two margins, so the ruler row
@@ -358,7 +367,8 @@ def emit_tikz(data: dict) -> str:
 
     # ---------------- vertical budget ------------------------------------
     n_rows = len(order) + 1 + 1          # families, pooled, margin ruler
-    head_h = 0.90
+    head_h = 1.16                # 0.24 + 0.28 + 0.30 + 0.24, the three header
+                                 # rows plus the rule; was 0.90 for two rows
     axis_h = 0.52
     note = (
         rf"\textbf{{The ordering is set by churn, not by difficulty.}} MMLU "
@@ -374,10 +384,14 @@ def emit_tikz(data: dict) -> str:
         rf"leaderboard."
     )
     note_h = nlines(note, W) * LINE_CM
-    total = head_h + n_rows * pitch + axis_h + 0.18 + note_h
+    total = head_h + n_rows * pitch + RULER_EXTRA + axis_h + 0.18 + note_h
     top = total
 
-    a(r"\begin{figure}[!t]")
+    # [!tp] for the same reason as Figure 2: see the note there. This float is
+    # 438pt against a 541pt \textheight in the arXiv arm, so it can be a top
+    # float on its own, but it sits behind Figure 2 in the float queue and
+    # inherits whatever happens to it.
+    a(r"\begin{figure}[!tp]")
     a(r"\centering")
     a(r"\begin{tikzpicture}[")
     a(r"  x=1cm, y=1cm, line width=0.5pt,")
@@ -396,19 +410,28 @@ def emit_tikz(data: dict) -> str:
                 f"{limit:.2f}cm by {x_left + width - limit:.2f}cm")
 
     # ---------------- headers --------------------------------------------
-    y = top - 0.30
-    a(rf"\node[hd, anchor=west] at ({lab_x},{y:.2f}) {{benchmark family}};")
+    # THREE header rows, not two (2026-08-14). The axis span title used to
+    # share a baseline with the column headers. It is centred on the axis, but
+    # at this measure the title is wider than the axis it labels, so it
+    # overprinted "benchmark family" on the left and "med." on the right: the
+    # first proof rendered "benchmark family" and the title on top of one
+    # another. Nothing here is centred over a region narrower than itself any
+    # more. The alternative was to shorten the title, but the title is the
+    # sentence that says what the whole chart measures, so the row was cheaper.
+    y = top - 0.24
     a(rf"\node[hd, anchor=north] at ({(ax_l + ax_r) / 2:.2f},{y + 0.16:.2f}) "
       rf"{{items required to certify equivalence within $\pm{fmt(margin, 0)}$ pp}};")
-    a(rf"\node[hd, anchor=east] at ({col_n},{y:.2f}) {{med.}};")
-    a(rf"\node[hd, anchor=east] at ({col_d},{y:.2f}) {{churn}};")
-    a(rf"\node[hd, anchor=east] at ({col_a},{y:.2f}) {{base acc}};")
-    check("right numeric column", col_a - 0.90, 0.90)
-    y -= 0.30
+    y -= 0.28
     a(rf"\node[font=\scriptsize\itshape, anchor=north] "
       rf"at ({(ax_l + ax_r) / 2:.2f},{y + 0.16:.2f}) "
       rf"{{p25 \rule[0.10em]{{0.45cm}}{{0.30ex}} p75 band, "
       rf"$\bullet$ median, log scale}};")
+    y -= 0.30
+    a(rf"\node[hd, anchor=west] at ({lab_x},{y:.2f}) {{benchmark family}};")
+    a(rf"\node[hd, anchor=east] at ({col_n},{y:.2f}) {{med.}};")
+    a(rf"\node[hd, anchor=east] at ({col_d},{y:.2f}) {{churn}};")
+    a(rf"\node[hd, anchor=east] at ({col_a},{y:.2f}) {{base acc}};")
+    check("right numeric column", col_a - 0.90, 0.90)
     y -= 0.24
     a(rf"\draw[frule!45, line width=0.5pt] (0,{y:.2f}) -- ({W},{y:.2f});")
 
@@ -459,7 +482,12 @@ def emit_tikz(data: dict) -> str:
     # ---------------- the margin ruler -----------------------------------
     # The same axis, so the quadratic cost of a tighter margin is a distance the
     # reader can measure against the rows above rather than a claim in prose.
-    y_cursor -= pitch
+    # RULER_EXTRA, because this row is the only one carrying labels ABOVE its
+    # ink: the +-1/+-2/+-3 captions sit over the dots. At a bare `pitch` their
+    # cap height reached about 0.11cm past the rule above, printing them inside
+    # the "ALL (pooled)" band. The row is taller than the others by exactly the
+    # space those captions need.
+    y_cursor -= pitch + RULER_EXTRA
     ruler_y = y_cursor + pitch / 2
     a(rf"\node[lbl] at ({lab_x},{ruler_y:.3f}) "
       r"{pooled, by margin};")
