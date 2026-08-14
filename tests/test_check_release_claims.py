@@ -89,16 +89,16 @@ def test_fixture_tree_passes(tree: Path):
 def test_c2_rejects_current_doi_replaced_by_v10_doi(tree: Path):
     """The regression that the first implementation missed entirely."""
     p = tree / "paper/main.tex"
-    p.write_text(p.read_text().replace(crc.V11_DOI, crc.V10_DOI))
+    p.write_text(p.read_text().replace(crc.CURRENT_DOI, crc.V10_DOI))
     r = results(tree)
     assert r["C2"] is False, "pointing \\versiondoi at the v1.0.0 DOI must be rejected"
-    assert r["C3"] is False, "and the v1.1.0 DOI is then absent"
+    assert r["C3"] is False, "and the current release DOI is then absent"
 
 
 def test_c2_rejects_an_unrelated_doi(tree: Path):
     """Neither-DOI must fail too: C2 is not merely 'v1.0.0 absent'."""
     p = tree / "paper/main.tex"
-    p.write_text(p.read_text().replace(crc.V11_DOI, "10.5281/zenodo.99999999"))
+    p.write_text(p.read_text().replace(crc.CURRENT_DOI, "10.5281/zenodo.99999999"))
     assert results(tree)["C2"] is False
 
 

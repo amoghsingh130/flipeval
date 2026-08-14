@@ -103,15 +103,22 @@
   % cannot be reused for it: it expands to \withheld, which is \textsc markup.
   \newcommand{\pdfauthorstring}{Anonymous authors}
 \else
-  % v1.1.0 version DOI, RESERVED on Zenodo 2026-08-06 via "New version" on the
+  % v1.2.0 version DOI, RESERVED on Zenodo 2026-08-14 via "New version" on the
   % existing record. A reserved DOI exists as an identifier but does NOT resolve
-  % until the deposit is published -- https://zenodo.org/api/records/21829570
-  % returned 404 to an unauthenticated client on 2026-08-06, which is the
-  % expected state for a reservation and is also the reason this paper MUST NOT
-  % be submitted to arXiv before the deposit is published. Re-check that it
+  % until the deposit is published -- https://zenodo.org/api/records/21939143
+  % is expected to return 404 to an unauthenticated client until then, which is
+  % the expected state for a reservation and is also the reason this paper MUST
+  % NOT be submitted to arXiv before the deposit is published. Re-check that it
   % resolves before submission.
+  %
+  % WHY v1.2.0 AND NOT v1.1.0. The v1.1.0 archive does not contain the Python
+  % package this paper describes -- flipeval.certification, flipeval.report, the
+  % report/required-n CLI, the packaged certification table, or examples/. Those
+  % were added 2026-08-13 in response to reviewer feedback, after v1.1.0 was
+  % published. A reader following this DOI to obtain them would not have found
+  % them, which is the defect this release repairs.
   \newcommand{\versiondoi}{%
-    \href{https://doi.org/10.5281/zenodo.21829570}{10.5281/zenodo.21829570}}
+    \href{https://doi.org/10.5281/zenodo.21939143}{10.5281/zenodo.21939143}}
   % v1.0.0, superseded but deliberately left published.
   \newcommand{\priorversiondoi}{%
     \href{https://doi.org/10.5281/zenodo.21708923}{10.5281/zenodo.21708923}}

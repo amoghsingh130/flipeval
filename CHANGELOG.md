@@ -14,7 +14,7 @@ published beside its replacement, so that each correction remains visible.
 
 ## v1.2.0 — unreleased
 
-Version DOI: `RESERVE_ME_V120_DOI` (reserve on Zenodo before the paper cites
+Version DOI: `10.5281/zenodo.21939143` (reserve on Zenodo before the paper cites
 it; see the release checklist). Ships distribution version `0.3.0`.
 
 Post-review synchronisation of the artifact with the manuscript. **No audit

@@ -43,7 +43,8 @@ from pathlib import Path
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[2]
 
-V11_DOI = "10.5281/zenodo.21829570"
+CURRENT_DOI = "10.5281/zenodo.21939143"   # v1.2.0; renamed from CURRENT_DOI 2026-08-14 so the
+                                          # name cannot outlive the release it points at
 V10_DOI = "10.5281/zenodo.21708923"
 FALSE_CLAIM = "frozen v1.0.0 state this paper describes"
 AUTHOR_NAME = "Amogh Singh"
@@ -117,10 +118,10 @@ def c2_v10_not_canonical(r: Report, root: Path) -> None:
     if V10_DOI in body:
         r.add("C2", False, f"\\versiondoi resolves to the v1.0.0 DOI {V10_DOI}")
         return
-    if V11_DOI not in body:
+    if CURRENT_DOI not in body:
         r.add("C2", False, f"\\versiondoi resolves to neither the v1.1.0 nor the v1.0.0 DOI: {body[-60:]!r}")
         return
-    r.add("C2", True, f"\\versiondoi resolves to {V11_DOI}, not {V10_DOI}")
+    r.add("C2", True, f"\\versiondoi resolves to {CURRENT_DOI}, not {V10_DOI}")
 
 
 def c3_v11_present(r: Report, root: Path) -> None:
@@ -131,13 +132,13 @@ def c3_v11_present(r: Report, root: Path) -> None:
         return
     mt, at = main.read_text(encoding="utf-8"), arts.read_text(encoding="utf-8")
     body = _macro_body(mt, "\\versiondoi")
-    defined = bool(body) and V11_DOI in body
+    defined = bool(body) and CURRENT_DOI in body
     # The availability statement must cite it, via the macro (raw URLs break the
     # anonymous build, so the macro is the only correct form).
     cited = bool(re.search(r"archived release is canonical.{0,120}\\versiondoi", at, re.S))
     ok = defined and cited
     r.add("C3", ok,
-          f"{V11_DOI} defined in main.tex and cited via \\versiondoi in the availability statement"
+          f"{CURRENT_DOI} defined in main.tex and cited via \\versiondoi in the availability statement"
           if ok else
           f"defined={defined} cited_in_availability={cited} (need both)")
 
