@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-14T15:50:08.462603+00:00",
-  "source_commit": "fb3c34ba6d46fc0f9d5ec5a6ed8c8dad292d5d61",
-  "source_tree": "0fbee917050908dbfcb5115a9cb82f439d1498d6",
+  "created_at": "2026-08-14T19:47:24.428365+00:00",
+  "source_commit": "b203311f8b6d5c96f58d89e5a01e91a2d23b4daa",
+  "source_tree": "ed5c76f024e2d37e075168598e6dc03a0cabbe74",
   "branch": "main",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
@@ -85,7 +85,7 @@
     "tests/test_build_quantized.py": "50b5857a99502b30087007bc15b30825f21bc13497a1f502efe0af98129e43d9",
     "tests/test_certification_lookup.py": "c0f56c17ae2ecacf37d76945ea048cdbd3557b6e30aa6e078e5a3df82288a7f3",
     "tests/test_check_paper_stale.py": "d1e11679e04e2dbcaae2acd717acf2617a91f08574ea9b4552022a6573a0ca0c",
-    "tests/test_check_release_claims.py": "ffcf125fde4ccff2a3339e9999a55d6c767373183442e5f4132e8a11a8fa306d",
+    "tests/test_check_release_claims.py": "6e66935577aac025445da6c9d73f1705600df077149be5199039973cd5fc8510",
     "tests/test_churn_ratio.py": "5ae716506f5f2b3224540f6b061ddb4f57798225468d01b95cbe1c5dd5d69d91",
     "tests/test_compare_mmlu_reference.py": "887b9539311e16bed12c9886da6a3e5675bb4a03a21a28b3f2b5e2ad7de7271a",
     "tests/test_core.py": "08797d3c4913bfdc6289aed196461da5fe5adecbab0bed9203b4b6831ecae7b3",
@@ -109,5 +109,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "2fd965b7747ee72fb544f29e3de4e2568d98a5b6f2be75f04fc3bd6de7a2e001"
+  "manifest_payload_sha256": "8625981ece74c00656277b29a65bfa258fd2e2dbb23e902ecec592bb27d14840"
 }
