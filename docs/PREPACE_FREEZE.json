@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "created_at": "2026-08-14T14:50:18.236349+00:00",
-  "source_commit": "c1982eff091208d4912cc0b1601fdbc8dd67e8a0",
-  "source_tree": "2fa0aa01ad3f6dd2f3e67bf5d652ea4924ae0870",
+  "created_at": "2026-08-14T15:50:08.462603+00:00",
+  "source_commit": "fb3c34ba6d46fc0f9d5ec5a6ed8c8dad292d5d61",
+  "source_tree": "0fbee917050908dbfcb5115a9cb82f439d1498d6",
   "branch": "main",
   "files": {
     "Dockerfile": "00c9f82801da5b449ba8add29c3499581be17547c7ea279cbc6365427d14de4d",
     "PREREGISTRATION.md": "9d7b1a5a691d1b703f7588910a327e748d060c6238c672cc5e2e9702cf8d5115",
-    "README.md": "17f0464c4f992ac628b6c17e59604400d5da4b9198d06533881cf61033c8054d",
+    "README.md": "08729b71928f2049db14d968939436aa25dca84d00e9e69568cc597080b271a2",
     "STATUS.md": "19b0bee876a278847bc62dd387798d49978cc1e803115a6da82cdf9275702ce1",
     "configs/kaggle_qwen_1p5b.yaml": "9b012e690b86747393ceb0c17ef91ef33803e69c447812543a763af9e40e4659",
     "configs/kaggle_qwen_public_quantized.yaml": "73c53f17c018d9fa278c467f4dc4803fd4585aaf58f8d4765bedaf9bfe07383d",
@@ -52,7 +52,7 @@
     "scripts/kaggle_bootstrap.py": "c18c3528d281e3ab97a0e9dff3c5b1101afb06b4d41abae31536ed00d2e5c1fe",
     "scripts/kaggle_pack_outputs.py": "2fe86bcdc4fa7faff33c4b0bae53270808731cc6a5d544d07e40eae269ce7c35",
     "scripts/make_figure1.py": "052b52ba79c7aab6a314d64ad6e85538841a2f041cb21843675c6f552e603df2",
-    "scripts/make_figure2.py": "7ca7f3a93b3bee019d27c33b1fc9322b8bbdbb9c80eaf673da6c907ba44599e0",
+    "scripts/make_figure2.py": "0dc592c2b82560773486ca851d58b7b82840a7d6a03816d7caba9d696fd2d386",
     "scripts/make_figure3.py": "2f5f7789e5a7ff772b985505a61ccf37cb23a0b37561b06035b378c6a4350354",
     "scripts/make_kaggle_bundle.py": "dfa0820fc21f7b845175e52db0f2e87a63839885d99ebfa5a4dda4faf5f3d822",
     "scripts/slurm/README.md": "26344c7aff173635072f90210d3f58df6ee304422cc3ea7e34c219f278f7a3aa",
@@ -109,5 +109,5 @@
   "expected_grid_manifest": "configs/main_grid_manifest.yaml",
   "expected_grid_expansion": "docs/EXPECTED_MAIN_GRID.json",
   "pace_execution_started": false,
-  "manifest_payload_sha256": "b4e372c2545c0f3add2348920f3d856f48e58a47985bedca279d3d147bfab488"
+  "manifest_payload_sha256": "2fd965b7747ee72fb544f29e3de4e2568d98a5b6f2be75f04fc3bd6de7a2e001"
 }
