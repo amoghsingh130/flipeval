@@ -1,6 +1,6 @@
 # FlipEval — Paper Reading Copy
 
-**Generated 2026-08-14T15:50:08Z from `paper/main.tex` at commit `0cafe08`.**
+**Generated 2026-08-14T19:47:24Z from `paper/main.tex` at commit `7c055bb`.**
 
 No PDF: the Phoenix login node has no `pdflatex`, `xelatex`, `lualatex`, `latexmk`, `tectonic` or `pandoc`, and the pinned Apptainer image is an ML runtime with no TeX distribution. Per the fallback, the sections are concatenated **verbatim, in `main.tex` input order** (nested `\input` expanded in place), with no content edits. LaTeX markup is left as-is deliberately: substituting rendered text would be an edit.
 
@@ -3153,13 +3153,13 @@ manifest and a retrieval script (Appendix~\ref{app:artifacts:released}).
 % and no rev3 file, while the rev-3 verdicts were computed 2026-07-31. v1.1.0 is
 % the first archive that contains them.
 %
-% \versiondoi is now the RESERVED v1.1.0 DOI. A reserved DOI does not resolve
+% \versiondoi is now the RESERVED v1.2.0 DOI. A reserved DOI does not resolve
 % until the deposit is published, so this paper MUST NOT go to arXiv first.
 % Enforced by paper/tools/check_release_claims.py -- do not restore the old
 % wording, and do not point \versiondoi back at the v1.0.0 record.
 The archived release is canonical: \textbf{\versiondoi}, which resolves to the
-frozen v1.1.0 state this paper describes and not to the latest one. The package
-is at \repourl, tag \texttt{v1.1.0}, and the data is mirrored at \dataseturl.
+frozen v1.2.0 state this paper describes and not to the latest one. The package
+is at \repourl, tag \texttt{v1.2.0}, and the data is mirrored at \dataseturl.
 \textbf{v1.0.0 (\priorversiondoi) is historical}: it predates the rev-3 audit
 verdicts reported here, carries the superseded rev-2 file, and stays published
 rather than withdrawn so that the correction remains visible.
@@ -5816,7 +5816,7 @@ conclusion on a different object.
 % and the detail lives here.
 %
 % RULE, UNCHANGED: no URL, DOI, or version number may be written here until it
-% exists. UPDATED 2026-08-06: the release is now v1.1.0, whose version DOI is
+% exists. UPDATED 2026-08-14: the release is now v1.2.0, whose version DOI is
 % RESERVED and does not resolve until the deposit is published. v1.0.0 stays
 % listed as the superseded record, via \priorversiondoi.
 % =====================================================================
@@ -5990,7 +5990,7 @@ remains visible is this paper's argument applied to itself.
 \subsection{Metadata and identifiers}
 \label{app:artifacts:metadata}
 
-Released at version \textbf{v1.1.0}, the string shared by the source tag, the
+Released at version \textbf{v1.2.0}, the string shared by the source tag, the
 archived release and the dataset revision. The archived DOI is canonical for
 citation; the dataset repository is a convenience mirror.
 
@@ -6016,7 +6016,7 @@ Version DOI (canonical) & \versiondoi \\
 % are all unchanged. Only the label text is shorter.
 v1.0.0 DOI (superseded) & \priorversiondoi \\
 Concept DOI (latest) & \conceptdoi \\
-Source package & \repopath, tag \texttt{v1.1.0} \\
+Source package & \repopath, tag \texttt{v1.2.0} \\
 Dataset mirror (secondary) & \datasetpath \\
 Container image SHA-256 & \texttt{8260d04c\ldots1db2007} \\
 \bottomrule
