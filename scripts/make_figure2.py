@@ -464,6 +464,23 @@ def emit_tikz(data: dict) -> str:
     a(r"  font=\scriptsize,")
     a(r"  ttl/.style={font=\scriptsize\bfseries, anchor=north west},")
     a(r"  lbl/.style={font=\scriptsize, anchor=north west},")
+    # The row labels, and ONLY the row labels. `lab` is `lbl` with discretionary
+    # hyphenation switched off inside the node. Row 1's label is "declare a
+    # margin" -- two words -- and in a 2.52cm measure TeX broke it as
+    # "declare a mar-" / "gin". \exhyphenpenalty is deliberately left alone, so
+    # row 5 still breaks "per-item" at the hyphen it already carries.
+    #
+    # Widening the column instead was measured and rejected. The label sets
+    # 75.26pt wide at \scriptsize (\textbf{1}, a \quad, and the words); the
+    # label box starts at lab_x = 0.04cm and column A's frame is drawn at
+    # a_box = 2.72cm, so a one-line label would end 1.0pt short of that rule,
+    # against the 0.16cm of clear gutter every other label line has. A short
+    # first line costs nothing; a label touching the next column does.
+    #
+    # This changes no row height: nlines() budgets two lines for this label
+    # either way, so every coordinate in the emitted figure is unchanged.
+    a(r"  lab/.style={font=\scriptsize, anchor=north west,")
+    a(r"    execute at begin node={\hyphenpenalty=10000\relax}},")
     a(r"  gone/.style={font=\scriptsize, text=fneutral, anchor=north west},")
     a(r"]")
 
@@ -503,7 +520,7 @@ def emit_tikz(data: dict) -> str:
 
     # ---------------- the five rows --------------------------------------
     for entry in rows:
-        a(rf"\node[lbl, text width={lab_w}cm, inner sep=0] "
+        a(rf"\node[lab, text width={lab_w}cm, inner sep=0] "
           rf"at ({lab_x},{y - 0.04:.2f}) "
           rf"{{{label_tex(entry)}}};")
         a(rf"\node[gone, text width={a_w}cm, inner sep=0] "

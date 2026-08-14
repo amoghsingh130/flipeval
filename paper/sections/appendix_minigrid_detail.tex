@@ -209,9 +209,30 @@ The three analyses were run once per cell at the registered parameters
 the verdict, and \S\ref{sec:minigrid:supporting} reads them. None of them
 modifies the verdict, and none can.
 
-\begin{table}[!t]
+% HEIGHT FIX 2026-08-14 -- FLOAT TALLER THAN THE PAGE, the same defect as
+% tab:audit-characterisation and worse. This float measured 619.1pt in the
+% arXiv arm (plain article 11pt, \textheight 541.4pt), 77.7pt taller than the
+% page. \@largefloatcheck clamps an oversized float to \textheight instead of
+% refusing it, so the last rows of panel (c) printed over the page number, and
+% a float this tall can never be placed as a top float, so it was deferred to
+% the end of the document -- page 109 against a reference on page 62.
+% The float is now 517.3pt. NO NUMBER, ROW, CAPTION WORD OR SCOPE STATEMENT
+% CHANGED. The settings, and why each:
+%   [!tp]   lets an oversized float take a page of its own (commit c1982ef,
+%           Figures 2 and 3).
+%   \footnotesize for the caption and for panels (a) and (b). Panel (c) was
+%           ALREADY \footnotesize, so this makes the three panels agree rather
+%           than mixing two sizes in one float. The caption size has to be set
+%           by \let-ing \normalsize, because \@caption issues \normalsize
+%           unconditionally; the caption package would do it properly but
+%           restyles all 23 floats in both arms.
+%   \abovecaptionskip 0pt, and \smallskip rather than \medskip between panels.
+% Re-render after any change here. The width guards cannot see float height.
+\begin{table}[!tp]
 \centering
-\small
+\footnotesize
+\setlength{\abovecaptionskip}{0pt}
+\begingroup\let\normalsize\footnotesize
 \caption{The three registered supporting analyses over the eight confirmatory
 cells. \textbf{(a)}~Variance components, reported separately as registered: SD
 is across the five calibration seeds, SE is the item-level standard error within
@@ -228,8 +249,9 @@ beneficial are the two directions of correctness change, accuracy-state churn is
 their sum, and total answer churn adds items that change answer without changing
 correctness state.}
 \label{tab:h3-supporting}
+\endgroup
 
-\textbf{(a) Variance components, kept separate}\par\medskip
+\textbf{(a) Variance components, kept separate}\par\smallskip
 \begin{tabular}{llrrrr}
 \toprule
 & & \multicolumn{2}{c}{Seed-level SD} & \multicolumn{2}{c}{Item-level SE} \\
@@ -247,10 +269,12 @@ Llama-3.1-8B & GSM8K & 0.014307 & 0.010654 & 0.013874 & 0.013640 \\
 \bottomrule
 \end{tabular}
 
-\medskip
-\textbf{(b) Two-level paired bootstrap}\par\medskip
+\smallskip
+\textbf{(b) Two-level paired bootstrap}\par\smallskip
 % WIDTH FIX 2026-08-05: 54.1pt past the measure. Values unchanged.
-\setlength{\tabcolsep}{2pt}\small
+% \small -> \footnotesize with the 2026-08-14 height fix above; still no value
+% changed, and this panel now matches panels (a) and (c).
+\setlength{\tabcolsep}{2pt}\footnotesize
 \begin{tabular}{llrlrll}
 \toprule
 Model & Task & Rank-flip rate & Replicates & Tie rate & Ties & Winner flip \\
@@ -266,8 +290,8 @@ Llama-3.1-8B & GSM8K & 0.1260 & 252 / 2000 & 0.0030 & 6 / 2000  & \textbf{TRUE} 
 \bottomrule
 \end{tabular}
 
-\medskip
-\textbf{(c) Flip statistics, GPTQ against AWQ}\par\medskip
+\smallskip
+\textbf{(c) Flip statistics, GPTQ against AWQ}\par\smallskip
 % SOURCE: docs/MINIGRID_SUPPORTING_RESULTS_2026-07-26.md, slot 4 table.
 % base = GPTQ, method = AWQ, so net delta = acc_AWQ - acc_GPTQ (= -d_s in the
 % decision record's sign convention). Churn quantities are direction-symmetric.

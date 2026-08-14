@@ -38,17 +38,19 @@
   font=\scriptsize,
   ttl/.style={font=\scriptsize\bfseries, anchor=north west},
   lbl/.style={font=\scriptsize, anchor=north west},
+  lab/.style={font=\scriptsize, anchor=north west,
+    execute at begin node={\hyphenpenalty=10000\relax}},
   gone/.style={font=\scriptsize, text=fneutral, anchor=north west},
 ]
 \node[anchor=north west, inner sep=0, text width=12.6cm, font=\scriptsize] at (0,12.07) {Qwen2.5-7B on GSM8K, 4-bit GPTQ against 4-bit AWQ, $1{,}000$ paired items, five calibration seeds. One evaluation, reported twice. Column~A is the whole of the report; column~B is the same run, same items, same numbers, under the five-line standard.};
 \node[ttl, text width=3.06cm, inner sep=0] at (2.86,10.85) {A\quad As reported today};
 \node[ttl, text width=6.24cm, inner sep=0] at (6.3,10.85) {B\quad The same evaluation, reported to the standard};
 \draw[frule!45, line width=0.5pt] (0,10.09) -- (12.6,10.09);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,9.91) {\textbf{1}\quad declare a margin};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,9.91) {\textbf{1}\quad declare a margin};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,9.91) {\textemdash\ none declared};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,9.91) {$\pm2$ pp, declared in advance};
 \draw[frule!18, line width=0.3pt] (0,9.07) -- (12.6,9.07);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,8.98) {\textbf{2}\quad run the paired equivalence test at that margin};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,8.98) {\textbf{2}\quad run the paired equivalence test at that margin};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,8.98) {\textemdash\ no equivalence test is reported};
 \draw[fill=frule!8, draw=none] (7.065,8.205) rectangle (10.935,8.505);
 \draw[frule!70, line width=0.5pt, dash pattern=on 1.4pt off 1.0pt] (7.065,8.105) -- (7.065,8.605);
@@ -65,15 +67,15 @@
 \node[font=\scriptsize, anchor=west] at (11.700,8.355) {pp};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,7.52) {$\Delta = -0.58$ pp (AWQ $-$ GPTQ), 95\% paired bootstrap CI $[-2.24, +1.34]$ pp. No TOST verdict is recorded for this cell, and this is not the 90\% interval TOST would read.};
 \draw[frule!18, line width=0.3pt] (0,6.01) -- (12.6,6.01);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,5.92) {\textbf{3}\quad report churn beside net delta};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,5.92) {\textbf{3}\quad report churn beside net delta};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,5.92) {net delta $-0.58$ pp \\ (GPTQ 74.28\%, AWQ 73.70\%)};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,5.92) {net delta $-0.58$ pp \emph{and} churn 17.66\%: 9.12\% correct $\to$ wrong, 8.54\% wrong $\to$ correct. The net is what is left of the two.};
 \draw[frule!18, line width=0.3pt] (0,4.41) -- (12.6,4.41);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,4.32) {\textbf{4}\quad cite the sample size met against the size required};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,4.32) {\textbf{4}\quad cite the sample size met against the size required};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,4.32) {$n = 1{,}000$; no requirement cited};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,4.32) {$1{,}000$ items evaluated against $2{,}730$ required at $\pm2$ pp. That is a planning requirement at an assumed true difference of zero: it says this evaluation cannot support the claim, and it is \emph{not} evidence that the two methods differ.};
 \draw[frule!18, line width=0.3pt] (0,2.48) -- (12.6,2.48);
-\node[lbl, text width=2.52cm, inner sep=0] at (0.04,2.39) {\textbf{5}\quad release per-item outputs};
+\node[lab, text width=2.52cm, inner sep=0] at (0.04,2.39) {\textbf{5}\quad release per-item outputs};
 \node[gone, text width=3.06cm, inner sep=0] at (2.86,2.39) {\textemdash\ not released};
 \node[lbl, text width=6.24cm, inner sep=0] at (6.3,2.39) {released: 88 per-item cell JSONL files, one per cell of the controlled experiment};
 \draw[frule!25, rounded corners=1pt, line width=0.4pt] (2.72,10.05) rectangle (6.0600000000000005,1.52);

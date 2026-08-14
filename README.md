@@ -81,12 +81,29 @@ first place.
 ### As a CLI
 
 ```bash
+# The paper's five-line reporting standard for one model pair.
+flipeval report fp16.mmlu.jsonl gptq.mmlu.jsonl --margin 0.02 --benchmark mmlu
+
+# How many items a declared margin costs, before you run anything.
+flipeval required-n --benchmark mmlu --margin 2.0
+flipeval required-n --list
+
 # Pairwise comparison. Writes a one-row CSV and prints the full result.
 flipeval compare fp16.mmlu.jsonl gptq.mmlu.jsonl --margin 0.02 --output comparison.csv
 
-# Read lm-evaluation-harness --log_samples output directly.
+# Read lm-evaluation-harness --log_samples output directly. `report` and
+# `compare` both take either a --log_samples file or the output directory.
 flipeval compare baseline_samples.json method_samples.json --format lm-eval
 ```
+
+`--margin` is a **proportion** for `report` and `compare` (`0.02` is two
+accuracy points), because they compare it against accuracies, and **percentage
+points** for `required-n` (`2.0`), because the published certification table is
+in points. Both sides range-check the argument and say which unit they wanted.
+
+`examples/` is a runnable end-to-end walkthrough of this workflow against
+`lm-evaluation-harness` output, with a deterministic fixture, so it runs with no
+GPU, no model download and no harness install. Start at `examples/README.md`.
 
 ## Does it work as a library?
 
@@ -98,11 +115,16 @@ it. Everything below is importable, stable, and covered by the test suite.
 | Name | Kind | Purpose |
 |---|---|---|
 | `compare` | function | Pairwise baseline-vs-method comparison. Returns `ComparisonResult`. |
+| `five_line_report` | function | The paper's five-line reporting standard for one pair. Returns `FiveLineReport`. |
+| `required_n_for_benchmark` | function | Required *n* by benchmark family and margin, read from the published certification table. Returns `RequiredN`. |
+| `required_n_from_discordance` | function | The same arithmetic for a family the table does not cover, from a measured discordance rate. Returns `int`. |
 | `rank_stability` | function | Bootstrap rank-flip rate across two or more methods. Returns `RankStabilityResult`. |
 | `paired_seed_bootstrap` | function | Two-level (seed, item) bootstrap for two methods across matched calibration seeds. Returns `HierarchicalBootstrapResult`. |
 | `required_n_for_effect` | function | Items needed to resolve a given effect, from observed paired deltas. Returns `int` or `None`. |
 | `minimum_detectable_difference` | function | Smallest effect resolvable at the given n, alpha and power. Returns `float`. |
 | `ComparisonResult` | dataclass | Frozen result record, see fields below. |
+| `FiveLineReport` | dataclass | The computed block (`to_text()`, `to_dict()`) and every number behind it. |
+| `RequiredN` | dataclass | One certification-table row: the family, the margin, the p25/median/p75 churn rates and their required counts. |
 | `RankStabilityResult` | dataclass | `methods`, `n_common_items`, `full_sample_winner`, `rank_flip_rate`, `deltas`. |
 | `PerSeedBootstrapResult` | dataclass | Per-seed slice of the hierarchical result. |
 | `HierarchicalBootstrapResult` | dataclass | Joint intervals, seed-level SD, item-level SE, per-seed breakdown. |
@@ -187,8 +209,12 @@ Paired records are aligned by `item_id`. **Duplicate IDs are rejected** and
 comparison fails closed rather than silently dropping or reordering items.
 
 The `lm-evaluation-harness` adapter targets the v0.4.x `--log_samples` schema
-(represented by v0.4.12) and accepts either a full result JSON with a `samples`
-mapping, or a sample JSON/JSONL file.
+(represented by v0.4.12) and accepts a full result JSON with a `samples`
+mapping, a sample JSON/JSONL file, or the `--output_path` directory the harness
+wrote, which is searched recursively for `samples_<task>_<timestamp>.jsonl` and
+concatenated. Loglikelihood tasks (MMLU-style) and generative tasks (GSM8K-style)
+are both handled; for generative tasks the prediction is the harness's own
+filtered answer, so scoring stays the harness's decision rather than ours.
 
 ## Calibration-seed analysis
 
