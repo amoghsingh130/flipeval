@@ -101,6 +101,27 @@ an audited model is in fact equivalent.
 %      metric). REV-2: this cited 643, the rev-1 float-scored count that the
 %      spot-check retracted; corrected 2026-07-26. Never write "incompatible
 %      with a paired framework": it is the flip model that does not apply.
+%
+% ADDED 2026-08-13 (reviewer feedback, "Methodological & Scope
+% Clarifications"). Concern 10 above is the only place the paper acknowledged
+% float-scored metrics, in one clause, and the reviewer asked for a formal
+% treatment. It is added as ONE \subsection at the end of this file, and the
+% two prose paragraphs above are untouched: concern 10 keeps its mandatory home
+% in paragraph two, the new subsection picks up its last sentence rather than
+% restating it, and the 33-cell count is deliberately NOT repeated (prose rule
+% 9, duplicated statements).
+%
+% WHY A HEADING, given that prose rule 4 turned this file's ten \paragraph
+% microheadings into two paragraphs. That ruling removed a list of headings over
+% existing prose; this is one heading over new material that a reviewer is
+% expected to look for by name, and it does not re-split the two paragraphs. The
+% formal detail is in Appendix~\ref{app:continuous} rather than here, because
+% docs/PAGE_MAP_2026-08-05.md puts this section at 2 pages against a 1.5-page
+% target.
+%
+% NO NEW NUMBER APPEARS BELOW. The variance identity and the required-n
+% generalisation are mathematics, not measurement, and the subsection says in
+% its own last sentence that none of it is validated.
 The controlled experiment covers all 8 registered confirmatory cells (1.5B to
 8B parameters, two benchmarks, 4 bits, two methods, five seeds) and nothing
 beyond them, so the verdict licenses no statement about 3-bit behaviour,
@@ -135,3 +156,29 @@ about open-ended generation, including the CIDEr-style metric that put
 \AuditOutsideFrameworkClaim{} outside our registered binary paired-outcome
 calculation (\S\ref{sec:audit:r04}). That is a limit of the flip model we
 registered, not of paired analysis, which handles graded metrics perfectly well.
+
+\subsection{Continuous and graded metrics, and what certifying them would take}
+\label{sec:limitations:continuous}
+
+The binary outcome model is the paper's binding scope condition, and it was the
+necessary first step rather than a convenience. With per-item correctness the
+paired difference $d_i$ takes values in $\{-1,0,+1\}$, so its variance under a
+true difference of zero is exactly the discordance rate $p_d$, a quantity two
+per-item dumps determine by counting; that identity is what makes
+Table~\ref{tab:certification} an empirical table instead of a modelling
+assumption, and it is also the only outcome type the public record and the
+audited sources supply. TOST itself is not so restricted. It applies to the mean
+paired difference of any bounded per-item score, with $p_d$ replaced by
+$\sigma_d^2$, the variance of the per-item score difference, and the binary
+formula of \S\ref{sec:cert:method} is the case $\sigma_d^2 = p_d$. What does not
+come with that generalisation is everything empirical: $\sigma_d$ has to be
+measured per metric and per family, and this paper measures it for none, since
+the atlas records accuracy-state churn and the float-scored cells it met were
+excluded rather than scored. Churn also stops being a count of flips and becomes
+a dispersion of score changes, and the margin has to be declared in the metric's
+own units, where two CIDEr points and two accuracy points are unrelated
+quantities. Appendix~\ref{app:continuous} states the generalisation, works
+through pass@$k$, n-gram and description-overlap metrics and judge scales, and
+returns to \AuditOutsideFrameworkClaim{} to say what scoring it would have
+required. None of that extension is validated here, and no required-$n$ reported
+in this paper transfers to a metric outside the binary model.

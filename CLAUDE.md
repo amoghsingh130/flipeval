@@ -205,7 +205,7 @@ it has python 3.9.21 and no pytest, torch, pandas, or scipy, and the project
 targets 3.11. The equivalent gate is the in-image suite:
 
 ```bash
-apptainer exec "$IMAGE" python -m pytest -q   # expect: 388 passed, 0 skipped
+apptainer exec "$IMAGE" python -m pytest -q   # expect: 457 passed, 0 skipped
 ```
 
 Run it with `scripts/slurm/run_tests.sbatch`, which executes the suite in the

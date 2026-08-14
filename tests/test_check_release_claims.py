@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import importlib.util
 import shutil
+import stat
 from pathlib import Path
 
 import pytest
@@ -48,6 +49,14 @@ def tree(tmp_path: Path) -> Path:
         dst = tmp_path / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(REPO / rel, dst)
+        # copy2 preserves mode, and results/audit_verdicts_rev3.csv is sealed
+        # read-only (0444) in the real tree. That seal protects the real
+        # artifact; inheriting it here made the copy immutable, so the negative
+        # test that rewrites the ledger died with PermissionError instead of
+        # exercising C5 -- a gate test that cannot reach its assertion. The
+        # copies are this fixture's mutable subject, as its docstring says, so
+        # restore write permission on them.
+        dst.chmod(dst.stat().st_mode | stat.S_IWUSR)
     return tmp_path
 
 

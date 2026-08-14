@@ -1,0 +1,242 @@
+% =====================================================================
+% Appendix: continuous and graded metrics.
+%
+% CREATED 2026-08-13, in response to reviewer feedback ("Methodological &
+% Scope Clarifications"): the only acknowledgement of float-scored metrics was
+% one clause in sections/limitations.tex, and the reviewer asked for a formal
+% treatment. The body keeps a compact subsection
+% (\S\ref{sec:limitations:continuous}); the algebra and the per-metric mapping
+% live here, because the body is at its measured page target
+% (docs/PAGE_MAP_2026-08-05.md, limitations 2 pages against a target of 1.5).
+%
+% STATUS RULE FOR THIS WHOLE FILE, AND IT IS THE POINT OF IT.
+% Nothing here was run. Everything in it is either (a) MATHEMATICS -- the
+% standard TOST planning argument applied to the mean of a bounded paired
+% difference, which is a derivation and not an empirical claim -- or (b) a
+% PROPOSAL for how a metric family would map onto that argument. No required-n
+% in this paper transfers to any non-binary metric, and this appendix must never
+% be written as though the extension had been validated. If a later revision
+% measures a sigma_d for any metric, that measurement gets its own registration
+% and its own SOURCE pointer; it does not get folded into this file's prose.
+%
+% NUMBERS. This file states NO empirical number of its own. The two it points at
+% are consumed through macros or cross-references:
+%   \AuditOutsideFrameworkClaim{}, \AuditPerItemTaskMatched{}, \AuditEligible{}
+%     -> paper/audit_denominators.tex (GENERATED from the sealed
+%        results/audit_verdicts_rev3.csv)
+%   the excluded float-scored atlas cells
+%     -> Appendix~\ref{app:atlas:exclusions}, which states the count and its
+%        source; it is deliberately not restated here (prose rule 9).
+%
+% WORDING RULE, inherited from sections/audit.tex §\ref{sec:audit:r04} and the
+% carry checklist §15: R04 is outside OUR REGISTERED BINARY PAIRED-OUTCOME
+% CALCULATION. NEVER write "incompatible with a paired framework" -- CIDEr
+% supports paired resampling perfectly well; it is the flip model that does not
+% apply. This file must not state the audit's verdict for R04 in any form the
+% audit section does not use.
+% =====================================================================
+
+\section{Continuous and graded metrics: the extension this paper does not run}
+\label{app:continuous}
+
+This appendix states what would be required to certify a metric that scores each
+item on a scale instead of marking it right or wrong. It is a derivation and a
+proposal. No part of it has been executed, no quantity in it has been measured,
+and none of the required sample sizes reported in this paper applies to any
+metric outside the binary per-item model.
+
+\subsection{Why the binary outcome model comes first}
+\label{app:continuous:why}
+
+Three things follow from binary per-item correctness, and the certification
+apparatus uses all three.
+
+The first is an exact variance. Write $c_i^{\mathrm{base}}, c_i^{\mathrm{comp}}
+\in \{0,1\}$ for the correctness of item $i$ under the baseline and the
+compressed model, and $d_i = c_i^{\mathrm{comp}} - c_i^{\mathrm{base}}$ for the
+per-item accuracy difference, so that $d_i \in \{-1,0,+1\}$. Because $d_i^2$ is
+the indicator that the two models disagree on item $i$,
+\begin{equation}
+\mathrm{Var}(d_i) \;=\; \mathbb{E}[d_i^2] - \delta^2 \;=\; p_d - \delta^2 ,
+\qquad \delta = \mathbb{E}[d_i],
+\label{eq:vard-binary}
+\end{equation}
+and under the null of no true difference this is $p_d$ exactly, which is the
+$\mathrm{sd}_{\mathrm{paired}}$ of Equation~\eqref{eq:sds}. Nothing is assumed
+about the joint distribution of the two runs beyond the pairing itself: the
+second moment of a variable supported on $\{-1,0,+1\}$ \emph{is} the probability
+that it is non-zero. That identity is what makes the certification tables
+countable. The variance term is a rate a third party obtains by comparing two
+per-item dumps, so Table~\ref{tab:certification} is populated by measurement
+(\S\ref{sec:atlas}) and not by an assumption about how models vary.
+
+% SOURCE (non-numeric): the mined quantity is the per-item correctness field,
+% docs/ATLAS_MINING_REGISTRATION_2026-07-15.md §§1, 3.4 as reproduced in
+% Appendix~\ref{app:atlas:sources}; the excluded float-scored cells and their
+% count are Appendix~\ref{app:atlas:exclusions}, whose SOURCE pointer is
+% results/atlas_cells_summary_rev2.csv (reason column). The count is
+% deliberately not restated here.
+The second is that binary correctness is what the public record carries. The
+atlas mines per-item dumps whose recorded quantity is a correctness field
+(Appendix~\ref{app:atlas:sources}); the cells it met that carried no binary
+correctness metric at all were excluded rather than scored, and that exclusion
+is reported with its count in Appendix~\ref{app:atlas:exclusions}. A continuous
+apparatus built on this record would have had nothing to be built from.
+
+% SOURCE: \AuditNotAssessableOutsideFramework{} and
+% \AuditOutsideFrameworkClaim{} are generated from
+% results/audit_verdicts_rev3.csv via paper/audit_denominators.tex. This states
+% the audit's own count and does not generalise it into a claim about which
+% metrics the sources report.
+The third is that binary correctness is the outcome type the audit could score.
+Of the eligible claims, exactly \AuditNotAssessableOutsideFramework{} was set
+aside because the metric its qualifying sentence speaks about carries no
+per-item correctness state, and that claim, \AuditOutsideFrameworkClaim{}, is
+the subject of \S\ref{app:continuous:r04} below.
+
+\subsection{TOST for a bounded graded score}
+\label{app:continuous:tost}
+
+The generalisation of the planning calculation is immediate, and stating it
+costs nothing, because TOST is defined on the mean of a paired difference and
+never on its support. Let each item carry bounded scores $s_i^{\mathrm{base}},
+s_i^{\mathrm{comp}} \in [a,b]$ under the same metric, put $d_i =
+s_i^{\mathrm{comp}} - s_i^{\mathrm{base}}$, and let the reported statistic be
+$\bar{d} = n^{-1} \sum_i d_i$ with $\sigma_d^2 = \mathrm{Var}(d_i)$. TOST at
+one-sided $\alpha$ with power $1-\beta$, against an assumed true difference of
+zero and at a margin $m$ expressed in the metric's own units, then requires
+\begin{equation}
+n_{\mathrm{req}} \;=\; \left\lceil \left(\frac{(z_{1-\alpha} + z_{1-\beta})\,
+\sigma_d}{m}\right)^{\!2} \right\rceil ,
+\label{eq:nreq-continuous}
+\end{equation}
+which is Equation~\eqref{eq:nreq} with the paired standard deviation replaced by
+$\sigma_d$. The binary case is the special case $\sigma_d^2 = p_d$ of
+Equation~\eqref{eq:vard-binary}. Two consequences are pure algebra and worth
+stating because they bound what any adaptation can achieve: the requirement
+scales as $(\sigma_d/m)^2$, so a graded metric needs more items than the
+corresponding binary row of Table~\ref{tab:certification} exactly when
+$\sigma_d^2 > p_d$ and fewer when it is smaller; and every qualification already
+attached to Equation~\eqref{eq:nreq} carries over unchanged, including that this
+is a planning size under an assumed true difference of zero and is therefore a
+lower bound on what a non-zero true difference would demand
+(\S\ref{sec:cert:method}).
+
+What does not transfer is everything empirical.
+
+\emph{The churn tables do not transfer.} $\sigma_d$ is a property of the metric,
+of the model pair and of the benchmark family jointly, and it has to be measured
+for each combination in the same way $p_d$ was. This paper measures it for none.
+The atlas records accuracy-state churn and carries no per-item score dispersion
+for any metric, so there is no path from the numbers in this paper to a
+$\sigma_d$ for CIDEr, for ROUGE, or for a judge scale. A practitioner adapting
+the method supplies that measurement; the method does not supply it to them.
+
+\emph{The interpretation of churn does not transfer.} For a binary outcome,
+churn is a count: the proportion of items whose correctness state changed, which
+is simultaneously the variance term and a directly reportable description of
+per-item behaviour. For a graded metric the corresponding quantity is a
+dispersion of per-item score changes, and it is not a count of anything. In
+particular the net-versus-gross decomposition that motivates this paper has to
+be redefined before it means anything: a cell can show a net difference of zero
+with arbitrarily large $\sigma_d$, but "how many items changed" is no longer the
+question, since almost every item changes a little.
+
+\emph{The margin does not transfer.} $m$ in
+Equation~\eqref{eq:nreq-continuous} is in the metric's own units. A margin of two
+CIDEr points and a margin of two accuracy points are unrelated quantities, and
+neither can be read across to the other, so a certificate on a graded metric is
+interpretable only if the margin is declared in that metric and defended in that
+metric. The registered $2$\,pp margin of this paper is an accuracy margin and
+means nothing elsewhere.
+
+\subsection{How three metric families would map}
+\label{app:continuous:families}
+
+Each of the following is a proposal about structure, not a result.
+
+\paragraph{pass@$k$.} At $k=1$ the per-item outcome is a single pass or fail, so
+this is the binary model already, with the added wrinkle that sampling makes
+correctness itself random and one draw is one draw. For $k > 1$ the per-item
+quantity is an estimated success probability $\hat{\pi}_i \in [0,1]$, computed
+from a finite number of completions. The per-item difference is then bounded and
+graded, so Equation~\eqref{eq:nreq-continuous} applies in form, but the
+estimation error enters the variance: writing $\pi_i$ for the quantity being
+estimated, the law of total variance gives
+\begin{equation}
+\sigma_d^2 \;=\; \mathrm{Var}\!\left(\pi_i^{\mathrm{comp}} -
+\pi_i^{\mathrm{base}}\right) \;+\;
+\mathbb{E}\!\left[\mathrm{Var}\!\left(\hat{\pi}_i^{\mathrm{comp}} -
+\hat{\pi}_i^{\mathrm{base}} \,\middle|\, \pi_i^{\mathrm{comp}},
+\pi_i^{\mathrm{base}}\right)\right],
+\label{eq:passk-variance}
+\end{equation}
+whose second term shrinks as the number of completions per item grows. Sizing a
+pass@$k$ evaluation therefore involves two budgets, items and completions per
+item, and only the first is what a required-$n$ table counts. If the same
+sampling seeds drive both sides, the two estimation errors are positively
+correlated and the second term is smaller; that is a design choice to be
+declared, not a property to be assumed.
+
+\paragraph{BLEU, ROUGE and CIDEr.} These assign a bounded score to a generated
+string, so at the level of a single item they are exactly the graded case above
+and Equation~\eqref{eq:nreq-continuous} applies once $\sigma_d$ is measured. The
+obstacle is aggregation rather than gradedness. Corpus-level BLEU is not the
+mean of per-sentence BLEU: it is computed from n-gram match counts and reference
+lengths summed over the whole corpus, with a brevity penalty formed from those
+totals, so the reported statistic is not an average of per-item quantities and
+there is no $d_i$ whose mean it is. Certifying it therefore requires either a
+sentence-level variant, which is a different number from the corpus figure and
+must be declared as the certified quantity, or a paired resampling scheme over
+items that respects the aggregation, in which case the sample size is found by
+simulation and Equation~\eqref{eq:nreq-continuous} does not give it. ROUGE and
+CIDEr are ordinarily reported as means of per-item scores and do not have this
+particular problem, which is why the aggregation question has to be asked per
+metric rather than per family.
+
+\paragraph{LLM-as-a-judge scales.} A judge produces a bounded ordinal score, so
+the graded form applies in principle, with two additions. First, the score is
+itself a model output, so the observed per-item value is the quantity of
+interest plus judge error. Under the simple model that an observed score is
+$s_i + e_i$ with judge errors of variance $\sigma_j^2$ and correlation $\rho$
+between the two sides, the difference has variance
+\begin{equation}
+\sigma_d^2 \;=\; \sigma_{\mathrm{true}}^2 \;+\; 2\sigma_j^2 (1 - \rho),
+\label{eq:judge-variance}
+\end{equation}
+so judge noise inflates the requirement unless the same judge scores both sides
+of an item in a way that makes its errors correlated. $\sigma_j^2$ has to be
+estimated from repeated judgements, which is a third budget, and assuming it
+away is the failure mode this paper exists to complain about in another setting.
+Second, an ordinal scale is not an interval scale, so a margin stated as a
+fraction of a point on a five-point rubric has no agreed meaning; the margin
+would have to be defended as a statement about the rubric before the arithmetic
+is worth running. We take no position here on how that defence should go.
+
+\subsection{\AuditOutsideFrameworkClaim{} and what scoring it would require}
+\label{app:continuous:r04}
+
+\AuditOutsideFrameworkClaim{} is the one audited claim that this limitation
+touches directly, and the audit's treatment of it stands as written
+(\S\ref{sec:audit:r04}): its qualifying sentence asserts negligible loss on COCO
+CIDEr, a generation metric that assigns a graded score to a caption and has no
+per-item correct/incorrect state, so V1 and V2, which are defined on $d_i \in
+\{-1,0,+1\}$, have nothing to compute and there is no discordance rate to impute.
+It is recorded as outside our registered calculation and carries no verdict. The
+history of the overruled first-pass computation on a substituted benchmark is in
+\S\ref{sec:audit:r04} and Appendix~\ref{app:audit:r04detail}, and that
+computation is not claimed anywhere in this paper as an audit result.
+
+The extension above does not retroactively score it, and it is worth being
+precise about why, because the reason is not the mathematics. Equation
+\eqref{eq:nreq-continuous} would need three inputs that do not exist here:
+per-caption CIDEr scores for both models on the same images, from which
+$\sigma_d$ could be measured; a margin declared in CIDEr points and defended as
+a statement about caption quality; and a decision, taken before looking, about
+which of those a claim of negligible loss is asserting.
+The audit records that \AuditPerItemTaskMatched{} of the \AuditEligible{}
+eligible sources release \emph{task-matched} per-item outputs
+(\S\ref{sec:audit:v3}), so the first input is unavailable from the public
+record, and the second and third were never registered.
+The limit is the model we registered and the evidence the source released, not
+paired analysis, which handles graded metrics without difficulty.

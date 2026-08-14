@@ -235,9 +235,15 @@ five-seed mean ranking does not survive resampling.
 The ratio of per-item churn to aggregate net delta is larger in the
 controlled method-against-method contrast than in the observational
 quantized-against-FP16 contrast. The ordering is stable across the two
-aggregations, which is a robustness check on the choice of summary and not a
-significance claim (Table~\ref{tab:churn-aggregations}). Comparing like with
-like, the
+aggregations, which is a robustness check on the choice of summary
+(Table~\ref{tab:churn-aggregations}).
+% HEDGE TRIMMED 2026-08-13 (TMLR reviewer: repeated disclaimers). This clause
+% ended "and not a significance claim", which is the third statement of the same
+% scope inside one float's worth of text: the Result opens "Descriptive; not a
+% registered hypothesis and not an inferential test", and the caption of
+% tab:churn-aggregations says it again for readers who meet the table on its
+% own. Both of those stay; the ordering claim itself is unchanged.
+Comparing like with like, the
 median of the per-cell ratios is \textbf{3.85} across the atlas
 (\S\ref{sec:atlas:netgross}) and \textbf{12.7} across the eight controlled
 cells, where the per-cell ratios run \textbf{$3.0\times$ to $30.5\times$};

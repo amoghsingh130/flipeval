@@ -153,23 +153,41 @@ def test_public_api_surface():
     planning helpers in particular are the ones a reader arriving from the
     paper imports by name, and they were reachable only as flipeval.core
     until this was pinned.
+
+    The surface stopped being core-only on 2026-08-13: the certification
+    lookup and the five-line report are re-exported from their own modules.
+    Each name is therefore checked against the module that defines it, so the
+    identity half of this test keeps its meaning instead of being relaxed.
     """
     import flipeval
-    from flipeval import core
+    from flipeval import certification, core, report
 
     assert set(flipeval.__all__) == {
         "ComparisonResult",
+        "FiveLineReport",
         "HierarchicalBootstrapResult",
         "PerSeedBootstrapResult",
         "RankStabilityResult",
+        "RequiredN",
         "compare",
+        "five_line_report",
         "minimum_detectable_difference",
         "paired_seed_bootstrap",
         "rank_stability",
+        "required_n_for_benchmark",
         "required_n_for_effect",
+        "required_n_from_discordance",
+    }
+    defining_module = {
+        "FiveLineReport": report,
+        "five_line_report": report,
+        "RequiredN": certification,
+        "required_n_for_benchmark": certification,
+        "required_n_from_discordance": certification,
     }
     for name in flipeval.__all__:
-        assert getattr(flipeval, name) is getattr(core, name), name
+        origin = defining_module.get(name, core)
+        assert getattr(flipeval, name) is getattr(origin, name), name
 
     # Deliberately not exported: compare() already surfaces TOST through
     # ComparisonResult, and this takes deltas rather than records. If it is ever

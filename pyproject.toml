@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flipeval"
-version = "0.2.0"
+version = "0.3.0"
 description = "Paired behavioral-change statistics for compressed-model evaluation"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -19,6 +19,13 @@ flipeval = "flipeval.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["flipeval*", "pilot_eval*"]
+
+# The certification table ships inside the package so that `flipeval required-n`
+# works from an installed distribution, where results/ is not present. It is a
+# byte-identical copy of the released results/certification_tables_rev2.csv and
+# tests/test_certification_lookup.py fails if the two ever differ.
+[tool.setuptools.package-data]
+flipeval = ["data/*.csv"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

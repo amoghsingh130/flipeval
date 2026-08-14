@@ -1,0 +1,114 @@
+{
+  "cell": "qwen25-7b/gsm8k",
+  "figure": "fig2_before_after",
+  "generator": "scripts/make_figure2.py",
+  "margin_pp": 2.0,
+  "values": {
+    "acc_awq": {
+      "key": "full_sample_accuracies.awq",
+      "source": "paper/figures/fig1_values.json -> results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 0.7370000000000001
+    },
+    "acc_gptq": {
+      "key": "full_sample_accuracies.gptq",
+      "source": "paper/figures/fig1_values.json -> results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 0.7428
+    },
+    "alpha": {
+      "key": "ALPHA",
+      "source": "paper/figures/fig1_values.json -> scripts/audit_stats.py",
+      "value": 0.05
+    },
+    "audit_eligible": {
+      "key": "count of eligible == True",
+      "source": "results/audit_verdicts_rev3.csv",
+      "value": 16
+    },
+    "audit_per_item_task_matched": {
+      "key": "count of eligible rows with v3_per_item_outputs == yes",
+      "source": "results/audit_verdicts_rev3.csv",
+      "value": 0
+    },
+    "audit_prospective_margin": {
+      "key": "count of eligible rows with margin_category == 1",
+      "source": "results/audit_verdicts_rev3.csv",
+      "value": 0
+    },
+    "beneficial": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.beneficial_flip_rate",
+      "source": "paper/figures/fig1_values.json -> results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.0854
+    },
+    "bootstrap_replicates": {
+      "key": "bootstrap_replicates",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 2000
+    },
+    "churn": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.accuracy_state_churn",
+      "source": "paper/figures/fig1_values.json -> results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.1766
+    },
+    "ci_alpha": {
+      "key": "alpha",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 0.05
+    },
+    "delta_ci_awq_minus_gptq": {
+      "key": "negation of joint_confidence_intervals.accuracy_delta",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": [
+        -0.022399999999999975,
+        0.013399999999999967
+      ]
+    },
+    "delta_ci_gptq_minus_awq": {
+      "key": "joint_confidence_intervals.accuracy_delta",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": [
+        -0.013399999999999967,
+        0.022399999999999975
+      ]
+    },
+    "discordance": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.accuracy_state_churn",
+      "source": "paper/figures/fig1_values.json -> results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.1766
+    },
+    "full_sample_delta_gptq_minus_awq": {
+      "key": "full_sample_accuracy_delta",
+      "source": "results/h3_eight_cell/paired_seeds_qwen25-7b_gsm8k.json",
+      "value": 0.005799999999999916
+    },
+    "harmful": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.harmful_flip_rate",
+      "source": "paper/figures/fig1_values.json -> results/minigrid_supporting/minigrid_supporting.json",
+      "value": 0.09119999999999999
+    },
+    "margin_pp": {
+      "key": "margin_pp",
+      "source": "paper/figures/fig1_values.json",
+      "value": 2.0
+    },
+    "n_items": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.n",
+      "source": "paper/figures/fig1_values.json -> results/minigrid_supporting/minigrid_supporting.json",
+      "value": 1000
+    },
+    "net_awq_minus_gptq": {
+      "key": "slot4_flip_statistics.qwen25-7b/gsm8k.cell_mean.net_accuracy_delta",
+      "source": "paper/figures/fig1_values.json -> results/minigrid_supporting/minigrid_supporting.json",
+      "value": -0.005800000000000005
+    },
+    "per_item_cells_released": {
+      "key": "count of .jsonl entries in the two archived run manifests",
+      "source": "results/minigrid_run_20260722.manifest.json + results/escalation_run_20260726.manifest.json",
+      "value": 88
+    },
+    "required_n": {
+      "key": "required_n_for_tost(paired_flip_sd(d), 0.02)",
+      "source": "paper/figures/fig1_values.json -> scripts/audit_stats.py",
+      "value": 2730
+    }
+  }
+}

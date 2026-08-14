@@ -26,10 +26,14 @@
 \section{Preregistration detail}
 \label{app:prereg-detail}
 
-This appendix holds the full text of six items summarised in
-\S\ref{sec:prereg}: the freeze timeline, the disclosed pre-registration data
-contact, the seven interpretive choices, the result-inspection discipline, the
-H3 reporting rule as registered, and the spot-check narrative.
+% ITEM COUNT UPDATED 2026-08-13 with the two relocations of that date
+% (app:prereg:whatfixed, and the body's account of choice 1 inside
+% app:prereg:choices). Six items became seven.
+This appendix holds the full text of seven items summarised in
+\S\ref{sec:prereg}: the freeze timeline, what the freezes fix in advance, the
+disclosed pre-registration data contact, the seven interpretive choices, the
+result-inspection discipline, the H3 reporting rule as registered, and the
+spot-check narrative.
 
 \subsection{The freeze timeline}
 \label{app:prereg:timeline}
@@ -65,6 +69,40 @@ Date & Artifact & Commit & What it fixed in advance \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{What the freezes fix in advance}
+\label{app:prereg:whatfixed}
+
+% RELOCATED 2026-08-13 from sections/preregistration.tex
+% §"What was frozen, and when" (\S\ref{sec:prereg}), under the reviewer's
+% structural-streamlining request. Moved VERBATIM; nothing was deleted, and the
+% body keeps a two-sentence compliance statement plus a pointer here.
+% TWO MECHANICAL EDITS, BOTH RECORDED: the source paragraph's cross-reference
+% read "Table~\ref{tab:freeze-timeline} in Appendix~\ref{app:prereg-detail}",
+% which is repointed to the local table now that the text sits inside that
+% appendix; and its closing pointer sentence ("The appendix carries the rest:
+% ...") is dropped, because it pointed AT this appendix from the body and the
+% body now carries that pointer. Its opening sentence ("Each artifact ... before
+% the decision") is not repeated here: it is reproduced word for word in the
+% caption of Table~\ref{tab:freeze-timeline} directly above, and a condensed
+% form of it is what the body retains.
+% SOURCE: PREREGISTRATION.md header lines 3-7;
+% docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3 (commits b74fd58, d6e02dd, f06348f,
+% 715a7ce); docs/AUDIT_VERDICTS_2026-07-20.md §Provenance (claim-table sha256).
+Table~\ref{tab:freeze-timeline} dates every freeze against its commit. The
+frozen claim table's content hash is recorded with the verdicts (sha256
+\texttt{842b9756...5af7b15}), as is the atlas summary's
+(\texttt{98201ade...10a4712d}) and the container image's, so a reader can
+confirm that the inputs to any reported number were the frozen ones.
+
+Three properties of that arrangement do work in the paper. The mechanical parts
+of the audit, meaning the inclusion trigger vocabulary, the extraction fields,
+the verdict formulas and the robustness sweep, were fixed before any claim's
+power was computed, so the audit cannot have selected its claims or its
+statistics to produce a headline. The atlas pair list was fixed before any flip
+statistic, so the atlas cannot have selected pairs to produce churn. And the H3
+decision rule was fixed, in algebra, before the first compressed checkpoint
+existed, so the paper reports whatever that rule returns.
 
 \subsection{Result-inspection discipline}
 \label{app:prereg:discipline}
@@ -234,6 +272,39 @@ that was reported for ten days. Amendment~2 returns the analysis to the uniform
 registered margin, where the rev-3 recomputation gives \textbf{1 of 11
 assessable claims below the approximate planning threshold}, the same claim the
 very first pass had flagged.
+
+\paragraph{Choice 1, as the main text stated it.}
+% RELOCATED 2026-08-13 from sections/preregistration.tex §"The interpretive
+% choice that moved the headline" (\S\ref{sec:prereg:choices}), under the
+% reviewer's structural-streamlining request. Moved VERBATIM, whole; nothing
+% was deleted. The body keeps a three-sentence statement of the sequence and of
+% Amendment 2's correction, because that sequence is the paper's canonical
+% disclosure of an analyst decision that moved the headline and does not live
+% only in an appendix; \S\ref{sec:audit:r04} states it a second time in the
+% audit's own terms.
+% IT OVERLAPS THE TWO PARAGRAPHS ABOVE BY CONSTRUCTION -- the body passage was a
+% condensed retelling of them -- and is preserved whole rather than merged into
+% them, so that the relocation loses no wording.
+% SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1 (the
+% SUPERSEDED record); resolved by docs/AUDIT_REGISTRATION_2026-07-15.md "Dated
+% Amendments" Part 1, signed 2026-07-31. Current values from
+% results/audit_verdicts_rev3.csv.
+%
+% RESOLVED, NOT OPEN. The reasoning "a source asserting parity within 0.15 pp
+% has made a 0.15 pp claim" is the error Amendment 2 exists to correct: R17's
+% 0.15 is an OBSERVED DELTA (68.69 vs 68.54), not a declared tolerance. It must
+% not be restated as the paper's position anywhere, in any file, in any wording.
+The conditional decides it. \emph{When it states one}: no audited source states
+one, so the applicable margin is the registered 2\,pp throughout, and what the
+superseded implementation had substituted was each source's largest reported
+delta. That substitution treats a measured outcome as a decision rule the source
+never adopted. The sequence of values is reported plainly because it is the
+disclosure: the first pass returned $K = 1$ of 12, the claim-specific reading
+raised it to $K = 5$, the metric-compatibility ruling on R04 gave the $K = 4$
+that was published, and the rev-3 recomputation at the registered margin returns
+\textbf{\AuditBelowThresholdAtMedian{} of \AuditAssessable{} assessable claims
+below the approximate planning threshold}, which is the claim the first pass had
+flagged. All readings ship in the released CSV (\S\ref{sec:audit:results}).
 
 \paragraph{Choice 2: what counted as the claim's own margin (withdrawn).}
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #2 (the

@@ -15,9 +15,22 @@
 %   §"The H3 reporting rule"                     (moved verbatim)
 %   §"Atlas validation and population correction" narrative (already there in
 %                                                 full, at app:prereg-spotcheck)
-% WHAT STAYS HERE, AND WHY: the freeze summary, and the K = 1 -> 5 -> 4 ->
-% 1-of-11 sequence, which is the body's canonical self-correction and does not
-% move to an appendix.
+%
+% MOVED TO Appendix~\ref{app:prereg-detail} ON 2026-08-13 (TMLR reviewer:
+% relocate the bookkeeping), AGAIN NOTHING DELETED:
+%   the freeze hashes + "three properties of that arrangement"
+%                                     -> app:prereg:whatfixed (verbatim)
+%   the conditional-clause reasoning and the full K narrative
+%                                     -> app:prereg:choices, paragraph "Choice
+%                                        1, as the main text stated it"
+%                                        (verbatim; the two
+%                                        hand-typed audit counts became their
+%                                        \Audit* macros, which expand to the
+%                                        same digits)
+% WHAT STAYS HERE, AND WHY: a two-sentence freeze-compliance statement, and the
+% K = 1 -> 5 -> 4 -> \AuditBelowThresholdAtMedian-of-\AuditAssessable sequence,
+% which is the body's canonical self-correction and does not move to an
+% appendix.
 %
 % PRIMARY SOURCES:
 %   PREREGISTRATION.md                        (frozen 2026-07-11)
@@ -35,8 +48,26 @@
 % in the abstract, in §\ref{sec:atlas}, or anywhere in the blog post.
 % =====================================================================
 
-\subsection{What was frozen, and when}
+% COMPRESSED 2026-08-13 (TMLR reviewer, "structural and narrative
+% streamlining"): the two subsections that were here, "What was frozen, and
+% when" and "The interpretive choice that moved the headline", are now one, and
+% what remains is a compliance statement plus the self-correction itself.
+% RELOCATED VERBATIM IN THE SAME EDIT, NOTHING DELETED:
+%   the freeze hashes and the "three properties" paragraph
+%                                     -> Appendix~\ref{app:prereg:whatfixed}
+%   the conditional-clause reasoning, the "measured outcome as a decision rule"
+%   argument and the full K sequence  -> Appendix~\ref{app:prereg:choices},
+%                                        paragraph "Choice 1, as the main text
+%                                        stated it"
+% BOTH LABELS BELOW STAY IN THE BODY. sec:prereg is referenced from
+% introduction.tex, audit.tex, related_work.tex, appendix_registrations.tex,
+% appendix_related_detail.tex and appendix_artifacts_detail.tex;
+% sec:prereg:choices has no external reference today and is kept so that any
+% pointer to the disclosure still resolves to the body, which is where the
+% disclosure lives.
+\subsection{Preregistration compliance, and the choice that moved the headline}
 \label{sec:prereg}
+\label{sec:prereg:choices}
 
 % SOURCE: PREREGISTRATION.md header lines 3-7;
 % docs/RESULTS_2026-07-15_ATLAS_AUDIT.md §3 (commits b74fd58, d6e02dd, f06348f,
@@ -45,63 +76,46 @@ Each artifact this paper depends on was committed before the analysis it
 governs could run, and each frozen file carries a \emph{Dated Amendments}
 section, so deviations are appended and never edited in, each recording whether
 results had been inspected before the decision.
-Table~\ref{tab:freeze-timeline} in Appendix~\ref{app:prereg-detail} dates every
-freeze against its commit. The frozen claim table's content hash is recorded
-with the verdicts (sha256 \texttt{842b9756...5af7b15}), as is the atlas
-summary's (\texttt{98201ade...10a4712d}) and the container image's, so a reader
-can confirm that the inputs to any reported number were the frozen ones.
-
-Three properties of that arrangement do work in the paper. The mechanical parts
-of the audit, meaning the inclusion trigger vocabulary, the extraction fields,
-the verdict formulas and the robustness sweep, were fixed before any claim's
-power was computed, so the audit cannot have selected its claims or its
-statistics to produce a headline. The atlas pair list was fixed before any flip
-statistic, so the atlas cannot have selected pairs to produce churn. And the H3
-decision rule was fixed, in algebra, before the first compressed checkpoint
-existed, so the paper reports whatever that rule returns. The appendix carries
-the rest: the three disclosed points of pre-registration data contact, the seven
-interpretive rulings in full, the inspection discipline observed during grid
-execution, and the H3 rule as registered.
-
-\subsection{The interpretive choice that moved the headline}
-\label{sec:prereg:choices}
-
-Frozen protocols do not eliminate analyst judgement; they make it visible and
-datable. Seven passages of the audit registration were ambiguous enough to
-require a ruling before verdicts could be computed. All seven were ruled on
-2026-07-20, each is implemented in code, each is reversible by re-running with
-the alternative, and all seven are stated in full in
-Appendix~\ref{app:prereg:choices}. One carries a methodological point that
-belongs in the main text.
+Appendix~\ref{app:prereg-detail} carries the bookkeeping: the freeze timeline
+against its commits, the content hashes a reader can check the inputs against,
+what each freeze fixes in advance, the disclosed points of pre-registration data
+contact, the inspection discipline observed during grid execution, the H3 rule
+as registered, and the seven interpretive rulings in full.
 
 % SOURCE: docs/AUDIT_VERDICTS_2026-07-20.md §"Interpretive choices" #1 (the
 % SUPERSEDED record); resolved by docs/AUDIT_REGISTRATION_2026-07-15.md "Dated
 % Amendments" Part 1, signed 2026-07-31. Current values from
-% results/audit_verdicts_rev3.csv.
+% results/audit_verdicts_rev3.csv, via the generated \Audit* macros.
 %
-% RESOLVED, NOT OPEN. The previous version of this paragraph carried the
-% reasoning "a source asserting parity within 0.15 pp has made a 0.15 pp claim",
-% which is the error Amendment 2 exists to correct: R17's 0.15 is an OBSERVED
-% DELTA (68.69 vs 68.54), not a declared tolerance. It must not be restated as
-% the paper's position anywhere, in any file, in any wording.
-The frozen §4 names the 2\,pp registered margin first, adds ``(and at the
-claim's own margin when it states one)'', and labels the verdict
-``underpowered for its own assertion'' \emph{at the applicable margin}. We took
-that as two live readings and chose the claim-specific one. The choice was
-wrong, and correcting it is the substance of Amendment~2
-(Appendix~\ref{app:prereg-detail}).
-
-The conditional decides it. \emph{When it states one}: no audited source states
-one, so the applicable margin is the registered 2\,pp throughout, and what the
-superseded implementation had substituted was each source's largest reported
-delta. That substitution treats a measured outcome as a decision rule the source
-never adopted. The sequence of values is reported plainly because it is the
-disclosure: the first pass returned $K = 1$ of 12, the claim-specific reading
-raised it to $K = 5$, the metric-compatibility ruling on R04 gave the $K = 4$
-that was published, and the rev-3 recomputation at the registered margin returns
-\textbf{1 of 11 assessable claims below the approximate planning threshold},
-which is the claim the first pass had flagged. All readings ship in the released
-CSV (\S\ref{sec:audit:results}).
+% RESOLVED, NOT OPEN. The reasoning "a source asserting parity within 0.15 pp
+% has made a 0.15 pp claim" is the error Amendment 2 exists to correct: R17's
+% 0.15 is an OBSERVED DELTA (68.69 vs 68.54), not a declared tolerance. It must
+% not be restated as the paper's position anywhere, in any file, in any wording.
+%
+% THIS PARAGRAPH DOES NOT MOVE TO AN APPENDIX. The K sequence is the paper's
+% canonical disclosure of an analyst decision that moved the headline, and a
+% disclosure a reader has to go to an appendix to find is not one. The argument
+% behind it -- the conditional clause, and why a measured outcome is not a
+% decision rule -- is what moved (app:prereg:choices, paragraph "Choice 1, as
+% the main text stated it"); \S\ref{sec:audit:r04} states the same sequence in
+% the audit's own
+% terms, and the two must stay consistent.
+One ruling moved the headline, and the order in which its numbers arrived is
+itself the disclosure. The frozen §4 names the registered
+\AuditMarginPP{}\,pp margin first and adds ``(and at the claim's own margin when
+it states one)''; we took that as two live readings and chose the
+claim-specific one, which raised the count of claims below the planning
+threshold from $K = 1$ of 12 to $K = 5$, and the metric-compatibility ruling on
+R04 then gave the $K = 4$ that was published for ten days. That reading was
+wrong: no audited source states a margin, so the conditional never fires, and
+what the implementation had substituted was each source's own largest reported
+delta, which is a measured outcome and not a decision rule its authors adopted.
+Amendment~2 (signed 2026-07-31) withdrew it and returned the analysis to the
+uniform registered margin, where the rev-3 recomputation gives
+\textbf{\AuditBelowThresholdAtMedian{} of \AuditAssessable{} assessable claims}
+below the threshold, the same claim the very first pass had flagged. The full
+reasoning, the other six rulings, and the readings as they ship in the released
+CSV are in Appendix~\ref{app:prereg:choices}.
 
 \subsection{Atlas validation and population correction}
 \label{sec:prereg-spotcheck}
